@@ -10,11 +10,11 @@ de ensino Bola Malek e os auxiliares técnicos Fons van der Plas, Logan
 Kilpatrick por criarem esse material sob uma licença aberta que permite a sua
 adaptação e re-uso.
 
-This repository is repository is a fork of the course material from
+This repository is a fork of the course material from
 ["Computational Thinking, a live online Julia/Pluto textbook](https://computationalthinking.mit.edu/)
 that is available at [Github](https://github.com/mitmath/18S191).
 
-Let me start by thanking deeply the oritinal authors, profs. Alan
+Let me start by thanking deeply the original authors, profs. Alan
 Edelman, David P. Sanders, Charles E. Leiserson, Henri F. Drake, Teaching
 Assistant Bola Malek, and Techinical Assistants Fons van der Plas, Logan
 Kilpatrick for making available such wonderful material under a Creative Commons
@@ -35,48 +35,45 @@ Além disso temos o Moodle da disciplina onde podemos interagir em fóruns.
 # Detalhes burocráticos
 ## Ementa
 
-Programação para aplicações científicas baseadas em linguagens
-dinâmicas de alto desempenho, com bibliotecas estáveis e de alta
-performance. Introdução a conceitos como programação por arrays,
-paralelismo, linguagens de modelagem, resolução de equações
-diferenciais serão introduzidas com exemplos práticos ligados a
-problemas reais. O objetivo é ter um curso com ênfase prática para dar
-segurança aos alunos no uso de sistemas avançados de programação.
-Dessa forma, as aulas, quando em formato presencial, devem ser
-oferecidas preferencialmente em ambiente de laboratório para que os
-alunos possam realizar pequenos exercícios ao longo da discussão.
+Programação para aplicações científicas baseadas em linguagens dinâmicas de alto
+desempenho, com bibliotecas estáveis e de alta performance. Introdução a
+conceitos como programação por arrays, paralelismo, linguagens de modelagem,
+resolução de equações diferenciais serão introduzidas com exemplos práticos
+ligados a problemas reais. O objetivo é ter um curso com ênfase prática para dar
+segurança aos alunos no uso de sistemas avançados de programação. Dessa forma,
+as aulas, quando em formato presencial, devem ser oferecidas preferencialmente
+em ambiente de laboratório para que os alunos possam realizar pequenos
+exercícios ao longo da discussão.
 
 ## Programa da disciplina
 
-1. Introdução a uma linguagem dinâmica para computação de alto
-   desempenho, considerações sobre eficiência em programas de
-   computadores (num primeiro oferecimento a linguagem será Julia).
-2. Funções matemáticas em linguagens de programação, diferenciação
-   automática, despacho múltiplo.
+1. Introdução a uma linguagem dinâmica para computação de alto desempenho,
+   considerações sobre eficiência em programas de computadores (num primeiro
+   oferecimento a linguagem será Julia).
+2. Funções matemáticas em linguagens de programação, diferenciação automática,
+   despacho múltiplo.
 3. Programação por arrays (em um primeiro oferecimento com exemplos em
    processamento de imagens).
 4. Noções de programação dinâmica e programação com grafos.
 5. Noções de programação paralela.
-6. Aleatoriedade e simulação estocástica em computadores (em um
-   primeiro oferecimento com exemplos em dinâmica de partículas).
-7. Resolução numérica de equações deferenciais através de pacotes
-   computacionais (em um primeiro oferecimento com exemplos em
-   modelagem climática).
+6. Aleatoriedade e simulação estocástica em computadores (em um primeiro
+   oferecimento com exemplos em dinâmica de partículas).
+7. Resolução numérica de equações deferenciais através de pacotes computacionais
+   (em um primeiro oferecimento com exemplos em modelagem climática).
 
 ## Avaliação
 
-Será feita através de trabalhos computacionais durante todo o
-semestre.
+Será feita através de trabalhos computacionais durante o semestre.
 
 ## Bibliografia
 
-* Bezanson, J.; Edelman, A.; Karpinski, S.; Shah, V. B. Julia: A Fresh
-  Approach to Numerical Computing. SIAM Rev. 2017, 59 (1), 65–98.
+* Bezanson, J.; Edelman, A.; Karpinski, S.; Shah, V. B. Julia: A Fresh Approach
+  to Numerical Computing. SIAM Rev. 2017, 59 (1), 65–98.
   https://doi.org/10.1137/141000671.
 
-* Balbaert, I. Julia 1.0 Programming: Dynamic and high-performance
-  programming to build fast scientific applications, 2nd Edition, 2º
-  edição.; Packt Publishing, 2018.
+* Balbaert, I. Julia 1.0 Programming: Dynamic and high-performance programming
+  to build fast scientific applications, 2nd Edition, 2º edição.; Packt
+  Publishing, 2018.
 
 * Manual da linguagem Julia. https://docs.julialang.org/en/v1/
 
