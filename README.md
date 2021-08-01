@@ -1,75 +1,89 @@
-# 18.S191: Introduction to computational thinking for real-world problems
+# Laboratório de Computação Científica
 
-<p align="center"><a href="https://computationalthinking.mit.edu/"> <b>Go to course website</b> :balloon:</a></p>
+Esse repositório é um *fork* do material do
+["Computational Thinking, a live online Julia/Pluto textbook](https://computationalthinking.mit.edu/)
+que está disponível no [Github](https://github.com/mitmath/18S191).
 
-Welcome to **MIT 18.S191 aka 6.S083 aka 22.S092**, **Spring 2021** edition!
-_For older semester, see the [Fall 2020 branch](https://github.com/mitmath/18S191/tree/Fall20) or [older content](https://computationalthinking.mit.edu/Spring21/semesters/)._
+Deixo aqui um enorme agradecimento aos autores originais, professores Alan
+Edelman, David P. Sanders, Charles E. Leiserson, Henri F. Drake, assistente
+de ensino Bola Malek e os auxiliares técnicos Fons van der Plas, Logan
+Kilpatrick por criarem esse material sob uma licença aberta que permite a sua
+adaptação e re-uso.
 
-This is an introductory course on Computational Thinking. We use the [Julia programming language](http://www.julialang.org) to approach real-world problems in varied areas applying data analysis and computational and mathematical modeling. In this class you will learn computer science, software, algorithms, applications, and mathematics as an integrated whole.
+This repository is repository is a fork of the course material from
+["Computational Thinking, a live online Julia/Pluto textbook](https://computationalthinking.mit.edu/)
+that is available at [Github](https://github.com/mitmath/18S191).
 
-Topics include:
+Let me start by thanking deeply the oritinal authors, profs. Alan
+Edelman, David P. Sanders, Charles E. Leiserson, Henri F. Drake, Teaching
+Assistant Bola Malek, and Techinical Assistants Fons van der Plas, Logan
+Kilpatrick for making available such wonderful material under a Creative Commons
+Licence that allows remix the original content.
 
--   Image analysis
--   Machine Learning?
--   Network theory
--   Climate modeling
+Esse é um curso de laboratório de computação científica que irá usar a
+[linguagem de programação Julia](http://www.julialang.org) em exemplos "do mundo
+real" em que aplicaremos ideias de análise de dados de modelagem matemática e
+computacional. A ideia é ter um curso do tipo "mão na massa", onde escrever
+e entender código será nossa principal forma de comunicação.
 
-<!--
+# Logistica do curso
 
-Please help edit the automatically-generated subtitles in the [lecture transcripts](https://drive.google.com/drive/folders/1ekXz8x78qnq3G-_MhOh6CYgFDbL2G6Vz)!
-If you do so, please add punctuation, and please change the colour of the part you edited to a colour other than black, and different from the previous and next sections. -->
+As aulas serão terças e quintas às 8hs da manhã. Durante as aulas apresentarei
+cadernos Julia com código e discutirei os problemas que vamos estudar mostrando
+como usar técnicas modernas de programação e matemática aplicada para atacá-los.
+Além disso temos o Moodle da disciplina onde podemos interagir em fóruns.
+# Detalhes burocráticos
+## Ementa
 
-## Meet our staff
+Programação para aplicações científicas baseadas em linguagens
+dinâmicas de alto desempenho, com bibliotecas estáveis e de alta
+performance. Introdução a conceitos como programação por arrays,
+paralelismo, linguagens de modelagem, resolução de equações
+diferenciais serão introduzidas com exemplos práticos ligados a
+problemas reais. O objetivo é ter um curso com ênfase prática para dar
+segurança aos alunos no uso de sistemas avançados de programação.
+Dessa forma, as aulas, quando em formato presencial, devem ser
+oferecidas preferencialmente em ambiente de laboratório para que os
+alunos possam realizar pequenos exercícios ao longo da discussão.
 
-**Lecturers:** [Alan Edelman](http://math.mit.edu/~edelman), [David P. Sanders](http://sistemas.fciencias.unam.mx/~dsanders/), [Charles E. Leiserson](https://people.csail.mit.edu/cel/), [Henri F. Drake](https://hdrake.github.io/)
+## Programa da disciplina
 
-**Teaching assistants:** [Bola Malek]()
+1. Introdução a uma linguagem dinâmica para computação de alto
+   desempenho, considerações sobre eficiência em programas de
+   computadores (num primeiro oferecimento a linguagem será Julia).
+2. Funções matemáticas em linguagens de programação, diferenciação
+   automática, despacho múltiplo.
+3. Programação por arrays (em um primeiro oferecimento com exemplos em
+   processamento de imagens).
+4. Noções de programação dinâmica e programação com grafos.
+5. Noções de programação paralela.
+6. Aleatoriedade e simulação estocástica em computadores (em um
+   primeiro oferecimento com exemplos em dinâmica de partículas).
+7. Resolução numérica de equações deferenciais através de pacotes
+   computacionais (em um primeiro oferecimento com exemplos em
+   modelagem climática).
 
-**Technical assistants:** [Fons van der Plas](), [Logan Kilpatrick](https://scholar.harvard.edu/logankilpatrick/home)
+## Avaliação
 
-**Guest lecturers:** _to be announced_
+Será feita através de trabalhos computacionais durante todo o
+semestre.
 
-## Logistics
+## Bibliografia
 
-Course materials will be published on this website on **Monday 1:00pm**. Each week is a new _chapter_, which includes:
+* Bezanson, J.; Edelman, A.; Karpinski, S.; Shah, V. B. Julia: A Fresh
+  Approach to Numerical Computing. SIAM Rev. 2017, 59 (1), 65–98.
+  https://doi.org/10.1137/141000671.
 
--   Asynchronous video lectures _(total 60 minutes)_
--   Interactive visualizations
--   Exercises
+* Balbaert, I. Julia 1.0 Programming: Dynamic and high-performance
+  programming to build fast scientific applications, 2nd Edition, 2º
+  edição.; Packt Publishing, 2018.
 
-### Live lectures
+* Manual da linguagem Julia. https://docs.julialang.org/en/v1/
 
-On **Monday 1:00pm - 2:30pm**, after the material is published, there will also be:
+* Introduction to computational thinking for real-world problems.
+  https://github.com/mitmath/18S191
 
--   Q&A on Discord
--   Live overview lecture _(30 minutes)_
+## Pré-requisitos
 
-On **Wednesday 1:00pm 2:30pm** _(MIT students only)_, you will meet with fellow students and your TA to:
+MC102, MS211
 
--   Review the lecture
--   Work on problem sets in small groups or individually, with the opportunity to ask questions to your TA
-
-Start date: February 16, 2021
-
-### Discussion forum and homework submission
-
--   [Discord](https://discord.gg/Z5qnVf8): discussion (we encourage you to hang out here during class!)
-
--   [Piazza](https://piazza.com/mit/spring2021/6s083): (MIT only) questions, discussion with staff, announcements
-
--   [Canvas](https://canvas.mit.edu/courses/7590): (MIT only) homework submissions. If you're a non-MIT student, don't worry, the **homework has built-in answers checks**, or you can find a partner to cross-grade homeworks via Discord.
-
-### Evaluation
-
-The final grade is 80% problem sets, and 20% MITx _quick questions_.
-
--   Problem sets are released on Tuesdays and due before Sunday (11:59pm). They have equal weight; your lowest score will be dropped.
-
--   [MITx](https://lms.mitx.mit.edu/courses/course-v1:MITx+6.S083r+2021_Spring/course/) exercises (_quick questions_) are due before Wednesday (11:59pm), but are best done on Monday, during or right after the lectures.
-
-<!--
-
-Please help edit the automatically-generated subtitles in the [lecture transcripts](https://drive.google.com/drive/folders/1ekXz8x78qnq3G-_MhOh6CYgFDbL2G6Vz)!
-If you do so, please add punctuation, and please change the colour of the part you edited to a colour other than black, and different from the previous and next sections. -->
-
-<p align="center"><a href="https://computationalthinking.mit.edu/"> <b>Go to course website</b> :balloon:</a></p>
