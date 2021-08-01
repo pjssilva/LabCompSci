@@ -26,7 +26,7 @@ real" em que aplicaremos ideias de análise de dados de modelagem matemática e
 computacional. A ideia é ter um curso do tipo "mão na massa", onde escrever
 e entender código será nossa principal forma de comunicação.
 
-# Logistica do curso
+# Logística do curso
 
 As aulas serão terças e quintas às 8hs da manhã. Durante as aulas apresentarei
 cadernos Julia com código e discutirei os problemas que vamos estudar mostrando
