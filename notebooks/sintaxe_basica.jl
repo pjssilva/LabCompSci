@@ -11,7 +11,9 @@ Lembre-se que para executar esse caderno em sua máquina é preciso primeiro ins
 
 Obs: Esse caderno é apenas uma introcução bem rápida à Julia para quem nunca viu a linguagem. Ele não tenta de fato ensinar Julia, apenas faz um sobrevoo parnorâmico. Para apresnder Julia sugiro fortemente que você procure um texto introdutório completo ou mesmo um livro.
 
-Uma boa opção, em português, é o [capítulo 1](http://leandro.iqm.unicamp.br/m3g/main/didatico/simulacoes2/simulacoes2.pdf) de um texto do Leandro Martínez, do IQ. Um bom livro é o [Julia 1.0 Programming](https://www.packtpub.com/product/julia-1-0-programming-second-edition/9781788999090) do Balbert.
+Uma boa opção, em português, é o capítulo 1 do [texto do Leandro Martínez](http://leandro.iqm.unicamp.br/m3g/main/didatico/simulacoes2/simulacoes2.pdf), do IQ. Um bom livro é o [Julia 1.0 Programming](https://www.packtpub.com/product/julia-1-0-programming-second-edition/9781788999090) do Balbert.
+
+Outra ótima fonte de informção é o [manual da linguagem](https://docs.julialang.org/en/v1/).
 "
 
 
@@ -110,7 +112,7 @@ md"A expressão `1:10` representa uma sequência de números que inicia no 1 e v
 typeof(1:10)
 
 # ╔═╡ 6c44abb4-edec-11ea-16bd-557800b5f9d2
-md"Acima usamos um bloco `let` para criar uma nova variável local `s`. Essa variável existe apenas dentro do bloco. Mas o uso de variáveis locais é bem mais comum dentro de fuções, e de fato funções são preferíveis por serem reutilizáveis. Por exemplo, podemos reescrever o código acima para usar quantas vezes quisermos:
+md"Acima usamos um bloco `let` para criar uma nova variável local `s`. Essa variável existe apenas dentro do bloco. Mas o uso de variáveis locais é bem mais comum dentro de fuções, e de fato funções são preferíveis por serem reutilizáveis. Por exemplo, podemos reescrever o código acima para usar quantas vezes quisermos:"
 
 # ╔═╡ 683af3e2-eded-11ea-25a5-0d90bf099d98
 function mysum(n)
@@ -226,17 +228,17 @@ md"Ou ainda usar a sintaxe alternatica de compreensão de arrays mas agora com d
 [i + j for i in 1:5, j in 1:6]
 
 # ╔═╡ Cell order:
-# ╟─0d3aec92-edeb-11ea-3adb-cd0dc17cbdab
+# ╠═0d3aec92-edeb-11ea-3adb-cd0dc17cbdab
 # ╟─3b038ee0-edeb-11ea-0977-97cc30d1c6ff
 # ╠═3e8e0ea0-edeb-11ea-22e0-c58f7c2168ce
 # ╠═59b66862-edeb-11ea-2d62-71dcc79dbfab
 # ╟─5e062a24-edeb-11ea-256a-d938f77d7815
-# ╠═7e46f0e8-edeb-11ea-1092-4b5e8acd9ee0
+# ╟─7e46f0e8-edeb-11ea-1092-4b5e8acd9ee0
 # ╠═8a695b86-edeb-11ea-08cc-17263bec09df
-# ╠═8e2dd3be-edeb-11ea-0703-354fb31c12f5
-# ╠═96b5a28c-edeb-11ea-11c0-597615962f54
+# ╟─8e2dd3be-edeb-11ea-0703-354fb31c12f5
+# ╟─96b5a28c-edeb-11ea-11c0-597615962f54
 # ╠═a7453572-edeb-11ea-1e27-9f710fd856a6
-# ╠═b341db4e-edeb-11ea-078b-b71ac00089d7
+# ╟─b341db4e-edeb-11ea-078b-b71ac00089d7
 # ╠═23f9afd4-eded-11ea-202a-9f0f1f91e5ad
 # ╠═cc1f6872-edeb-11ea-33e9-6976fd9b107a
 # ╟─a92ff397-cd8d-4cd6-8b1a-d1b8703ea11f
@@ -247,38 +249,38 @@ md"Ou ainda usar a sintaxe alternatica de compreensão de arrays mas agora com d
 # ╟─ce9667c2-edeb-11ea-2665-d789032abd11
 # ╠═d73d3400-edeb-11ea-2dea-95e8c4a6563b
 # ╠═e04ccf10-edeb-11ea-36d1-d11969e4b2f2
-# ╠═e297c5cc-edeb-11ea-3bdd-090f415685ab
-# ╠═ec751446-edeb-11ea-31ba-2372e7c71b42
+# ╟─e297c5cc-edeb-11ea-3bdd-090f415685ab
+# ╟─ec751446-edeb-11ea-31ba-2372e7c71b42
 # ╠═fe3fa290-edeb-11ea-121e-7114e5c573c1
 # ╟─394b0ec8-eded-11ea-31fb-27392068ef8f
 # ╠═4dc00908-eded-11ea-25c5-0f7b2b7e18f9
-# ╠═6c44abb4-edec-11ea-16bd-557800b5f9d2
+# ╟─6c44abb4-edec-11ea-16bd-557800b5f9d2
 # ╠═683af3e2-eded-11ea-25a5-0d90bf099d98
 # ╠═76764ea2-eded-11ea-1aa6-296f3421de1c
 # ╟─93a231f4-edec-11ea-3b39-299b3be2da78
-# ╠═82e63a24-eded-11ea-3887-15d6bfabea4b
+# ╟─82e63a24-eded-11ea-3887-15d6bfabea4b
 # ╠═9b339b2a-eded-11ea-10d7-8fc9a907c892
 # ╠═9535eb40-eded-11ea-1651-e33c9c23dbfb
-# ╠═a16299a2-eded-11ea-2b56-93eb7a1010a7
+# ╟─a16299a2-eded-11ea-2b56-93eb7a1010a7
 # ╠═bc6b124e-eded-11ea-0290-b3760cb81024
 # ╟─cfb21014-eded-11ea-1261-3bc30952a88e
 # ╟─ffee7d80-eded-11ea-26b1-1331df204c67
-# ╠═cae4137e-edee-11ea-14af-59a32227de1b
-# ╠═714f4fca-edee-11ea-3410-c9ab8825d836
+# ╟─cae4137e-edee-11ea-14af-59a32227de1b
+# ╟─714f4fca-edee-11ea-3410-c9ab8825d836
 # ╠═82cc2a0e-edee-11ea-11b7-fbaa5ad7b556
 # ╠═85916c18-edee-11ea-0738-5f5d78875b86
 # ╟─881b7d0c-edee-11ea-0b4a-4bd7d5be2c77
 # ╠═a298e8ae-edee-11ea-3613-0dd4bae70c26
 # ╠═a5ebddd6-edee-11ea-2234-55453ea59c5a
 # ╟─a9b48e54-edee-11ea-1333-a96181de0185
-# ╠═68c4ead2-edef-11ea-124a-03c2d7dd6a1b
+# ╟─68c4ead2-edef-11ea-124a-03c2d7dd6a1b
 # ╠═84129294-edef-11ea-0c77-ffa2b9592a26
-# ╠═d364fa16-edee-11ea-2050-0f6cb70e1bcf
+# ╟─d364fa16-edee-11ea-2050-0f6cb70e1bcf
 # ╟─db99ae9a-edee-11ea-393e-9de420a545a1
 # ╠═04f175f2-edef-11ea-0882-712548ebb7a3
 # ╠═0a8ac112-edef-11ea-1e99-cf7c7808c4f5
-# ╠═1295f48a-edef-11ea-22a5-61e8a2e1d005
-# ╠═3e1fdaa8-edef-11ea-2f03-eb41b2b9ea0f
+# ╟─1295f48a-edef-11ea-22a5-61e8a2e1d005
+# ╟─3e1fdaa8-edef-11ea-2f03-eb41b2b9ea0f
 # ╠═48f3deca-edef-11ea-2c18-e7419c9030a0
 # ╟─a8f26af8-edef-11ea-2fc7-2b776f515aea
 # ╠═b595373e-edef-11ea-03e2-6599ef14af20
