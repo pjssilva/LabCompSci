@@ -4,11 +4,15 @@
 using Markdown
 using InteractiveUtils
 
+# ╔═╡ 1ccb3a84-88d4-11eb-2499-91af66e78e89
+begin
+	import Pkg
+	Pkg.activate(mktempdir())
+	using Plots
+end
+
 # ╔═╡ f1261dab-6736-4b0a-803b-b2d2836ca24a
 Pkg.add("ColorSchemes")
-
-# ╔═╡ 1ccb3a84-88d4-11eb-2499-91af66e78e89
-using Plots
 
 # ╔═╡ 3fa5970e-8d82-11eb-302e-d53a453e984f
 using SpecialFunctions
