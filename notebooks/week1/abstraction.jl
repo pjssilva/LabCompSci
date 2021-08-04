@@ -1,5 +1,5 @@
 ### A Pluto.jl notebook ###
-# v0.14.5
+# v0.15.1
 
 using Markdown
 using InteractiveUtils
@@ -22,95 +22,51 @@ begin
 	using Images
 end
 
-# ╔═╡ 5ef51c3a-70a7-11eb-2023-31113399a57f
-html"""
-<div style="
-position: absolute;
-width: calc(100% - 30px);
-border: 50vw solid #282936;
-border-top: 500px solid #282936;
-border-bottom: none;
-box-sizing: content-box;
-left: calc(-50vw + 15px);
-top: -500px;
-height: 500px;
-pointer-events: none;
-"></div>
-
-<div style="
-height: 500px;
-width: 100%;
-background: #282936;
-color: #fff;
-padding-top: 68px;
-">
-<span style="
-font-family: Vollkorn, serif;
-font-weight: 700;
-font-feature-settings: 'lnum', 'pnum';
-"> <p style="
-font-size: 1.5rem;
-opacity: .8;
-"><em>Section 1.2</em></p>
-<p style="text-align: center; font-size: 2rem;">
-<em> Intro to Abstractions </em>
-</p>
-
-<p style="
-font-size: 1.5rem;
-text-align: center;
-opacity: .8;
-"><em>Lecture Video</em></p>
-<div style="display: flex; justify-content: center;">
-<div  notthestyle="position: relative; right: 0; top: 0; z-index: 300;">
-<iframe src="https://www.youtube.com/embed/3zTO3LEY-cM" width=400 height=250  frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>
-</div>
-</div>
-
-<style>
-body {
-overflow-x: hidden;
-}
-</style>"""
+# ╔═╡ fbe33f22-672e-45b2-a1b1-30bb24033db8
+md"""
+#### Tradução livre de [`abstraction.jl`](https://github.com/mitmath/18S191/blob/Spring21/notebooks/week1/abstraction.jl)
+"""
 
 # ╔═╡ 60ae819a-70a7-11eb-31d4-750c7f5dc6ca
 PlutoUI.TableOfContents(aside=true)
 
 # ╔═╡ 792c6a62-ec41-11ea-01f3-73e7eee23cc7
 md"""
-#### Intializing packages
+#### Inicializando os pacotes
 
-_When running this notebook for the first time, this could take up to 15 minutes. Hang in there!_
+_Ao executar esse notebook pela primeira vez ele pode demorar muito para instalar e inicializar pacotes. Ele também pega umas imagens na Internet, outro motivo de espera. Por isso tenha um pouco de paciência, vá fazer outra coisa e volte em alguns instantes!_
 """
 
 # ╔═╡ ef1bfa16-70ea-11eb-189c-a54db292cd6f
-md"
-## Introduction
+md"""
+## Introdução
 
-The goal of this section is to introduce you to the notion of abstraction. You can think of abstraction as an opposite to specialization. We will illustrate this by looking at the following example.
+Esse caderno vai falar com você sobre _abstração_. Uma das formas de se pensar em abstração, principalmente do ponto de vista computacional, é como o oposto da _especialização_. Ou seja, abstração é a arte de se ver o que há de comum em objetos diferentes, focando no que importa para a tarefa do momento.
 
-### What is _one_?
+Vamos ver isso com um exemplo meio bobo, mas elucidativo.
 
-Before we get lost talking about the foundations of number theory, I will present you with a few examples that represent one to me. 
-"
+### O que é _um_?
+
+Antes de tentarmos partir para os fundamentos da matemática, deixe-me apresentar alguns objetos que podem ser vistos naturalmente como _um_ em contextos diferentes.
+"""
 
 # ╔═╡ 6fcac482-70ee-11eb-0b80-ff41c708053b
-md"Each of the items in this list is a specific, or **_specialized_** representation of _one_:
-1. as an integer
-1. as a float
-1. as a string
-1. as a rational number
-1. as a cute picture
-1. as an 2x2 identity matrix
-1. as a singular dog
+md"Cada um desses itens pode ser interpretado como o _um_ em contextos diferentes. Ou seja eles são diferentes versões de representações _especializadas_ do _um):
+1. Como um inteiro
+1. Como um float (ponto flutuante)
+1. Como uma string (cadeia de caracteres)
+1. Como um número racional (sim, Julia tem isso!)
+1. Como uma figura enfeitada do número 1
+1. A matriz identidade 2x2
+1. Como um foguete
 
-Of course, these are just a few examples of _one_. People have been representing _one_ for ages in different langauges, scripts, artistic expression, etc.
+É claro que cada um desses é apenas um exemplo da ideia abstrata de _um_. Como esse é um conceito simples e fundamental, há inúmeras represetações do _um_ nas várias linguagens, notações, em manifestações artísticas, etc. 
 
-The difference between these ones to me is clear. In fact, I just articulated it to you. Now, let's turn to how a computer sees _one_ differently based on what I type.
+A diferença entre eles é clara. De fato nós deixamos isso claro ao descrever cada um deles como sua versão especializada. Mas para o computador, como será que ele diferencia essas diferentes formas do _um_?
 "
 
 # ╔═╡ 9ebc079a-70f0-11eb-07d9-f9e80f3f4584
-md"So to a computer, all of these are different types."
+md"Vemos que o computador diferencias essas diferentes forma usando tipos diferentes para armaezenar cada um."
 
 # ╔═╡ 15f7f90a-70f0-11eb-0d41-63677e4023f4
 md"### What is a collection of _one_s?
@@ -119,11 +75,11 @@ Now, I want to make a collection of ones for some reason. Below is a way for you
 
 # ╔═╡ f6886d90-70ed-11eb-07c4-471ee267e7c1
 md"""
-Before we even look at the output, I am amazed that this code even ran. Are you telling me that the computer doesn't care which _one_ I am using in my array?
+Antes mesmo de rodar os exemplo, mas apenas lendo o código, isso chama atenção: como isso roda? Essa dúvida deve ser particularmente forte para programadores de linguagens fortemente tipadas como C, C++ ou Fortran. Em Julia, e outras linguagens dinâmicas, o código não parece se preocupar com qual é o _um_ que estou colocando na matriz! Ele simplesmente cria uma matriz do tipo adequado.
 
-Yes! That's exactly what abstraction is. By stepping back, we can now think and operate at a level that doesn't care about which _specific_ one I am using. This is what we mean by **abstraction is the opposite of specialization**.
+E sim, é exatamente essa a força da abstração. Para o tipo de operações que estamos fazendo não há motivo para diferenciar entre os diferentes tipos _específicos_ de _um_. A linguagem é "esperta", ou "ágil", o suficience para criar a matriz do tipo natural desejado e continuar em frente.
 
-The information that Julia gives back is quite informative. Here is an example of the first line of the output for a few different types: 
+Note ainda que a informação que Julia devolve é bastante informativa. Veja quais seriam as primeiras linhas (que informam o tipo dos elementos armazenados na matriz) para alguns diferentes _uns_:
 
 ```
 array = 3x4 Array{Int64, 2}
@@ -131,14 +87,14 @@ array = 3x4 Array{Float64, 2}
 array = 3x4 Array{Rational{Int64}, 2}
 ```
 
-Notice that for all of these, we have the same `3x4 Array{***, 2}`. 
+Atente que todos esse tem a mesma forma geral: `3x4 Array{***, 2}`.
 """
 
 # ╔═╡ 3c1a3cf8-70f8-11eb-3c18-375207f321eb
 md"""
-## First Taste of Abstraction
+## Um primeiro encontro com a abstração
 
-Now, I want to do something to a collection of ones, that doesn't care about which one I'm using. So I'm going to write a function that takes in my collection, and add a corgi whereever I desire.
+Agora, vamos ver como trabalhar com uma coleção de uns, no caso uma matriz de uns, sem que o código precise saber qual o tipo específico de um que ela armazena. Ou seja, queremos escrever uma função que recebe a coleção e modifica a matriz em uma posição específica, mas que não está a priori "consciente" de qual é o tipo que ela manipula. 
 """
 
 # ╔═╡ 19f4ddb0-ec44-11ea-20b9-5d97fb2b1cf4
@@ -149,38 +105,45 @@ function insert(new, A, i, j)
 end
 
 # ╔═╡ 424f5f10-ec44-11ea-076d-f3cba4435e0c
-begin	
-	A = fill(0, 3, 4)
+begin
+	max_i, max_j = 3, 4
 	md"""
-	$(@bind i Slider(1: size(A,1), show_value=true))  
-	$(@bind j Slider(1: size(A,2), show_value=true))
+	i: $(@bind i Slider(1: max_i, show_value=true))
+	j: $(@bind j Slider(1: max_j, show_value=true))
 	"""
 end
 
 # ╔═╡ 71ac08ea-7145-11eb-237d-5506adfb9533
 begin
-	one_number_array = fill(1,3,4)
+	one_number_array = fill(1, max_i, max_j)
 	insert(5, one_number_array, i, j)
 end
 
 # ╔═╡ ee43d808-70fa-11eb-0cc6-337279f41494
-md"This is still amazing. I wrote one function that just cares about how to insert an object into an array, without knowing anything about what's inside, and it worked for two completely different arrays, _collections of ones of **any kind**_."
+md"""
+Mais uma vez vemos o poder da abstração. Nós escrevemos uma função que pode manipular matrizes com objetos de diferentes tipos. Ela não se importa com o tipo específico do que está dentro da matriz, já que tudo que ela faz é manipular o seu conteúdo e para isso precisamos basicamente do operador de atribuição apenas, que naturalmente funciona com qualquer tipo. Aí a mesma função funcionou para matrizes de tipos completamente distintos: imagens e inteiros. 
+
+Como Julia faz isso? Diferente de outras linguagens, a primeira vez que ele vê uma chamada concreta de uma função ele cria uma versão especializada para aquele tipo, compila e depois executa. Isso faz com o código a partir da segunda chamada seja extremamente eficiente, é código compilado. Isso porque a linguagem tem um ferramental que guarda as diferentes versões compiladas e chama a versão correta no momento de uma nova chamada. O preço a pagar: a primeira chamada, que gera uma nova versão que deve ser compilada, é mais demorada. Isso ajuda a explicar porque Julia parece lento de início, mas depois que "pega no tranco", ou seja que compila o código, é estremamente rápida.
+"""
 
 # ╔═╡ 263a8a0a-70ee-11eb-236d-c941ba63dff3
 md"
-## Conclusion
-The key idea here is that a computer language should allow you to do operations that make sense. Often times, an operation can make sense for many different objects. So we can abstract away the specifics of the object in our implementation. It should let you step back from there.
+## Conclusão
+
+A ideia é que as linguagens de computação deveria permitir realizar todas as operações que fazem sentido para os diferentes tipos de maneira natural. Isso porque muitas vezes a mesma operação faz sentido para diferentes tipos. Então podemos abstrair as diferenças e escrever um único código para o que esses objetos têm em comum. 
+
+A especialização deve ser usada apenas quando estritamente necessária.
 "
 
 # ╔═╡ 52461588-ea1a-4e7d-aec2-3de388d31656
 md"""
-## Appendix
+## Apêndice
 """
 
 # ╔═╡ 1a2a9000-ec43-11ea-3f39-8312ea286a92
 begin
 	oneimage = load(download("https://gallery.yopriceville.com/var/albums/Free-Clipart-Pictures/Decorative-Numbers/Cute_Number_One_PNG_Clipart_Image.png?m=1437447301"))
-	corgi = load(download("https://i.barkpost.com/wp-content/uploads/2015/01/corgi2.jpg?q=70&fit=crop&crop=entropy&w=808&h=500"))
+	rocket = load(download("https://upload.wikimedia.org/wikipedia/commons/thumb/e/eb/Bangabandhu_Satellite-1_Mission_%2842025499722%29.jpg/800px-Bangabandhu_Satellite-1_Mission_%2842025499722%29.jpg"))
 	nothing
 end
 
@@ -193,7 +156,7 @@ one = [
 	1//1,
 	oneimage,
 	[1 0; 0 1],
-	corgi,
+	rocket,
 ]
 
 # ╔═╡ 0b1668ba-ec42-11ea-3e50-ed97c5b17ced
@@ -201,10 +164,9 @@ computer_ones = typeof.(one)
 
 # ╔═╡ b2239b96-70ef-11eb-0b85-21ecab25dc9f
 begin
-	one_keys = ["1", "1.0", "one", "1//1", "Cute One", "2x2 Identity", "One Corgi"] 
-	selections = one_keys .=> one_keys
+	one_keys = ["1", "1.0", "one", "1//1", "Cute One", "2x2 Identity", "One rocket"]
 	lookup_element = Dict(one_keys .=> one)
-	md"$(@bind element_key Select(selections))"
+	md"$(@bind element_key Select(one_keys))"
 end
 
 # ╔═╡ 4251f668-70aa-11eb-3d89-35f8d53b7d9b
@@ -217,16 +179,16 @@ typeof(element)
 
 # ╔═╡ ab02d850-ec41-11ea-10b2-a1b600b12658
 # a 3x4 array of this one.
-array = fill(element,3,4)
+array = fill(element, 3, 4)
 
 # ╔═╡ 5363a400-ec44-11ea-284e-d13a8872551c
 begin
-	one_image_array = fill(oneimage,3,4)
-	insert(corgi, one_image_array, i, j)
+	one_image_array = fill(oneimage, max_i, max_j)
+	insert(rocket, one_image_array, i, j)
 end
 
 # ╔═╡ Cell order:
-# ╟─5ef51c3a-70a7-11eb-2023-31113399a57f
+# ╟─fbe33f22-672e-45b2-a1b1-30bb24033db8
 # ╟─60ae819a-70a7-11eb-31d4-750c7f5dc6ca
 # ╟─792c6a62-ec41-11ea-01f3-73e7eee23cc7
 # ╟─ef1bfa16-70ea-11eb-189c-a54db292cd6f
@@ -242,7 +204,7 @@ end
 # ╟─f6886d90-70ed-11eb-07c4-471ee267e7c1
 # ╟─3c1a3cf8-70f8-11eb-3c18-375207f321eb
 # ╠═19f4ddb0-ec44-11ea-20b9-5d97fb2b1cf4
-# ╠═424f5f10-ec44-11ea-076d-f3cba4435e0c
+# ╟─424f5f10-ec44-11ea-076d-f3cba4435e0c
 # ╠═5363a400-ec44-11ea-284e-d13a8872551c
 # ╠═71ac08ea-7145-11eb-237d-5506adfb9533
 # ╟─ee43d808-70fa-11eb-0cc6-337279f41494
