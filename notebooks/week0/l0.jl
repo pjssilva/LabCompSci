@@ -61,9 +61,9 @@ md"""
 
 L0 data disponível: Terça, 10 de agosto de 2021.
 
-**L0 data de entrega: Quinta 12 de agosto de 2021. Mas é melhor entregar na quarta para estar pronto para a aula da quinta_.
+**L0 data de entrega: Quinta 12 de agosto de 2021. Mas é melhor entregar na quarta para estar pronto para a aula da quinta**.
 
-Em primeiro lugar: **bem vindo ao curso**. Esto muito animado em dividir com vocês ferramentas e ideias que uso cotidianamente para atacar probemas _reais_.
+Em primeiro lugar: **bem vindo ao curso**. Estou muito animado em dividir com vocês ferramentas e ideias que uso cotidianamente para atacar probemas _reais_.
 
 Espero que todos submetam essa **lista 0**, isso vai ajudar a saber quem conseguiu instalar o ambiente mínimo de uso do curso e tomar alguma atitude corretiva se for necessário. Mesm que você não tenha conseguido fazer muito, pelo menos coloque o seu nome e email da DAC e mande assim mesmo. A nota dessa lista não conta para o curso.🙂
 """

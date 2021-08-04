@@ -228,7 +228,7 @@ md"Ou ainda usar a sintaxe alternatica de compreensão de arrays mas agora com d
 [i + j for i in 1:5, j in 1:6]
 
 # ╔═╡ Cell order:
-# ╠═0d3aec92-edeb-11ea-3adb-cd0dc17cbdab
+# ╟─0d3aec92-edeb-11ea-3adb-cd0dc17cbdab
 # ╟─3b038ee0-edeb-11ea-0977-97cc30d1c6ff
 # ╠═3e8e0ea0-edeb-11ea-22e0-c58f7c2168ce
 # ╠═59b66862-edeb-11ea-2d62-71dcc79dbfab
