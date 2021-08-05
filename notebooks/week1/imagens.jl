@@ -244,7 +244,7 @@ De uma forma geral, você pode imaginar que a imagem é uma matriz que contem va
 """
 
 # ╔═╡ bd22d09a-64c7-11eb-146f-67733b8be241
-a_pixel = apolo[200, 100]
+a_pixel = apolo[400, 600]
 
 # ╔═╡ 28860d48-64c8-11eb-240f-e1232b3638df
 md"""
@@ -375,7 +375,7 @@ RGB(test_r, test_g, test_b)
 
 # ╔═╡ f6cc03a0-ee07-11ea-17d8-013991514d42
 md"""
-#### Exercício 2.5
+#### Exercício 1.1
 👉 Escreva uma função `invert` que inverte uma cor, ou seja, leva $(r, g, b)$ em $(1 - r, 1-g, 1-b)$.
 
 Dica: a função `fieldnames` recebe um tipo e devolve o nome dos campos disponíveis.
@@ -665,7 +665,7 @@ Ao mover o slider, vemos que o gradiente se ajusta automaticamente.
 md"""
 #### Exercício
 
->Crie três slider para pegar três valores RGB e cria um bloco de cor com os valores selecionados. 
+>Crie três sliders para pegar três valores RGB e cria um bloco de cor com os valores selecionados. 
 
 Obs: Pluto não permite criar variáveis com o mesmo nome em células diferente. Isso é fundamental para permitir a reatividade e a reordenação de células.
 """
@@ -1169,14 +1169,14 @@ md"_Aula 1, 2º Sem 2021, version 0_"
 # ╠═4f03f651-56ed-4361-b954-e6848ac56089
 # ╟─2808339c-64cc-11eb-21d1-c76a9854aa5b
 # ╠═1bd53326-d705-4d1a-bf8f-5d7f2a4e696f
-# ╠═a5f8bafe-edf0-11ea-0da3-3330861ae43a
+# ╟─a5f8bafe-edf0-11ea-0da3-3330861ae43a
 # ╠═b6b65b94-edf0-11ea-3686-fbff0ff53d08
 # ╟─d862fb16-edf1-11ea-36ec-615d521e6bc0
 # ╟─e3394c8a-edf0-11ea-1bb8-619f7abb6881
 # ╟─693af19c-64cc-11eb-31f3-57ab2fbae597
 # ╟─6361d102-64cc-11eb-31b7-fb631b632040
 # ╠═ae542fe4-64cc-11eb-29fc-73b7a66314a9
-# ╠═c29292b8-64cc-11eb-28db-b52c46e865e6
+# ╟─c29292b8-64cc-11eb-28db-b52c46e865e6
 # ╟─7b04331a-6bcb-11eb-34fa-1f5b151e5510
 # ╟─5319c03c-64cc-11eb-0743-a1612476e2d3
 # ╠═3db09d92-64cc-11eb-0333-45193c0fd1fe
