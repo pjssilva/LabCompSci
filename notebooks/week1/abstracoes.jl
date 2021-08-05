@@ -28,7 +28,7 @@ md"""
 """
 
 # ╔═╡ 60ae819a-70a7-11eb-31d4-750c7f5dc6ca
-PlutoUI.TableOfContents(aside=true)
+PlutoUI.TableOfContents(title="Índice", aside=true)
 
 # ╔═╡ 792c6a62-ec41-11ea-01f3-73e7eee23cc7
 md"""
@@ -189,7 +189,7 @@ end
 
 # ╔═╡ Cell order:
 # ╟─fbe33f22-672e-45b2-a1b1-30bb24033db8
-# ╟─60ae819a-70a7-11eb-31d4-750c7f5dc6ca
+# ╠═60ae819a-70a7-11eb-31d4-750c7f5dc6ca
 # ╟─792c6a62-ec41-11ea-01f3-73e7eee23cc7
 # ╟─ef1bfa16-70ea-11eb-189c-a54db292cd6f
 # ╠═0504ac94-70ee-11eb-1c4e-977d9e7d35c9

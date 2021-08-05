@@ -1,5 +1,5 @@
 ### A Pluto.jl notebook ###
-# v0.14.5
+# v0.15.1
 
 using Markdown
 using InteractiveUtils
@@ -24,7 +24,7 @@ begin
 		Pkg.PackageSpec(name="PNGFiles", version="0.3.6"),
 		Pkg.PackageSpec(name="Colors", version="0.12"),
 		Pkg.PackageSpec(name="ColorVectorSpace", version="0.8"),
-		Pkg.PackageSpec(name="PlutoUI", version="0.7"), 
+		Pkg.PackageSpec(name="PlutoUI", version="0.7"),
 		Pkg.PackageSpec(name="HypertextLiteral", version="0.5")
 	])
 
@@ -38,150 +38,87 @@ filter!(LOAD_PATH) do path
 	path != "@v#.#"
 end;
 
-# ╔═╡ e91d7926-ec6e-41e7-aba2-9dca333c8aa5
-html"""
-<div style="
-position: absolute;
-width: calc(100% - 30px);
-border: 50vw solid #282936;
-border-top: 500px solid #282936;
-border-bottom: none;
-box-sizing: content-box;
-left: calc(-50vw + 15px);
-top: -500px;
-height: 500px;
-pointer-events: none;
-"></div>
-
-<div style="
-height: 500px;
-width: 100%;
-background: #282936;
-color: #fff;
-padding-top: 68px;
-">
-<span style="
-font-family: Vollkorn, serif;
-font-weight: 700;
-font-feature-settings: 'lnum', 'pnum';
-"> <p style="
-font-size: 1.5rem;
-opacity: .8;
-"><em>Section 1.1</em></p>
-<p style="text-align: center; font-size: 2rem;">
-<em> Images as Data and Arrays </em>
-</p>
-
-<p style="
-font-size: 1.5rem;
-text-align: center;
-opacity: .8;
-"><em>Lecture Video</em></p>
-<div style="display: flex; justify-content: center;">
-<div  notthestyle="position: relative; right: 0; top: 0; z-index: 300;">
-<iframe src="https://www.youtube.com/embed/3zTO3LEY-cM" width=400 height=250  frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>
-</div>
-</div>
-
-<style>
-body {
-overflow-x: hidden;
-}
-</style>"""
+# ╔═╡ 75b96e8c-fa48-4b78-a7dc-587a676f04e2
+md"Essa é uma tradução livre de [images.jl](https://github.com/mitmath/18S191/blob/Spring21/notebooks/week1/images.jl)"
 
 # ╔═╡ d07fcdb0-7afc-4a25-b68a-49fd1e3405e7
-PlutoUI.TableOfContents(aside=true)
+PlutoUI.TableOfContents(title="Índice", aside=true)
 
 # ╔═╡ 9b49500c-0164-4556-a17b-7595e35c5ede
 md"""
-#### Intializing packages
+#### Inicializando os pacotes
 
-_When running this notebook for the first time, this could take up to 15 minutes. Hang in there!_
+_Lembre que quando executa esse caderno pela primeira vez pode levar um tempo para instalar pacotes e baixar arquivos da Internet. Em casos extremos isso pode levar até 15 minutos. Tenha paciência!_
 """
 
 # ╔═╡ ca1b507e-6017-11eb-34e6-6b85cd189002
 md"""
-# Images as examples of data  all around us
-Welcome to the Computational Thinking using Julia for Real-World Problems, at MIT in Spring 2021!
+# Imagens como exemplo de dados que estão por todo lado
 
-The aim of this course is to bring together concepts from computer science and applied math with coding in the modern **Julia language**, and to see how to apply these techniques to study interesting applications (and of course to have fun).
+Bem vindos ao Laboratório de Computação Científica usando Julia para problemas reais. Esse é um curso baseado no _Computational Thinking using Julia for Real-World Problems_ do MIT com uma pitada pessoal.
 
-We would be pleased if students who have been interested in computer science now become interested in computational science and those interested in scientific applications learn computer science they may not see elsewhere.
-... and for all students, we wish to share the value of 
-the Julia  language as the best of both worlds.
-"""
+O objetivo do curso é juntar conceitos de ciência da computação e matemática aplicada e código em liguagem moderna e ágil chamada **Julia**. A ideia é usar essas ideias em um curso no estilo "mãos-à-obra" olhando para aplicações interessantes e se divertir no processo.
 
-# ╔═╡ e9ff96d8-6bc1-11eb-0f6a-234b9fae047e
-md"""
+A ideia é tocar os estudos interessados em matemática aplicada e computação científica aprederem um pouco mais de ciência da computação e vice-versa. A ainda introduzir uma nova linguagem que traz novos conceitos e uma abordagem interessante para a computação científica. Então vamos lá aprender um pouco de tudo, exprimindo-se por código.
 
-## Alan's Essay: Are all programming languages the same? 
-
->Superficially, many programming languages are very similar.  "Showoffs" will compare functional programming vs imperative programming.  Others will compare compiled languages vs dynamic languages.  I will avoid such fancy terms in this little essay, preferring to provide this course's pedagogical viewpoint.
->
->Generally speaking beginning programmers should learn to create "arrays" write "for loops", "conditionals", "comparisons", express mathematical formulas, etc. So why Julia at a time when Python seems to be the language of teaching, and Java and C++ so prominent in the corporate world?
->
->As you might imagine, we believe Julia is special.   Oh you will still have the nitty gritty of when to use a bracket and a comma.  You might have strong opinions as to whether arrays should begin with 0 or 1 (joke: some say it's time to compromise and use ½.)  Getting past these irrelevant issues,  you will begin to experience one by one what makes Julia so very special.  For starters, a language that runs fast is more fun.  We can have you try things that would just be so slow in other languages it would be boring.  We also think you will start to notice how natural Julia is, how it feels like the mathematics, and how flexible it can be.  
->
->Getting to see the true value of fancy terms like multiple dispatch, strong typing, generic programming, and composable software will take a little longer, but stick with us, and you too will see why Julia is so very special.
 """
 
 # ╔═╡ 9111db10-6bc3-11eb-38e5-cf3f58536914
 md"""
-## Computer Science and Computational Science Working Together
+## O que é computação científica?
 """
 
 # ╔═╡ fb8a99ac-6bc1-11eb-0835-3146734a1c99
 md"""
-Applications of computer science in the real world use **data**, i.e. information that we can **measure** in some way. Data take many different forms, for example:
+Aplicações de computação no mundo real usam **dados**, isto é, informções que podemos **medir** de alguma forma. Esses dados podem ser de vários tipos, como por exemplo:
 
-- Numbers that change over time (**time series**): 
-  - Stock price each second / minute / day
-  - Weekly number of infections
-  - Earth's global average temperature
+- Números que variam no tempo (**séries temporais**):
+  - Preços de ações por segundo / minuto /dia
+  - Número diário / semanal de novos casos de uma epidemia 
+  - Temperatura global média por mês
 
-- Video:
-  - The view from a window of a self-driving car
-  - A hurricane monitoring station
-  - Ultrasound e.g. prenatal
+- Vídeo:
+  - A vista da câmera de um carro autônomo
+  - As imagens de uma câmera de segurança
+  - Ultrasom, por exemplo um exame pré-natal
 
-- Images:
-  - Diseased versus healthy tissue in a medical scan
-  - Pictures of your favourite dog
+- Imagens:
+  - Imagens de exames médicos com exemplos de tecidos sadios e doentes
+  - Fotos do seu animal de estimação
 """
 
 # ╔═╡ b795dcb4-6bc3-11eb-20ec-db2cc4b89bfb
 md"""
-#### Exercise: 
-> Think of another two examples in each category. Can you think of other categories of data?
+#### Exercício:
+> Tente imaginar outros exemplos em cada categoria. Você consegue também pensar em outras categorias de dados?
 """
 
 # ╔═╡ 8691e434-6bc4-11eb-07d1-8169158484e6
 md"""
-Computational science can be summed up by a simplified workflow:
+Assim, processos computacionais geralmente seguem o seguinte fluxo simplificado:
 """
 
 # ╔═╡ 546db74c-6d4e-11eb-2e27-f5bed9dbd9ba
 md"""
-## data ⟶  input  ⟶ process ⟶ model ⟶ visualize ⟶ output
+## dados ⟶  entrada  ⟶ processamento ⟶ modelagem ⟶ visualização ⟶ saída
 """
 
 # ╔═╡ 6385d174-6d4e-11eb-093b-6f6fafb79f84
 md"""
-$(html"<br>")
-To use any data source, we need to **input** the data of interest, for example by downloading it, reading in the resulting file, and converting it into a form that we can use in the computer. Then we need to **process** it in some way to extract information of interest. We usually want to **visualize** the results, and we may want to **output** them, for example by saving to disc or putting them on a website.
+Para usar uma fonte de dados, precisamos conseguir entrar com esses dados no nosso computador, por exemplo baixando a informação da Internet e lendo o arquivo obtido. Ele então deve ser convertido em uma forma que facilite as manipulações que desejamos fazer. Os dados são então **processados** de alguma forma para obter a informação desejada. Muitas vezes, também, desejemamos **visualizar** a informção obtida e **armazená-la** de alguma forma. 
 
-We often want to make a mathematical or computational **model** that can help us to understand and predict the behavior of the system of interest.
+Tipicamente o processamento está baseado em algum modelo matemático ou computacional que nos ajuda a entender os dados e extrair a informação de interesse.
 
-> In this course we aim to show how programming, computer science and applied math combine to help us with these goals.
+>O objetivo desse cuso é usar programção, ciência da computação e matemática aplicada para nos ajudar a atingir esses objetivos.
 """
 
 # ╔═╡ 132f6596-6bc6-11eb-29f1-1b2478c929af
 md"""
-# Data: Images (as an example of data)
-Let's start off by looking at **images** and how we can process them. 
-Our goal is to process the data contained in an image in some way, which we will do by developing and coding certain **algorithms**.
+# Dados: Imagens como um exemplo de dados
 
-Here is the the Fall 2020 version of this lecture (small variations) by 3-Blue-1-Brown (Grant Sanderson) for your reference.
+Vamos começar visualizando **imagens** e aprendendo como processá-las. Our objetivo é processar os dados presentes na imagem de algum momento. Isso pode ser feito utilizando **algoritmos** específicos.
+
+Deixo aqui um vídeo do 3-Blue-1-Brown (Grant Sanderson) apresentando uma pequena variação dessa aula na versão oritinal do curso oferecida no MIT no outono 2020. Pois é não dá para concorrer...
 """
 
 # ╔═╡ 635a03dd-abd7-49c8-a3d2-e68c7d83cc9b
@@ -192,135 +129,128 @@ html"""
 # ╔═╡ 9eb6efd2-6018-11eb-2db8-c3ce41d9e337
 md"""
 
+Ao abrirmos uma imagem no computador e ampliarmos o suficientes, iremos ver que elas são armazenadas como uma matriz de pequenos quadrados chmados de **pixels** (que vem do inglês "picture elements"). Cada pixel é preenchido com uma or única. Eles são então organizados em uma grade retangular bi-deimensional.
 
-If we open an image on our computer or the web and zoom in enough, we will see that it consists of many tiny squares, or **pixels** ("picture elements"). Each pixel is a block of one single colour, and the pixels are arranged in a two-dimensional square grid. 
+Como tudo no computador, essas cores são representadas no computador em formato RGB (três canais, números, de cores de tom vermelho (Red), verde (Green) e azul (Blue)). 
 
-You probably already know that these pixels are stored in a computer numerically
-perhaps in some form of RGB (red,green,blue) format.  This is the computer's represenation of the data.   
-
-Note that an image is already an **approximation** of the real world -- it is a two-dimensional, discrete representation of a three-dimensional reality.
+Lembrem-se que muitas imagens são apenas respresentações **aproximadas** da realidade. Elas são discretas e bi-dimensionais e tentam capturar uma realidade tri-dimensional.
 
 """
 
 # ╔═╡ e37e4d40-6018-11eb-3e1d-093266c98507
 md"""
-# Input and Visualize: loading and viewing an Image (in Julia)
+# Entrada e visualização: carregando e visualizando uma imagem (em Julia)
 """
 
 # ╔═╡ e1c9742a-6018-11eb-23ba-d974e57f78f9
 md"""
-Let's use Julia to load  actual images and play around with them. We can download images from the internet, your own file, or your own webcam.
+Vamos usar Julia para carregar imagens reais e manipulá-las. Podemos baixar imagens da Internet, ler de um arquivo ou mesmo usar sua webcam para tirar uma foto.
 """
 
 # ╔═╡ 9b004f70-6bc9-11eb-128c-914eadfc9a0e
 md"""
-## Downloading an image from the internet or a local file
-We can use the `Images.jl` package to load an image file in three steps.
+## Baixando uma imagem da Internet ou lendo de um arquivo local. 
+
+Vamos usar o pacote `Images.jl` e ler imagens em três passos simples.
 """
 
 # ╔═╡ 62fa19da-64c6-11eb-0038-5d40a6890cf5
 md"""
-Step 1: (from internet) we specify the URL (web address) to download from:
+Passo 1: (da Internet) devemos definir uma URL (endereço web) de onde baixar:
 $(html"<br>")
-(note that Pluto places results before commands because some people believe
-output is more interesting than code.  This takes some getting used to.)
+(observe que Pluto coloca as resultado antes do código que os gera porque o seu desenvolverdor considera que a saída é mais interessante (ou importante) que o código. Isso pode exigir um tempo de adaptação, principalmente para quem está acostumado com Jupyter.)
 """
 
 # ╔═╡ 34ee0954-601e-11eb-1912-97dc2937fd52
-url = "https://user-images.githubusercontent.com/6933510/107239146-dcc3fd00-6a28-11eb-8c7b-41aaf6618935.png" 
+url = "https://www.ime.unicamp.br/~pjssilva/images/ensino/labcompsci/apolo1.png"
 
 # ╔═╡ 9180fbcc-601e-11eb-0c22-c920dc7ee9a9
 md"""
-Step 2: Now we use the aptly-named `download` function to download the image file to our own computer. (Philip is Prof. Edelman's corgi.)
+Passo 2: Agora podemos usar a função `download` (essa é fácil de lembrar!) para baixar o arquivo de imagem no computador. (Apolo é o meu cachorro SRD.)
 """
 
 # ╔═╡ 34ffc3d8-601e-11eb-161c-6f9a07c5fd78
-philip_filename = download(url) # download to a local file. The filename is returned
+apolo_filename = download(url) # Baixa para um arquivo local, retornando o nome do arquivo onde ele foi armazenado.
 
 # ╔═╡ abaaa980-601e-11eb-0f71-8ff02269b775
 md"""
-Step 3:
-Using the `Images.jl` package (loaded at the start of this notebook; scroll up and take a look.) we can **load** the file, which automatically converts it into usable data. We'll store the result in a variable. (Remember the code is after the output.)
+Passo 3:
+Usando o pacote `Images.jl` (que foi carregado lá no topo desse cardeno, dê uma olhada) podemos **carregar** o arquivo na memória. Isso o transforma automaticamente em um tipo de dado que a linguagem consegue manipular. Armazenamos essa informação em uma variável. (Lembre que o código aparece depois da saída.)
 """
 
 # ╔═╡ aafe76a6-601e-11eb-1ff5-01885c5238da
-philip = load(philip_filename)
+apolo = load(apolo_filename)
 
 # ╔═╡ e86ed944-ee05-11ea-3e0f-d70fc73b789c
-md"_Hi there Philip_"
+md"_Oi Apolo!_"
 
 # ╔═╡ c99d2aa8-601e-11eb-3469-497a246db17c
 md"""
-We see that the Pluto notebook has recognised that we created an object representing an image, and automatically displayed the resulting image of Philip, the cute Welsh Pembroke corgi and co-professor of this course.
-Poor Philip will undergo quite a few transformations as we go along!
+O caderno Plutio reconheceu e apresentou o objeto que representa a imagem do Apolo, um cão SRD que vive comigo. O pobre Apolo será usado com exemplo nesse curso algumas vezes substituindo o crogi do professor Eldelman, autor original desses cadernos.
+
+Pobre Apolo, ele vai ter que passar por várias "transformações" ao longo de nosso curso!
 """
 
 # ╔═╡ 11dff4ce-6bca-11eb-1056-c1345c796ed4
 md"""
-- Exercise : change the url.
-- Exercise: download a file that is already on your own computer.
+- Exercício : troque a url para uma outra imagem na Internet.
+- Exercício: adapte o código para usar outro arquivo de imagem que já esteja em seu computador.
 """
 
 # ╔═╡ efef3a32-6bc9-11eb-17e9-dd2171be9c21
 md"""
-## Capturing an Image from your own camera
+## Capturando uma imagem de sua webcam
 """
 
 # ╔═╡ e94dcc62-6d4e-11eb-3d53-ff9878f0091e
 md"""
-Even more fun is to use your own webcam. Try pressing the enable button below. Then
-press the camera to capture an image. Kind of fun to keep pressing the button as you move your hand etc.
+Outra possibilidade divertida é capaturar uma imagem usando a webcam de seu computador. Tente selecionar o botão abaixo e dê permissão para o caderno acessar a sua webcam (ele está rodando em sua máquina). Depois basta selecionar o botão da câmera para capturar imagens. Você pode até pressionar várias vezes o botão enquanto se você e ver que a imagem capturada se move junto. Tudo em tempo real.
 """
 
 # ╔═╡ cef1a95a-64c6-11eb-15e7-636a3621d727
 md"""
-## Inspecting your data
+## Analisando o dado (a imagem)
 """
 
 # ╔═╡ f26d9326-64c6-11eb-1166-5d82586422ed
 md"""
-### Image size
+### Dimensões da imagem
 """
 
 # ╔═╡ 6f928b30-602c-11eb-1033-71d442feff93
 md"""
-The first thing we might want to know is the size of the image:
+A primeira coisa que vamos faer é pegar o tamanho da imagem:
 """
 
 # ╔═╡ 75c5c85a-602c-11eb-2fb1-f7e7f2c5d04b
-philip_size = size(philip)
+apolo_size = size(apolo)
 
 # ╔═╡ 77f93eb8-602c-11eb-1f38-efa56cc93ca5
 md"""
-Julia returns a pair of two numbers. Comparing these with the picture of the image, we see that the first number is the height, i.e. the vertical number of pixels, and the second is the width.
+Julia retorna dois números. Eles representam a altura e a largura da imagem, ou seja o número de pixels na vertical e na horizontal respectivamente.
 """
 
 # ╔═╡ 96b7d801-c427-4e27-ab1f-e2fd18fc24d0
-philip_height = philip_size[1]
+apolo_height = apolo_size[1]
 
 # ╔═╡ f08d02af-6e38-4ace-8b11-7af4930b64ea
-philip_width = philip_size[2]
+apolo_width = apolo_size[2]
 
 # ╔═╡ f9244264-64c6-11eb-23a6-cfa76f8aff6d
 md"""
-### Locations in an image: Indexing
+### Indexando para selecionar posições na imagem
 
-Now suppose that we want to examine a piece of the image in more detail. We need some way of specifying which piece of the image we want. 
-
-Thinking of the image as a grid of pixels, we need a way to tell the computer which pixel or group of pixels we want to refer to. 
-Since the image is a two-dimensional grid, we can use two integers (whole numbers) to give the coordinates of a single pixel.  Specifying coordinates like this is called **indexing**: think of the index of a book, which tells you *on which page* an idea is discussed.
-
-In Julia we use (square) brackets, `[` and `]` for indexing: 
+De uma forma geral, você pode imaginar que a imagem é uma matriz que contem valores RGB. Assim a forma natural de selecionar porções da imagem ou um pixel específico é usar indexação. A ideia é que vocês possam as coordenadas definindo qual linha e coluna querem selecionar. Isso é feito em Julia usando colchetes `[` e `]`. 
 """
 
 # ╔═╡ bd22d09a-64c7-11eb-146f-67733b8be241
-a_pixel = philip[200, 100]
+a_pixel = apolo[200, 100]
 
 # ╔═╡ 28860d48-64c8-11eb-240f-e1232b3638df
 md"""
-We see that Julia knows to draw our pixel object for us a block of the relevant color.
+Vemos que Julia nos mostra um bloco de cor sólida como representação de um pixel.
 
-When we index into an image like this, the first number indicates the *row* in the image, starting from the top, and the second the *column*, starting from the left. In Julia, the first row and column are numbered starting from 1, not from 0 as in some other programming languages.
+Lembrando, o primeiro número representa a *linha* na imagem, começando do topo e descendo. Já o segundo é a coluna na imagem, da esquera da para direita. Em Julia os índices começam em 1, diferenet de outras linguagens em que os índices começam no 0.
 """
 
 # ╔═╡ 4ef99715-4d8d-4f9d-bf0b-8df9907a14cf
@@ -328,105 +258,105 @@ When we index into an image like this, the first number indicates the *row* in t
 
 # ╔═╡ a510fc33-406e-4fb5-be83-9e4b5578717c
 md"""
-We can also use variables as indices...
+É claro que podemos usar variáveis no lugar dos indices.
 """
 
 # ╔═╡ 13844ebf-52c4-47e9-bda4-106a02fad9d7
 md"""
-...and these variables can be controlled by sliders!
+...e para fazer tudo mais divertido essas variáveis podem ser controladas por _sliders_!
 """
 
 # ╔═╡ 08d61afb-c641-4aa9-b995-2552af89f3b8
-@bind row_i Slider(1:size(philip)[1], show_value=true)
+@bind row_i Slider(1:size(apolo)[1], show_value=true)
 
 # ╔═╡ 6511a498-7ac9-445b-9c15-ec02d09783fe
-@bind col_i Slider(1:size(philip)[2], show_value=true)
+@bind col_i Slider(1:size(apolo)[2], show_value=true)
 
 # ╔═╡ 94b77934-713e-11eb-18cf-c5dc5e7afc5b
-row_i,col_i
+row_i, col_i
 
 # ╔═╡ ff762861-b186-4eb0-9582-0ce66ca10f60
-philip[row_i, col_i]
+apolo[row_i, col_i]
 
 # ╔═╡ c9ed950c-dcd9-4296-a431-ee0f36d5b557
 md"""
-### Locations in an image: Range indexing
+### Regiões em uma imagem: faixas de índices
 
-We saw that we can use the **row number** and **column number** to index a _single pixel_ of our image. Next, we will use a **range of numbers** to index _multiple rows or columns_ at once, returning a subarray:
+Vemos que ao usar um valor para a linha e outro para coluna conseguimos selecionar um pixel individual na imamgem. Agora vamos pegar uma faixa iteira de índices. Em Julia é possível selecionar múltiplas linhas e colunas de uma matriz obtendo uma nova matriz que presenta a região selecionada:
 """
 
 # ╔═╡ f0796032-8105-4f6d-b5ee-3647b052f2f6
-philip[550:650, 1:philip_width]
+apolo[550:650, 1:apolo_width]
 
 # ╔═╡ b9be8761-a9c9-49eb-ba1b-527d12097362
 md"""
-Here, we use `a:b` to mean "_all numbers between `a` and `b`_". For example:
+Nesse caso, usamos `a:b` para representar _todos os números de `a` até `b`_ (incluindo ambos extremos). Por exemplo:
 
 """
 
 # ╔═╡ d515286b-4ad4-449b-8967-06b9b4c87684
-collect(1:10)
+collect(2:10)
 
 # ╔═╡ eef8fbc8-8887-4628-8ba8-114575d6b91f
 md"""
 
-You can also use a `:` without start and end to mean "_every index_"
+Se usar apenas `:` Julia vai enteder que você quer _todos os índices_. Isso pode simplificar um pouco a expressão acima.
 """
 
 # ╔═╡ 4e6a31d6-1ef8-4a69-b346-ad58cfc4d8a5
-philip[550:650, :]
+apolo[550:650, :]
 
 # ╔═╡ e11f0e47-02d9-48a6-9b1a-e313c18db129
 md"""
-Let's get a single row of pixels:
+Podemos também elecionar uma única linha ou coluna.
 """
 
 # ╔═╡ 9e447eab-14b6-45d8-83ab-1f7f1f1c70d2
-philip[550, :]
+apolo[:, 500]
 
 # ╔═╡ c926435c-c648-419c-9951-ac8a1d4f3b92
-philip_head = philip[470:800, 140:410]
+apolo_head = apolo[140:1000, 250:1250]
 
 # ╔═╡ 32e7e51c-dd0d-483d-95cb-e6043f2b2975
 md"""
-#### Scroll in on Philip's nose!
+#### Selecione o nariz do Apolo!
 
-Use the widgets below (slide left and right sides).
+Use o selecionador abaixo para achar a faixa que pega justamente o nariz do Apolo. Você pode ajustar os dois lados.
 """
 
 # ╔═╡ 4b64e1f2-d0ca-4e22-a89d-1d9a16bd6788
-@bind range_rows RangeSlider(1:size(philip_head)[1])
+@bind range_rows RangeSlider(1:size(apolo_head)[1])
 
 # ╔═╡ 85919db9-1444-4904-930f-ba572cff9460
-@bind range_cols RangeSlider(1:size(philip_head)[2])
+@bind range_cols RangeSlider(1:size(apolo_head)[2])
 
 # ╔═╡ 2ac47b91-bbc3-49ae-9bf5-4def30ff46f4
-nose = philip_head[range_rows, range_cols]
+nose = apolo_head[range_rows, range_cols]
 
 # ╔═╡ 5a0cc342-64c9-11eb-1211-f1b06d652497
 md"""
-# Process: Modifying an image
+# Processamento: Modificando uma imagem
 
-Now that we have access to image data, we can start to **process** that data to extract information and/or modify it in some way.
+Agora que já sabemos como armazenar e manipular a imagem, podemos começar a **processá-la** para extrair informções e/ou moddificá-la de alguma forma.
 
-We might want to detect what type of objects are in the image, say to detect whether a patient has a certain disease. To achieve a high-level goal like this, we will need to perform mid-level operations, such as detecting edges that separate different objects based on their color. And, in turn, to carry that out we will need to do low-level operations like comparing colors of neighboring pixels and somehow deciding if they are "different".
+Podemos, por exemplo, querer identificar objetos na imagem. Por exemplo buscar um tumor numa imagem médica. Para ser capaz de atingir esse tipo de objetivo de alto nível, precisamos saber inicialmente fazer coisas mais simples, como detectar arestas ou selecionar objetos de acordo com sua cor. Essas operações podem, por sua vez, ser reduzidas a operações ainda mais elementares como comparar a cor de pixels vizinhos ou decidir se eles são suficientemnte "distindos".
 
 """
 
 # ╔═╡ 4504577c-64c8-11eb-343b-3369b6d10d8b
 md"""
-## Representing colors
+## Representando cores
 
-We can  use indexing to *modify* a pixel's color. To do so, we need a way to specify a new color.
+Uma primeira coisa que iremos fazer é *modificar* a cor de um pixel. Para conseguir isso precisamos ver com mais calma como essas cores são representadas.
 
-Color turns out to be a complicated concept, having to do with the interaction of the physical properties of light with the physiological mechanisms and mental processes by which we detect it!
+Cores são no fundo um conceito complexo que mistura as propriedades físicas (a frequẽncia), biológicas (quais cores os cones de luz que temos nos nossos olhos são capazes de captar) e até os processos cerebrais que traduzem os sinais adquiridos na nossa concepção mental dde cor. 
 
-We will ignore this complexity by using a standard method of representing colours in the computer as an **RGB triple**, i.e. a triple of three numbers $(r, g, b)$, giving the amount of red, of green and of blue in a colour, respectively. These are numbers between 0 (none) and 1 (full). The final colour that we perceive is the result of "adding" the corresponding amount of light of each colour; the details are fascinating, but beyond the scope of this course!
+Mas aqui nós vamos ignorar esses nuances e iremos no ater ao método padrão de presentar as cores como uma **tripla RGB**. Ela é basicamente formada de três números $(r, g, b)$ que represetam "quanto" vermelho, verde e azul uma cor possui. Esses são números reais entre 0 (representando _ausência_) e 1 (representado _tudo_). A cor final que percebemos vem justamente de juntarmos essas três informações em nosso cérebro. Isso tudo é facinante, mas não podemos ver os detalhes aqui.
 """
 
 # ╔═╡ 40886d36-64c9-11eb-3c69-4b68673a6dde
 md"""
-We can create a new color in Julia as follows:
+A maneira mais simples de criar um cor em Julia é usar:
 """
 
 # ╔═╡ 552235ec-64c9-11eb-1f7f-f76da2818cb3
@@ -435,23 +365,25 @@ RGB(1.0, 0.0, 0.0)
 # ╔═╡ c2907d1a-47b1-4634-8669-a68022706861
 begin
 	md"""
-	A pixel with $(@bind test_r Scrubbable(0:0.1:1; default=0.1)) red, $(@bind test_g Scrubbable(0:0.1:1; default=0.5)) green and $(@bind test_b Scrubbable(0:0.1:1; default=1.0)) blue looks like:
+	Já um pixel com $(@bind test_r Scrubbable(0:0.1:1; default=0.1)) de vermelho, $(@bind test_g Scrubbable(0:0.1:1; default=0.5)) de verde e $(@bind test_b Scrubbable(0:0.1:1; default=1.0)) de azul tem a seguinte cor:
 	"""
 end
-	
+
 
 # ╔═╡ ff9eea3f-cab0-4030-8337-f519b94316c5
 RGB(test_r, test_g, test_b)
 
 # ╔═╡ f6cc03a0-ee07-11ea-17d8-013991514d42
 md"""
-#### Exercise 2.5
-👉 Write a function `invert` that inverts a color, i.e. sends $(r, g, b)$ to $(1 - r, 1-g, 1-b)$.
+#### Exercício 2.5
+👉 Escreva uma função `invert` que inverte uma cor, ou seja, leva $(r, g, b)$ em $(1 - r, 1-g, 1-b)$.
+
+Dica: a função `fieldnames` recebe um tipo e devolve o nome dos campos disponíveis.
 """
 
 # ╔═╡ 63e8d636-ee0b-11ea-173d-bd3327347d55
 function invert(color::AbstractRGB)
-	
+
 	return missing
 end
 
@@ -471,171 +403,156 @@ red = RGB(0.8, 0.1, 0.1)
 invert(red)
 
 # ╔═╡ 846b1330-ee0b-11ea-3579-7d90fafd7290
-md"Can you invert the picture of Philip?"
+md"Can you invert the picture of apolo?"
 
 # ╔═╡ 943103e2-ee0b-11ea-33aa-75a8a1529931
-philip_inverted = missing
+apolo_inverted = missing
 
 # ╔═╡ 2ee543b2-64d6-11eb-3c39-c5660141787e
 md"""
 
-## Modifying a pixel
+## Modificando um pixel
 
-Let's start by seeing how to modify an image, e.g. in order to hide sensitive information.
+Vamos começar pensando como modificar uma imagem, por exemplo para esconder alguma informação sensível.
 
-We do this by assigning a new value to the color of a pixel:
+Podemos fazer isso trocando a code de um pixel:
 """
 
 # ╔═╡ 53bad296-4c7b-471f-b481-0e9423a9288a
 let
-	temp = copy(philip_head)
-	temp[100, 200] = RGB(1.0, 0.0, 0.0)
+	temp = copy(apolo_head)
+	temp[100, 200] = RGB(0.0, 0.0, 1.0)
 	temp
 end
 
 # ╔═╡ 81b88cbe-64c9-11eb-3b26-39011efb2089
 md"""
-Be careful: We are actually *modifying* the original image here, even though if we look at the image it is hard to spot, since a single pixel is so small.
+Cuidado: nós de fatos estamos *modificando* a imagem mesmo que não consigamos de fato ver a modificação já que um único pixel foi alterado.
 """
 
 # ╔═╡ ab9af0f6-64c9-11eb-13d3-5dbdb75a69a7
 md"""
-## Groups of pixels
+## Grupos de pixels
 
-We probably want to examine and modify several pixels at once.
-For example, we can extract a horizontal strip 1 pixel tall:
+Nós podemos ter também o interesse de examinar e modificar vários pixels de uma vez. Por exemplo, vamos extrair uma faixa horizontal com um pixel de altura:
 """
 
 # ╔═╡ e29b7954-64cb-11eb-2768-47de07766055
-philip_head[50, 50:100]
+apolo_head[250, 25:300]
 
 # ╔═╡ 8e7c4866-64cc-11eb-0457-85be566a8966
 md"""
-Here, Julia is showing the strip as a collection of rectangles in a row.
-
-
+Nesse caso, Julia mostra a faixa como um conjunto de retângulos em uma linha.
 """
 
 # ╔═╡ f2ad501a-64cb-11eb-1707-3365d05b300a
 md"""
-And then modify it:
+Podemos também modificar essa faixa.
 """
 
 # ╔═╡ 4f03f651-56ed-4361-b954-e6848ac56089
 let
-	temp = copy(philip_head)
-	temp[50, 50:100] .= RGB(1.0, 0.0, 0.0)
+	temp = copy(apolo_head)
+	temp[250, 25:300] .= RGB(0.0, 0.0, 1.0)
 	temp
 end
 
 # ╔═╡ 2808339c-64cc-11eb-21d1-c76a9854aa5b
 md"""
-Similarly we can modify a whole rectangular block of pixels:
+E, de forma análoga, modificamos um bloco retangular de pixels:
 """
 
 # ╔═╡ 1bd53326-d705-4d1a-bf8f-5d7f2a4e696f
 let
-	temp = copy(philip_head)
-	temp[50:100, 50:100] .= RGB(1.0, 0.0, 0.0)
+	temp = copy(apolo_head)
+	temp[100:180, 100:200] .= RGB(0.0, 0.0, 1.0)
 	temp
 end
 
 # ╔═╡ a5f8bafe-edf0-11ea-0da3-3330861ae43a
 md"""
-#### Exercise 1.2
+#### Exercício 1.2
 
-👉 Generate a vector of 100 zeros. Change the center 20 elements to 1.
+👉 Gere um vetor de 100 zeros e altere o 20 elementos centrais para 1.
 """
 
 # ╔═╡ b6b65b94-edf0-11ea-3686-fbff0ff53d08
 function create_bar()
-	
+
 	return missing
 end
 
 # ╔═╡ 693af19c-64cc-11eb-31f3-57ab2fbae597
 md"""
-## Reducing the size of an image
+## Reduzindo o tamanho da imagem
 """
 
 # ╔═╡ 6361d102-64cc-11eb-31b7-fb631b632040
 md"""
-Maybe we would also like to reduce the size of this image, since it's rather large. For example, we could take every 10th row and every 10th column and make a new image from the result:
+Podemos também querer reduzir o tamanho da imagem, já que ela é um pouco grande. Podemos, por exeplo, pegar o um pixel a cada 10 linhas e 10 colunas e gerar uma nova imagem com o resultado.
 """
 
 # ╔═╡ ae542fe4-64cc-11eb-29fc-73b7a66314a9
-reduced_image = philip[1:10:end, 1:10:end]
+reduced_image = apolo[1:10:end, 1:10:end]
 
 # ╔═╡ c29292b8-64cc-11eb-28db-b52c46e865e6
 md"""
-Note that the resulting image doesn't look very good, since we seem to have lost too much detail. 
+Observando com calma a imagem não parece tão boa, ela perdeu muitos detalhes.
 
-#### Exercise
+#### Exercício
 
-> Think about what we might do to reduce the size of an image without losing so much detail.
+> Tente pensar como seria possível reduzir a imagem sem perder tanto detalhe.
 """
 
 # ╔═╡ 7b04331a-6bcb-11eb-34fa-1f5b151e5510
 md"""
-# Model: Creating synthetic images 
+# Modelagem: Criando imagens sintéticas
 
-Think about your favorite Pixar movie (e.g. Monsters Inc.) Movie frames are images that are generated from complicated mathematical models.  Ray tracing (which may be covered in this class)
-is a method for making images feel realistic.  
+Pense no seu filme favorita da Pixar (por exemplo Monstros S. A.). Quadros desses filmes são imagens geradas a partir de modelos matemáticos complexos. Uma das técnicas que são usadas é o Ray tracing (que talvez vejamos nesse curso). Essa é uma técnica muito usada na geração de imagens que parecem realísticas.
 """
 
 # ╔═╡ 5319c03c-64cc-11eb-0743-a1612476e2d3
 md"""
-# Output: Saving an image to a file
+# Saída: Gravando uma imagem em arquivo
 
-Finally, we want to be able to save our new creation to a file. To do so, you can **right click** on a displayed image, or you can write it to a file. Fill in a path below:
+Finamente, nós podemos querer gravar nossa nova criação em um arquivo. Para isso, você pode **aperta com o botão direito** sobre uma imagem e salvá-la para um arquivo. Mas você também pode querer salvar a imagem usado Julia, basta usar a função `save` que recebe o nome do arquivo destino e a imagem a ser guardada.
 """
 
 # ╔═╡ 3db09d92-64cc-11eb-0333-45193c0fd1fe
-save("reduced_phil.png", reduced_image)
+save("reduced_apolo.png", reduced_image)
 
 # ╔═╡ 61606acc-6bcc-11eb-2c80-69ceec9f9702
 md"""
-# $(html"<br>")   
+# $(html"<br>")
 """
 
 # ╔═╡ dd183eca-6018-11eb-2a83-2fcaeea62942
 md"""
-# Computer science: Arrays
+# Ciência da computação: arrays
 
-An image is a concrete example of a fundamental concept in computer science, namely an **array**. 
+Um imagem é um exemplo concreto de uma ideia geral e fundamental em computação, o **aray**. 
 
-Just as an image is a rectangular grid, where each grid cell contains a single color,
-an array is a rectangular grid for storing data. Data is stored and retrieved using indexing, just as in the image examples: each cell in the grid can store a single "piece of data" of a given type.
+Uma imagem é uma malha retangular em que cada elemento contém uma cor. Um array é uma malha retangular para armazenar dados de um _único tipo_. Os dados são armazenados e recuperados usando índices, exatamente como no exemplo das imagens: cada célula da malha pode armazenar uma "única unidade" de um certo tipo.
 
+## Dimensão de um array
 
-## Dimension of an array
+OK, isso é um pouco confuso para um matemático. Mas em programação chamamos de dimensão de um array o número de eixos que usamos na indexação. Assim, o que costumamos de chamar de vetor teria uma dimensão. Já uma matriz duas. É possível criar arrays com mais de duas dimensões, que em matemática levaria a tensores. Além da dimensão (número de eixos), precisamos definir o comprimento de cada eixo e quais são de fato os índices que podem ser usados. Em Julia a convenção é que os índices começam em 1 e vão até o comprimento daquele eixo. Mas é também possível definir outras indexações se isso for estritamente necessário.
 
-An array can be one-dimensional, like the strip of pixels above, two-dimensional, three-dimensional, and so on. The dimension tells us the number of indices that we need to specify a unique location in the grid.
-The array object also needs to know the length of the data in each dimension.
+## Arrays como estrutura dados
 
-## Names for different types of array
+Arrays são um exemplo simples de **estruturas de dados**. Elas são formas de armazenar dados e acessá-los. Diferentes estruturas de dados podem ser usada em diferentes situações. O importante é usar a estratura adequada, que é aquela que facilita as manipulações que você deseja fazer nos dados. Por exemplo, arrays são ótimos para acessar qualquer porção dos dados com posição conhecida. Mas eles já não são tão bons se desejamos procurar uma informação.
 
-One-dimensional arrays are often called **vectors** (or, in some other languages, "lists") and two-dimensional arrays are **matrices**. Higher-dimensional arrays are  **tensors**.
-
-
-## Arrays as data structures
-
-An array is an example of a **data structure**, i.e. a way of arranging data such that we can access it. A key theme in computer science is that of designing different data structures that represent data in different ways.
-
-Conceptually, we can think of an array as a block of data that has a position or location in space. This can be a useful way to arrange data if, for example, we want to represent the fact that values in nearby locations in array are somehow near to one another.
-
-Images are a good example of this: neighbouring pixels often represent different pieces of the same object, for example the rug or floor, or Philip himself, in the photo. We thus expect neighbouring pixels to be of a similar color. On the other hand, if they are not, this is also useful information, since that may correspond to the edge of an object.
-
+Os arrays tem essa noção de posição que os torna natural na representação de informação que tem essa estrutura posicional, como as imagens. Em imagens objetos distinos estão próximos (como o piso ou o nariz do Apolo). Dessa forma podemos esperar que pixels próximos tenham cores semelhantes e quando isso não ocorre podemos imaginar que estamos "trocando" de objetos e encontrando uma fronteira, uma aresta de um novo objeto. Essa estrutura será aproveitada nas próximas aulas.
 """
 
 # ╔═╡ 8ddcb286-602a-11eb-3ae0-07d3c77a0f8c
 md"""
-# Julia: constructing arrays
+# Julia: construindo arrays
 
-## Creating vectors and matrices
-Julia has strong support for arrays of any dimension.
+## Criando vetores e matrices
+Julia lida muito bem com arrays de qualquer dimensão.
 
-Vectors, or one-dimensional arrays, are written using square brackets and commas:
+Vetores, que são arrays uni-demensionais, podem ser criados usando uma notação com colchetes e vírgulas:
 """
 
 # ╔═╡ f4b0aa23-2d76-4d88-b2a4-3807e88d27ce
@@ -646,7 +563,7 @@ Vectors, or one-dimensional arrays, are written using square brackets and commas
 
 # ╔═╡ 2b0e6450-64d4-11eb-182b-ff1bd515b56f
 md"""
-Matrices, or two-dimensional arrays, also use square brackets, but with spaces and new lines instead of commas:
+Já matrizes, que são bi-dimensionais, também usam colchetes.Matrices, mas separam elementos de uma mesma linha por espaços e as linhas em si por quabra de linha ou ponto-e-vírgula:
 """
 
 # ╔═╡ 3b2b041a-64d4-11eb-31dd-47d7321ee909
@@ -656,14 +573,15 @@ Matrices, or two-dimensional arrays, also use square brackets, but with spaces a
 # ╔═╡ 0f35603a-64d4-11eb-3baf-4fef06d82daa
 md"""
 
-## Array comprehensions
+## Compreensões de arrays
 
-It's clear that if we want to create an array with more than a few elements, it will be *very* tedious to do so by hand like this.
-Rather, we want to *automate* the process of creating an array by following some pattern, for example to create a whole palette of colors!
+Quando queremos criar arrays com mais de um punhado de elemento já não é tão prático usar a notação acima. Uma forma de *automatizar* esse processo e criar o novo array seguindo algum tipo de padrão. Por exemplo, podemos querer criar todo um gradiente de cores.
 
-Let's start with all the possible colors interpolating between black, `RGB(0, 0, 0)`, and red, `RGB(1, 0, 0)`.  Since only one of the values is changing, we can represent this as a vector, i.e. a one-dimensional array.
+Para isso vamos interpolar linearmente entre dois valores. No exemplo abaixo o valor inicial seria o `RGB(0, 0, 0)`, que representa o preto, e o final o vermelho, `RGB(1, 0, 0)`. Como apenas um valor está mudando (ou mais formalmente os valores estão mudando em uma direção específica), é possível armazenar o resultado num vetor.
 
-A neat method to do this is an **array comprehension**. Again we use square brackets  to create an array, but now we use a **variable** that varies over a given **range** values:
+Uma forma espera de fazer isso é usar uma **compreensão de array**, que é criar um novo array a partir de uma modificação de elements de um outro array (ou iterador). 
+
+Vejamos o exemplo:
 """
 
 # ╔═╡ e69b02c6-64d6-11eb-02f1-21c4fb5d1043
@@ -671,12 +589,12 @@ A neat method to do this is an **array comprehension**. Again we use square brac
 
 # ╔═╡ fce76132-64d6-11eb-259d-b130038bbae6
 md"""
-Here, `0:0.1:1` is a **range**; the first and last numbers are the start and end values, and the middle number is the size of the step.
+Nele, `0:0.1:1` é um **range** (uma faixa de números). O primeiro valor diz onde começa, o último onde termina e o do meio, quando existir, o passo que deve ser dados.
 """
 
 # ╔═╡ 17a69736-64d7-11eb-2c6c-eb5ebf51b285
 md"""
-In a similar way we can create two-dimensional matrices, by separating the two variables for each dimension with a comma (`,`):
+Podemos criar de maneira similar matrizes que são bimensionais, usamos aqui um `for` que pecorre dois ranges, o primeiro variando as linhas e o segundo as colunas. Os dois ranges deve ser separados por vírgula (`,`). No lugar dos ranges, podem estar outros objetos que sabemos percorrer, como vetores ou mesmo (uma única) matriz.
 """
 
 # ╔═╡ 291b04de-64d7-11eb-1ee0-d998dccb998c
@@ -684,33 +602,37 @@ In a similar way we can create two-dimensional matrices, by separating the two v
 
 # ╔═╡ 647fddf2-60ee-11eb-124d-5356c7014c3b
 md"""
-## Joining matrices
+## Concatenando matrizes
 
-We often want to join vectors and matrices together. We can do so using an extension of the array creation syntax:
+Para concatenar matrizes podemos usar a justaposição usando uma sintaxe selhante à criação de arrays:
 """
 
 # ╔═╡ 7d9ad134-60ee-11eb-1b2a-a7d63f3a7a2d
-[philip_head  philip_head]
+[apolo_head  apolo_head]
 
 # ╔═╡ 8433b862-60ee-11eb-0cfc-add2b72997dc
-[philip_head                   reverse(philip_head, dims=2)
- reverse(philip_head, dims=1)  rot180(philip_head)]
+[apolo_head                   reverse(apolo_head, dims=2)
+ reverse(apolo_head, dims=1)  rot180(apolo_head)]
 
 # ╔═╡ 5e52d12e-64d7-11eb-0905-c9038a404e24
 md"""
-# Pluto: Interactivity using sliders
+# Pluto: Iteratividade usando _sliders_
 """
 
 # ╔═╡ 6aba7e62-64d7-11eb-2c49-7944e9e2b94b
 md"""
-Suppose we want to see the effect of changing the number of colors in our vector or matrix. We could, of course, do so by manually fiddling with the range.
+Pluto tem algumas ferramentas para criar cadernos com iteratividade sem que o leitor precise alterar código. 
 
-It would be nice if we could do so using a **user interface**, for example with a **slider**. Fortunately, the Pluto notebook allows us to do so!
+Por exemplo, suponha que queremos ver o efeito de se alterar um valor, digamos o número de tons de vermelho que usaremos no nosso gradiente. É claro que isso pode ser feito ajustando o range.
+
+Mas Pluto nos permite também associar o valor de uma variável a posição de um slider (vimos outros exemplos durante a aula) e usar isso para definir o número de tons de vermehor que veremos no resultado.
+
+Isso é um exemplo de se usar um elemento de **interface gráfica** em uma página web para torná-la iterativa. Vamos ver como funciona.
 """
 
 # ╔═╡ afc66dac-64d7-11eb-1ad0-7f62c20ffefb
 md"""
-We can define a slider using
+Nós definimos o slider através de
 """
 
 # ╔═╡ b37c9868-64d7-11eb-3033-a7b5d3065f7f
@@ -718,17 +640,17 @@ We can define a slider using
 
 # ╔═╡ b1dfe122-64dc-11eb-1104-1b8852b2c4c5
 md"""
-[The `Slider` type is defined in the `PlutoUI.jl` package.]
+[O tipo `Slider` é definido n pacote `PlutoUI.jl`.]
 """
 
 # ╔═╡ cfc55140-64d7-11eb-0ff6-e59c70d01d67
 md"""
-This creates a new variable called `number_reds`, whose value is the value shown by the slider. When we move the slider, the value of the variable gets updated. Since Pluto is a **reactive** notebook, other cells which use the value of this variable will *automatically be updated too*!
+Isso cira uma nova variável chamada `number_reds` cujo valor é obtido a partir do valor que está no slider. Ao mover o slider, altermos o valor e a variável tem seu conteúdo atualizado. Isso resulta, devido à **reatividade** de Pluto, em mudanças em todas as células do caderno que usam esse valor! Isso tudo ocorre automaticamente sem que nós precisemos intervir!
 """
 
 # ╔═╡ fca72490-64d7-11eb-1464-f5e0582c4d18
 md"""
-Let's use this to make a slider for our one-dimensional collection of reds:
+Aqui está o código que gera o gradiente a partir do número de tons de vermelhos que escolhido no slider. Notem que preto vai estar sempre lá.
 """
 
 # ╔═╡ 88933746-6028-11eb-32de-13eb6ff43e29
@@ -736,37 +658,38 @@ Let's use this to make a slider for our one-dimensional collection of reds:
 
 # ╔═╡ 1c539b02-64d8-11eb-3505-c9288357d139
 md"""
-When you move the slider, you should see the number of red color patches change!
-"""
-
-# ╔═╡ 10f6e6da-64d8-11eb-366f-11f16e73043b
-md"""
-What is going on here is that we are creating a vector in which `red_value` takes each value in turn from the range from `0` up to the current value of `number_reds`. If we change `number_reds`, then we create a new vector with that new number of red patches.
+Ao mover o slider, vemos que o gradiente se ajusta automaticamente.
 """
 
 # ╔═╡ 82a8314c-64d8-11eb-1acb-e33625381178
 md"""
-#### Exercise
+#### Exercício
 
-> Make three sliders with variables `r`, `g` and `b`. Then make a single color patch with the RGB color given by those values.
+>Crie três slider para pegar três valores RGB e cria um bloco de cor com os valores selecionados. 
+
+Obs: Pluto não permite criar variáveis com o mesmo nome em células diferente. Isso é fundamental para permitir a reatividade e a reordenação de células.
 """
 
 # ╔═╡ 576d5e3a-64d8-11eb-10c9-876be31f7830
 md"""
-We can do the same to create different size matrices, by creating two sliders, one for reds and one for greens. Try it out!
+Dá também para estender o exemplo da matriz de cores acima usando sliders para definir o número de linhas e colunas. Tente você mesmo!
 """
+
+# ╔═╡ a7cbbca2-324a-4d3e-ae03-c1e07f80f7e4
+md"Obs: O código para pegar a imagem da webcam não está em `PlutoUI` ele está abaixo e usa diretamente HTML. Se quiser usar isso em outro lugar, você terá que copiar e colar ou colocar em uma biblioteca."
 
 # ╔═╡ ace86c8a-60ee-11eb-34ef-93c54abc7b1a
 md"""
-# Summary
+# Resumo
 """
 
 # ╔═╡ b08e57e4-60ee-11eb-0e1a-2f49c496668b
 md"""
-Let's summarize the main ideas from this notebook:
-- Images are **arrays** of colors
-- We can inspect and modify arrays using **indexing**
-- We can create arrays directly or using **array comprehensions**
+Vamos resumid as principais ideias desse caderno:
+
+- Imagens são como **arrays** (mais precisamente matrizes) de cores.
+- Nós podemos acessar e modificar arrays unsando **índices**.
+- Noós podemos criar arrays explícitamente ou através de funções ou usando **compreensões de arrays**.
 """
 
 # ╔═╡ 9025a5b4-6066-11eb-20e8-099e9b8f859e
@@ -784,25 +707,25 @@ end
 colored_line(create_bar())
 
 # ╔═╡ e074560a-601b-11eb-340e-47acd64f03b2
-hint(text) = Markdown.MD(Markdown.Admonition("hint", "Hint", [text]))
+hint(text) = Markdown.MD(Markdown.Admonition("dica", "Dica", [text]))
 
 # ╔═╡ e0776548-601b-11eb-2563-57ba2cf1d5d1
-almost(text) = Markdown.MD(Markdown.Admonition("warning", "Almost there!", [text]))
+almost(text) = Markdown.MD(Markdown.Admonition("aviso", "Quase lá!", [text]))
 
 # ╔═╡ e083bef6-601b-11eb-2134-e3063d5c4253
-still_missing(text=md"Replace `missing` with your answer.") = Markdown.MD(Markdown.Admonition("warning", "Here we go!", [text]))
+still_missing(text=md"Substitua `missing` com sua resposta.") = Markdown.MD(Markdown.Admonition("aviso", "Vamos lá!", [text]))
 
 # ╔═╡ e08ecb84-601b-11eb-0e25-152ed3a262f7
 keep_working(text=md"The answer is not quite right.") = Markdown.MD(Markdown.Admonition("danger", "Keep working on it!", [text]))
 
 # ╔═╡ e09036a4-601b-11eb-1a8b-ef70105ab91c
-yays = [md"Great!", md"Yay ❤", md"Great! 🎉", md"Well done!", md"Keep it up!", md"Good job!", md"Awesome!", md"You got the right answer!", md"Let's move on to the next section."]
+yays = [md"Ótimo!", md"Ôba ❤", md"Muito bom! 🎉", md"Bom trabalho!", md"Continue assim!", md"Perfeito!", md"Incrível!", md"Você acertou!", md"Podemos continuar para a próxima seção."]
 
 # ╔═╡ e09af1a2-601b-11eb-14c8-57a46546f6ce
-correct(text=rand(yays)) = Markdown.MD(Markdown.Admonition("correct", "Got it!", [text]))
+correct(text=rand(yays)) = Markdown.MD(Markdown.Admonition("correto", "Você entendeu!", [text]))
 
 # ╔═╡ e0a4fc10-601b-11eb-211d-03570aca2726
-not_defined(variable_name) = Markdown.MD(Markdown.Admonition("danger", "Oopsie!", [md"Make sure that you define a variable called **$(Markdown.Code(string(variable_name)))**"]))
+not_defined(variable_name) = Markdown.MD(Markdown.Admonition("perigo", "Ooppss!", [md"Verifique que você definiu uma variável chamada **$(Markdown.Code(string(variable_name)))**"]))
 
 # ╔═╡ e3394c8a-edf0-11ea-1bb8-619f7abb6881
 if !@isdefined(create_bar)
@@ -835,7 +758,7 @@ function camera_input(;max_size=150, default_url="https://i.imgur.com/SUmi94P.pn
 """
 <span class="pl-image waiting-for-permission">
 <style>
-	
+
 	.pl-image.popped-out {
 		position: fixed;
 		top: 0;
@@ -880,7 +803,7 @@ function camera_input(;max_size=150, default_url="https://i.imgur.com/SUmi94P.pn
 		position: absolute;
 		flex-direction: column;
 	}
-	
+
 	.pl-image .bar#bottom {
 		background: black;
 		border-radius: 0 0 1rem 1rem;
@@ -926,7 +849,7 @@ function camera_input(;max_size=150, default_url="https://i.imgur.com/SUmi94P.pn
 		<button id="shutter" title="Click to take a picture">📷</button>
 		</div>
 	</div>
-		
+
 	<div id="prompt">
 		<span>
 		Enable webcam
@@ -962,7 +885,7 @@ function camera_input(;max_size=150, default_url="https://i.imgur.com/SUmi94P.pn
 		}
 		span.dispatchEvent(new CustomEvent("input"))
 	}
-	
+
 	const clear_camera = () => {
 		window.stream.getTracks().forEach(s => s.stop());
 		video.srcObject = null;
@@ -1010,8 +933,8 @@ function camera_input(;max_size=150, default_url="https://i.imgur.com/SUmi94P.pn
 		console.log(video)
 		send_source(video, video.videoWidth, video.videoHeight)
 	}
-	
-	
+
+
 	document.addEventListener("visibilitychange", () => {
 		if (document.visibilityState != "visible") {
 			clear_camera()
@@ -1037,41 +960,38 @@ end
 # ╔═╡ d6742ea0-1106-4f3c-a5b8-a31a48d33f19
 @bind webcam_data1 camera_input()
 
-# ╔═╡ 2a94a2cf-b697-4b0b-afd0-af2e35af2bb1
-@bind webcam_data camera_input()
-
 # ╔═╡ e891fce0-601b-11eb-383b-bde5b128822e
 
 function process_raw_camera_data(raw_camera_data)
 	# the raw image data is a long byte array, we need to transform it into something
 	# more "Julian" - something with more _structure_.
-	
+
 	# The encoding of the raw byte stream is:
 	# every 4 bytes is a single pixel
 	# every pixel has 4 values: Red, Green, Blue, Alpha
 	# (we ignore alpha for this notebook)
-	
-	# So to get the red values for each pixel, we take every 4th value, starting at 
+
+	# So to get the red values for each pixel, we take every 4th value, starting at
 	# the 1st:
 	reds_flat = UInt8.(raw_camera_data["data"][1:4:end])
 	greens_flat = UInt8.(raw_camera_data["data"][2:4:end])
 	blues_flat = UInt8.(raw_camera_data["data"][3:4:end])
-	
+
 	# but these are still 1-dimensional arrays, nicknamed 'flat' arrays
 	# We will 'reshape' this into 2D arrays:
-	
+
 	width = raw_camera_data["width"]
 	height = raw_camera_data["height"]
-	
+
 	# shuffle and flip to get it in the right shape
 	reds = reshape(reds_flat, (width, height))' / 255.0
 	greens = reshape(greens_flat, (width, height))' / 255.0
 	blues = reshape(blues_flat, (width, height))' / 255.0
-	
+
 	# we have our 2D array for each color
-	# Let's create a single 2D array, where each value contains the R, G and B value of 
+	# Let's create a single 2D array, where each value contains the R, G and B value of
 	# that pixel
-	
+
 	RGB.(reds, greens, blues)
 end
 
@@ -1082,15 +1002,6 @@ myface1 = process_raw_camera_data(webcam_data1);
 [
 	myface1              myface1[   :    , end:-1:1]
 	myface1[end:-1:1, :] myface1[end:-1:1, end:-1:1]
-]
-
-# ╔═╡ 3e0ece65-b8a7-4be7-ae44-6d7210c2e15b
-myface = process_raw_camera_data(webcam_data);
-
-# ╔═╡ 4ee18bee-13e6-4478-b2ca-ab66100e57ec
-[
-	myface              myface[   :    , end:-1:1]
-	myface[end:-1:1, :] myface[end:-1:1, end:-1:1]
 ]
 
 # ╔═╡ 3ef77236-1867-4d02-8af2-ff4777fcd6d9
@@ -1141,7 +1052,7 @@ ct-answer {
 """
 
 # ╔═╡ 61b29e7d-5aba-4bc8-870b-c1c43919c236
-exercise(x, number="") = 
+exercise(x, number="") =
 @htl("""
 	<ct-exercise class="exercise">
 	<h4>Exercise <span>$(number)</span></h4>
@@ -1168,16 +1079,15 @@ quick_question(x, number, options, correct) = let
 end
 
 # ╔═╡ edf900be-601b-11eb-0456-3f7cfc5e876b
-md"_Lecture 1, Spring 2021, version 0_"
+md"_Aula 1, 2º Sem 2021, version 0_"
 
 # ╔═╡ Cell order:
-# ╟─e91d7926-ec6e-41e7-aba2-9dca333c8aa5
+# ╟─75b96e8c-fa48-4b78-a7dc-587a676f04e2
 # ╟─d07fcdb0-7afc-4a25-b68a-49fd1e3405e7
 # ╟─9b49500c-0164-4556-a17b-7595e35c5ede
 # ╠═74b008f6-ed6b-11ea-291f-b3791d6d1b35
 # ╟─71a1e08a-6abc-48d5-b177-5184dbdd76a8
 # ╟─ca1b507e-6017-11eb-34e6-6b85cd189002
-# ╟─e9ff96d8-6bc1-11eb-0f6a-234b9fae047e
 # ╟─9111db10-6bc3-11eb-38e5-cf3f58536914
 # ╟─fb8a99ac-6bc1-11eb-0835-3146734a1c99
 # ╟─b795dcb4-6bc3-11eb-20ec-db2cc4b89bfb
@@ -1201,7 +1111,7 @@ md"_Lecture 1, Spring 2021, version 0_"
 # ╟─11dff4ce-6bca-11eb-1056-c1345c796ed4
 # ╟─efef3a32-6bc9-11eb-17e9-dd2171be9c21
 # ╟─e94dcc62-6d4e-11eb-3d53-ff9878f0091e
-# ╟─d6742ea0-1106-4f3c-a5b8-a31a48d33f19
+# ╠═d6742ea0-1106-4f3c-a5b8-a31a48d33f19
 # ╠═1d7375b7-7ea6-4d67-ab73-1c69d6b8b87f
 # ╠═6224c74b-8915-4983-abf0-30e6ba04a46d
 # ╟─cef1a95a-64c6-11eb-15e7-636a3621d727
@@ -1227,7 +1137,7 @@ md"_Lecture 1, Spring 2021, version 0_"
 # ╠═d515286b-4ad4-449b-8967-06b9b4c87684
 # ╟─eef8fbc8-8887-4628-8ba8-114575d6b91f
 # ╠═4e6a31d6-1ef8-4a69-b346-ad58cfc4d8a5
-# ╟─e11f0e47-02d9-48a6-9b1a-e313c18db129
+# ╠═e11f0e47-02d9-48a6-9b1a-e313c18db129
 # ╠═9e447eab-14b6-45d8-83ab-1f7f1f1c70d2
 # ╠═c926435c-c648-419c-9951-ac8a1d4f3b92
 # ╟─32e7e51c-dd0d-483d-95cb-e6043f2b2975
@@ -1259,14 +1169,14 @@ md"_Lecture 1, Spring 2021, version 0_"
 # ╠═4f03f651-56ed-4361-b954-e6848ac56089
 # ╟─2808339c-64cc-11eb-21d1-c76a9854aa5b
 # ╠═1bd53326-d705-4d1a-bf8f-5d7f2a4e696f
-# ╟─a5f8bafe-edf0-11ea-0da3-3330861ae43a
+# ╠═a5f8bafe-edf0-11ea-0da3-3330861ae43a
 # ╠═b6b65b94-edf0-11ea-3686-fbff0ff53d08
 # ╟─d862fb16-edf1-11ea-36ec-615d521e6bc0
 # ╟─e3394c8a-edf0-11ea-1bb8-619f7abb6881
 # ╟─693af19c-64cc-11eb-31f3-57ab2fbae597
 # ╟─6361d102-64cc-11eb-31b7-fb631b632040
 # ╠═ae542fe4-64cc-11eb-29fc-73b7a66314a9
-# ╟─c29292b8-64cc-11eb-28db-b52c46e865e6
+# ╠═c29292b8-64cc-11eb-28db-b52c46e865e6
 # ╟─7b04331a-6bcb-11eb-34fa-1f5b151e5510
 # ╟─5319c03c-64cc-11eb-0743-a1612476e2d3
 # ╠═3db09d92-64cc-11eb-0333-45193c0fd1fe
@@ -1294,28 +1204,25 @@ md"_Lecture 1, Spring 2021, version 0_"
 # ╟─fca72490-64d7-11eb-1464-f5e0582c4d18
 # ╠═88933746-6028-11eb-32de-13eb6ff43e29
 # ╟─1c539b02-64d8-11eb-3505-c9288357d139
-# ╟─10f6e6da-64d8-11eb-366f-11f16e73043b
 # ╟─82a8314c-64d8-11eb-1acb-e33625381178
 # ╟─576d5e3a-64d8-11eb-10c9-876be31f7830
-# ╠═2a94a2cf-b697-4b0b-afd0-af2e35af2bb1
-# ╠═3e0ece65-b8a7-4be7-ae44-6d7210c2e15b
-# ╠═4ee18bee-13e6-4478-b2ca-ab66100e57ec
+# ╟─a7cbbca2-324a-4d3e-ae03-c1e07f80f7e4
 # ╟─ace86c8a-60ee-11eb-34ef-93c54abc7b1a
 # ╟─b08e57e4-60ee-11eb-0e1a-2f49c496668b
 # ╟─9025a5b4-6066-11eb-20e8-099e9b8f859e
 # ╟─45815734-ee0a-11ea-2982-595e1fc0e7b1
-# ╟─5da8cbe8-eded-11ea-2e43-c5b7cc71e133
-# ╟─e074560a-601b-11eb-340e-47acd64f03b2
-# ╟─e0776548-601b-11eb-2563-57ba2cf1d5d1
-# ╟─e083bef6-601b-11eb-2134-e3063d5c4253
+# ╠═5da8cbe8-eded-11ea-2e43-c5b7cc71e133
+# ╠═e074560a-601b-11eb-340e-47acd64f03b2
+# ╠═e0776548-601b-11eb-2563-57ba2cf1d5d1
+# ╠═e083bef6-601b-11eb-2134-e3063d5c4253
 # ╟─e08ecb84-601b-11eb-0e25-152ed3a262f7
-# ╟─e09036a4-601b-11eb-1a8b-ef70105ab91c
-# ╟─e09af1a2-601b-11eb-14c8-57a46546f6ce
-# ╟─e0a4fc10-601b-11eb-211d-03570aca2726
+# ╠═e09036a4-601b-11eb-1a8b-ef70105ab91c
+# ╠═e09af1a2-601b-11eb-14c8-57a46546f6ce
+# ╠═e0a4fc10-601b-11eb-211d-03570aca2726
 # ╠═e0a6031c-601b-11eb-27a5-65140dd92897
-# ╟─e0b15582-601b-11eb-26d6-bbf708933bc8
+# ╠═e0b15582-601b-11eb-26d6-bbf708933bc8
 # ╟─e891fce0-601b-11eb-383b-bde5b128822e
-# ╟─3ef77236-1867-4d02-8af2-ff4777fcd6d9
-# ╟─61b29e7d-5aba-4bc8-870b-c1c43919c236
-# ╟─a9fef6c9-e911-4d8c-b141-a4832b40a260
-# ╟─edf900be-601b-11eb-0456-3f7cfc5e876b
+# ╠═3ef77236-1867-4d02-8af2-ff4777fcd6d9
+# ╠═61b29e7d-5aba-4bc8-870b-c1c43919c236
+# ╠═a9fef6c9-e911-4d8c-b141-a4832b40a260
+# ╠═edf900be-601b-11eb-0456-3f7cfc5e876b
