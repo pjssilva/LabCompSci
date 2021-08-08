@@ -39,7 +39,7 @@ filter!(LOAD_PATH) do path
 end;
 
 # ╔═╡ 75b96e8c-fa48-4b78-a7dc-587a676f04e2
-md"Essa é uma tradução livre de [images.jl](https://github.com/mitmath/18S191/blob/Spring21/notebooks/week1/images.jl)"
+md"Esta é uma tradução livre de [images.jl](https://github.com/mitmath/18S191/blob/Spring21/notebooks/week1/images.jl)"
 
 # ╔═╡ d07fcdb0-7afc-4a25-b68a-49fd1e3405e7
 PlutoUI.TableOfContents(title="Índice", aside=true)

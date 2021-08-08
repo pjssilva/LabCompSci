@@ -1,5 +1,5 @@
 ### A Pluto.jl notebook ###
-# v0.14.5
+# v0.15.1
 
 using Markdown
 using InteractiveUtils
@@ -25,8 +25,8 @@ begin
 		Pkg.PackageSpec(name="Colors", version="0.12"),
 		Pkg.PackageSpec(name="ColorVectorSpace", version="0.8"),
 
-		Pkg.PackageSpec(name="PlutoUI", version="0.7"), 
-		Pkg.PackageSpec(name="HypertextLiteral", version="0.5"), 
+		Pkg.PackageSpec(name="PlutoUI", version="0.7"),
+		Pkg.PackageSpec(name="HypertextLiteral", version="0.5"),
 		Pkg.PackageSpec(name="ForwardDiff", version="0.10")
 	])
 
@@ -128,7 +128,7 @@ md"""
 
 # ╔═╡ db56bcda-76aa-11eb-2447-5d9076789244
 md"""
-In high school you learned about univariate functions e.g. 
+In high school you learned about univariate functions e.g.
 * $f₁(x)=x^2$
 * $f₂(x)=\sin(x)$
 * $f₃(x)=x^\alpha$
@@ -138,7 +138,7 @@ In Julia, functions can be written in short form, anonymous form, or long form.
 
 # ╔═╡ 539aeec8-76ab-11eb-32a3-95c6672a0ea9
 # short form
-f₁(x) = x^2 # subscript unicode:   \_1 + <tab>   
+f₁(x) = x^2 # subscript unicode:   \_1 + <tab>
 
 # ╔═╡ 81a00b78-76ab-11eb-072a-6b96847c2ce4
 f₁(5)
@@ -321,7 +321,7 @@ md"""
 
 # ╔═╡ ac1ab224-76bb-11eb-13cb-0bd44bea1042
 md"""
-While scalar functions might technically be called a transformation, it is more common to use the term when both the input and output are multidimensional.  
+While scalar functions might technically be called a transformation, it is more common to use the term when both the input and output are multidimensional.
 """
 
 # ╔═╡ bcf92688-76b9-11eb-30fb-1f320a65f45a
@@ -372,9 +372,9 @@ begin
 			rot(θ)([x,y])
 		end
 	end
-	
+
 	rθ(x) = ( norm(x), atan(x[2],x[1])) # maybe vectors are more readable here?
-	
+
 	xy((r,θ)) = ( r*cos(θ), r*sin(θ))
 end
 
@@ -385,9 +385,9 @@ rotation depends on the point where it is applied.
 """
 
 # ╔═╡ 5655d2a6-76bd-11eb-3042-5b2dd3f6f44e
-begin	
+begin
 	warp₂(α,x,y) = rot(α*√(x^2+y^2))
-	warp₂(α) = ((x,y),) -> warp₂(α,x,y)([x,y])	
+	warp₂(α) = ((x,y),) -> warp₂(α,x,y)([x,y])
 end
 
 # ╔═╡ 852592d6-76bd-11eb-1265-5f200e39113d
@@ -418,7 +418,7 @@ end
 
 # ╔═╡ ad728ee6-7639-11eb-0b23-c37f1366fb4e
 md"""
-## 4.2 But what is a transformation, really? 
+## 4.2 But what is a transformation, really?
 You have very likely learned how to multiply matrices times vectors.  I'll bet you think of a matrix as a table of numbers, and a vector as a column of numbers, and if you are well practiced, you know just when to multiply and just when to add.
 Congratulations, you now can do what computers excel at.
 
@@ -439,9 +439,9 @@ let
 
 range = -1.5:.1:1.5
 md"""
-This is a "scrubbable matrix" -- click on the number and drag to change.	
-	
-``(``	
+This is a "scrubbable matrix" -- click on the number and drag to change.
+
+``(``
  $(@bind a Scrubbable( range; default=1.0))
  $(@bind b Scrubbable( range; default=0.0))
 ``)``
@@ -450,7 +450,7 @@ This is a "scrubbable matrix" -- click on the number and drag to change.
 $(@bind c Scrubbable(range; default=0.0 ))
 $(@bind d Scrubbable(range; default=1.0))
 ``)``
-	
+
 	**Re-run this cell to reset to identity transformation**
 """
 end
@@ -523,10 +523,10 @@ html"""
 md"""
 What about more than 3 dimensions?
 
-Oh I've heard it all, 
-* there is no such thing as more than 3 dimensions. 
-* The fourth dimension is time, isn't it?  
-* I have trouble visualizing 3 dimensions, let alone contemplating 4.  
+Oh I've heard it all,
+* there is no such thing as more than 3 dimensions.
+* The fourth dimension is time, isn't it?
+* I have trouble visualizing 3 dimensions, let alone contemplating 4.
 
 ... but mathematicians have no trouble with n spatial dimensions, and they do not (usually) worry about silly questions like whether these exist.
 """
@@ -568,13 +568,13 @@ end
 # ╔═╡ 7d0096ad-d89a-4ade-9679-6ee95f7d2044
 function trygetpixel(img::AbstractMatrix, x::Float64, y::Float64)
 	rows, cols = size(img)
-	
+
 	"The linear map [-1,1] ↦ [0,1]"
 	f = t -> (t - -1.0)/(1.0 - -1.0)
-	
+
 	i = floor(Int, rows *  f(-y) / z)
 	j = floor(Int, cols *  f(x * (rows / cols))  / z)
- 
+
 	if 1 < i ≤ rows && 1 < j ≤ cols
 		img[i,j]
 	else
@@ -585,22 +585,22 @@ end
 
 # ╔═╡ 83d45d42-7406-11eb-2a9c-e75efe62b12c
 function with_gridlines(img::Array{<:Any,2}; n=16)
-	
+
 	sep_i = size(img, 1) ÷ n
 	sep_j = size(img, 2) ÷ n
-	
+
 	result = copy(img)
 	# stroke = zero(eltype(img))#RGBA(RGB(1,1,1), 0.75)
-	
+
 	stroke = RGBA(1, 1, 1, 0.75)
-	
+
 	result[1:sep_i:end, :] .= stroke
 	result[:, 1:sep_j:end] .= stroke
 
 	# a second time, to create a line 2 pixels wide
 	result[2:sep_i:end, :] .= stroke
 	result[:, 2:sep_j:end] .= stroke
-	
+
 	 result[  sep_i * (n ÷2) .+ [1,2]    , :] .= RGBA(0,1,0,1)
 	result[ : ,  sep_j * (n ÷2) .+ [1,2]    ,] .= RGBA(1,0,0,1)
 	return result
@@ -618,13 +618,13 @@ end;
 	if det_A == 0
 		RGB(1.0, 1.0, 1.0)
 	else
-		
+
 		 # in_x, in_y = A \ [out_x, out_y]
          # in_x, in_y = xy( [out_x, out_y] )
 		in_x, in_y =  T([out_x, out_y])
 		trygetpixel(img, in_x, in_y)
 	end
-	
+
 	for out_y in LinRange(f, -f, 500),
 		out_x in LinRange(-f, f, 500)
 ]
