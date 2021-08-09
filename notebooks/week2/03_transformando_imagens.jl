@@ -46,7 +46,7 @@ filter!(LOAD_PATH) do path
 end;
 
 # ╔═╡ f5c464b6-663a-4c4d-9e93-30e469d3a496
-md"Essa é uma tradução livre de [transforming_images.jl](https://github.com/mitmath/18S191/blob/Spring21/notebooks/week2/transforming_images.jl)"
+md"Tradução livre de [`transforming_images.jl`](https://github.com/mitmath/18S191/blob/Spring21/notebooks/week2/transforming_images.jl)"
 
 # ╔═╡ 8d389d80-74a1-11eb-3452-f38eff03483b
 PlutoUI.TableOfContents(aside=true)
@@ -442,7 +442,7 @@ surface([kernel;])
 
 # ╔═╡ ee93eeb2-7524-11eb-342d-0343d8aebf59
 md"""
-Obs: as linhas pretas são curvas de nível e a visão do gráfico com relação aos eixos. 
+Obs: as linhas pretas são curvas de nível e a visão do gráfico com relação aos eixos.
 """
 
 # ╔═╡ 662d73b6-74b3-11eb-333d-f1323a001000

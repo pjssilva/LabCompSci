@@ -39,7 +39,7 @@ filter!(LOAD_PATH) do path
 end;
 
 # ╔═╡ 75b96e8c-fa48-4b78-a7dc-587a676f04e2
-md"Esta é uma tradução livre de [images.jl](https://github.com/mitmath/18S191/blob/Spring21/notebooks/week1/images.jl)"
+md"Tradução livre de [`images.jl`](https://github.com/mitmath/18S191/blob/Spring21/notebooks/week1/images.jl)"
 
 # ╔═╡ d07fcdb0-7afc-4a25-b68a-49fd1e3405e7
 PlutoUI.TableOfContents(title="Índice", aside=true)
@@ -74,7 +74,7 @@ Aplicações de computação no mundo real usam **dados**, isto é, informções
 
 - Números que variam no tempo (**séries temporais**):
   - Preços de ações por segundo / minuto /dia
-  - Número diário / semanal de novos casos de uma epidemia 
+  - Número diário / semanal de novos casos de uma epidemia
   - Temperatura global média por mês
 
 - Vídeo:
@@ -105,7 +105,7 @@ md"""
 
 # ╔═╡ 6385d174-6d4e-11eb-093b-6f6fafb79f84
 md"""
-Para usar uma fonte de dados, precisamos conseguir entrar com esses dados no nosso computador, por exemplo baixando a informação da Internet e lendo o arquivo obtido. Ele então deve ser convertido em uma forma que facilite as manipulações que desejamos fazer. Os dados são então **processados** de alguma forma para obter a informação desejada. Muitas vezes, também, desejemamos **visualizar** a informção obtida e **armazená-la** de alguma forma. 
+Para usar uma fonte de dados, precisamos conseguir entrar com esses dados no nosso computador, por exemplo baixando a informação da Internet e lendo o arquivo obtido. Ele então deve ser convertido em uma forma que facilite as manipulações que desejamos fazer. Os dados são então **processados** de alguma forma para obter a informação desejada. Muitas vezes, também, desejemamos **visualizar** a informção obtida e **armazená-la** de alguma forma.
 
 Tipicamente o processamento está baseado em algum modelo matemático ou computacional que nos ajuda a entender os dados e extrair a informação de interesse.
 
@@ -131,7 +131,7 @@ md"""
 
 Ao abrirmos uma imagem no computador e ampliarmos o suficientes, iremos ver que elas são armazenadas como uma matriz de pequenos quadrados chmados de **pixels** (que vem do inglês "picture elements"). Cada pixel é preenchido com uma or única. Eles são então organizados em uma grade retangular bi-deimensional.
 
-Como tudo no computador, essas cores são representadas no computador em formato RGB (três canais, números, de cores de tom vermelho (Red), verde (Green) e azul (Blue)). 
+Como tudo no computador, essas cores são representadas no computador em formato RGB (três canais, números, de cores de tom vermelho (Red), verde (Green) e azul (Blue)).
 
 Lembrem-se que muitas imagens são apenas respresentações **aproximadas** da realidade. Elas são discretas e bi-dimensionais e tentam capturar uma realidade tri-dimensional.
 
@@ -149,7 +149,7 @@ Vamos usar Julia para carregar imagens reais e manipulá-las. Podemos baixar ima
 
 # ╔═╡ 9b004f70-6bc9-11eb-128c-914eadfc9a0e
 md"""
-## Baixando uma imagem da Internet ou lendo de um arquivo local. 
+## Baixando uma imagem da Internet ou lendo de um arquivo local.
 
 Vamos usar o pacote `Images.jl` e ler imagens em três passos simples.
 """
@@ -240,7 +240,7 @@ apolo_width = apolo_size[2]
 md"""
 ### Indexando para selecionar posições na imagem
 
-De uma forma geral, você pode imaginar que a imagem é uma matriz que contem valores RGB. Assim a forma natural de selecionar porções da imagem ou um pixel específico é usar indexação. A ideia é que vocês possam as coordenadas definindo qual linha e coluna querem selecionar. Isso é feito em Julia usando colchetes `[` e `]`. 
+De uma forma geral, você pode imaginar que a imagem é uma matriz que contem valores RGB. Assim a forma natural de selecionar porções da imagem ou um pixel específico é usar indexação. A ideia é que vocês possam as coordenadas definindo qual linha e coluna querem selecionar. Isso é feito em Julia usando colchetes `[` e `]`.
 """
 
 # ╔═╡ bd22d09a-64c7-11eb-146f-67733b8be241
@@ -349,7 +349,7 @@ md"""
 
 Uma primeira coisa que iremos fazer é *modificar* a cor de um pixel. Para conseguir isso precisamos ver com mais calma como essas cores são representadas.
 
-Cores são no fundo um conceito complexo que mistura as propriedades físicas (a frequẽncia), biológicas (quais cores os cones de luz que temos nos nossos olhos são capazes de captar) e até os processos cerebrais que traduzem os sinais adquiridos na nossa concepção mental dde cor. 
+Cores são no fundo um conceito complexo que mistura as propriedades físicas (a frequẽncia), biológicas (quais cores os cones de luz que temos nos nossos olhos são capazes de captar) e até os processos cerebrais que traduzem os sinais adquiridos na nossa concepção mental dde cor.
 
 Mas aqui nós vamos ignorar esses nuances e iremos no ater ao método padrão de presentar as cores como uma **tripla RGB**. Ela é basicamente formada de três números $(r, g, b)$ que represetam "quanto" vermelho, verde e azul uma cor possui. Esses são números reais entre 0 (representando _ausência_) e 1 (representado _tudo_). A cor final que percebemos vem justamente de juntarmos essas três informações em nosso cérebro. Isso tudo é facinante, mas não podemos ver os detalhes aqui.
 """
@@ -530,7 +530,7 @@ md"""
 md"""
 # Ciência da computação: arrays
 
-Um imagem é um exemplo concreto de uma ideia geral e fundamental em computação, o **aray**. 
+Um imagem é um exemplo concreto de uma ideia geral e fundamental em computação, o **aray**.
 
 Uma imagem é uma malha retangular em que cada elemento contém uma cor. Um array é uma malha retangular para armazenar dados de um _único tipo_. Os dados são armazenados e recuperados usando índices, exatamente como no exemplo das imagens: cada célula da malha pode armazenar uma "única unidade" de um certo tipo.
 
@@ -579,7 +579,7 @@ Quando queremos criar arrays com mais de um punhado de elemento já não é tão
 
 Para isso vamos interpolar linearmente entre dois valores. No exemplo abaixo o valor inicial seria o `RGB(0, 0, 0)`, que representa o preto, e o final o vermelho, `RGB(1, 0, 0)`. Como apenas um valor está mudando (ou mais formalmente os valores estão mudando em uma direção específica), é possível armazenar o resultado num vetor.
 
-Uma forma espera de fazer isso é usar uma **compreensão de array**, que é criar um novo array a partir de uma modificação de elements de um outro array (ou iterador). 
+Uma forma espera de fazer isso é usar uma **compreensão de array**, que é criar um novo array a partir de uma modificação de elements de um outro array (ou iterador).
 
 Vejamos o exemplo:
 """
@@ -621,7 +621,7 @@ md"""
 
 # ╔═╡ 6aba7e62-64d7-11eb-2c49-7944e9e2b94b
 md"""
-Pluto tem algumas ferramentas para criar cadernos com iteratividade sem que o leitor precise alterar código. 
+Pluto tem algumas ferramentas para criar cadernos com iteratividade sem que o leitor precise alterar código.
 
 Por exemplo, suponha que queremos ver o efeito de se alterar um valor, digamos o número de tons de vermelho que usaremos no nosso gradiente. É claro que isso pode ser feito ajustando o range.
 
@@ -665,7 +665,7 @@ Ao mover o slider, vemos que o gradiente se ajusta automaticamente.
 md"""
 #### Exercício
 
->Crie três sliders para pegar três valores RGB e cria um bloco de cor com os valores selecionados. 
+>Crie três sliders para pegar três valores RGB e cria um bloco de cor com os valores selecionados.
 
 Obs: Pluto não permite criar variáveis com o mesmo nome em células diferente. Isso é fundamental para permitir a reatividade e a reordenação de células.
 """
