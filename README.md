@@ -36,7 +36,7 @@ cadernos Julia com código e discutirei os problemas que vamos estudar mostrando
 como usar técnicas modernas de programação e matemática aplicada para atacá-los.
 Além disso temos o Moodle da disciplina onde podemos interagir em fóruns.
 ## Detalhes burocráticos
-## Ementa
+### Ementa
 
 Programação para aplicações científicas baseadas em linguagens dinâmicas de alto
 desempenho, com bibliotecas estáveis e de alta performance. Introdução a
