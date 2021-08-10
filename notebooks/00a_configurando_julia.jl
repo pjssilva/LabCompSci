@@ -7,7 +7,7 @@ using InteractiveUtils
 # ╔═╡ 208d992c-0a93-4028-b078-fa21fdadf261
 begin
 	using LaTeXStrings
-	using PyPlot
+	import PyPlot
 	using Plots
 	pyplot()
 end
@@ -52,7 +52,7 @@ end
 md"""
 ## Apêndice
 
-Vou colocar no apêndice código de configuração como a importação de bibliotecas com `using` ou `import`. Também posso usar esse tipo de espaço para pegar algo na Internet que seja necessário para trabalhar.
+Vou colocar no apêndice código que não quero enfatizar durante a apresentação de aula. Você sempre pode ler o que achar importante para entender tudo.
 """
 
 # ╔═╡ 00000000-0000-0000-0000-000000000001
@@ -64,7 +64,7 @@ PyPlot = "d330b81b-6aea-500a-939a-2ce795aea3ee"
 
 [compat]
 LaTeXStrings = "~1.2.1"
-Plots = "~1.19.4"
+Plots = "~1.20.0"
 PyPlot = "~2.9.0"
 """
 
@@ -146,9 +146,9 @@ version = "1.7.0"
 
 [[DataStructures]]
 deps = ["Compat", "InteractiveUtils", "OrderedCollections"]
-git-tree-sha1 = "4437b64df1e0adccc3e5d1adbc3ac741095e4677"
+git-tree-sha1 = "7d9d316f04214f7efdbb6398d545446e246eff02"
 uuid = "864edb3b-99cc-5e75-8d2d-829cb0a9cfe8"
-version = "0.18.9"
+version = "0.18.10"
 
 [[DataValueInterfaces]]
 git-tree-sha1 = "bfc1187b79289637fa0ef6d4436ebdfe6905cbd6"
@@ -233,15 +233,15 @@ version = "3.3.5+0"
 
 [[GR]]
 deps = ["Base64", "DelimitedFiles", "GR_jll", "HTTP", "JSON", "Libdl", "LinearAlgebra", "Pkg", "Printf", "Random", "Serialization", "Sockets", "Test", "UUIDs"]
-git-tree-sha1 = "9f473cdf6e2eb360c576f9822e7c765dd9d26dbc"
+git-tree-sha1 = "182da592436e287758ded5be6e32c406de3a2e47"
 uuid = "28b8d3ca-fb5f-59d9-8090-bfdbd6d07a71"
-version = "0.58.0"
+version = "0.58.1"
 
 [[GR_jll]]
 deps = ["Artifacts", "Bzip2_jll", "Cairo_jll", "FFMPEG_jll", "Fontconfig_jll", "GLFW_jll", "JLLWrappers", "JpegTurbo_jll", "Libdl", "Libtiff_jll", "Pixman_jll", "Pkg", "Qt5Base_jll", "Zlib_jll", "libpng_jll"]
-git-tree-sha1 = "eaf96e05a880f3db5ded5a5a8a7817ecba3c7392"
+git-tree-sha1 = "d59e8320c2747553788e4fc42231489cc602fa50"
 uuid = "d2c73de3-f751-5644-a686-071e5b155ba9"
-version = "0.58.0+0"
+version = "0.58.1+0"
 
 [[GeometryBasics]]
 deps = ["EarCut_jll", "IterTools", "LinearAlgebra", "StaticArrays", "StructArrays", "Tables"]
@@ -300,9 +300,9 @@ version = "1.3.0"
 
 [[JSON]]
 deps = ["Dates", "Mmap", "Parsers", "Unicode"]
-git-tree-sha1 = "81690084b6198a2e1da36fcfda16eeca9f9f24e4"
+git-tree-sha1 = "8076680b162ada2a031f707ac7b4953e30667a37"
 uuid = "682c06a0-de6a-54ab-a142-c8b1cf79cde6"
-version = "0.21.1"
+version = "0.21.2"
 
 [[JpegTurbo_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg"]
@@ -415,9 +415,9 @@ uuid = "56ddb016-857b-54e1-b83d-db4d58db5568"
 
 [[MacroTools]]
 deps = ["Markdown", "Random"]
-git-tree-sha1 = "6a8a2a625ab0dea913aba95c11370589e0239ff0"
+git-tree-sha1 = "0fb723cd8c45858c22169b2e42269e53271a6df7"
 uuid = "1914dd2f-81c6-5fcd-8719-6d5c9610ff09"
-version = "0.5.6"
+version = "0.5.7"
 
 [[Markdown]]
 deps = ["Base64"]
@@ -489,9 +489,9 @@ version = "8.44.0+0"
 
 [[Parsers]]
 deps = ["Dates"]
-git-tree-sha1 = "94bf17e83a0e4b20c8d77f6af8ffe8cc3b386c0a"
+git-tree-sha1 = "477bf42b4d1496b454c10cce46645bb5b8a0cf2c"
 uuid = "69de0a69-1ddd-5017-9359-2bf0b02dc9f0"
-version = "1.1.1"
+version = "2.0.2"
 
 [[Pixman_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg"]
@@ -517,9 +517,9 @@ version = "1.0.11"
 
 [[Plots]]
 deps = ["Base64", "Contour", "Dates", "FFMPEG", "FixedPointNumbers", "GR", "GeometryBasics", "JSON", "Latexify", "LinearAlgebra", "Measures", "NaNMath", "PlotThemes", "PlotUtils", "Printf", "REPL", "Random", "RecipesBase", "RecipesPipeline", "Reexport", "Requires", "Scratch", "Showoff", "SparseArrays", "Statistics", "StatsBase", "UUIDs"]
-git-tree-sha1 = "1e72752052a3893d0f7103fbac728b60b934f5a5"
+git-tree-sha1 = "e39bea10478c6aff5495ab522517fae5134b40e3"
 uuid = "91a5bcdd-55d7-5caf-9e0b-520d859cae80"
-version = "1.19.4"
+version = "1.20.0"
 
 [[Preferences]]
 deps = ["TOML"]
@@ -616,9 +616,9 @@ uuid = "2f01184e-e22b-5df5-ae63-d93ebab69eaf"
 
 [[StaticArrays]]
 deps = ["LinearAlgebra", "Random", "Statistics"]
-git-tree-sha1 = "885838778bb6f0136f8317757d7803e0d81201e4"
+git-tree-sha1 = "3240808c6d463ac46f1c1cd7638375cd22abbccb"
 uuid = "90137ffa-7385-5640-81b9-e52037218182"
-version = "1.2.9"
+version = "1.2.12"
 
 [[Statistics]]
 deps = ["LinearAlgebra", "SparseArrays"]
@@ -895,8 +895,8 @@ version = "0.9.1+5"
 
 # ╔═╡ Cell order:
 # ╟─97e34d60-f387-11eb-031f-a9ece2b90b20
+# ╠═208d992c-0a93-4028-b078-fa21fdadf261
 # ╠═cccc50e0-813f-4a09-bc5c-0a0e72ff6dac
 # ╟─51250825-47b2-4cb1-9bff-f64e26c5010a
-# ╠═208d992c-0a93-4028-b078-fa21fdadf261
 # ╟─00000000-0000-0000-0000-000000000001
 # ╟─00000000-0000-0000-0000-000000000002

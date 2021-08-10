@@ -145,8 +145,7 @@ md"Condições lógicas podem então ser usadas em expressões condicionais que 
 
 # ╔═╡ bc6b124e-eded-11ea-0290-b3760cb81024
 if a < 5
-	"small"
-	
+	"small"	
 else
 	"big"
 	
