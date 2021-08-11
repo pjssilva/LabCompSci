@@ -13,30 +13,18 @@ macro bind(def, element)
     end
 end
 
-# ╔═╡ 74b008f6-ed6b-11ea-291f-b3791d6d1b35
-begin
-	import Pkg
-	Pkg.activate(mktempdir())
-	Pkg.add([
-		Pkg.PackageSpec(name="ImageIO", version="0.5"),
-		Pkg.PackageSpec(name="ImageShow", version="0.2"),
-		Pkg.PackageSpec(name="FileIO", version="1.6"),
-		Pkg.PackageSpec(name="PNGFiles", version="0.3.6"),
-		Pkg.PackageSpec(name="Colors", version="0.12"),
-		Pkg.PackageSpec(name="ColorVectorSpace", version="0.8"),
-		Pkg.PackageSpec(name="PlutoUI", version="0.7"),
-		Pkg.PackageSpec(name="HypertextLiteral", version="0.5")
-	])
-
-	using Colors, ColorVectorSpace, ImageShow, FileIO
-	using PlutoUI
-	using HypertextLiteral
-end
-
 # ╔═╡ 71a1e08a-6abc-48d5-b177-5184dbdd76a8
 filter!(LOAD_PATH) do path
 	path != "@v#.#"
 end;
+
+# ╔═╡ 74b008f6-ed6b-11ea-291f-b3791d6d1b35
+begin
+	import ImageIO
+	using Colors, ColorVectorSpace, ImageShow, FileIO
+	using PlutoUI
+	using HypertextLiteral
+end
 
 # ╔═╡ 75b96e8c-fa48-4b78-a7dc-587a676f04e2
 md"Tradução livre de [`images.jl`](https://github.com/mitmath/18S191/blob/Spring21/notebooks/week1/images.jl)"
@@ -57,10 +45,9 @@ md"""
 
 Bem vindos ao Laboratório de Computação Científica usando Julia para problemas reais. Esse é um curso baseado no _Computational Thinking using Julia for Real-World Problems_ do MIT com uma pitada pessoal.
 
-O objetivo do curso é juntar conceitos de ciência da computação e matemática aplicada e código em liguagem moderna e ágil chamada **Julia**. A ideia é usar essas ideias em um curso no estilo "mãos-à-obra" olhando para aplicações interessantes e se divertir no processo.
+O objetivo do curso é unir conceitos de ciência da computação e matemática aplicada a código em uma linguagem moderna e ágil chamada **Julia**. Vamos então usar essas ideias em um curso no estilo "mãos à obra" olhando para aplicações interessantes e procurando se divertir no processo.
 
-A ideia é tocar os estudos interessados em matemática aplicada e computação científica aprederem um pouco mais de ciência da computação e vice-versa. A ainda introduzir uma nova linguagem que traz novos conceitos e uma abordagem interessante para a computação científica. Então vamos lá aprender um pouco de tudo, exprimindo-se por código.
-
+Com isso buscamos levar as pessoas interessadas em matemática aplicada e computação científica a aprender um pouco mais de ciência da computação e vice-versa. Vamos ainda introduzir uma linguagem que traz novos conceitos e uma abordagem interessante para a computação científica. Então aqui vamos nós, buscar aprender um pouco de tudo, exprimindo-se por código.
 """
 
 # ╔═╡ 9111db10-6bc3-11eb-38e5-cf3f58536914
@@ -70,21 +57,21 @@ md"""
 
 # ╔═╡ fb8a99ac-6bc1-11eb-0835-3146734a1c99
 md"""
-Aplicações de computação no mundo real usam **dados**, isto é, informções que podemos **medir** de alguma forma. Esses dados podem ser de vários tipos, como por exemplo:
+Aplicações de computação no mundo real usam **dados**, isto é, informações que podemos **medir** de alguma forma. Esses dados podem ser de vários tipos, como:
 
 - Números que variam no tempo (**séries temporais**):
-  - Preços de ações por segundo / minuto /dia
-  - Número diário / semanal de novos casos de uma epidemia
-  - Temperatura global média por mês
+  - Preços de ações por segundo / minuto /dia;
+  - Número diário / semanal de novos casos de uma epidemia;
+  - Temperatura global média por mês.
 
 - Vídeo:
-  - A vista da câmera de um carro autônomo
-  - As imagens de uma câmera de segurança
-  - Ultrasom, por exemplo um exame pré-natal
+  - A vista da câmera de um carro autônomo;
+  - As imagens de uma câmera de segurança;
+  - Ultrassom: um exame pré-natal, por exemplo.
 
 - Imagens:
-  - Imagens de exames médicos com exemplos de tecidos sadios e doentes
-  - Fotos do seu animal de estimação
+  - Imagens de exames médicos com exemplos de tecidos sadios e doentes;
+  - Fotos do seu animal de estimação.
 """
 
 # ╔═╡ b795dcb4-6bc3-11eb-20ec-db2cc4b89bfb
@@ -105,20 +92,20 @@ md"""
 
 # ╔═╡ 6385d174-6d4e-11eb-093b-6f6fafb79f84
 md"""
-Para usar uma fonte de dados, precisamos conseguir entrar com esses dados no nosso computador, por exemplo baixando a informação da Internet e lendo o arquivo obtido. Ele então deve ser convertido em uma forma que facilite as manipulações que desejamos fazer. Os dados são então **processados** de alguma forma para obter a informação desejada. Muitas vezes, também, desejemamos **visualizar** a informção obtida e **armazená-la** de alguma forma.
+Para usar uma fonte de dados, precisamos conseguir entrar com essa informação no computador, por exemplo, baixando-a da Internet e lendo o arquivo obtido. Os dados devem ser convertidos em uma forma que facilite as manipulações que desejamos fazer. Eles são então **processados** para obtermos a informação desejada. Muitas vezes, também, desejamos **visualizar** a informação obtida e **armazená-la**.
 
-Tipicamente o processamento está baseado em algum modelo matemático ou computacional que nos ajuda a entender os dados e extrair a informação de interesse.
+Tipicamente o processamento está baseado em algum **modelo matemático** ou computacional que nos ajuda a entender os dados e extrair a informação de interesse.
 
->O objetivo desse cuso é usar programção, ciência da computação e matemática aplicada para nos ajudar a atingir esses objetivos.
+>O objetivo desse curso é usar programação, ciência da computação e matemática aplicada para nos ajudar a atingir esses objetivos.
 """
 
 # ╔═╡ 132f6596-6bc6-11eb-29f1-1b2478c929af
 md"""
 # Dados: Imagens como um exemplo de dados
 
-Vamos começar visualizando **imagens** e aprendendo como processá-las. Our objetivo é processar os dados presentes na imagem de algum momento. Isso pode ser feito utilizando **algoritmos** específicos.
+Vamos começar visualizando **imagens** e aprendendo como processá-las. Nosso objetivo é processar e/ou extrair a informações presentes na imagem. Isso pode ser feito utilizando **algoritmos** específicos.
 
-Deixo aqui um vídeo do 3-Blue-1-Brown (Grant Sanderson) apresentando uma pequena variação dessa aula na versão oritinal do curso oferecida no MIT no outono 2020. Pois é não dá para concorrer...
+Deixo aqui um vídeo do 3Blue-1Brown (Grant Sanderson) apresentando uma pequena variação dessa aula na versão original do curso oferecida no MIT no outono 2020. Pois é, não dá para concorrer...
 """
 
 # ╔═╡ 635a03dd-abd7-49c8-a3d2-e68c7d83cc9b
@@ -128,13 +115,11 @@ html"""
 
 # ╔═╡ 9eb6efd2-6018-11eb-2db8-c3ce41d9e337
 md"""
+Ao abrirmos uma imagem no computador e a ampliarmos bastante, iremos ver que elas são armazenadas como uma matriz de pequenos quadrados chamados de **pixels** (que vem do inglês "picture elements"). Cada pixel é preenchido com uma cor única. Eles são então organizados em uma grade retangular bi-dimensional.
 
-Ao abrirmos uma imagem no computador e ampliarmos o suficientes, iremos ver que elas são armazenadas como uma matriz de pequenos quadrados chmados de **pixels** (que vem do inglês "picture elements"). Cada pixel é preenchido com uma or única. Eles são então organizados em uma grade retangular bi-deimensional.
+Como tudo no computador, essas cores são representadas por números. Nesse caso, usamos o formato RGB (níveis de cor em três canais, representáveis numericamente, de cores de tom vermelho (Red), verde (Green) e azul (Blue)).
 
-Como tudo no computador, essas cores são representadas no computador em formato RGB (três canais, números, de cores de tom vermelho (Red), verde (Green) e azul (Blue)).
-
-Lembrem-se que muitas imagens são apenas respresentações **aproximadas** da realidade. Elas são discretas e bi-dimensionais e tentam capturar uma realidade tri-dimensional.
-
+Lembrem-se que muitas imagens são apenas representações **aproximadas** da realidade. Elas são discretas e bi-dimensionais e tentam capturar uma realidade tri-dimensional.
 """
 
 # ╔═╡ e37e4d40-6018-11eb-3e1d-093266c98507
@@ -156,9 +141,9 @@ Vamos usar o pacote `Images.jl` e ler imagens em três passos simples.
 
 # ╔═╡ 62fa19da-64c6-11eb-0038-5d40a6890cf5
 md"""
-Passo 1: (da Internet) devemos definir uma URL (endereço web) de onde baixar:
+Passo 1: (da Internet) devemos definir um URL (endereço web) de onde baixar:
 $(html"<br>")
-(observe que Pluto coloca as resultado antes do código que os gera porque o seu desenvolverdor considera que a saída é mais interessante (ou importante) que o código. Isso pode exigir um tempo de adaptação, principalmente para quem está acostumado com Jupyter.)
+(observe que Pluto coloca como resultado antes do código que os gera porque o seu desenvolvedor considera que a saída é mais interessante (ou importante) que o código. Isso pode exigir um tempo de adaptação, principalmente para quem está acostumado com Jupyter.)
 """
 
 # ╔═╡ 34ee0954-601e-11eb-1912-97dc2937fd52
@@ -175,7 +160,8 @@ apolo_filename = download(url) # Baixa para um arquivo local, retornando o nome 
 # ╔═╡ abaaa980-601e-11eb-0f71-8ff02269b775
 md"""
 Passo 3:
-Usando o pacote `Images.jl` (que foi carregado lá no topo desse cardeno, dê uma olhada) podemos **carregar** o arquivo na memória. Isso o transforma automaticamente em um tipo de dado que a linguagem consegue manipular. Armazenamos essa informação em uma variável. (Lembre que o código aparece depois da saída.)
+
+Usando o pacote `Images.jl` (carregado lá no topo desse caderno, dê uma olhada) podemos **carregar** o arquivo na memória. Isso o transforma automaticamente em uma categoria de dado que a linguagem consegue manipular. Armazenamos essa informação em uma variável. (Lembre que o código aparece depois da saída.)
 """
 
 # ╔═╡ aafe76a6-601e-11eb-1ff5-01885c5238da
@@ -186,14 +172,14 @@ md"_Oi Apolo!_"
 
 # ╔═╡ c99d2aa8-601e-11eb-3469-497a246db17c
 md"""
-O caderno Plutio reconheceu e apresentou o objeto que representa a imagem do Apolo, um cão SRD que vive comigo. O pobre Apolo será usado com exemplo nesse curso algumas vezes substituindo o crogi do professor Eldelman, autor original desses cadernos.
+O caderno Pluto reconheceu e apresentou o objeto que representa a imagem do Apolo, um cão SRD que vive comigo. O pobre Apolo será usado com exemplo nesse curso algumas vezes, substituindo o corgi do professor Eldelman, um dos autores originais deste caderno.
 
 Pobre Apolo, ele vai ter que passar por várias "transformações" ao longo de nosso curso!
 """
 
 # ╔═╡ 11dff4ce-6bca-11eb-1056-c1345c796ed4
 md"""
-- Exercício : troque a url para uma outra imagem na Internet.
+- Exercício : troque a URL para uma outra imagem na Internet.
 - Exercício: adapte o código para usar outro arquivo de imagem que já esteja em seu computador.
 """
 
@@ -204,7 +190,7 @@ md"""
 
 # ╔═╡ e94dcc62-6d4e-11eb-3d53-ff9878f0091e
 md"""
-Outra possibilidade divertida é capaturar uma imagem usando a webcam de seu computador. Tente selecionar o botão abaixo e dê permissão para o caderno acessar a sua webcam (ele está rodando em sua máquina). Depois basta selecionar o botão da câmera para capturar imagens. Você pode até pressionar várias vezes o botão enquanto se você e ver que a imagem capturada se move junto. Tudo em tempo real.
+Outra possibilidade divertida é capturar uma imagem usando a webcam de seu computador. Tente selecionar o botão abaixo e dê permissão para o caderno acessar a sua webcam (ele está rodando em sua máquina). Depois basta selecionar o botão da câmera para captar imagens. Você pode até pressionar várias vezes o botão enquanto se você e ver que a imagem capturada se move junto. Tudo em tempo real.
 """
 
 # ╔═╡ cef1a95a-64c6-11eb-15e7-636a3621d727
@@ -219,7 +205,7 @@ md"""
 
 # ╔═╡ 6f928b30-602c-11eb-1033-71d442feff93
 md"""
-A primeira coisa que vamos faer é pegar o tamanho da imagem:
+A primeira coisa que vamos fazer é pegar o tamanho da imagem:
 """
 
 # ╔═╡ 75c5c85a-602c-11eb-2fb1-f7e7f2c5d04b
@@ -227,7 +213,7 @@ apolo_size = size(apolo)
 
 # ╔═╡ 77f93eb8-602c-11eb-1f38-efa56cc93ca5
 md"""
-Julia retorna dois números. Eles representam a altura e a largura da imagem, ou seja o número de pixels na vertical e na horizontal respectivamente.
+Julia retorna dois números. Eles representam a altura e a largura da imagem, ou seja, o número de pixels na vertical e na horizontal respectivamente.
 """
 
 # ╔═╡ 96b7d801-c427-4e27-ab1f-e2fd18fc24d0
@@ -250,7 +236,7 @@ a_pixel = apolo[400, 600]
 md"""
 Vemos que Julia nos mostra um bloco de cor sólida como representação de um pixel.
 
-Lembrando, o primeiro número representa a *linha* na imagem, começando do topo e descendo. Já o segundo é a coluna na imagem, da esquera da para direita. Em Julia os índices começam em 1, diferenet de outras linguagens em que os índices começam no 0.
+Lembrando, o primeiro número representa a *linha* na imagem, começando do topo e descendo. Já o segundo é a coluna na imagem, da esquerda para direita. Em Julia os índices começam em 1, diferente de outras linguagens em que os índices começam no 0.
 """
 
 # ╔═╡ 4ef99715-4d8d-4f9d-bf0b-8df9907a14cf
@@ -258,7 +244,7 @@ Lembrando, o primeiro número representa a *linha* na imagem, começando do topo
 
 # ╔═╡ a510fc33-406e-4fb5-be83-9e4b5578717c
 md"""
-É claro que podemos usar variáveis no lugar dos indices.
+É claro que podemos usar variáveis no lugar dos índices.
 """
 
 # ╔═╡ 13844ebf-52c4-47e9-bda4-106a02fad9d7
@@ -282,11 +268,11 @@ apolo[row_i, col_i]
 md"""
 ### Regiões em uma imagem: faixas de índices
 
-Vemos que ao usar um valor para a linha e outro para coluna conseguimos selecionar um pixel individual na imamgem. Agora vamos pegar uma faixa iteira de índices. Em Julia é possível selecionar múltiplas linhas e colunas de uma matriz obtendo uma nova matriz que presenta a região selecionada:
+Vemos que ao usar um valor para a linha e outro para coluna conseguimos selecionar um pixel individual na imagem. Agora vamos pegar uma faixa inteira de índices. Em Julia é possível selecionar múltiplas linhas e colunas de uma matriz obtendo uma nova matriz que presenta a região selecionada:
 """
 
 # ╔═╡ f0796032-8105-4f6d-b5ee-3647b052f2f6
-apolo[550:650, 1:apolo_width]
+apolo[550:650, 1:apolo_width] # You can use 'end' instead of apolo_width
 
 # ╔═╡ b9be8761-a9c9-49eb-ba1b-527d12097362
 md"""
@@ -300,7 +286,7 @@ collect(2:10)
 # ╔═╡ eef8fbc8-8887-4628-8ba8-114575d6b91f
 md"""
 
-Se usar apenas `:` Julia vai enteder que você quer _todos os índices_. Isso pode simplificar um pouco a expressão acima.
+Se usar apenas `:` Julia vai entender que você quer _todos os índices_. Isso pode simplificar um pouco a expressão acima.
 """
 
 # ╔═╡ 4e6a31d6-1ef8-4a69-b346-ad58cfc4d8a5
@@ -308,14 +294,14 @@ apolo[550:650, :]
 
 # ╔═╡ e11f0e47-02d9-48a6-9b1a-e313c18db129
 md"""
-Podemos também elecionar uma única linha ou coluna.
+Podemos também selecionar uma única linha ou coluna.
 """
 
 # ╔═╡ 9e447eab-14b6-45d8-83ab-1f7f1f1c70d2
 apolo[:, 500]
 
 # ╔═╡ c926435c-c648-419c-9951-ac8a1d4f3b92
-apolo_head = apolo[140:1000, 250:1250]
+apolo_head = apolo[50:380, 100:480]
 
 # ╔═╡ 32e7e51c-dd0d-483d-95cb-e6043f2b2975
 md"""
@@ -337,9 +323,9 @@ nose = apolo_head[range_rows, range_cols]
 md"""
 # Processamento: Modificando uma imagem
 
-Agora que já sabemos como armazenar e manipular a imagem, podemos começar a **processá-la** para extrair informções e/ou moddificá-la de alguma forma.
+Agora que já sabemos como armazenar e manipular a imagem, podemos começar a **processá-la** para extrair informações e/ou modificá-la de alguma forma.
 
-Podemos, por exemplo, querer identificar objetos na imagem. Por exemplo buscar um tumor numa imagem médica. Para ser capaz de atingir esse tipo de objetivo de alto nível, precisamos saber inicialmente fazer coisas mais simples, como detectar arestas ou selecionar objetos de acordo com sua cor. Essas operações podem, por sua vez, ser reduzidas a operações ainda mais elementares como comparar a cor de pixels vizinhos ou decidir se eles são suficientemnte "distindos".
+Podemos, por exemplo, querer identificar objetos na imagem. Por exemplo buscar um tumor numa imagem médica. Para ser capaz de atingir esse tipo de objetivo de alto nível, precisamos saber inicialmente fazer coisas mais simples, como detectar arestas ou selecionar objetos de acordo com sua cor. Essas operações podem, por sua vez, ser reduzidas a operações ainda mais elementares como comparar a cor de pixels vizinhos ou decidir se eles são suficientemente "distintos".
 
 """
 
@@ -347,11 +333,11 @@ Podemos, por exemplo, querer identificar objetos na imagem. Por exemplo buscar u
 md"""
 ## Representando cores
 
-Uma primeira coisa que iremos fazer é *modificar* a cor de um pixel. Para conseguir isso precisamos ver com mais calma como essas cores são representadas.
+Uma primeira tarefa que iremos fazer é *modificar* a cor de um pixel. Para conseguir isso precisamos ver com mais calma como essas cores são representadas.
 
-Cores são no fundo um conceito complexo que mistura as propriedades físicas (a frequẽncia), biológicas (quais cores os cones de luz que temos nos nossos olhos são capazes de captar) e até os processos cerebrais que traduzem os sinais adquiridos na nossa concepção mental dde cor.
+Cores são no fundo um conceito complexo que mistura as propriedades físicas (a frequência do feixe de luz), biológicas (quais cores os cones de luz que temos nos nossos olhos são capazes de captar) e até os processos cerebrais que traduzem os sinais adquiridos na nossa concepção mental de cor.
 
-Mas aqui nós vamos ignorar esses nuances e iremos no ater ao método padrão de presentar as cores como uma **tripla RGB**. Ela é basicamente formada de três números $(r, g, b)$ que represetam "quanto" vermelho, verde e azul uma cor possui. Esses são números reais entre 0 (representando _ausência_) e 1 (representado _tudo_). A cor final que percebemos vem justamente de juntarmos essas três informações em nosso cérebro. Isso tudo é facinante, mas não podemos ver os detalhes aqui.
+Mas aqui nós vamos ignorar esses nuances e iremos no ater ao método padrão de presentar as cores como uma **tripla RGB**. Ela é basicamente formada de três números $(r, g, b)$ que representam "quanto" vermelho, verde e azul uma cor possui. Esses são números reais entre 0 (representando _ausência_) e 1 (representado _totatlidade_). A cor final que percebemos vem justamente de juntarmos essas três informações em nosso cérebro. Isso tudo é fascinante, mas não iremos ver os detalhes aqui.
 """
 
 # ╔═╡ 40886d36-64c9-11eb-3c69-4b68673a6dde
@@ -378,7 +364,8 @@ md"""
 #### Exercício 1.1
 👉 Escreva uma função `invert` que inverte uma cor, ou seja, leva $(r, g, b)$ em $(1 - r, 1-g, 1-b)$.
 
-Dica: a função `fieldnames` recebe um tipo e devolve o nome dos campos disponíveis.
+!!! hint
+    A função `fieldnames` recebe um tipo e devolve o nome dos campos disponíveis.
 """
 
 # ╔═╡ 63e8d636-ee0b-11ea-173d-bd3327347d55
@@ -388,7 +375,7 @@ function invert(color::AbstractRGB)
 end
 
 # ╔═╡ 2cc2f84e-ee0d-11ea-373b-e7ad3204bb00
-md"Let's invert some colors:"
+md"Vamos inverter algumas cores:"
 
 # ╔═╡ b8f26960-ee0a-11ea-05b9-3f4bc1099050
 black = RGB(0.0, 0.0, 0.0)
@@ -415,13 +402,13 @@ md"""
 
 Vamos começar pensando como modificar uma imagem, por exemplo para esconder alguma informação sensível.
 
-Podemos fazer isso trocando a code de um pixel:
+Podemos fazer isso trocando a cor de um pixel:
 """
 
 # ╔═╡ 53bad296-4c7b-471f-b481-0e9423a9288a
 let
 	temp = copy(apolo_head)
-	temp[100, 200] = RGB(0.0, 0.0, 1.0)
+	temp[40, 100] = RGB(0.0, 0.0, 1.0)
 	temp
 end
 
@@ -473,7 +460,7 @@ end
 md"""
 #### Exercício 1.2
 
-👉 Gere um vetor de 100 zeros e altere o 20 elementos centrais para 1.
+👉 Gere um vetor de 100 zeros e altere os 20 elementos centrais para 1.
 """
 
 # ╔═╡ b6b65b94-edf0-11ea-3686-fbff0ff53d08
@@ -489,7 +476,7 @@ md"""
 
 # ╔═╡ 6361d102-64cc-11eb-31b7-fb631b632040
 md"""
-Podemos também querer reduzir o tamanho da imagem, já que ela é um pouco grande. Podemos, por exeplo, pegar o um pixel a cada 10 linhas e 10 colunas e gerar uma nova imagem com o resultado.
+Podemos também querer reduzir o tamanho da imagem, já que ela é um pouco grande. Podemos, por exemplo, pegar o um pixel a cada 10 linhas e 10 colunas e gerar uma nova imagem com o resultado.
 """
 
 # ╔═╡ ae542fe4-64cc-11eb-29fc-73b7a66314a9
@@ -508,41 +495,36 @@ Observando com calma a imagem não parece tão boa, ela perdeu muitos detalhes.
 md"""
 # Modelagem: Criando imagens sintéticas
 
-Pense no seu filme favorita da Pixar (por exemplo Monstros S. A.). Quadros desses filmes são imagens geradas a partir de modelos matemáticos complexos. Uma das técnicas que são usadas é o Ray tracing (que talvez vejamos nesse curso). Essa é uma técnica muito usada na geração de imagens que parecem realísticas.
+Pense no seu filme favorito da Pixar (o meu é Monstros S. A.). Quadros desses filmes são imagens geradas a partir de modelos matemáticos complexos. Uma das técnicas que são usadas é o Ray tracing (que talvez vejamos nesse curso). Essa é uma técnica muito usada na geração de imagens que parecem realísticas.
 """
 
 # ╔═╡ 5319c03c-64cc-11eb-0743-a1612476e2d3
 md"""
 # Saída: Gravando uma imagem em arquivo
 
-Finamente, nós podemos querer gravar nossa nova criação em um arquivo. Para isso, você pode **aperta com o botão direito** sobre uma imagem e salvá-la para um arquivo. Mas você também pode querer salvar a imagem usado Julia, basta usar a função `save` que recebe o nome do arquivo destino e a imagem a ser guardada.
+Finamente, nós podemos querer gravar nossa nova criação em um arquivo. Para isso, você pode **apertar o botão direito** do mouse sobre uma imagem e salvá-la para um arquivo. Mas você também pode querer salvar a imagem usado Julia, basta usar a função `save` que recebe o nome do arquivo destino e a imagem a ser guardada.
 """
 
 # ╔═╡ 3db09d92-64cc-11eb-0333-45193c0fd1fe
 save("reduced_apolo.png", reduced_image)
 
-# ╔═╡ 61606acc-6bcc-11eb-2c80-69ceec9f9702
-md"""
-# $(html"<br>")
-"""
-
 # ╔═╡ dd183eca-6018-11eb-2a83-2fcaeea62942
 md"""
 # Ciência da computação: arrays
 
-Um imagem é um exemplo concreto de uma ideia geral e fundamental em computação, o **aray**.
+Uma imagem é um exemplo concreto de uma ideia geral e fundamental em computação, o **array**.
 
-Uma imagem é uma malha retangular em que cada elemento contém uma cor. Um array é uma malha retangular para armazenar dados de um _único tipo_. Os dados são armazenados e recuperados usando índices, exatamente como no exemplo das imagens: cada célula da malha pode armazenar uma "única unidade" de um certo tipo.
+Ela é uma malha retangular em que cada elemento contém uma cor. Um array é uma malha retangular para armazenar dados de um _único tipo_. Os dados são armazenados e recuperados usando índices, exatamente como no exemplo das imagens: cada célula da malha pode armazenar uma "única unidade" de um certo tipo.
 
 ## Dimensão de um array
 
-OK, isso é um pouco confuso para um matemático. Mas em programação chamamos de dimensão de um array o número de eixos que usamos na indexação. Assim, o que costumamos de chamar de vetor teria uma dimensão. Já uma matriz duas. É possível criar arrays com mais de duas dimensões, que em matemática levaria a tensores. Além da dimensão (número de eixos), precisamos definir o comprimento de cada eixo e quais são de fato os índices que podem ser usados. Em Julia a convenção é que os índices começam em 1 e vão até o comprimento daquele eixo. Mas é também possível definir outras indexações se isso for estritamente necessário.
+OK, isso é um pouco confuso para um matemático. Mas em programação chamamos de dimensão de um array o número de eixos que usamos na indexação. Assim, o que costumamos de chamar de vetor teria dimensão **um**. Já uma matriz tem duas dimensões. É possível criar arrays com mais de duas dimensões, que em matemática levaria a tensores. Além da dimensão (número de eixos), precisamos definir o comprimento de cada eixo e quais são de fato os índices que podem ser usados. Em Julia a convenção é que os índices começam em 1 e vão até o comprimento daquele eixo. Mas é também possível definir outras indexações se isso for estritamente necessário.
 
 ## Arrays como estrutura dados
 
-Arrays são um exemplo simples de **estruturas de dados**. Elas são formas de armazenar dados e acessá-los. Diferentes estruturas de dados podem ser usada em diferentes situações. O importante é usar a estratura adequada, que é aquela que facilita as manipulações que você deseja fazer nos dados. Por exemplo, arrays são ótimos para acessar qualquer porção dos dados com posição conhecida. Mas eles já não são tão bons se desejamos procurar uma informação.
+Arrays são um exemplo simples de **estruturas de dados**. Elas são formas de armazenar dados e acessá-los. Diferentes estruturas de dados podem ser usada em diferentes situações. O importante é usar a estrutura adequada, que é aquela que facilita as manipulações que você deseja fazer com os dados. Por exemplo, arrays são ótimos para acessar qualquer porção dos dados com posição conhecida. Mas eles já não são tão bons se desejamos procurar uma informação.
 
-Os arrays tem essa noção de posição que os torna natural na representação de informação que tem essa estrutura posicional, como as imagens. Em imagens objetos distinos estão próximos (como o piso ou o nariz do Apolo). Dessa forma podemos esperar que pixels próximos tenham cores semelhantes e quando isso não ocorre podemos imaginar que estamos "trocando" de objetos e encontrando uma fronteira, uma aresta de um novo objeto. Essa estrutura será aproveitada nas próximas aulas.
+Os arrays tem essa noção de posição que os torna natural na representação de informação que tem essa estrutura posicional, como as imagens. Em imagens porções distintas de um mesmo objeto estão próximas (como o piso ou o nariz do Apolo). Dessa forma podemos esperar que pixels próximos tenham cores semelhantes e quando isso não ocorre podemos imaginar que estamos "trocando" de objetos e encontrando uma fronteira, uma aresta de um novo objeto. Essa estrutura será aproveitada nas próximas aulas.
 """
 
 # ╔═╡ 8ddcb286-602a-11eb-3ae0-07d3c77a0f8c
@@ -552,7 +534,7 @@ md"""
 ## Criando vetores e matrices
 Julia lida muito bem com arrays de qualquer dimensão.
 
-Vetores, que são arrays uni-demensionais, podem ser criados usando uma notação com colchetes e vírgulas:
+Vetores, que são arrays uni-dimensionais, podem ser criados usando uma notação com colchetes e vírgulas:
 """
 
 # ╔═╡ f4b0aa23-2d76-4d88-b2a4-3807e88d27ce
@@ -563,7 +545,7 @@ Vetores, que são arrays uni-demensionais, podem ser criados usando uma notaçã
 
 # ╔═╡ 2b0e6450-64d4-11eb-182b-ff1bd515b56f
 md"""
-Já matrizes, que são bi-dimensionais, também usam colchetes.Matrices, mas separam elementos de uma mesma linha por espaços e as linhas em si por quabra de linha ou ponto-e-vírgula:
+Já matrizes, que são bi-dimensionais, também usam colchetes. Mas nelas eleementos de uma mesma linha são separados por espaços e as linhas em si por quebra de linha ou ponto-e-vírgula:
 """
 
 # ╔═╡ 3b2b041a-64d4-11eb-31dd-47d7321ee909
@@ -594,7 +576,7 @@ Nele, `0:0.1:1` é um **range** (uma faixa de números). O primeiro valor diz on
 
 # ╔═╡ 17a69736-64d7-11eb-2c6c-eb5ebf51b285
 md"""
-Podemos criar de maneira similar matrizes que são bimensionais, usamos aqui um `for` que pecorre dois ranges, o primeiro variando as linhas e o segundo as colunas. Os dois ranges deve ser separados por vírgula (`,`). No lugar dos ranges, podem estar outros objetos que sabemos percorrer, como vetores ou mesmo (uma única) matriz.
+Podemos criar de maneira similar matrizes que são bidimensionais, usamos aqui um `for` que percorre dois ranges, o primeiro variando as linhas e o segundo as colunas. Os dois ranges devem ser separados por vírgula (`,`). No lugar dos ranges, podem estar outros objetos que sabemos percorrer, como vetores ou mesmo (uma única) matriz.
 """
 
 # ╔═╡ 291b04de-64d7-11eb-1ee0-d998dccb998c
@@ -604,7 +586,7 @@ Podemos criar de maneira similar matrizes que são bimensionais, usamos aqui um 
 md"""
 ## Concatenando matrizes
 
-Para concatenar matrizes podemos usar a justaposição usando uma sintaxe selhante à criação de arrays:
+Para concatenar matrizes podemos usar a justaposição usando uma sintaxe semelhante à criação de arrays:
 """
 
 # ╔═╡ 7d9ad134-60ee-11eb-1b2a-a7d63f3a7a2d
@@ -625,7 +607,7 @@ Pluto tem algumas ferramentas para criar cadernos com iteratividade sem que o le
 
 Por exemplo, suponha que queremos ver o efeito de se alterar um valor, digamos o número de tons de vermelho que usaremos no nosso gradiente. É claro que isso pode ser feito ajustando o range.
 
-Mas Pluto nos permite também associar o valor de uma variável a posição de um slider (vimos outros exemplos durante a aula) e usar isso para definir o número de tons de vermehor que veremos no resultado.
+Mas Pluto nos permite também associar o valor de uma variável a posição de um slider (vimos outros exemplos durante a aula) e usar isso para definir o número de tons de vermelho que veremos no resultado.
 
 Isso é um exemplo de se usar um elemento de **interface gráfica** em uma página web para torná-la iterativa. Vamos ver como funciona.
 """
@@ -640,17 +622,17 @@ Nós definimos o slider através de
 
 # ╔═╡ b1dfe122-64dc-11eb-1104-1b8852b2c4c5
 md"""
-[O tipo `Slider` é definido n pacote `PlutoUI.jl`.]
+Obs: O tipo `Slider` é definido no pacote `PlutoUI.jl`.
 """
 
 # ╔═╡ cfc55140-64d7-11eb-0ff6-e59c70d01d67
 md"""
-Isso cira uma nova variável chamada `number_reds` cujo valor é obtido a partir do valor que está no slider. Ao mover o slider, altermos o valor e a variável tem seu conteúdo atualizado. Isso resulta, devido à **reatividade** de Pluto, em mudanças em todas as células do caderno que usam esse valor! Isso tudo ocorre automaticamente sem que nós precisemos intervir!
+Isso cira uma nova variável chamada `number_reds` cujo valor é obtido a partir do valor que está no slider. Ao mover o slider, alteramos o valor e a variável tem seu conteúdo atualizado. Isso resulta, devido à **reatividade** de Pluto, em mudanças em todas as células do caderno que usam esse valor! Tudo ocorre automaticamente sem que nós precisemos intervir.
 """
 
 # ╔═╡ fca72490-64d7-11eb-1464-f5e0582c4d18
 md"""
-Aqui está o código que gera o gradiente a partir do número de tons de vermelhos que escolhido no slider. Notem que preto vai estar sempre lá.
+Aqui está o código que gera o gradiente a partir do número de tons de vermelhos que é definido pelo slider. Notem que preto vai estar sempre lá.
 """
 
 # ╔═╡ 88933746-6028-11eb-32de-13eb6ff43e29
@@ -688,14 +670,12 @@ md"""
 Vamos resumid as principais ideias desse caderno:
 
 - Imagens são como **arrays** (mais precisamente matrizes) de cores.
-- Nós podemos acessar e modificar arrays unsando **índices**.
-- Noós podemos criar arrays explícitamente ou através de funções ou usando **compreensões de arrays**.
+- Nós podemos acessar e modificar arrays usando **índices**.
+- Nós podemos criar arrays explicitamente ou através de funções ou usando **compreensões de arrays**.
 """
 
-# ╔═╡ 9025a5b4-6066-11eb-20e8-099e9b8f859e
-md"""
-----
-"""
+# ╔═╡ 45815734-ee0a-11ea-2982-595e1fc0e7b1
+md"# Apêndice"
 
 # ╔═╡ 5da8cbe8-eded-11ea-2e43-c5b7cc71e133
 begin
@@ -719,7 +699,7 @@ still_missing(text=md"Substitua `missing` com sua resposta.") = Markdown.MD(Mark
 keep_working(text=md"The answer is not quite right.") = Markdown.MD(Markdown.Admonition("danger", "Keep working on it!", [text]))
 
 # ╔═╡ e09036a4-601b-11eb-1a8b-ef70105ab91c
-yays = [md"Ótimo!", md"Ôba ❤", md"Muito bom! 🎉", md"Bom trabalho!", md"Continue assim!", md"Perfeito!", md"Incrível!", md"Você acertou!", md"Podemos continuar para a próxima seção."]
+yays = [md"Ótimo!", md"Oba ❤", md"Muito bom! 🎉", md"Bom trabalho!", md"Continue assim!", md"Perfeito!", md"Incrível!", md"Você acertou!", md"Podemos continuar para a próxima seção."]
 
 # ╔═╡ e09af1a2-601b-11eb-14c8-57a46546f6ce
 correct(text=rand(yays)) = Markdown.MD(Markdown.Admonition("correto", "Você entendeu!", [text]))
@@ -749,9 +729,6 @@ end
 
 # ╔═╡ e0a6031c-601b-11eb-27a5-65140dd92897
 bigbreak = html"<br><br><br><br><br>";
-
-# ╔═╡ 45815734-ee0a-11ea-2982-595e1fc0e7b1
-bigbreak
 
 # ╔═╡ e0b15582-601b-11eb-26d6-bbf708933bc8
 function camera_input(;max_size=150, default_url="https://i.imgur.com/SUmi94P.png")
@@ -1081,6 +1058,436 @@ end
 # ╔═╡ edf900be-601b-11eb-0456-3f7cfc5e876b
 md"_Aula 1, 2º Sem 2021, version 0_"
 
+# ╔═╡ 00000000-0000-0000-0000-000000000001
+PLUTO_PROJECT_TOML_CONTENTS = """
+[deps]
+ColorVectorSpace = "c3611d14-8923-5661-9e6a-0046d554d3a4"
+Colors = "5ae59095-9a9b-59fe-a467-6f913c188581"
+FileIO = "5789e2e9-d7fb-5bc7-8068-2c6fae9b9549"
+HypertextLiteral = "ac1192a8-f4b3-4bfe-ba22-af5b92cd3ab2"
+ImageIO = "82e4d734-157c-48bb-816b-45c225c6df19"
+ImageShow = "4e3cecfd-b093-5904-9786-8bbb286a6a31"
+PlutoUI = "7f904dfe-b85e-4ff6-b463-dae2292396a8"
+
+[compat]
+ColorVectorSpace = "~0.9.5"
+Colors = "~0.12.8"
+FileIO = "~1.10.1"
+HypertextLiteral = "~0.9.0"
+ImageIO = "~0.5.6"
+ImageShow = "~0.3.2"
+PlutoUI = "~0.7.9"
+"""
+
+# ╔═╡ 00000000-0000-0000-0000-000000000002
+PLUTO_MANIFEST_TOML_CONTENTS = """
+# This file is machine-generated - editing it directly is not advised
+
+[[AbstractFFTs]]
+deps = ["LinearAlgebra"]
+git-tree-sha1 = "485ee0867925449198280d4af84bdb46a2a404d0"
+uuid = "621f4979-c628-5d54-868e-fcf4e3e8185c"
+version = "1.0.1"
+
+[[Adapt]]
+deps = ["LinearAlgebra"]
+git-tree-sha1 = "84918055d15b3114ede17ac6a7182f68870c16f7"
+uuid = "79e6a3ab-5dfb-504d-930d-738a2a938a0e"
+version = "3.3.1"
+
+[[ArgTools]]
+uuid = "0dad84c5-d112-42e6-8d28-ef12dabb789f"
+
+[[Artifacts]]
+uuid = "56f22d72-fd6d-98f1-02f0-08ddc0907c33"
+
+[[Base64]]
+uuid = "2a0f44e3-6c83-55bd-87e4-b1978d98bd5f"
+
+[[CEnum]]
+git-tree-sha1 = "215a9aa4a1f23fbd05b92769fdd62559488d70e9"
+uuid = "fa961155-64e5-5f13-b03f-caf6b980ea82"
+version = "0.4.1"
+
+[[ChainRulesCore]]
+deps = ["Compat", "LinearAlgebra", "SparseArrays"]
+git-tree-sha1 = "bdc0937269321858ab2a4f288486cb258b9a0af7"
+uuid = "d360d2e6-b24c-11e9-a2a3-2a2ae2dbcce4"
+version = "1.3.0"
+
+[[ColorTypes]]
+deps = ["FixedPointNumbers", "Random"]
+git-tree-sha1 = "024fe24d83e4a5bf5fc80501a314ce0d1aa35597"
+uuid = "3da002f7-5984-5a60-b8a6-cbb66c0b333f"
+version = "0.11.0"
+
+[[ColorVectorSpace]]
+deps = ["ColorTypes", "FixedPointNumbers", "LinearAlgebra", "SpecialFunctions", "Statistics", "TensorCore"]
+git-tree-sha1 = "42a9b08d3f2f951c9b283ea427d96ed9f1f30343"
+uuid = "c3611d14-8923-5661-9e6a-0046d554d3a4"
+version = "0.9.5"
+
+[[Colors]]
+deps = ["ColorTypes", "FixedPointNumbers", "Reexport"]
+git-tree-sha1 = "417b0ed7b8b838aa6ca0a87aadf1bb9eb111ce40"
+uuid = "5ae59095-9a9b-59fe-a467-6f913c188581"
+version = "0.12.8"
+
+[[Compat]]
+deps = ["Base64", "Dates", "DelimitedFiles", "Distributed", "InteractiveUtils", "LibGit2", "Libdl", "LinearAlgebra", "Markdown", "Mmap", "Pkg", "Printf", "REPL", "Random", "SHA", "Serialization", "SharedArrays", "Sockets", "SparseArrays", "Statistics", "Test", "UUIDs", "Unicode"]
+git-tree-sha1 = "344f143fa0ec67e47917848795ab19c6a455f32c"
+uuid = "34da2185-b29b-5c13-b0c7-acf172513d20"
+version = "3.32.0"
+
+[[CompilerSupportLibraries_jll]]
+deps = ["Artifacts", "Libdl"]
+uuid = "e66e0078-7015-5450-92f7-15fbd957f2ae"
+
+[[Dates]]
+deps = ["Printf"]
+uuid = "ade2ca70-3891-5945-98fb-dc099432e06a"
+
+[[DelimitedFiles]]
+deps = ["Mmap"]
+uuid = "8bb1440f-4735-579b-a4ab-409b98df4dab"
+
+[[Distributed]]
+deps = ["Random", "Serialization", "Sockets"]
+uuid = "8ba89e20-285c-5b6f-9357-94700520ee1b"
+
+[[DocStringExtensions]]
+deps = ["LibGit2"]
+git-tree-sha1 = "a32185f5428d3986f47c2ab78b1f216d5e6cc96f"
+uuid = "ffbed154-4ef7-542d-bbb7-c09d3a79fcae"
+version = "0.8.5"
+
+[[Downloads]]
+deps = ["ArgTools", "LibCURL", "NetworkOptions"]
+uuid = "f43a241f-c20a-4ad4-852c-f6b1247861c6"
+
+[[FileIO]]
+deps = ["Pkg", "Requires", "UUIDs"]
+git-tree-sha1 = "256d8e6188f3f1ebfa1a5d17e072a0efafa8c5bf"
+uuid = "5789e2e9-d7fb-5bc7-8068-2c6fae9b9549"
+version = "1.10.1"
+
+[[FixedPointNumbers]]
+deps = ["Statistics"]
+git-tree-sha1 = "335bfdceacc84c5cdf16aadc768aa5ddfc5383cc"
+uuid = "53c48c17-4a7d-5ca2-90c5-79b7896eea93"
+version = "0.8.4"
+
+[[Graphics]]
+deps = ["Colors", "LinearAlgebra", "NaNMath"]
+git-tree-sha1 = "2c1cf4df419938ece72de17f368a021ee162762e"
+uuid = "a2bd30eb-e257-5431-a919-1863eab51364"
+version = "1.1.0"
+
+[[HypertextLiteral]]
+git-tree-sha1 = "72053798e1be56026b81d4e2682dbe58922e5ec9"
+uuid = "ac1192a8-f4b3-4bfe-ba22-af5b92cd3ab2"
+version = "0.9.0"
+
+[[ImageBase]]
+deps = ["ImageCore", "Reexport"]
+git-tree-sha1 = "5d19b6f294625fc59dba19ed744c81fca5667dac"
+uuid = "c817782e-172a-44cc-b673-b171935fbb9e"
+version = "0.1.2"
+
+[[ImageCore]]
+deps = ["AbstractFFTs", "ColorVectorSpace", "Colors", "FixedPointNumbers", "Graphics", "MappedArrays", "MosaicViews", "OffsetArrays", "PaddedViews", "Reexport"]
+git-tree-sha1 = "75f7fea2b3601b58f24ee83617b528e57160cbfd"
+uuid = "a09fc81d-aa75-5fe9-8630-4744c3626534"
+version = "0.9.1"
+
+[[ImageIO]]
+deps = ["FileIO", "Netpbm", "PNGFiles", "TiffImages", "UUIDs"]
+git-tree-sha1 = "d067570b4d4870a942b19d9ceacaea4fb39b69a1"
+uuid = "82e4d734-157c-48bb-816b-45c225c6df19"
+version = "0.5.6"
+
+[[ImageShow]]
+deps = ["Base64", "FileIO", "ImageBase", "ImageCore", "OffsetArrays", "StackViews"]
+git-tree-sha1 = "e439b5a4e8676da8a29da0b7d2b498f2db6dbce3"
+uuid = "4e3cecfd-b093-5904-9786-8bbb286a6a31"
+version = "0.3.2"
+
+[[IndirectArrays]]
+git-tree-sha1 = "c2a145a145dc03a7620af1444e0264ef907bd44f"
+uuid = "9b13fd28-a010-5f03-acff-a1bbcff69959"
+version = "0.5.1"
+
+[[Inflate]]
+git-tree-sha1 = "f5fc07d4e706b84f72d54eedcc1c13d92fb0871c"
+uuid = "d25df0c9-e2be-5dd7-82c8-3ad0b3e990b9"
+version = "0.1.2"
+
+[[InteractiveUtils]]
+deps = ["Markdown"]
+uuid = "b77e0a4c-d291-57a0-90e8-8db25a27a240"
+
+[[IrrationalConstants]]
+git-tree-sha1 = "f76424439413893a832026ca355fe273e93bce94"
+uuid = "92d709cd-6900-40b7-9082-c6be49f344b6"
+version = "0.1.0"
+
+[[JLLWrappers]]
+deps = ["Preferences"]
+git-tree-sha1 = "642a199af8b68253517b80bd3bfd17eb4e84df6e"
+uuid = "692b3bcd-3c85-4b1f-b108-f13ce0eb3210"
+version = "1.3.0"
+
+[[JSON]]
+deps = ["Dates", "Mmap", "Parsers", "Unicode"]
+git-tree-sha1 = "8076680b162ada2a031f707ac7b4953e30667a37"
+uuid = "682c06a0-de6a-54ab-a142-c8b1cf79cde6"
+version = "0.21.2"
+
+[[LibCURL]]
+deps = ["LibCURL_jll", "MozillaCACerts_jll"]
+uuid = "b27032c2-a3e7-50c8-80cd-2d36dbcbfd21"
+
+[[LibCURL_jll]]
+deps = ["Artifacts", "LibSSH2_jll", "Libdl", "MbedTLS_jll", "Zlib_jll", "nghttp2_jll"]
+uuid = "deac9b47-8bc7-5906-a0fe-35ac56dc84c0"
+
+[[LibGit2]]
+deps = ["Base64", "NetworkOptions", "Printf", "SHA"]
+uuid = "76f85450-5226-5b5a-8eaa-529ad045b433"
+
+[[LibSSH2_jll]]
+deps = ["Artifacts", "Libdl", "MbedTLS_jll"]
+uuid = "29816b5a-b9ab-546f-933c-edad1886dfa8"
+
+[[Libdl]]
+uuid = "8f399da3-3557-5675-b5ff-fb832c97cbdb"
+
+[[LinearAlgebra]]
+deps = ["Libdl"]
+uuid = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
+
+[[LogExpFunctions]]
+deps = ["DocStringExtensions", "IrrationalConstants", "LinearAlgebra"]
+git-tree-sha1 = "3d682c07e6dd250ed082f883dc88aee7996bf2cc"
+uuid = "2ab3a3ac-af41-5b50-aa03-7779005ae688"
+version = "0.3.0"
+
+[[Logging]]
+uuid = "56ddb016-857b-54e1-b83d-db4d58db5568"
+
+[[MappedArrays]]
+git-tree-sha1 = "e8b359ef06ec72e8c030463fe02efe5527ee5142"
+uuid = "dbb5928d-eab1-5f90-85c2-b9b0edb7c900"
+version = "0.4.1"
+
+[[Markdown]]
+deps = ["Base64"]
+uuid = "d6f4376e-aef5-505a-96c1-9c027394607a"
+
+[[MbedTLS_jll]]
+deps = ["Artifacts", "Libdl"]
+uuid = "c8ffd9c3-330d-5841-b78e-0817d7145fa1"
+
+[[Mmap]]
+uuid = "a63ad114-7e13-5084-954f-fe012c677804"
+
+[[MosaicViews]]
+deps = ["MappedArrays", "OffsetArrays", "PaddedViews", "StackViews"]
+git-tree-sha1 = "b34e3bc3ca7c94914418637cb10cc4d1d80d877d"
+uuid = "e94cdb99-869f-56ef-bcf0-1ae2bcbe0389"
+version = "0.3.3"
+
+[[MozillaCACerts_jll]]
+uuid = "14a3606d-f60d-562e-9121-12d972cd8159"
+
+[[NaNMath]]
+git-tree-sha1 = "bfe47e760d60b82b66b61d2d44128b62e3a369fb"
+uuid = "77ba4419-2d1f-58cd-9bb1-8ffee604a2e3"
+version = "0.3.5"
+
+[[Netpbm]]
+deps = ["FileIO", "ImageCore"]
+git-tree-sha1 = "18efc06f6ec36a8b801b23f076e3c6ac7c3bf153"
+uuid = "f09324ee-3d7c-5217-9330-fc30815ba969"
+version = "1.0.2"
+
+[[NetworkOptions]]
+uuid = "ca575930-c2e3-43a9-ace4-1e988b2c1908"
+
+[[OffsetArrays]]
+deps = ["Adapt"]
+git-tree-sha1 = "c0f4a4836e5f3e0763243b8324200af6d0e0f90c"
+uuid = "6fe1bfb0-de20-5000-8ca7-80f57d26f881"
+version = "1.10.5"
+
+[[OpenSpecFun_jll]]
+deps = ["Artifacts", "CompilerSupportLibraries_jll", "JLLWrappers", "Libdl", "Pkg"]
+git-tree-sha1 = "13652491f6856acfd2db29360e1bbcd4565d04f1"
+uuid = "efe28fd5-8261-553b-a9e1-b2916fc3738e"
+version = "0.5.5+0"
+
+[[OrderedCollections]]
+git-tree-sha1 = "85f8e6578bf1f9ee0d11e7bb1b1456435479d47c"
+uuid = "bac558e1-5e72-5ebc-8fee-abe8a469f55d"
+version = "1.4.1"
+
+[[PNGFiles]]
+deps = ["Base64", "CEnum", "ImageCore", "IndirectArrays", "OffsetArrays", "libpng_jll"]
+git-tree-sha1 = "520e28d4026d16dcf7b8c8140a3041f0e20a9ca8"
+uuid = "f57f5aa1-a3ce-4bc8-8ab9-96f992907883"
+version = "0.3.7"
+
+[[PaddedViews]]
+deps = ["OffsetArrays"]
+git-tree-sha1 = "646eed6f6a5d8df6708f15ea7e02a7a2c4fe4800"
+uuid = "5432bcbf-9aad-5242-b902-cca2824c8663"
+version = "0.5.10"
+
+[[Parsers]]
+deps = ["Dates"]
+git-tree-sha1 = "477bf42b4d1496b454c10cce46645bb5b8a0cf2c"
+uuid = "69de0a69-1ddd-5017-9359-2bf0b02dc9f0"
+version = "2.0.2"
+
+[[Pkg]]
+deps = ["Artifacts", "Dates", "Downloads", "LibGit2", "Libdl", "Logging", "Markdown", "Printf", "REPL", "Random", "SHA", "Serialization", "TOML", "Tar", "UUIDs", "p7zip_jll"]
+uuid = "44cfe95a-1eb2-52ea-b672-e2afdf69b78f"
+
+[[PkgVersion]]
+deps = ["Pkg"]
+git-tree-sha1 = "a7a7e1a88853564e551e4eba8650f8c38df79b37"
+uuid = "eebad327-c553-4316-9ea0-9fa01ccd7688"
+version = "0.1.1"
+
+[[PlutoUI]]
+deps = ["Base64", "Dates", "InteractiveUtils", "JSON", "Logging", "Markdown", "Random", "Reexport", "Suppressor"]
+git-tree-sha1 = "44e225d5837e2a2345e69a1d1e01ac2443ff9fcb"
+uuid = "7f904dfe-b85e-4ff6-b463-dae2292396a8"
+version = "0.7.9"
+
+[[Preferences]]
+deps = ["TOML"]
+git-tree-sha1 = "00cfd92944ca9c760982747e9a1d0d5d86ab1e5a"
+uuid = "21216c6a-2e73-6563-6e65-726566657250"
+version = "1.2.2"
+
+[[Printf]]
+deps = ["Unicode"]
+uuid = "de0858da-6303-5e67-8744-51eddeeeb8d7"
+
+[[ProgressMeter]]
+deps = ["Distributed", "Printf"]
+git-tree-sha1 = "afadeba63d90ff223a6a48d2009434ecee2ec9e8"
+uuid = "92933f4c-e287-5a05-a399-4b506db050ca"
+version = "1.7.1"
+
+[[REPL]]
+deps = ["InteractiveUtils", "Markdown", "Sockets", "Unicode"]
+uuid = "3fa0cd96-eef1-5676-8a61-b3b8758bbffb"
+
+[[Random]]
+deps = ["Serialization"]
+uuid = "9a3f8284-a2c9-5f02-9a11-845980a1fd5c"
+
+[[Reexport]]
+git-tree-sha1 = "5f6c21241f0f655da3952fd60aa18477cf96c220"
+uuid = "189a3867-3050-52da-a836-e630ba90ab69"
+version = "1.1.0"
+
+[[Requires]]
+deps = ["UUIDs"]
+git-tree-sha1 = "4036a3bd08ac7e968e27c203d45f5fff15020621"
+uuid = "ae029012-a4dd-5104-9daa-d747884805df"
+version = "1.1.3"
+
+[[SHA]]
+uuid = "ea8e919c-243c-51af-8825-aaa63cd721ce"
+
+[[Serialization]]
+uuid = "9e88b42a-f829-5b0c-bbe9-9e923198166b"
+
+[[SharedArrays]]
+deps = ["Distributed", "Mmap", "Random", "Serialization"]
+uuid = "1a1011a3-84de-559e-8e89-a11a2f7dc383"
+
+[[Sockets]]
+uuid = "6462fe0b-24de-5631-8697-dd941f90decc"
+
+[[SparseArrays]]
+deps = ["LinearAlgebra", "Random"]
+uuid = "2f01184e-e22b-5df5-ae63-d93ebab69eaf"
+
+[[SpecialFunctions]]
+deps = ["ChainRulesCore", "LogExpFunctions", "OpenSpecFun_jll"]
+git-tree-sha1 = "a322a9493e49c5f3a10b50df3aedaf1cdb3244b7"
+uuid = "276daf66-3868-5448-9aa4-cd146d93841b"
+version = "1.6.1"
+
+[[StackViews]]
+deps = ["OffsetArrays"]
+git-tree-sha1 = "46e589465204cd0c08b4bd97385e4fa79a0c770c"
+uuid = "cae243ae-269e-4f55-b966-ac2d0dc13c15"
+version = "0.1.1"
+
+[[Statistics]]
+deps = ["LinearAlgebra", "SparseArrays"]
+uuid = "10745b16-79ce-11e8-11f9-7d13ad32a3b2"
+
+[[Suppressor]]
+git-tree-sha1 = "a819d77f31f83e5792a76081eee1ea6342ab8787"
+uuid = "fd094767-a336-5f1f-9728-57cf17d0bbfb"
+version = "0.2.0"
+
+[[TOML]]
+deps = ["Dates"]
+uuid = "fa267f1f-6049-4f14-aa54-33bafae1ed76"
+
+[[Tar]]
+deps = ["ArgTools", "SHA"]
+uuid = "a4e569a6-e804-4fa4-b0f3-eef7a1d5b13e"
+
+[[TensorCore]]
+deps = ["LinearAlgebra"]
+git-tree-sha1 = "1feb45f88d133a655e001435632f019a9a1bcdb6"
+uuid = "62fd8b95-f654-4bbd-a8a5-9c27f68ccd50"
+version = "0.1.1"
+
+[[Test]]
+deps = ["InteractiveUtils", "Logging", "Random", "Serialization"]
+uuid = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
+
+[[TiffImages]]
+deps = ["ColorTypes", "DocStringExtensions", "FileIO", "FixedPointNumbers", "IndirectArrays", "Inflate", "OffsetArrays", "OrderedCollections", "PkgVersion", "ProgressMeter"]
+git-tree-sha1 = "03fb246ac6e6b7cb7abac3b3302447d55b43270e"
+uuid = "731e570b-9d59-4bfa-96dc-6df516fadf69"
+version = "0.4.1"
+
+[[UUIDs]]
+deps = ["Random", "SHA"]
+uuid = "cf7118a7-6976-5b1a-9a39-7adc72f591a4"
+
+[[Unicode]]
+uuid = "4ec0a83e-493e-50e2-b9ac-8f72acf5a8f5"
+
+[[Zlib_jll]]
+deps = ["Libdl"]
+uuid = "83775a58-1f1d-513f-b197-d71354ab007a"
+
+[[libpng_jll]]
+deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg", "Zlib_jll"]
+git-tree-sha1 = "94d180a6d2b5e55e447e2d27a29ed04fe79eb30c"
+uuid = "b53b4c65-9356-5827-b1ea-8c7a1a84506f"
+version = "1.6.38+0"
+
+[[nghttp2_jll]]
+deps = ["Artifacts", "Libdl"]
+uuid = "8e850ede-7688-5339-a07c-302acd2aaf8d"
+
+[[p7zip_jll]]
+deps = ["Artifacts", "Libdl"]
+uuid = "3f19e933-33d8-53b3-aaab-bd5110c3b7a0"
+"""
+
 # ╔═╡ Cell order:
 # ╟─75b96e8c-fa48-4b78-a7dc-587a676f04e2
 # ╟─d07fcdb0-7afc-4a25-b68a-49fd1e3405e7
@@ -1137,7 +1544,7 @@ md"_Aula 1, 2º Sem 2021, version 0_"
 # ╠═d515286b-4ad4-449b-8967-06b9b4c87684
 # ╟─eef8fbc8-8887-4628-8ba8-114575d6b91f
 # ╠═4e6a31d6-1ef8-4a69-b346-ad58cfc4d8a5
-# ╠═e11f0e47-02d9-48a6-9b1a-e313c18db129
+# ╟─e11f0e47-02d9-48a6-9b1a-e313c18db129
 # ╠═9e447eab-14b6-45d8-83ab-1f7f1f1c70d2
 # ╠═c926435c-c648-419c-9951-ac8a1d4f3b92
 # ╟─32e7e51c-dd0d-483d-95cb-e6043f2b2975
@@ -1180,8 +1587,7 @@ md"_Aula 1, 2º Sem 2021, version 0_"
 # ╟─7b04331a-6bcb-11eb-34fa-1f5b151e5510
 # ╟─5319c03c-64cc-11eb-0743-a1612476e2d3
 # ╠═3db09d92-64cc-11eb-0333-45193c0fd1fe
-# ╟─61606acc-6bcc-11eb-2c80-69ceec9f9702
-# ╟─dd183eca-6018-11eb-2a83-2fcaeea62942
+# ╠═dd183eca-6018-11eb-2a83-2fcaeea62942
 # ╟─8ddcb286-602a-11eb-3ae0-07d3c77a0f8c
 # ╠═f4b0aa23-2d76-4d88-b2a4-3807e88d27ce
 # ╠═1b2b2b18-64d4-11eb-2d43-e31cb8bc25d1
@@ -1207,9 +1613,8 @@ md"_Aula 1, 2º Sem 2021, version 0_"
 # ╟─82a8314c-64d8-11eb-1acb-e33625381178
 # ╟─576d5e3a-64d8-11eb-10c9-876be31f7830
 # ╟─a7cbbca2-324a-4d3e-ae03-c1e07f80f7e4
-# ╟─ace86c8a-60ee-11eb-34ef-93c54abc7b1a
+# ╠═ace86c8a-60ee-11eb-34ef-93c54abc7b1a
 # ╟─b08e57e4-60ee-11eb-0e1a-2f49c496668b
-# ╟─9025a5b4-6066-11eb-20e8-099e9b8f859e
 # ╟─45815734-ee0a-11ea-2982-595e1fc0e7b1
 # ╠═5da8cbe8-eded-11ea-2e43-c5b7cc71e133
 # ╠═e074560a-601b-11eb-340e-47acd64f03b2
@@ -1226,3 +1631,5 @@ md"_Aula 1, 2º Sem 2021, version 0_"
 # ╠═61b29e7d-5aba-4bc8-870b-c1c43919c236
 # ╠═a9fef6c9-e911-4d8c-b141-a4832b40a260
 # ╠═edf900be-601b-11eb-0456-3f7cfc5e876b
+# ╟─00000000-0000-0000-0000-000000000001
+# ╟─00000000-0000-0000-0000-000000000002
