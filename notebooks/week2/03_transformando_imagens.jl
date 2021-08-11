@@ -21,6 +21,8 @@ end;
 # ╔═╡ 86f770fe-74a1-11eb-01f7-5b3ecf057124
 begin
 	import PNGFiles
+	import ImageIO
+	import ImageMagick
 	using PlutoUI
 	using Colors, ColorVectorSpace, ImageShow, FileIO
 	using Unitful
@@ -350,12 +352,14 @@ sel_kernel = kernelize(kernel_matrix[kernel_name])
 # ╔═╡ d22903d6-7529-11eb-2dcd-132cd27104c2
 begin
 	filtered = imfilter(apolohead, sel_kernel)
-	# Edge style filters can return negative values naturally.
-	# Therefore we want the absolute value and it more sense in
-	# Black and White.
-	bwabs_filtered = Gray.(1.5 .* abs.(imfilter(apolohead, sel_kernel)))
+	if kernel_name in ["edge_detect", "∇x", "∇y"]
+		# Edge style filters can return negative values naturally.
+		# Therefore we want the absolute value and it more sense in
+		# Black and White.
+		filtered = Gray.(3.0 .* abs.(filtered))
+	end
 	# Show both images side by side
-	[filtered bwabs_filtered]
+	filtered
 end
 
 # ╔═╡ 275bf7ac-74b3-11eb-32c3-cda1e4f1f8c2
@@ -422,7 +426,7 @@ kernel = Kernel.gaussian(gparam)
 plotly()
 
 # ╔═╡ 6aa8a76e-7524-11eb-22b5-015aab4191b0
-surface([kernel;])
+surface(kernel)
 
 # ╔═╡ ee93eeb2-7524-11eb-342d-0343d8aebf59
 md"""
@@ -431,7 +435,7 @@ Obs: as linhas pretas são curvas de nível e a visão do gráfico com relação
 
 # ╔═╡ 662d73b6-74b3-11eb-333d-f1323a001000
 md"""
-### Computação: estrutura de dados: arrays com descolamento de índices (_offset_)
+### Computação: estrutura de dados: arrays com deslocamento de índices (_offset_)
 """
 
 # ╔═╡ d127303a-7521-11eb-3507-7341a416211f
@@ -496,6 +500,8 @@ ColorVectorSpace = "c3611d14-8923-5661-9e6a-0046d554d3a4"
 Colors = "5ae59095-9a9b-59fe-a467-6f913c188581"
 FileIO = "5789e2e9-d7fb-5bc7-8068-2c6fae9b9549"
 ImageFiltering = "6a3955dd-da59-5b1f-98d4-e7296123deb5"
+ImageIO = "82e4d734-157c-48bb-816b-45c225c6df19"
+ImageMagick = "6218d12a-5da1-5696-b52f-db25d2ecc6d1"
 ImageShow = "4e3cecfd-b093-5904-9786-8bbb286a6a31"
 OffsetArrays = "6fe1bfb0-de20-5000-8ca7-80f57d26f881"
 PNGFiles = "f57f5aa1-a3ce-4bc8-8ab9-96f992907883"
@@ -508,6 +514,8 @@ ColorVectorSpace = "~0.9.5"
 Colors = "~0.12.8"
 FileIO = "~1.10.1"
 ImageFiltering = "~0.6.22"
+ImageIO = "~0.5.6"
+ImageMagick = "~1.2.1"
 ImageShow = "~0.3.2"
 OffsetArrays = "~1.10.5"
 PNGFiles = "~0.3.7"
@@ -813,6 +821,24 @@ git-tree-sha1 = "79dac52336910325a5675813053b1eee3eb5dcc6"
 uuid = "6a3955dd-da59-5b1f-98d4-e7296123deb5"
 version = "0.6.22"
 
+[[ImageIO]]
+deps = ["FileIO", "Netpbm", "PNGFiles", "TiffImages", "UUIDs"]
+git-tree-sha1 = "d067570b4d4870a942b19d9ceacaea4fb39b69a1"
+uuid = "82e4d734-157c-48bb-816b-45c225c6df19"
+version = "0.5.6"
+
+[[ImageMagick]]
+deps = ["FileIO", "ImageCore", "ImageMagick_jll", "InteractiveUtils", "Libdl", "Pkg", "Random"]
+git-tree-sha1 = "5bc1cb62e0c5f1005868358db0692c994c3a13c6"
+uuid = "6218d12a-5da1-5696-b52f-db25d2ecc6d1"
+version = "1.2.1"
+
+[[ImageMagick_jll]]
+deps = ["JpegTurbo_jll", "Libdl", "Libtiff_jll", "Pkg", "Zlib_jll", "libpng_jll"]
+git-tree-sha1 = "1c0a2295cca535fabaf2029062912591e9b61987"
+uuid = "c73af94c-d91f-53ed-93a7-00f77d67a9d7"
+version = "6.9.10-12+3"
+
 [[ImageShow]]
 deps = ["Base64", "FileIO", "ImageBase", "ImageCore", "OffsetArrays", "StackViews"]
 git-tree-sha1 = "e439b5a4e8676da8a29da0b7d2b498f2db6dbce3"
@@ -823,6 +849,11 @@ version = "0.3.2"
 git-tree-sha1 = "c2a145a145dc03a7620af1444e0264ef907bd44f"
 uuid = "9b13fd28-a010-5f03-acff-a1bbcff69959"
 version = "0.5.1"
+
+[[Inflate]]
+git-tree-sha1 = "f5fc07d4e706b84f72d54eedcc1c13d92fb0871c"
+uuid = "d25df0c9-e2be-5dd7-82c8-3ad0b3e990b9"
+version = "0.1.2"
 
 [[IniFile]]
 deps = ["Test"]
@@ -1045,6 +1076,12 @@ git-tree-sha1 = "bfe47e760d60b82b66b61d2d44128b62e3a369fb"
 uuid = "77ba4419-2d1f-58cd-9bb1-8ffee604a2e3"
 version = "0.3.5"
 
+[[Netpbm]]
+deps = ["FileIO", "ImageCore"]
+git-tree-sha1 = "18efc06f6ec36a8b801b23f076e3c6ac7c3bf153"
+uuid = "f09324ee-3d7c-5217-9330-fc30815ba969"
+version = "1.0.2"
+
 [[NetworkOptions]]
 uuid = "ca575930-c2e3-43a9-ace4-1e988b2c1908"
 
@@ -1117,6 +1154,12 @@ version = "0.40.1+0"
 deps = ["Artifacts", "Dates", "Downloads", "LibGit2", "Libdl", "Logging", "Markdown", "Printf", "REPL", "Random", "SHA", "Serialization", "TOML", "Tar", "UUIDs", "p7zip_jll"]
 uuid = "44cfe95a-1eb2-52ea-b672-e2afdf69b78f"
 
+[[PkgVersion]]
+deps = ["Pkg"]
+git-tree-sha1 = "a7a7e1a88853564e551e4eba8650f8c38df79b37"
+uuid = "eebad327-c553-4316-9ea0-9fa01ccd7688"
+version = "0.1.1"
+
 [[PlotThemes]]
 deps = ["PlotUtils", "Requires", "Statistics"]
 git-tree-sha1 = "a3a964ce9dc7898193536002a6dd892b1b5a6f1d"
@@ -1150,6 +1193,12 @@ version = "1.2.2"
 [[Printf]]
 deps = ["Unicode"]
 uuid = "de0858da-6303-5e67-8744-51eddeeeb8d7"
+
+[[ProgressMeter]]
+deps = ["Distributed", "Printf"]
+git-tree-sha1 = "afadeba63d90ff223a6a48d2009434ecee2ec9e8"
+uuid = "92933f4c-e287-5a05-a399-4b506db050ca"
+version = "1.7.1"
 
 [[Qt5Base_jll]]
 deps = ["Artifacts", "CompilerSupportLibraries_jll", "Fontconfig_jll", "Glib_jll", "JLLWrappers", "Libdl", "Libglvnd_jll", "OpenSSL_jll", "Pkg", "Xorg_libXext_jll", "Xorg_libxcb_jll", "Xorg_xcb_util_image_jll", "Xorg_xcb_util_keysyms_jll", "Xorg_xcb_util_renderutil_jll", "Xorg_xcb_util_wm_jll", "Zlib_jll", "xkbcommon_jll"]
@@ -1295,6 +1344,12 @@ version = "0.1.1"
 [[Test]]
 deps = ["InteractiveUtils", "Logging", "Random", "Serialization"]
 uuid = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
+
+[[TiffImages]]
+deps = ["ColorTypes", "DocStringExtensions", "FileIO", "FixedPointNumbers", "IndirectArrays", "Inflate", "OffsetArrays", "OrderedCollections", "PkgVersion", "ProgressMeter"]
+git-tree-sha1 = "03fb246ac6e6b7cb7abac3b3302447d55b43270e"
+uuid = "731e570b-9d59-4bfa-96dc-6df516fadf69"
+version = "0.4.1"
 
 [[TiledIteration]]
 deps = ["OffsetArrays"]
