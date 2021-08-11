@@ -55,7 +55,7 @@ md"Cada um desses itens pode ser interpretado como o _um_ em contextos diferente
 1. Como um número racional (sim, Julia tem isso!)
 1. Como uma figura enfeitada do número 1
 1. A matriz identidade 2x2
-1. Como um foguete
+1. Como **um** foguete
 
 É claro que cada um desses é apenas um exemplo da ideia abstrata de _um_. Como esse é um conceito simples e fundamental, há inúmeras represetações do _um_ nas várias linguagens, notações, em manifestações artísticas, etc. 
 

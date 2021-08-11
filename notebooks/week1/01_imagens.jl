@@ -21,6 +21,7 @@ end;
 # ╔═╡ 74b008f6-ed6b-11ea-291f-b3791d6d1b35
 begin
 	import ImageIO
+	import PlotlyBase
 	using Colors, ColorVectorSpace, ImageShow, FileIO
 	using PlutoUI
 	using HypertextLiteral
@@ -1067,6 +1068,7 @@ FileIO = "5789e2e9-d7fb-5bc7-8068-2c6fae9b9549"
 HypertextLiteral = "ac1192a8-f4b3-4bfe-ba22-af5b92cd3ab2"
 ImageIO = "82e4d734-157c-48bb-816b-45c225c6df19"
 ImageShow = "4e3cecfd-b093-5904-9786-8bbb286a6a31"
+PlotlyBase = "a03496cd-edff-5a9b-9e67-9cda94a718b5"
 PlutoUI = "7f904dfe-b85e-4ff6-b463-dae2292396a8"
 
 [compat]
@@ -1076,6 +1078,7 @@ FileIO = "~1.10.1"
 HypertextLiteral = "~0.9.0"
 ImageIO = "~0.5.6"
 ImageShow = "~0.3.2"
+PlotlyBase = "~0.8.7"
 PlutoUI = "~0.7.9"
 """
 
@@ -1243,6 +1246,11 @@ git-tree-sha1 = "8076680b162ada2a031f707ac7b4953e30667a37"
 uuid = "682c06a0-de6a-54ab-a142-c8b1cf79cde6"
 version = "0.21.2"
 
+[[LaTeXStrings]]
+git-tree-sha1 = "c7f1c695e06c01b95a67f0cd1d34994f3e7db104"
+uuid = "b964fa9f-0449-5b57-a5c2-d3ea65f4040f"
+version = "1.2.1"
+
 [[LibCURL]]
 deps = ["LibCURL_jll", "MozillaCACerts_jll"]
 uuid = "b27032c2-a3e7-50c8-80cd-2d36dbcbfd21"
@@ -1343,6 +1351,12 @@ git-tree-sha1 = "646eed6f6a5d8df6708f15ea7e02a7a2c4fe4800"
 uuid = "5432bcbf-9aad-5242-b902-cca2824c8663"
 version = "0.5.10"
 
+[[Parameters]]
+deps = ["OrderedCollections", "UnPack"]
+git-tree-sha1 = "2276ac65f1e236e0a6ea70baff3f62ad4c625345"
+uuid = "d96e819e-fc66-5662-9728-84c9c7592b0a"
+version = "0.12.2"
+
 [[Parsers]]
 deps = ["Dates"]
 git-tree-sha1 = "477bf42b4d1496b454c10cce46645bb5b8a0cf2c"
@@ -1358,6 +1372,12 @@ deps = ["Pkg"]
 git-tree-sha1 = "a7a7e1a88853564e551e4eba8650f8c38df79b37"
 uuid = "eebad327-c553-4316-9ea0-9fa01ccd7688"
 version = "0.1.1"
+
+[[PlotlyBase]]
+deps = ["Dates", "DelimitedFiles", "DocStringExtensions", "JSON", "LaTeXStrings", "Logging", "Parameters", "Pkg", "REPL", "Requires", "Statistics", "UUIDs"]
+git-tree-sha1 = "7f7dc47383d2e84dd670360acee818caa84688c8"
+uuid = "a03496cd-edff-5a9b-9e67-9cda94a718b5"
+version = "0.8.7"
 
 [[PlutoUI]]
 deps = ["Base64", "Dates", "InteractiveUtils", "JSON", "Logging", "Markdown", "Random", "Reexport", "Suppressor"]
@@ -1465,6 +1485,11 @@ version = "0.4.1"
 [[UUIDs]]
 deps = ["Random", "SHA"]
 uuid = "cf7118a7-6976-5b1a-9a39-7adc72f591a4"
+
+[[UnPack]]
+git-tree-sha1 = "387c1f73762231e86e0c9c5443ce3b4a0a9a0c2b"
+uuid = "3a884ed6-31ef-47d7-9d2a-63182c4928ed"
+version = "1.0.2"
 
 [[Unicode]]
 uuid = "4ec0a83e-493e-50e2-b9ac-8f72acf5a8f5"
