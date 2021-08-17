@@ -40,7 +40,7 @@ Pergunte o quanto quiser (uso o fórum do Mooddle)!
 """
 
 # ╔═╡ 911ccbce-ed68-11ea-3606-0384e7580d7c
-# edite o código abaixo com seu nome e email d dac (sem o @dac.unicamp.br)
+# edite o código abaixo com seu nome e email da dac (sem o @dac.unicamp.br)
 
 student = (name = "João Ninguém", email_dac = "j000000")
 
@@ -216,7 +216,7 @@ apolo = load(apolo_filename)
 md"_Olá, Apolo_"
 
 # ╔═╡ 6ccd8902-0dd9-4335-a11a-ee7f9a1a6c09
-apolo_head = apolo[140:1000, 250:1250]
+apolo_head = apolo[50:380, 100:480]
 
 # ╔═╡ 15088baa-c337-405d-8885-19a6e2bfd6aa
 md"""
@@ -1989,7 +1989,7 @@ uuid = "3f19e933-33d8-53b3-aaab-bd5110c3b7a0"
 
 # ╔═╡ Cell order:
 # ╟─8ef13896-ed68-11ea-160b-3550eeabbd7d
-# ╠═ac8ff080-ed61-11ea-3650-d9df06123e1f
+# ╟─ac8ff080-ed61-11ea-3650-d9df06123e1f
 # ╠═911ccbce-ed68-11ea-3606-0384e7580d7c
 # ╟─5f95e01a-ee0a-11ea-030c-9dba276aba92
 # ╠═65780f00-ed6b-11ea-1ecf-8b35523a7ac0
