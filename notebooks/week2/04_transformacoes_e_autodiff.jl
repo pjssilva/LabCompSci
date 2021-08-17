@@ -43,7 +43,7 @@ PlutoUI.TableOfContents(aside=true)
 
 # ╔═╡ e6a09409-f262-453b-a434-bfd935306719
 md"""
-#### Intializing packages
+#### Inicializando pacotes
 
 _Ao executar esse notebook a primeira ele pode levar até 15 min, tenha paciência_
 """
@@ -385,7 +385,7 @@ end
 
 # ╔═╡ ad728ee6-7639-11eb-0b23-c37f1366fb4e
 md"""
-## O que é, de verade, uma transformação?
+## O que é, de verdade, uma transformação linear?
 
 No ensino médio aprendemos a multiplicar duas matrizes ou multiplicar matrizes por vetores sem uma compreensão clara do significado da fórmula. Como é uma fórmula complexa e com várias contas repetidas, os computadores são ótimos para executar essa tarefa. Para que então ensinam humanos a fazer isso sem uma justificativa clara?
 """
@@ -396,43 +396,54 @@ Mas vocês já fizeram Álgebra Linear e lá aprenderam que matrizes são repres
 """
 
 # ╔═╡ ce55beee-7643-11eb-04bc-b517703facff
-md"""
-α= $(@bind α Slider(.1:.1:3, show_value=true))
-"""
+begin
+	transfs = Dict("Linear" => genlin, "Warp" => warp, "xy" => xy, "rθ" => rθ)
+	transfs_names = collect(keys(transfs))
+	md"""
+	#### Escolha uma transformação:
+
+	$(@bind transf Select(transfs_names))
+	"""
+end
 
 # ╔═╡ 005ca75a-7622-11eb-2ba4-9f450e71df1f
 let
+	range = -1.5:.1:1.5
+	md"""
+	Modifica a matriz para definir a transformação linear.
 
-range = -1.5:.1:1.5
-md"""
-This is a "scrubbable matrix" -- click on the number and drag to change.
+	``(``
+	 $(@bind a Scrubbable( range; default=1.0))
+	 $(@bind b Scrubbable( range; default=0.0))
+	``)``
 
-``(``
- $(@bind a Scrubbable( range; default=1.0))
- $(@bind b Scrubbable( range; default=0.0))
-``)``
+	``(``
+	$(@bind c Scrubbable(range; default=0.0 ))
+	$(@bind d Scrubbable(range; default=1.0))
+	``)``
 
-``(``
-$(@bind c Scrubbable(range; default=0.0 ))
-$(@bind d Scrubbable(range; default=1.0))
-``)``
-
-	**Re-run this cell to reset to identity transformation**
-"""
+		**Executando essa célula redifine a matriz para a identidade**
+	"""
 end
 
-# ╔═╡ ed3caab2-76bf-11eb-2544-21e8181adef5
-#T = shear(1) # Pick a transformation
-T = genlin(a,b,c,d)
+# ╔═╡ e04fa982-81fe-4f4e-bd2e-efb3392f246b
+md"""Defina o parâmetro $\alpha$ da warp.
 
-# ╔═╡ 2efaa336-7630-11eb-0c17-a7d4a0141dac
-md"""
-center zoom = $(@bind z Slider(.1:.1:3, show_value=true, default=1))
+α = $(@bind α Slider(0:.1:10, show_value=true, default=0))
 """
+
+# ╔═╡ ed3caab2-76bf-11eb-2544-21e8181adef5
+if transf == "Warp"
+	T = warp(α)
+elseif transf == "Linear"
+	T = genlin(a, b, c, d)
+else
+	T = transfs[transf]
+end
 
 # ╔═╡ 488d732c-7631-11eb-38c3-e9a9165d5606
 md"""
-top left zoom =	$(@bind f Slider(.1:1:3, show_value=true, default=1))
+center zoom = $(@bind cz Slider(.1:0.1:3.0, show_value=true, default=1))
 """
 
 # ╔═╡ 60532aa0-740c-11eb-0402-af8ff117f042
@@ -504,51 +515,83 @@ md"""
 ## Apêndice
 """
 
-# ╔═╡ fb509fb4-9608-421d-9c40-a4375f459b3f
-det_A = det(A)
-
 # ╔═╡ 40655bcc-6d1e-4d1e-9726-41eab98d8472
 img_sources = [
-	"https://user-images.githubusercontent.com/6933510/108605549-fb28e180-73b4-11eb-8520-7e29db0cc965.png" => "Corgis",
-	"https://user-images.githubusercontent.com/6933510/108883855-39690f80-7606-11eb-8eb1-e595c6c8d829.png" => "Arrows",
-	"https://images.squarespace-cdn.com/content/v1/5cb62a904d546e33119fa495/1589302981165-HHQ2A4JI07C43294HVPD/ke17ZwdGBToddI8pDm48kA7bHnZXCqgRu4g0_U7hbNpZw-zPPgdn4jUwVcJE1ZvWQUxwkmyExglNqGp0IvTJZamWLI2zvYWH8K3-s_4yszcp2ryTI0HqTOaaUohrI8PISCdr-3EAHMyS8K84wLA7X0UZoBreocI4zSJRMe1GOxcKMshLAGzx4R3EDFOm1kBS/fluffy+corgi?format=2500w" => "Long Corgi"
+	"https://www.ime.unicamp.br/~pjssilva/images/ensino/labcompsci/lukas-souza-vjFC9OjrOtA-unsplash.png" => "Tucano",
+	"https://www.ime.unicamp.br/~pjssilva/images/ensino/labcompsci/jason-leung-ZO3g2qlrmbw-unsplash.png" => "Onda",
+	"https://user-images.githubusercontent.com/6933510/108883855-39690f80-7606-11eb-8eb1-e595c6c8d829.png" => "Setas"
 ]
 
 # ╔═╡ c0c90fec-0e55-4be3-8ea2-88b8705ee258
 md"""
-#### Choose an image:
+#### Escolha uma imagem:
 
 $(@bind img_source Select(img_sources))
+
+Imagem do tucano de [Lukas Souza](https://unsplash.com/@lukassouza?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText) em [Unsplash](https://unsplash.com/s/photos/toucan?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText).
+
+Imagem onda de [Jason Leung](https://unsplash.com/@ninjason?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText) em [Usplash](https://unsplash.com/s/photos/wave?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText).
 """
 
 # ╔═╡ 4fcb4ac1-1ad1-406e-8776-4675c0fdbb43
 img_original = load(download(img_source));
 
-# ╔═╡ 52a8009e-761c-11eb-2dc9-dbccdc5e7886
-typeof(img_original)
-
-# ╔═╡ b754bae2-762f-11eb-1c6a-01251495a9bb
-begin
-	white(c::RGB) = RGB(1,1,1)
-	white(c::RGBA) = RGBA(1,1,1,0.75)
-end
-
 # ╔═╡ 7d0096ad-d89a-4ade-9679-6ee95f7d2044
-function trygetpixel(img::AbstractMatrix, x::Float64, y::Float64)
+function trygetpixel(img::AbstractMatrix, x::Float64, y::Float64, tlz::Number)
 	rows, cols = size(img)
 
 	"The linear map [-1,1] ↦ [0,1]"
 	f = t -> (t - -1.0)/(1.0 - -1.0)
 
-	i = floor(Int, rows *  f(-y) / z)
-	j = floor(Int, cols *  f(x * (rows / cols))  / z)
+	i = floor(Int, rows *  f(-y) / tlz)
+	j = floor(Int, cols *  f(x * (rows / cols))  / tlz)
 
 	if 1 < i ≤ rows && 1 < j ≤ cols
 		img[i,j]
 	else
 		white(img[1,1])
-
 	end
+end
+
+# ╔═╡ 74fe3391-21f0-4ab9-a41a-6eca0d88f889
+"Maps x ∈ [mino, maxo] to [mind, maxd]"
+function map_ints(x::Number, mino::Number, maxo::Number, mind::Number, maxd::Number)
+	return mind + (x - mino) / (maxo - mino) * (maxd - mind)
+end	
+
+# ╔═╡ 6feb2b01-cdb3-432c-a7d0-9b75df21f847
+map_ints(-1, -1, 1, 1, 640)
+
+# ╔═╡ a8f73668-b6fa-4046-9f8b-d5673e1e1bb0
+map_ints(1, 1, 640, 1, -1)
+
+# ╔═╡ cb1f80dd-ba4a-4176-b439-652529b8fd1a
+function transform_image(T, img::AbstractMatrix, cz::Number)
+	nrows, ncols = size(img)
+
+	# I will assume that the x range from [-1, 1] and calculate the respective y range
+	xmin, xmax = -1.0, 1.0
+	ymin, ymax = -nrows/ncols, nrows/ncols
+	
+	# Create a white image 
+	out = fill(RGB(1, 1, 1), nrows, ncols)
+	
+	for col in 1:1/cz:ncols, row in 1:1/cz:nrows
+		# Map pixel position to cartesian plane, the image in the original
+		# zoom level will span half of the area
+		x = map_ints(col, 1, ncols, 0.5*cz*xmin, 0.5*cz*xmax)
+		y = map_ints(row, 1, nrows, 0.5*cz*ymax, 0.5*cz*ymin)
+		
+		x_dest, y_dest = T((x, y))
+		
+		# Paint transformed pixel
+		if xmin ≤ x_dest ≤ xmax && ymin ≤ y_dest ≤ ymax 
+			j = round(Int, map_ints(x_dest, xmin, xmax, 1, ncols))
+			i = round(Int, map_ints(y_dest, ymax, ymin, 1, nrows))
+			out[i, j] = img[round(Int, row), round(Int, col)]
+		end
+	end
+	return out
 end
 
 # ╔═╡ 83d45d42-7406-11eb-2a9c-e75efe62b12c
@@ -582,31 +625,7 @@ else
 end;
 
 # ╔═╡ 8e0505be-359b-4459-9de3-f87ec7b60c23
-[
-	if det_A == 0
-		RGB(1.0, 1.0, 1.0)
-	else
-
-		 # in_x, in_y = A \ [out_x, out_y]
-         # in_x, in_y = xy( [out_x, out_y] )
-		in_x, in_y =  T([out_x, out_y])
-		trygetpixel(img, in_x, in_y)
-	end
-
-	for out_y in LinRange(f, -f, 500),
-		out_x in LinRange(-f, f, 500)
-]
-
-# ╔═╡ 0f63345c-8887-11eb-3ef9-37dabb46de75
-<p style="
-font-size: 1.5rem;
-text-align: center;
-opacity: .8;
-"><em>Lecture Video</em></p>
-<div style="display: flex; justify-content: center;">
-<div  notthestyle="position: relative; right: 0; top: 0; z-index: 300;">
-<iframe src="https://www.youtube.com/embed/AAREeuaKCic" width=400 height=250  frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>
-</div>
+transform_image(T, img, cz)
 
 # ╔═╡ 00000000-0000-0000-0000-000000000001
 PLUTO_PROJECT_TOML_CONTENTS = """
@@ -1154,8 +1173,8 @@ uuid = "3f19e933-33d8-53b3-aaab-bd5110c3b7a0"
 # ╟─c0c90fec-0e55-4be3-8ea2-88b8705ee258
 # ╟─ce55beee-7643-11eb-04bc-b517703facff
 # ╟─005ca75a-7622-11eb-2ba4-9f450e71df1f
-# ╠═ed3caab2-76bf-11eb-2544-21e8181adef5
-# ╟─2efaa336-7630-11eb-0c17-a7d4a0141dac
+# ╟─e04fa982-81fe-4f4e-bd2e-efb3392f246b
+# ╟─ed3caab2-76bf-11eb-2544-21e8181adef5
 # ╟─488d732c-7631-11eb-38c3-e9a9165d5606
 # ╟─60532aa0-740c-11eb-0402-af8ff117f042
 # ╠═8e0505be-359b-4459-9de3-f87ec7b60c23
@@ -1169,14 +1188,14 @@ uuid = "3f19e933-33d8-53b3-aaab-bd5110c3b7a0"
 # ╟─b9dba026-76b3-11eb-1bfb-ffe9c43ced5d
 # ╟─62b28c02-763a-11eb-1418-c1e30555b1fa
 # ╟─c536dafb-4206-4689-ad6d-6935385d8fdf
-# ╟─fb509fb4-9608-421d-9c40-a4375f459b3f
-# ╟─40655bcc-6d1e-4d1e-9726-41eab98d8472
+# ╠═40655bcc-6d1e-4d1e-9726-41eab98d8472
 # ╠═4fcb4ac1-1ad1-406e-8776-4675c0fdbb43
-# ╠═52a8009e-761c-11eb-2dc9-dbccdc5e7886
 # ╠═55898e88-36a0-4f49-897f-e0850bd2b0df
 # ╠═7d0096ad-d89a-4ade-9679-6ee95f7d2044
-# ╠═b754bae2-762f-11eb-1c6a-01251495a9bb
+# ╠═74fe3391-21f0-4ab9-a41a-6eca0d88f889
+# ╠═6feb2b01-cdb3-432c-a7d0-9b75df21f847
+# ╠═a8f73668-b6fa-4046-9f8b-d5673e1e1bb0
+# ╠═cb1f80dd-ba4a-4176-b439-652529b8fd1a
 # ╠═83d45d42-7406-11eb-2a9c-e75efe62b12c
-# ╟─0f63345c-8887-11eb-3ef9-37dabb46de75
 # ╟─00000000-0000-0000-0000-000000000001
 # ╟─00000000-0000-0000-0000-000000000002
