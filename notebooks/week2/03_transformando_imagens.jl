@@ -251,9 +251,6 @@ Vamos escrever abaixo uma versão interativa do código acima que nos permite ob
 # ╔═╡ 30b1c1f0-7504-11eb-1be7-a9463caea809
 md"""
 Algo intenressante que o prof. Edelman, autor desse caderno, notou e que também ocorre comigo é que olhando para essa imagem o meu cérebro parece preferir ver o Apolo "de pé" no lugar do Apolo "de cabeça-para-baixo". Mas a imavem é criada com a média aritmética dos dois, não há motivo "matemático" para isso ocorrer. Aqui é um dos momentos que o nosso cérebro tenta ser esperto e acaba "escolhendo" o que é mais natural para ele. Para mim eu preciso pegar numa combinação do tipo α = 0.4 (o peso da imagem em pé), para achar que as duas versões estão "equilibradas".
-
-
-The moment I did this with α = .5, I noticed my brain's tendency to see the rightsisde-up apolohead even though both have equal weight.  For me maybe around α = .39 which gives weight .61 to the upside-down apolohead "feels" balanced to me.  I think this is what the field of psychology called psychometrics tries to measure -- perhaps someone can tell me if there are studies of the brain's tendency to use world experience to prefer rightside-up apolohead, and in particular to put a numerical value to this tendency.
 """
 
 # ╔═╡ 1fe70e38-751b-11eb-25b8-c741e1726613
