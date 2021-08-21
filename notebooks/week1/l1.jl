@@ -918,7 +918,7 @@ else
 			keep_working(md"Você esqueceu de escrever`return`?")
 		elseif !(result isa AbstractRGB)
 			keep_working(md"Você deve retornar uma _cor_, i.e. um objeto do type `RGB`. Use `RGB(r, g, b)` para criar uma cor com valores `r`, `g` e `b` nos canais.")
-		elseif !(result == shouldbe)
+		elseif !(result ≈ shouldbe)
 			keep_working()
 		else
 			correct()
