@@ -559,12 +559,6 @@ function map_ints(x::Number, mino::Number, maxo::Number, mind::Number, maxd::Num
 	return mind + (x - mino) / (maxo - mino) * (maxd - mind)
 end	
 
-# ╔═╡ 6feb2b01-cdb3-432c-a7d0-9b75df21f847
-map_ints(-1, -1, 1, 1, 640)
-
-# ╔═╡ a8f73668-b6fa-4046-9f8b-d5673e1e1bb0
-map_ints(1, 1, 640, 1, -1)
-
 # ╔═╡ cb1f80dd-ba4a-4176-b439-652529b8fd1a
 function transform_image(T, img::AbstractMatrix, cz::Number)
 	nrows, ncols = size(img)
@@ -1173,9 +1167,9 @@ uuid = "3f19e933-33d8-53b3-aaab-bd5110c3b7a0"
 # ╟─c0c90fec-0e55-4be3-8ea2-88b8705ee258
 # ╟─ce55beee-7643-11eb-04bc-b517703facff
 # ╟─005ca75a-7622-11eb-2ba4-9f450e71df1f
-# ╟─e04fa982-81fe-4f4e-bd2e-efb3392f246b
+# ╠═e04fa982-81fe-4f4e-bd2e-efb3392f246b
 # ╟─ed3caab2-76bf-11eb-2544-21e8181adef5
-# ╟─488d732c-7631-11eb-38c3-e9a9165d5606
+# ╠═488d732c-7631-11eb-38c3-e9a9165d5606
 # ╟─60532aa0-740c-11eb-0402-af8ff117f042
 # ╠═8e0505be-359b-4459-9de3-f87ec7b60c23
 # ╟─f085296d-48b1-4db6-bb87-db863bb54049
@@ -1193,8 +1187,6 @@ uuid = "3f19e933-33d8-53b3-aaab-bd5110c3b7a0"
 # ╠═55898e88-36a0-4f49-897f-e0850bd2b0df
 # ╠═7d0096ad-d89a-4ade-9679-6ee95f7d2044
 # ╠═74fe3391-21f0-4ab9-a41a-6eca0d88f889
-# ╠═6feb2b01-cdb3-432c-a7d0-9b75df21f847
-# ╠═a8f73668-b6fa-4046-9f8b-d5673e1e1bb0
 # ╠═cb1f80dd-ba4a-4176-b439-652529b8fd1a
 # ╠═83d45d42-7406-11eb-2a9c-e75efe62b12c
 # ╟─00000000-0000-0000-0000-000000000001
