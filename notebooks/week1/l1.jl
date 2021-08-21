@@ -938,7 +938,7 @@ else
 		elseif isnothing(result)
 			keep_working(md"Você esqueceu de escrever`return`?")
 		elseif result != .3
-			if quantize(0.35) == .3
+			if quantize(0.35) ≈ .3
 				almost(md"Qual deveria ser o valor de quantize(`0.2`)?")
 			else
 				keep_working()
