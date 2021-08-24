@@ -234,6 +234,30 @@ f₇([1, 2, 3]) # this works with vector arguments, but not scalars (f₇(1,2,3)
 # ╔═╡ 42172fb6-76b7-11eb-0a11-b7e10c6881f5
 md"""
 Lembrando, na prática as funções $f_5$ e $f_6$ têm dois métodos definidos distintos. Um que receve um único argumento e outro que recebe três. Já $f_7$ tem um método apenas, que recebe um único argumento.
+
+Obs: Na verdade f₇ é uma função que recebe um único parâmetro e o que a linguagem faz é uma atribuição no topo da função para poder usar os nomes internamente. Isso é chamado de [desestruturação de argumentos](https://docs.julialang.org/en/v1/manual/functions/#Argument-destructuring).
+
+Ou seja se você define uma função
+```julia
+function foo((a, b, c))
+	⋮
+end
+```
+
+O que a linguagem faz para você é criar a função assim:
+```julia 
+function foo(v)
+	a, b, c = v
+	⋮
+end
+```
+
+Também é possível ter mais de um grupo de parâmetros assim:
+```julia
+function bar((x, y), (z, w))
+	⋮
+end
+```
 """
 
 # ╔═╡ 57b0cd3c-76b7-11eb-0ece-810f3a8ede00
@@ -432,7 +456,7 @@ md"""Defina o parâmetro $\alpha$ da warp.
 α = $(@bind α Slider(0:.1:10, show_value=true, default=0))
 """
 
-# ╔═╡ ed3caab2-76bf-11eb-2544-21e8181adef5
+# ╔═╡ 683bfffd-906d-45fc-b442-496639fb09cd
 if transf == "Warp"
 	T = warp(α)
 elseif transf == "Linear"
@@ -440,11 +464,6 @@ elseif transf == "Linear"
 else
 	T = transfs[transf]
 end
-
-# ╔═╡ 488d732c-7631-11eb-38c3-e9a9165d5606
-md"""
-center zoom = $(@bind cz Slider(.1:0.1:3.0, show_value=true, default=1))
-"""
 
 # ╔═╡ 60532aa0-740c-11eb-0402-af8ff117f042
 md"Show grid lines $(@bind show_grid CheckBox(default=true))"
@@ -471,21 +490,6 @@ Dê uma olhada se quiser
 # ╔═╡ 2835e33a-7642-11eb-33fd-79fb8ad27fa7
 md"""
 Outra fórmula que muitas vezes é ensinada sem uma explicação mais profunda, ou geométrica, de seu significado é o determinante de uma matriz. Não tenho como provar isso nesse curso, mas é interessante entender que ele representa o fator de como a área dos paralelogramos transformados pela transformação linear varia! Esse é um exemplo de um objeto algébrico que fica muito mais interessante quando entendemos de onde vem, quando vemos o seu apelo geométrico!.
-"""
-
-# ╔═╡ 4c93d784-763d-11eb-1f48-81d4d45d5ce0
-md"""
-## Why are we doing this backwards?
-"""
-
-# ╔═╡ 559660cc-763d-11eb-1ed8-017b93ed4ecb
-md"""
-Ciência da computação
-
-Resolvendo sistemas de duas equações e duas incógnitas.
-
-Os top 500 supercomputadores e quais são as dimensões dos grandes sistemas que estão sendo resolvidos hoje.
-Solving 2 equations in 2 unknowns, and higher dimensional analogs.
 """
 
 # ╔═╡ a66eb6fe-76b3-11eb-1d50-659ec2bf7c44
@@ -517,8 +521,8 @@ md"""
 
 # ╔═╡ 40655bcc-6d1e-4d1e-9726-41eab98d8472
 img_sources = [
-	"https://www.ime.unicamp.br/~pjssilva/images/ensino/labcompsci/lukas-souza-vjFC9OjrOtA-unsplash.png" => "Tucano",
-	"https://www.ime.unicamp.br/~pjssilva/images/ensino/labcompsci/jason-leung-ZO3g2qlrmbw-unsplash.png" => "Onda",
+	"https://www.ime.unicamp.br/~pjssilva/images/ensino/labcompsci/carmel-arquelau-bV3RXy9Upqg-unsplash.png" => "Tucano",
+	"https://www.ime.unicamp.br/~pjssilva/images/ensino/labcompsci/matt-paul-catalano-MUwfuO5RXEo-unsplash.png" => "Onda",
 	"https://user-images.githubusercontent.com/6933510/108883855-39690f80-7606-11eb-8eb1-e595c6c8d829.png" => "Setas"
 ]
 
@@ -528,30 +532,13 @@ md"""
 
 $(@bind img_source Select(img_sources))
 
-Imagem do tucano de [Lukas Souza](https://unsplash.com/@lukassouza?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText) em [Unsplash](https://unsplash.com/s/photos/toucan?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText).
+Imagem do tucano de [Carmel Arquelau](https://unsplash.com/@kkpsi?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText) em [Unsplash](https://unsplash.com/s/photos/toucan?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText).
 
-Imagem onda de [Jason Leung](https://unsplash.com/@ninjason?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText) em [Usplash](https://unsplash.com/s/photos/wave?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText).
+Imagem onda de [Matt Paul Catalano](https://unsplash.com/@mattpaul?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText) em [Unsplash](https://unsplash.com/s/photos/wave?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText).
 """
 
 # ╔═╡ 4fcb4ac1-1ad1-406e-8776-4675c0fdbb43
 img_original = load(download(img_source));
-
-# ╔═╡ 7d0096ad-d89a-4ade-9679-6ee95f7d2044
-function trygetpixel(img::AbstractMatrix, x::Float64, y::Float64, tlz::Number)
-	rows, cols = size(img)
-
-	"The linear map [-1,1] ↦ [0,1]"
-	f = t -> (t - -1.0)/(1.0 - -1.0)
-
-	i = floor(Int, rows *  f(-y) / tlz)
-	j = floor(Int, cols *  f(x * (rows / cols))  / tlz)
-
-	if 1 < i ≤ rows && 1 < j ≤ cols
-		img[i,j]
-	else
-		white(img[1,1])
-	end
-end
 
 # ╔═╡ 74fe3391-21f0-4ab9-a41a-6eca0d88f889
 "Maps x ∈ [mino, maxo] to [mind, maxd]"
@@ -560,7 +547,7 @@ function map_ints(x::Number, mino::Number, maxo::Number, mind::Number, maxd::Num
 end	
 
 # ╔═╡ cb1f80dd-ba4a-4176-b439-652529b8fd1a
-function transform_image(T, img::AbstractMatrix, cz::Number)
+function transform_image(T, img::AbstractMatrix)
 	nrows, ncols = size(img)
 
 	# I will assume that the x range from [-1, 1] and calculate the respective y range
@@ -570,11 +557,11 @@ function transform_image(T, img::AbstractMatrix, cz::Number)
 	# Create a white image 
 	out = fill(RGB(1, 1, 1), nrows, ncols)
 	
-	for col in 1:1/cz:ncols, row in 1:1/cz:nrows
+	for col in 1:ncols, row in 1:nrows
 		# Map pixel position to cartesian plane, the image in the original
 		# zoom level will span half of the area
-		x = map_ints(col, 1, ncols, 0.5*cz*xmin, 0.5*cz*xmax)
-		y = map_ints(row, 1, nrows, 0.5*cz*ymax, 0.5*cz*ymin)
+		x = map_ints(col, 1, ncols, 0.5*xmin, 0.5*xmax)
+		y = map_ints(row, 1, nrows, 0.5*ymax, 0.5*ymin)
 		
 		x_dest, y_dest = T((x, y))
 		
@@ -588,27 +575,37 @@ function transform_image(T, img::AbstractMatrix, cz::Number)
 	return out
 end
 
+# ╔═╡ 1726b965-acf6-4df5-83ef-8eb34308fc82
+begin
+	white(c::RGB) = RGB(1,1,1)
+	white(c::RGBA) = RGBA(1,1,1,0.75)
+	black(c::RGB) = RGB(0,0,0)
+	black(c::RGBA) = RGBA(0,0,0,0.75)
+end
+
 # ╔═╡ 83d45d42-7406-11eb-2a9c-e75efe62b12c
-function with_gridlines(img::Array{<:Any,2}; n=16)
-
-	sep_i = size(img, 1) ÷ n
-	sep_j = size(img, 2) ÷ n
-
+function with_gridlines(img::Matrix; n = 10)
+	rows, cols = size(img)
 	result = copy(img)
-	# stroke = zero(eltype(img))#RGBA(RGB(1,1,1), 0.75)
 
-	stroke = RGBA(1, 1, 1, 0.75)
+	stroke = white(img[1, 1])
 
-	result[1:sep_i:end, :] .= stroke
-	result[:, 1:sep_j:end] .= stroke
+	# Add grid
+	grid_lin = floor.(Int, LinRange(2, rows - 1, n))
+	grid_col = floor.(Int, LinRange(2, cols - 1, n))
+	for i in grid_lin
+		result[i - 1:i + 1, :] .= stroke
+	end
+	for j in grid_col
+		result[:, j - 1:j + 1] .= stroke
+	end
 
-	# a second time, to create a line 2 pixels wide
-	result[2:sep_i:end, :] .= stroke
-	result[:, 2:sep_j:end] .= stroke
-
-	 result[  sep_i * (n ÷2) .+ [1,2]    , :] .= RGBA(0,1,0,1)
-	result[ : ,  sep_j * (n ÷2) .+ [1,2]    ,] .= RGBA(1,0,0,1)
-	return result
+	# Add axis marks
+	axis_lin = rows ÷ 2
+	axis_col = cols ÷ 2
+    result[axis_lin - 1:axis_lin + 1, :] .= RGBA(0, 1, 0, 1)
+	result[:,  axis_col - 1:axis_col + 1] .= RGBA(1, 0, 0, 1)
+ 	return result
 end
 
 # ╔═╡ 55898e88-36a0-4f49-897f-e0850bd2b0df
@@ -619,7 +616,7 @@ else
 end;
 
 # ╔═╡ 8e0505be-359b-4459-9de3-f87ec7b60c23
-transform_image(T, img, cz)
+transform_image(T, img)
 
 # ╔═╡ 00000000-0000-0000-0000-000000000001
 PLUTO_PROJECT_TOML_CONTENTS = """
@@ -1131,7 +1128,7 @@ uuid = "3f19e933-33d8-53b3-aaab-bd5110c3b7a0"
 # ╟─4a57d898-76b6-11eb-15ea-7be43393922c
 # ╠═bf23ab30-76b5-11eb-1adb-3d74a52cddfd
 # ╠═d5d4ac48-76b6-11eb-1687-ed853c2db7c9
-# ╟─89b2d570-76ba-11eb-0389-813bbb33efea
+# ╠═89b2d570-76ba-11eb-0389-813bbb33efea
 # ╠═a8c28578-76ba-11eb-3f3f-af35ff0b6c74
 # ╠═d9e07084-76ba-11eb-18ac-c58b1bc972ba
 # ╟─42172fb6-76b7-11eb-0a11-b7e10c6881f5
@@ -1163,31 +1160,28 @@ uuid = "3f19e933-33d8-53b3-aaab-bd5110c3b7a0"
 # ╠═b78ef2fe-76be-11eb-1f55-3d0874b298e8
 # ╟─ad728ee6-7639-11eb-0b23-c37f1366fb4e
 # ╟─4d4e6b32-763b-11eb-3021-8bc61ac07eea
-# ╟─2e8c4a48-d535-44ac-a1f1-4cb26c4aece6
+# ╠═2e8c4a48-d535-44ac-a1f1-4cb26c4aece6
 # ╟─c0c90fec-0e55-4be3-8ea2-88b8705ee258
 # ╠═ce55beee-7643-11eb-04bc-b517703facff
-# ╠═005ca75a-7622-11eb-2ba4-9f450e71df1f
-# ╠═e04fa982-81fe-4f4e-bd2e-efb3392f246b
-# ╠═ed3caab2-76bf-11eb-2544-21e8181adef5
-# ╠═488d732c-7631-11eb-38c3-e9a9165d5606
+# ╟─005ca75a-7622-11eb-2ba4-9f450e71df1f
+# ╟─e04fa982-81fe-4f4e-bd2e-efb3392f246b
+# ╟─683bfffd-906d-45fc-b442-496639fb09cd
 # ╟─60532aa0-740c-11eb-0402-af8ff117f042
 # ╠═8e0505be-359b-4459-9de3-f87ec7b60c23
-# ╠═f085296d-48b1-4db6-bb87-db863bb54049
+# ╟─f085296d-48b1-4db6-bb87-db863bb54049
 # ╟─d1757b2c-7400-11eb-1406-d937294d5388
 # ╟─5227afd0-7641-11eb-0065-918cb8538d55
 # ╟─2835e33a-7642-11eb-33fd-79fb8ad27fa7
-# ╟─4c93d784-763d-11eb-1f48-81d4d45d5ce0
-# ╟─559660cc-763d-11eb-1ed8-017b93ed4ecb
 # ╟─a66eb6fe-76b3-11eb-1d50-659ec2bf7c44
 # ╟─b9dba026-76b3-11eb-1bfb-ffe9c43ced5d
 # ╟─62b28c02-763a-11eb-1418-c1e30555b1fa
 # ╟─c536dafb-4206-4689-ad6d-6935385d8fdf
-# ╠═40655bcc-6d1e-4d1e-9726-41eab98d8472
+# ╟─40655bcc-6d1e-4d1e-9726-41eab98d8472
 # ╠═4fcb4ac1-1ad1-406e-8776-4675c0fdbb43
 # ╠═55898e88-36a0-4f49-897f-e0850bd2b0df
-# ╠═7d0096ad-d89a-4ade-9679-6ee95f7d2044
 # ╠═74fe3391-21f0-4ab9-a41a-6eca0d88f889
 # ╠═cb1f80dd-ba4a-4176-b439-652529b8fd1a
+# ╠═1726b965-acf6-4df5-83ef-8eb34308fc82
 # ╠═83d45d42-7406-11eb-2a9c-e75efe62b12c
 # ╟─00000000-0000-0000-0000-000000000001
 # ╟─00000000-0000-0000-0000-000000000002
