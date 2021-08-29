@@ -130,7 +130,7 @@ md"""
 md"""
 Lembrando que a definição de derivada é
 ```math
-f'(x) = \lim_{h \rightarrow x} \frac{f(x + h) - f(x)}{h}.
+f'(x) = \lim_{h \rightarrow 0} \frac{f(x + h) - f(x)}{h}.
 ```
 Essa definição sugere imediatamente a fórmula de diferenciação progressiva que você deve ter visto em cálculo numérico. Vamos relembrá-la no caso específico da função seno.
 """
@@ -169,7 +169,7 @@ Em Julia uma biblioteca com esse tipo de funcionalidade é a `ForwardDiff`. Vamo
 ForwardDiff.derivative(f₁, 5)
 
 # ╔═╡ 06437040-76ae-11eb-0b1c-23a6470f41c8
-ForwardDiff.derivative(x -> f₃(x, 3), 5)
+ForwardDiff.derivative(x -> f₃(x, 2), 5)
 
 # ╔═╡ 28cd454c-76ae-11eb-0d1e-a56995100d59
 md"""
@@ -211,7 +211,7 @@ Melhor ainda, você pode escrever a função uma única vez e definir a outra ve
 
 # ╔═╡ bf23ab30-76b5-11eb-1adb-3d74a52cddfd
 begin
-	f₆(x, y, z)  = 5sin(x*y) + 2y/4z
+	f₆(x, y, z) = 5sin(x*y) + 2y/4z
 	f₆(v) = f₆(v[1], v[2], v[3])
 end
 
@@ -322,7 +322,7 @@ Vamos definir algumas funções simples que recebem vetores bidikmensionais e de
 
 # ╔═╡ d364f91a-76b9-11eb-1807-75e733940d53
 begin
-	 idy((x, y)) = [x, y]
+	 id((x, y)) = [x, y]
 	 lin1((x, y)) =  [2x + 3y, -5x + 4x]
 	 scalex(α) = ((x, y),) -> (α*x, y)
 	 scaley(α) = ((x, y),) -> (x,  α*y)
@@ -354,7 +354,7 @@ O que diferencia um tipo de outro?
 # ╔═╡ 78176284-76bc-11eb-3045-f584127f58b9
 begin
 	function warp(α)
-		((x,y ),)  -> begin
+		((x, y), )  -> begin
 			r = √(x^2 + y^2)
 			θ = α*r
 			rot(θ)([x, y])
@@ -546,6 +546,14 @@ function map_ints(x::Number, mino::Number, maxo::Number, mind::Number, maxd::Num
 	return mind + (x - mino) / (maxo - mino) * (maxd - mind)
 end	
 
+# ╔═╡ 1726b965-acf6-4df5-83ef-8eb34308fc82
+begin
+	white(c::RGB) = RGB(1,1,1)
+	white(c::RGBA) = RGBA(1,1,1,0.75)
+	black(c::RGB) = RGB(0,0,0)
+	black(c::RGBA) = RGBA(0,0,0,0.75)
+end
+
 # ╔═╡ cb1f80dd-ba4a-4176-b439-652529b8fd1a
 function transform_image(T, img::AbstractMatrix)
 	nrows, ncols = size(img)
@@ -554,8 +562,8 @@ function transform_image(T, img::AbstractMatrix)
 	xmin, xmax = -1.0, 1.0
 	ymin, ymax = -nrows/ncols, nrows/ncols
 	
-	# Create a white image 
-	out = fill(RGB(1, 1, 1), nrows, ncols)
+	# Create a white image 	
+	out = fill(black(img[1, 1]), nrows, ncols)
 	
 	for col in 1:ncols, row in 1:nrows
 		# Map pixel position to cartesian plane, the image in the original
@@ -573,14 +581,6 @@ function transform_image(T, img::AbstractMatrix)
 		end
 	end
 	return out
-end
-
-# ╔═╡ 1726b965-acf6-4df5-83ef-8eb34308fc82
-begin
-	white(c::RGB) = RGB(1,1,1)
-	white(c::RGBA) = RGBA(1,1,1,0.75)
-	black(c::RGB) = RGB(0,0,0)
-	black(c::RGBA) = RGBA(0,0,0,0.75)
 end
 
 # ╔═╡ 83d45d42-7406-11eb-2a9c-e75efe62b12c

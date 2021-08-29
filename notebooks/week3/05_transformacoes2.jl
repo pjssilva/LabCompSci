@@ -716,36 +716,15 @@ md"""
 
 # ╔═╡ 0be9fb1e-7aa7-11eb-0116-c3e86ab82c77
 md"""
-E se a tranformação $T$ que temos nas mãos for *não-linear*? Será que conseguimos invertê-la? Em outras palavras, se $y = T(x)$, conseguimos resolver a equação que vê o $x$ como variáveis e encontrar $x$ em função de $y$?
-
-Em geral essa é uma pergunta difícil que tem solução analítica apenas para casos bem particulares.
-
-Mas, de novo lembrando do curso de cálculo numérico, existem métodos numéricos que podem nos ajudar com esse problema. O mais famoso é o [método de Newton](https://en.wikipedia.org/wiki/Newton%27s_method).
-
-Julia possui várias implementações do método Newton, por exemplo há uma no [pacote NonlinearSolve.jl](https://github.com/JuliaComputing/NonlinearSolve.jl). Abaixo nós usamos essa implementação para tentar escrever uma rotina que inverte uma transformação não linear para user usadas com nossas imagens.
+Veremos como fazer isso na próxima aula.
 """
 
-# ╔═╡ 62a9201c-7938-11eb-144c-15690c06be94
-begin
-	function inverse(f, y, u0=SA[1.0, 1.0])
-	    prob = NonlinearProblem{false}((u, p) -> f(u, p) .- y, u0)
-	    solution = solve(prob, NewtonRaphson(), tol = 1e-4)
-	    return solution.u
-	end
+# ╔═╡ 4c93d784-763d-11eb-1f48-81d4d45d5ce0
+md"""
+## Porque estamos fazendo isso de trás para frente?
 
-	inverse(f) = y -> inverse( (u, p) -> f(SVector(u...)), y )
-end
-
-# ╔═╡ 96d847a6-8dce-46ac-9f42-4f00e6939073
-inverse( ((x, y),) -> [x^2, y] )([2.0, 2.0])
-
-# ╔═╡ 48577183-5c7a-4d4a-aa55-8886e99b2d35
-begin
-	f((x, y), p) = [x^2, y] - [2.0, 2.0]
-	prob = NonlinearProblem{false}(f, [0.0, 0.0])
-	solution = solve(prob, NewtonRaphson(), tol=1.0e-4)
-	solution.u
-end
+Se quisermor mover as cores dos píxeis aplicando T no lugar de T⁻¹ precisamos lidar com o fato que píxeis são elementos discretos. Ao levar um único píxel numa região onde imagem está sendo expandida apareceriam "vazios". Lembre da última aula. Ao contrário, ao levar um píxel em uma região em que a imagem fica "encolhida", haveria choque entre as cores caindo num mesmo píxel de chegada. Isso iria dificultar muito o trabalho de se obter resultados satisfatórios como já vimos antes.
+"""
 
 # ╔═╡ 7609d686-7aa7-11eb-310a-3550509504a1
 md"""
@@ -771,13 +750,6 @@ Resource("https://raw.githubusercontent.com/mitmath/18S191/Spring21/notebooks/we
 # ╔═╡ 5227afd0-7641-11eb-0065-918cb8538d55
 md"""
 Apagar
-"""
-
-# ╔═╡ 4c93d784-763d-11eb-1f48-81d4d45d5ce0
-md"""
-## Porque estamos fazendo isso de trás para frente?
-
-Se quisermor mover as cores dos píxeis aplicando T no lugar de T⁻¹ precisamos lidar com o fato que píxeis são elementos discretos. Ao levar um único píxel numa região onde imagem está sendo expandida apareceriam "vazios". Lembre da última aula. Ao contrário, ao levar um píxel em uma região em que a imagem fica "encolhida", haveria choque entre as cores caindo num mesmo píxel de chegada. Isso iria dificultar muito o trabalho de se obter resultados satisfatórios como já vimos antes.
 """
 
 # ╔═╡ c536dafb-4206-4689-ad6d-6935385d8fdf
@@ -1731,17 +1703,14 @@ uuid = "3f19e933-33d8-53b3-aaab-bd5110c3b7a0"
 # ╠═9b456686-7aac-11eb-3aa5-25e6c3c86aff
 # ╟─c2b0a488-7aac-11eb-1d8b-edd6bd23d1fd
 # ╟─02d6b440-7aa7-11eb-1be0-b78dea91387f
-# ╠═0be9fb1e-7aa7-11eb-0116-c3e86ab82c77
-# ╠═62a9201c-7938-11eb-144c-15690c06be94
-# ╠═96d847a6-8dce-46ac-9f42-4f00e6939073
-# ╠═48577183-5c7a-4d4a-aa55-8886e99b2d35
+# ╟─0be9fb1e-7aa7-11eb-0116-c3e86ab82c77
+# ╟─4c93d784-763d-11eb-1f48-81d4d45d5ce0
 # ╟─7609d686-7aa7-11eb-310a-3550509504a1
 # ╟─1b9faf64-7aab-11eb-1396-6fb89be7c445
 # ╟─5f0568dc-7aad-11eb-162f-0d6e26f17d59
 # ╟─8d32fff4-7c1b-11eb-1fa1-6ff2d87bfb73
 # ╟─80456168-7c1b-11eb-271c-83ef59a41102
 # ╟─5227afd0-7641-11eb-0065-918cb8538d55
-# ╟─4c93d784-763d-11eb-1f48-81d4d45d5ce0
 # ╟─c536dafb-4206-4689-ad6d-6935385d8fdf
 # ╟─fb509fb4-9608-421d-9c40-a4375f459b3f
 # ╠═55898e88-36a0-4f49-897f-e0850bd2b0df
