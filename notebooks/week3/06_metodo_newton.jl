@@ -56,8 +56,6 @@ md"""
 
 Vamos consderar que queremos resolver uma equação na reata real da forma $f(x) = g(x)$. Um primeiro passo, tradicional, é isolar o 0 no lado direito e resolver $h(x) := f(x) - g(x) = 0$. Um ponto $x$ em que $h(x) = 0$ é chamado de *zero de* $h$ ou uma *raiz de* $h$.
 
-We would like to solve equations like $f(x) = g(x)$.
-We rewrite that by moving all the terms to one side of the equation so that we can write $h(x) = 0$, with $h(x) := f(x) - g(x)$.
 
 O método de Newton busca resolver esse problema aproximando a função $h$ por uma reta baseada em sua derivada (o polinômio de Taylor de ordem 1). Se essa reta é não horizontal, ela irá cruzar o eixo $y$ fornecendo uma nova aproximação de raiz que será então refinada iterativamente.
 
@@ -221,7 +219,7 @@ md"""
 
 # ╔═╡ d44c73b4-7c3e-11eb-1302-8ba9039ae789
 md"""
-Vamos ber o que ocorre quando perturbamos os argumento de uma transformação $T \mathbb{R}^2 \to \rightarrow{R}^2$ por valores pequenos $\delta$ na direção $x$ e $\epsilon$ em $y$ nas proximidades de um ponto $(a, b)$:
+Vamos ber o que ocorre quando perturbamos os argumento de uma transformação $T: \mathbb{R}^2 \to \mathbb{R}^2$ por valores pequenos $\delta$ na direção $x$ e $\epsilon$ em $y$ nas proximidades de um ponto $(a, b)$:
 """
 
 # ╔═╡ 515c23b6-7c2d-11eb-28c9-1b1d92eb4ba0
@@ -344,10 +342,10 @@ end
 inverse(f) = y -> inverse(f, y)
 
 # ╔═╡ 07a754da-7c31-11eb-0394-4bef4d79fc30
-inverse(T(α))( [0.3, 0.4] )
+pre_imagem = inverse(T(α))( [0.3, 0.4] )
 
 # ╔═╡ 02b1b470-7c31-11eb-28f4-411956f73f12
-T(α)( [0.3, 0.4] )
+T(α)( pre_imagem )
 
 # ╔═╡ 5faa2784-7c31-11eb-34f1-3f8224dbdbde
 ( T(α) ∘ inverse(T(α)) )( [0.3, 0.4] )
@@ -432,6 +430,15 @@ let
 	f(x) = 0.2x^3 - 4x + 1
 
 	standard_Newton(f, n, -10:0.01:10, x0, -10, 70)
+end
+
+# ╔═╡ 886b1265-7495-4552-919a-19fffce66734
+# x |> f pega o x e chama o f nele
+begin
+    foo(x) = x + 1
+	bar(x) = x^2
+	4 |> foo |> bar |> tau
+	#   tau(bar(foo(4)))
 end
 
 # ╔═╡ 00000000-0000-0000-0000-000000000001
@@ -1709,5 +1716,6 @@ version = "0.9.1+5"
 # ╟─ee91563e-7c3e-11eb-3f65-1f336073869a
 # ╠═1b77fada-7b9d-11eb-3266-ebb3895cb76a
 # ╠═f25af026-7b9c-11eb-1f11-77a8b06b2d71
+# ╠═886b1265-7495-4552-919a-19fffce66734
 # ╟─00000000-0000-0000-0000-000000000001
 # ╟─00000000-0000-0000-0000-000000000002
