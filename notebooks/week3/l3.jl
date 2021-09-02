@@ -717,7 +717,7 @@ word_counts(["to", "be", "or", "not", "to", "be"])
 
 # ╔═╡ 808abf6e-fb84-11ea-0785-2fc3f1c4a09f
 md"""
-👉 Write code to find how many times `"Emma"` occurs in the book.
+👉 Escreva código para calcular quantas vezes a palavra "Capitu" aparece no Dom Casmurro.
 """
 
 # ╔═╡ 953363dc-fb84-11ea-1128-ebdfaf5160ee
@@ -1615,7 +1615,7 @@ uuid = "3f19e933-33d8-53b3-aaab-bd5110c3b7a0"
 # ╠═a9ffff9a-fb83-11ea-1efd-2fc15538e52f
 # ╟─808abf6e-fb84-11ea-0785-2fc3f1c4a09f
 # ╠═953363dc-fb84-11ea-1128-ebdfaf5160ee
-# ╠═b8af4d06-b38a-4675-9399-81fb5977f077
+# ╟─b8af4d06-b38a-4675-9399-81fb5977f077
 # ╟─294b6f50-fb84-11ea-1382-03e9ab029a2d
 # ╠═b726f824-fb5e-11ea-328e-03a30544037f
 # ╠═18355314-fb86-11ea-0738-3544e2e3e816
