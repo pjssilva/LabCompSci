@@ -15,7 +15,7 @@ end
 
 # ╔═╡ 71b53b98-8038-11eb-0ea5-d953294e9f35
 begin
-    import  ImageMagick
+    import ImageMagick
     using Plots, PlutoUI, Colors, Images
     using BenchmarkTools
 end
@@ -115,22 +115,22 @@ function compute_dyn_path(M)
     m, n = size(M)
 
     # We start with the original matrix values
-    dyn_M = [(best_cost=M[i, j], next=-1) for i=1:m, j=1:n]
+    dyn_M = [(best_cost = M[i, j], next = -1) for i = 1:m, j = 1:n]
 
     # we from from the before last line up
-    for i = m - 1:-1:1
+    for i = m-1:-1:1
         for j = 1:n
             # Look at the nodes attainable from (i, j) and find the one
             # with the best cost
             best_value, best_node = typemax(Int), -1
             for next_j = max(1, j - 1):min(n, j + 1)
-                if dyn_M[i + 1, next_j].best_cost < best_value
+                if dyn_M[i+1, next_j].best_cost < best_value
                     best_node = next_j
-                    best_value = dyn_M[i + 1, next_j].best_cost
+                    best_value = dyn_M[i+1, next_j].best_cost
                 end
             end
             # Update the cost of (i, j)
-            dyn_M[i, j] = (best_cost=best_value + dyn_M[i, j].best_cost, next=best_node)
+            dyn_M[i, j] = (best_cost = best_value + dyn_M[i, j].best_cost, next = best_node)
         end
     end
 
@@ -141,8 +141,8 @@ function compute_dyn_path(M)
     dyn_path[1] = best_col
 
     # Move down following the best path
-    for i=1:m - 1
-        dyn_path[i + 1] = dyn_M[i, dyn_path[i]].next
+    for i = 1:m-1
+        dyn_path[i+1] = dyn_M[i, dyn_path[i]].next
     end
     dyn_path
 end
@@ -185,13 +185,13 @@ begin
         n::Int
     end
 
-    function Base.iterate(p::Paths) 
-	    # Initial path is the path of 1's
-		first_path = fill(1, p.m)
-		
-		# The state is the path itself
-		return first_path, first_path
-	end
+    function Base.iterate(p::Paths)
+        # Initial path is the path of 1's
+        first_path = fill(1, p.m)
+
+        # The state is the path itself
+        return first_path, first_path
+    end
 
     # Don't try to guess the iterator size
     Base.IteratorSize(::Type{Paths}) = Base.SizeUnknown()
@@ -213,12 +213,12 @@ begin
         # Examples for number of columns = 6
         # [2, 3, 4, 5] -> [2, 3, 5, 4]
         # [2, 3, 6, 6] -> [3, 2, 1, 1]
-        while k ≥ 2 && (path[k] == n || path[k] + 1 > path[k - 1] + 1)
+        while k ≥ 2 && (path[k] == n || path[k] + 1 > path[k-1] + 1)
             k -= 1
         end
         path[k] += 1 # Add the one then reset the following elements
-        for j = k + 1:length(path)
-            path[j] = max(path[j - 1] - 1, 1)
+        for j = k+1:length(path)
+            path[j] = max(path[j-1] - 1, 1)
         end
         return path
     end
@@ -246,9 +246,9 @@ end
 
 # ╔═╡ 8cac71d5-8d6c-4aa8-8160-25836295e686
 begin
-	winnernum = argmin([sum( M[i,p[i]] for i=1:m) for p ∈ paths])
+    winnernum = argmin([sum(M[i, p[i]] for i = 1:m) for p ∈ paths])
     winner = paths[winnernum]
-    winnertotal = sum(M[i, winner[i]] for i=1:m)
+    winnertotal = sum(M[i, winner[i]] for i = 1:m)
 end
 
 # ╔═╡ 7191b674-80dc-11eb-24b3-518de83f465a
@@ -274,46 +274,68 @@ let
     # Get the selected path
     path = paths[whichpath]
     # Get the values in the path cells
-    values = [M[i, path[i]] for i=1:m]
+    values = [M[i, path[i]] for i = 1:m]
 
     # A title for the figure with the overall sum
-    thetitle = join([" $(values[i]) +" for i=1:m - 1]) * " $(values[end]) = $(sum(values))";
+    thetitle = join([" $(values[i]) +" for i = 1:m-1]) * " $(values[end]) = $(sum(values))"
 
     # Creates a ratangle
     rectangle(w, h, x, y) = Shape(x .+ [0, w, w, 0], y .+ [0, 0, h, h])
     plot()
 
     # Plot the ratangles to represent the matrix
-    for i=1:n, j=1:m
-       plot!(rectangle(1, 1, i, j), opacity=0.2, color=[:red, :white][1 + rem(i + j, 2)])
+    for i = 1:n, j = 1:m
+        plot!(rectangle(1, 1, i, j), opacity = 0.2, color = [:red, :white][1+rem(i + j, 2)])
     end
 
     # Add the values in each retangle
-    for i=1:m, j=1:n
-      annotate!((j + 0.5), m + 2 - (i + 0.5), M[i, j])
+    for i = 1:m, j = 1:n
+        annotate!((j + 0.5), m + 2 - (i + 0.5), M[i, j])
     end
 
     # Present the winning path
-    for i = 1:m - 1
-        plot!([winner[i + 1] + 0.5, winner[i] + 0.5], [m - i + 0.5, m - i + 1.5], color=RGB(1, 0.6, 0.6), linewidth=4)
+    for i = 1:m-1
+        plot!(
+            [winner[i+1] + 0.5, winner[i] + 0.5],
+            [m - i + 0.5, m - i + 1.5],
+            color = RGB(1, 0.6, 0.6),
+            linewidth = 4,
+        )
     end
 
     # Present the selected path
-    for i = 1:m - 1
-        plot!([path[i + 1] + 0.5, path[i] + 0.5], [m - i + 0.5, m - i + 1.5], color=:black,  linewidth=4)
+    for i = 1:m-1
+        plot!(
+            [path[i+1] + 0.5, path[i] + 0.5],
+            [m - i + 0.5, m - i + 1.5],
+            color = :black,
+            linewidth = 4,
+        )
     end
 
     # Add minimal value
-     plot!(xlabel="winner total = $winnertotal", xguidefontcolor=RGB(1, 0.5, 0.5))
+    plot!(xlabel = "winner total = $winnertotal", xguidefontcolor = RGB(1, 0.5, 0.5))
 
     # Add background for values (annotation)
-    for i=1:n, j=1:m
-        plot!(rectangle(0.4, 0.4, i + 0.3, j + 0.3), opacity=1, color=RGB(0, 1, 0), linewidth=0, fillcolor=[RGBA(1,.85,.85,.2),:white][1 + rem(i + j, 2)])
+    for i = 1:n, j = 1:m
+        plot!(
+            rectangle(0.4, 0.4, i + 0.3, j + 0.3),
+            opacity = 1,
+            color = RGB(0, 1, 0),
+            linewidth = 0,
+            fillcolor = [RGBA(1, 0.85, 0.85, 0.2), :white][1+rem(i + j, 2)],
+        )
     end
 
     # Add title and set limits and aspect
-     plot!(title=thetitle)
-     plot!(legend=false, aspectratio=1, xlims=(1, n + 1), ylims=(1, m + 1), axis=nothing)
+    plot!(title = thetitle)
+    plot!(
+        legend = false,
+        aspectratio = 1,
+        xlims = (1, n + 1),
+        ylims = (1, m + 1),
+        axis = nothing,
+    )
 end
 
 # ╔═╡ 84bb1f5c-80e5-11eb-0e55-83068948870c
@@ -332,40 +354,57 @@ let
     path = fixedpaths[whichfixedpath]
 
     # Get the values in the path cells
-    values = [M[i, path[i]] for i=1:m]
+    values = [M[i, path[i]] for i = 1:m]
 
     # A title for the figure with the overall sum
-    thetitle = join([" $(values[i]) +" for i=1:m - 1]) * " $(values[end]) = $(sum(values))";
+    thetitle = join([" $(values[i]) +" for i = 1:m-1]) * " $(values[end]) = $(sum(values))"
 
     # Creates a ratangle
     rectangle(w, h, x, y) = Shape(x .+ [0, w, w, 0], y .+ [0, 0, h, h])
     plot()
 
     # Plot the ratangles to represent the matrix
-    for i=1:n, j=1:m
-       plot!(rectangle(1, 1, i, j), opacity=0.2, color=[:red, :white][1 + rem(i + j, 2)])
+    for i = 1:n, j = 1:m
+        plot!(rectangle(1, 1, i, j), opacity = 0.2, color = [:red, :white][1+rem(i + j, 2)])
     end
 
     # Add the values in each retangle
-    for i=1:m, j=1:n
-      annotate!((j + 0.5), m + 2 - (i + 0.5), M[i, j])
+    for i = 1:m, j = 1:n
+        annotate!((j + 0.5), m + 2 - (i + 0.5), M[i, j])
     end
     annotate!((fixj + 0.5), m + 2 - (fixi + 0.5), M[fixi, fixj], :red)
 
     # Present the selected path
-    for i = 1:m - 1
-        i ≥ fixi ? c=:blue : c=:black
-        plot!([path[i + 1] + 0.5, path[i] + 0.5], [m - i + 0.5, m - i + 1.5], color=c,  linewidth=4)
+    for i = 1:m-1
+        i ≥ fixi ? c = :blue : c = :black
+        plot!(
+            [path[i+1] + 0.5, path[i] + 0.5],
+            [m - i + 0.5, m - i + 1.5],
+            color = c,
+            linewidth = 4,
+        )
     end
 
     # Add background for values (annotation)
-    for i=1:n, j=1:m
-        plot!(rectangle(0.4, 0.4, i + 0.3, j + 0.3), opacity=1, color=RGB(0, 1, 0), linewidth=0, fillcolor=[RGBA(1,.85,.85,.2),:white][1 + rem(i + j, 2)])
+    for i = 1:n, j = 1:m
+        plot!(
+            rectangle(0.4, 0.4, i + 0.3, j + 0.3),
+            opacity = 1,
+            color = RGB(0, 1, 0),
+            linewidth = 0,
+            fillcolor = [RGBA(1, 0.85, 0.85, 0.2), :white][1+rem(i + j, 2)],
+        )
     end
 
     # Add title and set limits and aspect
-     plot!(title=thetitle)
-     plot!(legend=false, aspectratio=1, xlims=(1, n + 1), ylims=(1, m + 1), axis=nothing)
+    plot!(title = thetitle)
+    plot!(
+        legend = false,
+        aspectratio = 1,
+        xlims = (1, n + 1),
+        ylims = (1, m + 1),
+        axis = nothing,
+    )
 end
 
 # ╔═╡ 4e8c8052-8102-11eb-3e9f-01494b525ba0
@@ -386,7 +425,9 @@ md"## Apêndice"
 hint(text) = Markdown.MD(Markdown.Admonition("hint", "Ideia", [text]))
 
 # ╔═╡ d015335b-2bed-43eb-9e77-352e6731700a
-hint(md"Partindo de um nó fixo, o único caminho que realmente importa é o melhor caminho a partir daquele ponto. E o custo real é a soma total desse caminho.")
+hint(
+    md"Partindo de um nó fixo, o único caminho que realmente importa é o melhor caminho a partir daquele ponto. E o custo real é a soma total desse caminho.",
+)
 
 # ╔═╡ 00000000-0000-0000-0000-000000000001
 PLUTO_PROJECT_TOML_CONTENTS = """
