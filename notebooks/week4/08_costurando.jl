@@ -15,7 +15,7 @@ end
 
 # ╔═╡ 405a4f82-8116-11eb-1b35-2563b06b02a7
 begin
-    import ImageIO, PNGFiles, ImageMagick
+    import ImageIO, PNGFiles, ImageMagick, PlotlyBase
     using Colors, ColorVectorSpace, ImageShow, FileIO
     using ImageFiltering
     using PlutoUI
@@ -539,6 +539,7 @@ ImageMagick = "6218d12a-5da1-5696-b52f-db25d2ecc6d1"
 ImageShow = "4e3cecfd-b093-5904-9786-8bbb286a6a31"
 LinearAlgebra = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
 PNGFiles = "f57f5aa1-a3ce-4bc8-8ab9-96f992907883"
+PlotlyBase = "a03496cd-edff-5a9b-9e67-9cda94a718b5"
 Plots = "91a5bcdd-55d7-5caf-9e0b-520d859cae80"
 PlutoUI = "7f904dfe-b85e-4ff6-b463-dae2292396a8"
 Statistics = "10745b16-79ce-11e8-11f9-7d13ad32a3b2"
@@ -552,6 +553,7 @@ ImageIO = "~0.5.8"
 ImageMagick = "~1.2.1"
 ImageShow = "~0.3.2"
 PNGFiles = "~0.3.9"
+PlotlyBase = "~0.8.16"
 Plots = "~1.21.3"
 PlutoUI = "~0.7.9"
 """
@@ -1188,6 +1190,12 @@ git-tree-sha1 = "646eed6f6a5d8df6708f15ea7e02a7a2c4fe4800"
 uuid = "5432bcbf-9aad-5242-b902-cca2824c8663"
 version = "0.5.10"
 
+[[Parameters]]
+deps = ["OrderedCollections", "UnPack"]
+git-tree-sha1 = "2276ac65f1e236e0a6ea70baff3f62ad4c625345"
+uuid = "d96e819e-fc66-5662-9728-84c9c7592b0a"
+version = "0.12.2"
+
 [[Parsers]]
 deps = ["Dates"]
 git-tree-sha1 = "438d35d2d95ae2c5e8780b330592b6de8494e779"
@@ -1221,6 +1229,12 @@ deps = ["ColorSchemes", "Colors", "Dates", "Printf", "Random", "Reexport", "Stat
 git-tree-sha1 = "9ff1c70190c1c30aebca35dc489f7411b256cd23"
 uuid = "995b91a9-d308-5afd-9ec6-746e21dbc043"
 version = "1.0.13"
+
+[[PlotlyBase]]
+deps = ["ColorSchemes", "Dates", "DelimitedFiles", "DocStringExtensions", "JSON", "LaTeXStrings", "Logging", "Parameters", "Pkg", "REPL", "Requires", "Statistics", "UUIDs"]
+git-tree-sha1 = "7eb4ec38e1c4e00fea999256e9eb11ee7ede0c69"
+uuid = "a03496cd-edff-5a9b-9e67-9cda94a718b5"
+version = "0.8.16"
 
 [[Plots]]
 deps = ["Base64", "Contour", "Dates", "Downloads", "FFMPEG", "FixedPointNumbers", "GR", "GeometryBasics", "JSON", "Latexify", "LinearAlgebra", "Measures", "NaNMath", "PlotThemes", "PlotUtils", "Printf", "REPL", "Random", "RecipesBase", "RecipesPipeline", "Reexport", "Requires", "Scratch", "Showoff", "SparseArrays", "Statistics", "StatsBase", "UUIDs"]
@@ -1415,6 +1429,11 @@ version = "1.3.0"
 [[UUIDs]]
 deps = ["Random", "SHA"]
 uuid = "cf7118a7-6976-5b1a-9a39-7adc72f591a4"
+
+[[UnPack]]
+git-tree-sha1 = "387c1f73762231e86e0c9c5443ce3b4a0a9a0c2b"
+uuid = "3a884ed6-31ef-47d7-9d2a-63182c4928ed"
+version = "1.0.2"
 
 [[Unicode]]
 uuid = "4ec0a83e-493e-50e2-b9ac-8f72acf5a8f5"
@@ -1631,7 +1650,6 @@ version = "0.9.1+5"
 """
 
 # ╔═╡ Cell order:
-# ╟─c09fe642-887e-11eb-1164-a3dc222d0f3d
 # ╟─5190bf86-a005-4517-abe4-5a89b46a5707
 # ╟─e7a77e52-8104-11eb-1b51-a9f8312e9d95
 # ╟─fb6b8564-8104-11eb-2e10-1f28be9a6ce7
