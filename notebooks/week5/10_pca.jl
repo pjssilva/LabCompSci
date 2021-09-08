@@ -173,20 +173,11 @@ begin
     xs = noisy_data[1, :]
     ys = noisy_data[2, :]
 
-    scatter(xs, ys, label = "ruidoso", m = :., alpha = 0.3, ms = 4, ratio = 1)
+    default(alpha = 0.3, leg = :topleft, framestyle = :origin, size = (500, 400), ratio = 1)
 
-    scatter!(
-        xx,
-        yy,
-        leg = :topleft,
-        label = "Posto 1",
-        ms = 3,
-        alpha = 0.3,
-        size = (500, 400),
-        m = :square,
-        c = :red,
-        framestyle = :origin,
-    )
+    scatter(xs, ys, label = "ruidoso", m = :., ms = 4)
+
+    scatter!(xx, yy, label = "Posto 1", m = :square, ms = 3, c = :red)
 
     title!("Plotar uma matriz de posto 1 gera uma reta!")
 end
@@ -237,15 +228,7 @@ begin
 end
 
 # ╔═╡ 1b8c743e-ec90-11ea-10aa-e3b94f768f82
-scatter(
-    xs_centered,
-    ys_centered,
-    ms = 5,
-    alpha = 0.5,
-    ratio = 1,
-    leg = false,
-    framestyle = :origin,
-)
+scatter(xs_centered, ys_centered, ms = 5, leg = false)
 
 # ╔═╡ eb867f18-852e-11eb-005f-e15b6d0d0d95
 md"""
@@ -261,25 +244,9 @@ Como já subtraímos a média, o que estamos calculando é o "desvio com relaç�
 
 # ╔═╡ 870d3efa-f8fc-11ea-1593-1552511dcf86
 begin
-    scatter(
-        xs_centered,
-        ys_centered,
-        ms = 5,
-        alpha = 0.5,
-        ratio = 1,
-        leg = false,
-        framestyle = :origin,
-    )
+    scatter(xs_centered, ys_centered, ms = 5, alpha = 0.5, leg = false)
 
-    scatter!(
-        xs_centered,
-        zeros(size(xs_centered)),
-        ms = 5,
-        alpha = 0.1,
-        ratio = 1,
-        leg = false,
-        framestyle = :origin,
-    )
+    scatter!(xs_centered, zeros(size(xs_centered)), ms = 5, alpha = 0.1, leg = false)
 
     for i = 1:length(xs_centered)
         plot!(
@@ -555,15 +522,7 @@ end
 
 # ╔═╡ 045b9b98-f8ff-11ea-0d49-5b209319e951
 begin
-    scatter(
-        xs_centered,
-        ys_centered,
-        ms = 5,
-        alpha = 0.3,
-        ratio = 1,
-        leg = false,
-        framestyle = :origin,
-    )
+    scatter(xs_centered, ys_centered, ms = 5, leg = false)
 
     plot!(
         [(0, 0), 2 * sqrt(fmax) .* (cos(θmax), sin(θmax))],
@@ -2191,7 +2150,7 @@ version = "0.9.1+5"
 # ╟─80722856-f86d-11ea-363d-53fc5f6b8152
 # ╟─b8fa6a1c-f86d-11ea-3d6b-2959d737254b
 # ╟─3547f296-f86f-11ea-1698-53d3c1a0bc30
-# ╠═7a83101e-f871-11ea-1d87-4946162777b5
+# ╟─7a83101e-f871-11ea-1d87-4946162777b5
 # ╠═e8276b4e-f86f-11ea-38be-218a72452b10
 # ╟─7eb51908-f906-11ea-19d2-e947d81cb743
 # ╟─4f1980ea-f86f-11ea-3df2-35cca6c961f3
