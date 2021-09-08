@@ -15,91 +15,13 @@ end
 
 # ╔═╡ 06d2666a-8723-11eb-1395-0febdf3dc2a4
 begin
-
-	import Pkg
-
-	Pkg.activate(mktempdir())
-
-	Pkg.add([
-
-			Pkg.PackageSpec(name="Images", version="0.22.4"), 
-
-			Pkg.PackageSpec(name="ImageMagick", version="0.7"), 
-
-			Pkg.PackageSpec(name="PlutoUI", version="0.7"), 
-
-			Pkg.PackageSpec(name="Plots"), 
-
-			Pkg.PackageSpec(name="Colors"), 
-			
-			Pkg.PackageSpec(name="StatsBase"), 
-			
-			
-			Pkg.PackageSpec(name="Distributions") 
-
-			])
-
-
-
-	using Plots, PlutoUI, Colors, Images, StatsBase, Distributions
-	using Statistics
-	
+    using ImageMagick: ImageMagick
+    using Plots, PlutoUI, Colors, Images, StatsBase, Distributions
+    using Statistics
 end
 
-
-# ╔═╡ 3a4957ec-8723-11eb-22a0-8b35322596e2
-html"""
-<div style="
-position: absolute;
-width: calc(100% - 30px);
-border: 50vw solid #282936;
-border-top: 500px solid #282936;
-border-bottom: none;
-box-sizing: content-box;
-left: calc(-50vw + 15px);
-top: -500px;
-height: 500px;
-pointer-events: none;
-"></div>
-
-<div style="
-height: 500px;
-width: 100%;
-background: #282936;
-color: #fff;
-padding-top: 68px;
-">
-<span style="
-font-family: Vollkorn, serif;
-font-weight: 700;
-font-feature-settings: 'lnum', 'pnum';
-"> <p style="
-font-size: 1.5rem;
-opacity: .8;
-"><em>Section 2.2</em></p>
-<p style="text-align: center; font-size: 2rem;">
-<em> Sampling and Random Variables </em>
-</p>
-
-<p style="
-font-size: 1.5rem;
-text-align: center;
-opacity: .8;
-"><em>Lecture Video</em></p>
-<div style="display: flex; justify-content: center;">
-<div  notthestyle="position: relative; right: 0; top: 0; z-index: 300;">
-<iframe src="https://www.youtube.com/embed/7HrpoFZzITI" width=400 height=250  frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>
-</div>
-</div>
-
-<style>
-body {
-overflow-x: hidden;
-}
-</style>"""
-
 # ╔═╡ 0a70bca4-8723-11eb-1bcf-e9abb9b1ab75
-PlutoUI.TableOfContents(aside=true)
+PlutoUI.TableOfContents(; aside=true)
 
 # ╔═╡ 472a41d2-8724-11eb-31b3-0b81612f0083
 md"""
@@ -235,16 +157,18 @@ We can also use random images:
 """
 
 # ╔═╡ 78dc94e2-8723-11eb-1ff2-bb7104b62033
-penny_image = load(download("https://www.usacoinbook.com/us-coins/lincoln-memorial-cent.jpg"))
+penny_image = load(
+    download("https://www.usacoinbook.com/us-coins/lincoln-memorial-cent.jpg")
+)
 
 # ╔═╡ bb1465c4-8723-11eb-1abc-bdb5a7028cf2
 begin
-	head = penny_image[:, 1:end÷2]
-	tail = penny_image[:, end÷2:end]
+    head = penny_image[:, 1:(end ÷ 2)]
+    tail = penny_image[:, (end ÷ 2):end]
 end;
 
 # ╔═╡ e04f3828-8723-11eb-3452-09f821391ad0
-rand( [head, tail], 5, 5)
+rand([head, tail], 5, 5)
 
 # ╔═╡ b7793f7a-8726-11eb-11d8-cd928f1a3645
 md"""
@@ -259,7 +183,7 @@ Let's *count* heads and tails using the `countmap` function from the `StatsBase.
 """
 
 # ╔═╡ 8fe715e4-8727-11eb-2e7f-15b723bb8d9d
-tosses = rand( ["head", "tail"], 10000)
+tosses = rand(["head", "tail"], 10000)
 
 # ╔═╡ 9da4e6f4-8727-11eb-08cb-d55e3bbff0e4
 toss_counts = countmap(tosses)
@@ -304,27 +228,26 @@ One way would be to generate random integers between 1 and 10 and assign heads t
 
 # ╔═╡ 062b400a-8729-11eb-16c5-235cef648edb
 function simple_weighted_coin()
-	outcome = if rand(1:10) ≤ 7
-		"heads"
-	else      # could have elseif
-		"tails"
-	end
-	
-	return outcome
+    outcome = if rand(1:10) ≤ 7
+        "heads"
+    else      # could have elseif
+        "tails"
+    end
+
+    return outcome
 end
 
 # ╔═╡ 7c099606-8746-11eb-37fe-c3befde06e9d
 function simple_weighted_coin2()
-	if rand(1:10) ≤ 7
-		"heads"
-	else      # could have elseif
-		"tails"
-	end
+    if rand(1:10) ≤ 7
+        "heads"
+    else      # could have elseif
+        "tails"
+    end
 end
 
 # ╔═╡ 97cb3dde-8746-11eb-0b00-690f20cb26dc
 result = for i in 1:10
-	
 end
 
 # ╔═╡ 9d8cdc8e-8746-11eb-2b9a-b30a52026f09
@@ -373,7 +296,7 @@ p = $(@bind p Slider(0.0:0.01:1.0, show_value=true, default=0.7))
 """
 
 # ╔═╡ baed5908-8729-11eb-00e0-9f749406c30c
-countmap( [bernoulli(p) for i in 1:1000] )
+countmap([bernoulli(p) for i in 1:1000])
 
 # ╔═╡ ed94eae8-86b3-11eb-3f1b-15c7a54903f5
 md"""
@@ -419,10 +342,10 @@ counts = [count(rolls .== i) for i in 1:6]
 
 # ╔═╡ 2d71fa88-86b5-11eb-0e55-35566c2246d7
 begin
-	bar(counts, alpha=0.5, leg=false, size=(500, 300))
-	hline!([length(rolls) / 6], ls=:dash)
-	title!("number of die rolls = $(length(rolls))")
-	ylims!(0, length(rolls) / 3)
+    bar(counts; alpha=0.5, leg=false, size=(500, 300))
+    hline!([length(rolls) / 6]; ls=:dash)
+    title!("number of die rolls = $(length(rolls))")
+    ylims!(0, length(rolls) / 3)
 end
 
 # ╔═╡ cb8a9762-86b1-11eb-0484-6b6cc8b1b14c
@@ -433,7 +356,7 @@ md"""
 """
 
 # ╔═╡ d0c9814e-86b1-11eb-2f29-1d041bccc649
-roll_dice(n) = sum( rand(1:12, n) )
+roll_dice(n) = sum(rand(1:12, n))
 
 # ╔═╡ 7a16b674-86b7-11eb-3aa5-83712cdc8580
 trials = 10^6
@@ -449,7 +372,7 @@ n = $(@bind n Slider(1:50, show_value=true))
 """
 
 # ╔═╡ b81b1090-8735-11eb-3a52-2dca4d4ed472
-experiment() = roll_dice(n) 
+experiment() = roll_dice(n)
 
 # experiment() = sum([randn()^2 for i in 1:n])
 
@@ -460,7 +383,7 @@ data = [experiment() for t in 1:trials]
 data
 
 # ╔═╡ 514f6be0-86b8-11eb-30c9-d1020f783afe
-histogram(data, alpha=0.5, legend=false, bins=200, c=:lightsalmon1, title="n = $n")  
+histogram(data; alpha=0.5, legend=false, bins=200, c=:lightsalmon1, title="n = $n")
 # c = RGB(0.1, 0.2, 0.3))
 
 # ╔═╡ a15fc456-8738-11eb-25bd-b15c2b16d461
@@ -475,9 +398,13 @@ Does the above histogram look like a bell to you?
 
 # ╔═╡ 8ab9001a-8737-11eb-1009-5717fbe83af7
 begin
-	bell = load(download("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRmxRAIQt_L-X99A_4FoP3vsC-l_WHlC3TtAw&usqp=CAU"))
-	
-	bell[1:end*9÷10, :]
+    bell = load(
+        download(
+            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRmxRAIQt_L-X99A_4FoP3vsC-l_WHlC3TtAw&usqp=CAU",
+        ),
+    )
+
+    bell[1:(end * 9 ÷ 10), :]
 end
 
 # ╔═╡ f8b2dd20-8737-11eb-1593-43659c693109
@@ -493,9 +420,16 @@ We need to **normalise** so that the total shaded *area* is 1. We can use the hi
 """
 
 # ╔═╡ 14f0a090-8737-11eb-0ccf-391249267401
-histogram(data, alpha=0.5, legend=false, bins=50, norm=true,
-			c=:lightsalmon1, title="n = $n", ylims=(0, 0.05))  
-
+histogram(
+    data;
+    alpha=0.5,
+    legend=false,
+    bins=50,
+    norm=true,
+    c=:lightsalmon1,
+    title="n = $n",
+    ylims=(0, 0.05),
+)
 
 # ╔═╡ e305467e-8738-11eb-1213-eb11aaebe151
 md"""
@@ -516,14 +450,21 @@ We need to make sure that the data is centred in the same place -- we will choos
 mean(data), std(data)
 
 # ╔═╡ 16023bea-8739-11eb-1e32-79f2d006b093
-normalised_data = ( data .- mean(data) ) ./ std(data)   
+normalised_data = (data .- mean(data)) ./ std(data)
 
 # ╔═╡ bfc52118-873b-11eb-0fbb-952c60bc7cc2
-histogram(normalised_data, bins=-5 - (1/(2σ)):(1/σ):5, norm=true,
-	alpha=0.5, leg=false, ylim=(0, 0.41), size=(500, 300))
+histogram(
+    normalised_data;
+    bins=(-5 - (1 / (2σ))):(1 / σ):5,
+    norm=true,
+    alpha=0.5,
+    leg=false,
+    ylim=(0, 0.41),
+    size=(500, 300),
+)
 
 # ╔═╡ aa6126f8-873b-11eb-3b4a-0f96fe07b7fb
-plot!(x -> exp(-x^2 / 2) / √(2π), lw=2, c=:red, alpha=0.5)
+plot!(x -> exp(-x^2 / 2) / √(2π); lw=2, c=:red, alpha=0.5)
 
 # ╔═╡ 308547c6-873d-11eb-3a42-833f8bf496ae
 md"""
@@ -567,17 +508,23 @@ dof = $(@bind dof Slider(1:50, show_value=true))
 """
 
 # ╔═╡ e01b6f70-873c-11eb-04a1-ad8e86578982
-chisq_data = rand( Chisq(dof), 100000 )
+chisq_data = rand(Chisq(dof), 100000)
 
 # ╔═╡ b5251f76-873c-11eb-38cb-7db300c8fe3c
-histogram( chisq_data, norm=true, bins=100, size=(500, 300), leg=false, alpha=0.5,
-	xlims=(0, 10*√(dof)))
-
+histogram(
+    chisq_data;
+    norm=true,
+    bins=100,
+    size=(500, 300),
+    leg=false,
+    alpha=0.5,
+    xlims=(0, 10 * √(dof)),
+)
 
 # ╔═╡ da62fd1c-873c-11eb-0758-e7cb48e964f1
-histogram( [ sum( randn().^2 for _=1:dof )  for _ = 1:100000], norm=true,
-	alpha=0.5, leg=false)
-
+histogram(
+    [sum(randn() .^ 2 for _ in 1:dof) for _ in 1:100000]; norm=true, alpha=0.5, leg=false
+)
 
 # ╔═╡ Cell order:
 # ╟─3a4957ec-8723-11eb-22a0-8b35322596e2
