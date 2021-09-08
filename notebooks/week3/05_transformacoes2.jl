@@ -15,31 +15,31 @@ end
 
 # ╔═╡ 230cba36-9d0a-4726-9e55-7df2c6743968
 filter!(LOAD_PATH) do path
-	path != "@v#.#"
+    path != "@v#.#"
 end;
 
 # ╔═╡ 2e8c4a48-d535-44ac-a1f1-4cb26c4aece6
 filter!(LOAD_PATH) do path
-	path != "@v#.#"
+    path != "@v#.#"
 end;
 
 # ╔═╡ 6b473b2d-4326-46b4-af38-07b61de287fc
 begin
-	import ImageIO
-	import PNGFiles
-	using PlutoUI
-	using Colors, ColorVectorSpace, ImageShow, FileIO
-	using PlutoUI
-	using HypertextLiteral
-	using LinearAlgebra
-	using ForwardDiff
-	using NonlinearSolve
-	using StaticArrays
-	using BenchmarkTools
+    import ImageIO
+    import PNGFiles
+    using PlutoUI
+    using Colors, ColorVectorSpace, ImageShow, FileIO
+    using PlutoUI
+    using HypertextLiteral
+    using LinearAlgebra
+    using ForwardDiff
+    using NonlinearSolve
+    using StaticArrays
+    using BenchmarkTools
 end
 
 # ╔═╡ b7895bd2-7634-11eb-211e-ef876d23bd88
-PlutoUI.TableOfContents(aside=true)
+PlutoUI.TableOfContents(aside = true)
 
 # ╔═╡ 230b0118-30b7-4035-ad31-520165a76fcc
 md"""
@@ -50,10 +50,14 @@ _Quando você executar esse caderno pela primeira vez ele irá instalr pacotes. 
 
 # ╔═╡ 890d30b9-2cd0-4d3a-99f6-f7d3d7858fda
 img_sources = [
-	"https://www.ime.unicamp.br/~pjssilva/images/ensino/labcompsci/carmel-arquelau-bV3RXy9Upqg-unsplash.png" => "Tucano",
-	"https://www.ime.unicamp.br/~pjssilva/images/ensino/labcompsci/matt-paul-catalano-MUwfuO5RXEo-unsplash.png" => "Onda",
-	"https://www.ime.unicamp.br/~pjssilva/images/ensino/labcompsci/matt-paul-catalano-MUwfuO5RXEo-unsplash_square.png" => "Onda quadrada",
-	"https://user-images.githubusercontent.com/6933510/108883855-39690f80-7606-11eb-8eb1-e595c6c8d829.png" => "Setas"
+    "https://www.ime.unicamp.br/~pjssilva/images/ensino/labcompsci/carmel-arquelau-bV3RXy9Upqg-unsplash.png" =>
+        "Tucano",
+    "https://www.ime.unicamp.br/~pjssilva/images/ensino/labcompsci/matt-paul-catalano-MUwfuO5RXEo-unsplash.png" =>
+        "Onda",
+    "https://www.ime.unicamp.br/~pjssilva/images/ensino/labcompsci/matt-paul-catalano-MUwfuO5RXEo-unsplash_square.png" =>
+        "Onda quadrada",
+    "https://user-images.githubusercontent.com/6933510/108883855-39690f80-7606-11eb-8eb1-e595c6c8d829.png" =>
+        "Setas",
 ]
 
 # ╔═╡ 85fba8fb-a9ea-444d-831b-ec6489b58b4f
@@ -84,15 +88,22 @@ md"""
 
 # ╔═╡ ab2fd438-b384-401f-a5d0-5a58c23e54ed
 begin
-	transfs_names = [
-		"Id", "Rotate(α)", "Shear(α)", "Linear", "Nonlinear shear(α)",
-		"Warp(α)", "xy", "rθ", "Custom"
-	]
-	md"""
-	#### Escolha uma transformação inversa:
+    transfs_names = [
+        "Id",
+        "Rotate(α)",
+        "Shear(α)",
+        "Linear",
+        "Nonlinear shear(α)",
+        "Warp(α)",
+        "xy",
+        "rθ",
+        "Custom",
+    ]
+    md"""
+    #### Escolha uma transformação inversa:
 
-	$(@bind transf Select(transfs_names))
-	"""
+    $(@bind transf Select(transfs_names))
+    """
 end
 
 # ╔═╡ 23ade8ee-7a09-11eb-0e40-296c6b831d74
@@ -104,23 +115,23 @@ Escolha uma transformação [linear](#a0afe3ae-76b9-11eb-2301-cde7260ddd7f) ou
 # ╔═╡ 005ca75a-7622-11eb-2ba4-9f450e71df1f
 let
 
-range = -1.5:.1:1.5
-md"""
+    range = -1.5:0.1:1.5
+    md"""
 
-Essa é matriz "variável": clique e arraste para mudar!
+    Essa é matriz "variável": clique e arraste para mudar!
 
-**A =**
+    **A =**
 
-``(``
- $(@bind a Scrubbable( range; default=1.0))
- $(@bind b Scrubbable( range; default=0.0))
-``)``
+    ``(``
+     $(@bind a Scrubbable( range; default=1.0))
+     $(@bind b Scrubbable( range; default=0.0))
+    ``)``
 
-``(``
-$(@bind c Scrubbable(range; default=0.0 ))
-$(@bind d Scrubbable(range; default=1.0))
-``)``
-"""
+    ``(``
+    $(@bind c Scrubbable(range; default=0.0 ))
+    $(@bind d Scrubbable(range; default=1.0))
+    ``)``
+    """
 end
 
 # ╔═╡ 2efaa336-7630-11eb-0c17-a7d4a0141dac
@@ -143,7 +154,7 @@ h= $(@bind h Slider(.1:.1:10, show_value=true, default = 5))
 
 # ╔═╡ f2c1671b-3f72-47e9-8eef-d6f1b33f05fa
 # custom = ((x, y),) -> [x, α*y^2]
-custom = ((x, y),) -> [sin(α*x), y]
+custom = ((x, y),) -> [sin(α * x), y]
 # custom = ((x, y),)-> [x + α*y^2, y + α*x^2] # may be non-invertible
 # custom  = flipy ∘ ((x, y),) ->  [(β*x - α*y)/(β - y), -h*y/(β - y)]
 # custom = ((x, y),) -> [log(x + 1.2), log(y + 1.2)] # Exponentialish
@@ -204,7 +215,9 @@ md"""
 """
 
 # ╔═╡ d42aec08-76ad-11eb-361a-a1f2c90fd4ec
-Resource("https://cdn.kastatic.org/ka-perseus-images/1b351a3653c1a12f713ec24f443a95516f916136.jpg")
+Resource(
+    "https://cdn.kastatic.org/ka-perseus-images/1b351a3653c1a12f713ec24f443a95516f916136.jpg",
+)
 
 # ╔═╡ e965cf5e-79fd-11eb-201d-695b54d08e54
 md"""
@@ -254,14 +267,14 @@ Aque estão algumas transformações lineares:
 
 # ╔═╡ d364f91a-76b9-11eb-1807-75e733940d53
 begin
-	 id((x,y)) = SA[x, y]
-	 scalex(α) = ((x, y),) -> SA[α*x,  y]
-	 scaley(α) = ((x, y),) -> SA[x,   α*y]
-	 scale(α)  = ((x, y),) -> SA[α*x, α*y]
-	 swap((x, y))  = SA[y, x]
-	 flipy((x, y)) = SA[x, -y]
-	 rotate(θ) = ((x, y),) -> SA[cos(θ)*x + sin(θ)*y, -sin(θ)*x + cos(θ)*y]
-	 shear(α)  = ((x, y),) -> SA[x + α*y, y]
+    id((x, y)) = SA[x, y]
+    scalex(α) = ((x, y),) -> SA[α*x, y]
+    scaley(α) = ((x, y),) -> SA[x, α*y]
+    scale(α) = ((x, y),) -> SA[α*x, α*y]
+    swap((x, y)) = SA[y, x]
+    flipy((x, y)) = SA[x, -y]
+    rotate(θ) = ((x, y),) -> SA[cos(θ)*x+sin(θ)*y, -sin(θ)*x+cos(θ)*y]
+    shear(α) = ((x, y),) -> SA[x+α*y, y]
 end
 
 # ╔═╡ 080d87e0-7aa2-11eb-18f5-2fb6a7a5bcb4
@@ -271,9 +284,9 @@ De fato podemos escrever uma transformação linear *geral* de duas formas:
 
 # ╔═╡ 15283aba-7aa2-11eb-389c-e9f215bd03e2
 begin
-	lin(a, b, c, d) = ((x, y),) -> ( a*x + b*y, c*x + d*y )
+    lin(a, b, c, d) = ((x, y),) -> (a * x + b * y, c * x + d * y)
 
-	lin(A) = v -> A*v  # linear algebra version using matrix multiplication
+    lin(A) = v -> A * v  # linear algebra version using matrix multiplication
 end
 
 # ╔═╡ 2612d2c2-7aa2-11eb-085a-1f27b6174995
@@ -289,24 +302,24 @@ md"""Vocês notaram o uso do `SA` na frente dos arrays acima? Isso vem do pacote
 
 # ╔═╡ 1943078d-9524-4cb6-ab66-9d069081b532
 begin
-	M1 = [1 2; 3 4]
-	v1 = [1, 2]
-	@benchmark $M1*$v1
+    M1 = [1 2; 3 4]
+    v1 = [1, 2]
+    @benchmark $M1 * $v1
 end
 
 # ╔═╡ 2c2eafb8-a3f4-4225-8432-4628a9da40db
 begin
-	M2 = SA[1 2; 3 4]
-	v2 = SA[1, 2]
-	@benchmark $M2*$v2
+    M2 = SA[1 2; 3 4]
+    v2 = SA[1, 2]
+    @benchmark $M2 * $v2
 end
 
 # ╔═╡ 11cd57f1-e83e-4f17-825d-ac5a9f5f6a97
 # Se precisar de arrays que podem mudar seus valores use "Mutable" Arrays
 begin
-	M3 = MMatrix{2, 2}(1, 3, 2, 4)    # Valores por coluna
-	v3 = MVector{2}(1, 2)
-	@benchmark $M3*$v3
+    M3 = MMatrix{2,2}(1, 3, 2, 4)    # Valores por coluna
+    v3 = MVector{2}(1, 2)
+    @benchmark $M3 * $v3
 end
 
 # ╔═╡ 507c9f1f-503a-415a-9881-e5e19dde3b98
@@ -319,34 +332,34 @@ md"""
 
 # ╔═╡ b4cdd412-7a02-11eb-149a-df1888a0f465
 begin
-  translate(α,β)  = ((x, y),) -> SA[x+α, y+β]   # affine, but not linear
+    translate(α, β) = ((x, y),) -> SA[x+α, y+β]   # affine, but not linear
 
-  nonlin_shear(α) = ((x, y),) -> SA[x, y + α*x^2]
+    nonlin_shear(α) = ((x, y),) -> SA[x, y+α*x^2]
 
-  function warp(α)
-	function fwarp((x, y))
-	  θ = α*√(x^2 + y^2)
-	  return SA[cos(θ)*x + sin(θ)*y, -sin(θ)*x + cos(θ)*y]
+    function warp(α)
+        function fwarp((x, y))
+            θ = α * √(x^2 + y^2)
+            return SA[cos(θ)*x+sin(θ)*y, -sin(θ)*x+cos(θ)*y]
+        end
+        return fwarp
     end
-	return fwarp
-  end
 
-  xy((r, θ)) = SA[ r*cos(θ), r*sin(θ) ]
-  rθ(x)      = SA[norm(x), atan(x[2],x[1]) ]
+    xy((r, θ)) = SA[r*cos(θ), r*sin(θ)]
+    rθ(x) = SA[norm(x), atan(x[2], x[1])]
 end
 
 # ╔═╡ 74bd4232-5255-441d-bd28-f3fe7d706e20
-	transfs = Dict(
-		"Id" => id,
-		"Rotate(α)" => rotate(α),
-		"Shear(α)" => shear(α),
-		"Linear" => lin(A),
-		"Nonlinear shear(α)" => nonlin_shear(α),
-		"Warp(α)" => warp(α),
-		"xy" => xy,
-		"rθ" => rθ,
-		"Custom" => custom
-	)
+transfs = Dict(
+    "Id" => id,
+    "Rotate(α)" => rotate(α),
+    "Shear(α)" => shear(α),
+    "Linear" => lin(A),
+    "Nonlinear shear(α)" => nonlin_shear(α),
+    "Warp(α)" => warp(α),
+    "xy" => xy,
+    "rθ" => rθ,
+    "Custom" => custom,
+)
 
 # ╔═╡ 58a30e54-7a08-11eb-1c57-dfef0000255f
 T⁻¹ = transfs[transf]
@@ -358,20 +371,20 @@ Por outro lado, vejamos como podemos redefinir a função warp, que vimos acima,
 
 # ╔═╡ 3d28ce92-6c12-4143-9f53-3634bbc687ce
 begin
-	warp₂(α, x, y) = rotate(α*√(x^2 + y^2))
-	warp₂(α) = ((x, y),) -> warp₂(α, x, y)([x, y])
+    warp₂(α, x, y) = rotate(α * √(x^2 + y^2))
+    warp₂(α) = ((x, y),) -> warp₂(α, x, y)([x, y])
 end
 
 # ╔═╡ 3460ad26-daeb-4e9c-9c75-1e00e43d592d
-warp₃(α) = ((x, y),) -> rotate(α*√(x^2 + y^2))([x, y])
+warp₃(α) = ((x, y),) -> rotate(α * √(x^2 + y^2))([x, y])
 
 # ╔═╡ a05a2667-ed48-4610-bc4d-bff0317788ef
 md"Vejamos que são todas equivalentes:"
 
 # ╔═╡ 2b50dc4e-6549-4640-922d-c1c15bb82d7c
 begin
-	test_v = rand(2)
-	warp(1)(test_v), warp₂(1)(test_v), warp₃(1)(test_v)
+    test_v = rand(2)
+    warp(1)(test_v), warp₂(1)(test_v), warp₃(1)(test_v)
 end
 
 # ╔═╡ 46898e66-8d95-43bd-83f6-6806e3c1ead7
@@ -416,8 +429,8 @@ Julia busca encorajar o uso de operador para gerar comportamento sofisticado, va
 
 # ╔═╡ 4b0e8742-7a70-11eb-1e78-813f6ad005f4
 let
-	x = rand()
-	(sin∘cos)(x) ≈ sin(cos(x))
+    x = rand()
+    (sin ∘ cos)(x) ≈ sin(cos(x))
 end
 
 # ╔═╡ f650b788-7a70-11eb-0b20-779d2f18f111
@@ -527,11 +540,11 @@ Se você não teve um curso formal de álgebra linear deve ficar pensando porque
 
 # ╔═╡ 8206e1ee-7a8a-11eb-1f26-054f6b100076
 let
-	 A = randn(2,2)
-	 B = randn(2,2)
-	 v = rand(2)
+    A = randn(2, 2)
+    B = randn(2, 2)
+    v = rand(2)
 
-	(lin(A) ∘ lin(B))(v) , lin(A * B)(v)
+    (lin(A) ∘ lin(B))(v), lin(A * B)(v)
 end
 
 # ╔═╡ 7d803684-7a8a-11eb-33d2-89d5e2a05bcf
@@ -551,13 +564,13 @@ Agora, computacionalmente podemos testar isso facilmente:
 # ╔═╡ 05049fa0-7a8e-11eb-283b-cb4753c4aaf0
 begin
 
-	P = randn(2, 2)
-	Q = randn(2, 2)
+    P = randn(2, 2)
+    Q = randn(2, 2)
 
-	T₁ = lin(P) ∘ lin(Q)
-	T₂ = lin(P*Q)
+    T₁ = lin(P) ∘ lin(Q)
+    T₂ = lin(P * Q)
 
-	T₁([1, 0]), T₂([1, 0])
+    T₁([1, 0]), T₂([1, 0])
 end
 
 # ╔═╡ 313cdcbd-5b11-41c8-9fcd-5aeaca3b8d24
@@ -594,10 +607,12 @@ Uma imagem tem índices (1, 1) no canto superior esquerdo. Ainda por cima, o eix
 """
 
 # ╔═╡ 7c68c7b6-7a9e-11eb-3f7f-99bb10aedd95
-Resource("https://raw.githubusercontent.com/mitmath/18S191/Spring21/notebooks/week3/coord_transform.png")
+Resource(
+    "https://raw.githubusercontent.com/mitmath/18S191/Spring21/notebooks/week3/coord_transform.png",
+)
 
 # ╔═╡ c1efc54a-7e9b-11eb-1e76-dbd0a66184a9
-translate(-400,400)([1,1])
+translate(-400, 400)([1, 1])
 
 # ╔═╡ db4bc328-76bb-11eb-28dc-eb9df8892d01
 md"""
@@ -622,17 +637,17 @@ md"""
 
 # ╔═╡ 9264508a-7a71-11eb-1b7c-bf6e62788115
 let
-	v = rand(2)
-	T = rotate(30)∘rotate(-30)
-	T(v) ,  v
+    v = rand(2)
+    T = rotate(30) ∘ rotate(-30)
+    T(v), v
 end
 
 # ╔═╡ e89339b2-7a71-11eb-0f97-971b2ed277d1
 let
-	  T = scale(0.5) ∘ scale(2)
+    T = scale(0.5) ∘ scale(2)
 
-	  v = rand(2)
-	  T(v) .≈ v
+    v = rand(2)
+    T(v) .≈ v
 end
 
 # ╔═╡ 0957fd9a-7a72-11eb-0566-e93ef32fb626
@@ -685,16 +700,16 @@ md"""
 
 # ╔═╡ 5ce799f4-7aac-11eb-0629-ebd8a404e9d3
 let
-	v = rand(2)
-	A = randn(2,2)
-    (lin(inv(A)) ∘ lin(A))(v) , v
+    v = rand(2)
+    A = randn(2, 2)
+    (lin(inv(A)) ∘ lin(A))(v), v
 end
 
 # ╔═╡ 9b456686-7aac-11eb-3aa5-25e6c3c86aff
 let
-	 A = randn(2,2)
-	 B = randn(2,2)
-	 inv(A*B) ≈ inv(B) * inv(A)
+    A = randn(2, 2)
+    B = randn(2, 2)
+    inv(A * B) ≈ inv(B) * inv(A)
 end
 
 # ╔═╡ c2b0a488-7aac-11eb-1d8b-edd6bd23d1fd
@@ -732,7 +747,9 @@ md"""
 """
 
 # ╔═╡ 1b9faf64-7aab-11eb-1396-6fb89be7c445
-Resource("https://raw.githubusercontent.com/mitmath/18S191/Spring21/notebooks/week3/comm2.png")
+Resource(
+    "https://raw.githubusercontent.com/mitmath/18S191/Spring21/notebooks/week3/comm2.png",
+)
 
 # ╔═╡ 5f0568dc-7aad-11eb-162f-0d6e26f17d59
 md"""
@@ -745,7 +762,9 @@ md"""
 """
 
 # ╔═╡ 80456168-7c1b-11eb-271c-83ef59a41102
-Resource("https://raw.githubusercontent.com/mitmath/18S191/Spring21/notebooks/week3/collide.png")
+Resource(
+    "https://raw.githubusercontent.com/mitmath/18S191/Spring21/notebooks/week3/collide.png",
+)
 
 # ╔═╡ 5227afd0-7641-11eb-0065-918cb8538d55
 md"""
@@ -762,99 +781,98 @@ det_A = det(A)
 
 # ╔═╡ b754bae2-762f-11eb-1c6a-01251495a9bb
 begin
-	white(c::RGB) = RGB(1,1,1)
-	white(c::RGBA) = RGBA(1,1,1,0.75)
-	black(c::RGB) = RGB(0,0,0)
-	black(c::RGBA) = RGBA(0,0,0,0.75)
+    white(c::RGB) = RGB(1, 1, 1)
+    white(c::RGBA) = RGBA(1, 1, 1, 0.75)
+    black(c::RGB) = RGB(0, 0, 0)
+    black(c::RGBA) = RGBA(0, 0, 0, 0.75)
 end
 
 # ╔═╡ 7d0096ad-d89a-4ade-9679-6ee95f7d2044
 begin
-	function transform_xy_to_ij(img::AbstractMatrix, x::Float64, y::Float64)
-	# convert coordinate system xy to ij
-	# center image, and use "white" when out of the boundary
+    function transform_xy_to_ij(img::AbstractMatrix, x::Float64, y::Float64)
+        # convert coordinate system xy to ij
+        # center image, and use "white" when out of the boundary
 
-		rows, cols = size(img)
-		m = max(cols, rows)
+        rows, cols = size(img)
+        m = max(cols, rows)
 
-	    # function to take xy to ij
-		xy_to_ij =  translate(rows/2, cols/2) ∘ swap ∘ flipy ∘ scale(m/2)
+        # function to take xy to ij
+        xy_to_ij = translate(rows / 2, cols / 2) ∘ swap ∘ flipy ∘ scale(m / 2)
 
-		# apply the function and "snap to grid"
-		i,j = floor.(Int, xy_to_ij((x, y)))
+        # apply the function and "snap to grid"
+        i, j = floor.(Int, xy_to_ij((x, y)))
 
-	end
+    end
 
-	function transform_ij_to_xy(i::Int,j::Int,pixels)
-		ij_to_xy =  scale(2/pixels) ∘ flipy ∘ swap ∘ translate(-pixels/2, -pixels/2)
+    function transform_ij_to_xy(i::Int, j::Int, pixels)
+        ij_to_xy = scale(2 / pixels) ∘ flipy ∘ swap ∘ translate(-pixels / 2, -pixels / 2)
 
-		ij_to_xy([i,j])
-	 end
+        ij_to_xy([i, j])
+    end
 
-	 function getpixel(img,i::Int,j::Int; circular::Bool=false, r::Real=200)
-		#  grab image color or place default
-		rows,cols = size(img)
-		m = max(cols,rows)
-		if circular
-			c = (i-rows/2)^2 + (j-cols/2)^2 ≤ r*m^2/4
-		else
-			c = true
-		end
+    function getpixel(img, i::Int, j::Int; circular::Bool = false, r::Real = 200)
+        #  grab image color or place default
+        rows, cols = size(img)
+        m = max(cols, rows)
+        if circular
+            c = (i - rows / 2)^2 + (j - cols / 2)^2 ≤ r * m^2 / 4
+        else
+            c = true
+        end
 
-		if 1 < i ≤ rows && 1 < j ≤ cols && c
-			img[i, j]
-		else
-			#white(img[1, 1])
-			black(img[1,1])
-		end
+        if 1 < i ≤ rows && 1 < j ≤ cols && c
+            img[i, j]
+        else
+            #white(img[1, 1])
+            black(img[1, 1])
+        end
 
-	end
+    end
 end
 
 # ╔═╡ bf1954d6-7e9a-11eb-216d-010bd761e470
-transform_ij_to_xy(1,1,400)
+transform_ij_to_xy(1, 1, 400)
 
 # ╔═╡ 83d45d42-7406-11eb-2a9c-e75efe62b12c
 function with_gridlines(img::Matrix; n = 10)
-	rows, cols = size(img)
-	result = copy(img)
+    rows, cols = size(img)
+    result = copy(img)
 
-	stroke = white(img[1, 1])
+    stroke = white(img[1, 1])
 
-	# Add grid
-	grid_lin = floor.(Int, LinRange(1, rows - 1, n))
-	grid_col = floor.(Int, LinRange(1, cols - 1, n))
-	for i in grid_lin
-		result[i:i + 1, :] .= stroke
-	end
-	for j in grid_col
-		result[:, j:j + 1] .= stroke
-	end
+    # Add grid
+    grid_lin = floor.(Int, LinRange(1, rows - 1, n))
+    grid_col = floor.(Int, LinRange(1, cols - 1, n))
+    for i in grid_lin
+        result[i:i+1, :] .= stroke
+    end
+    for j in grid_col
+        result[:, j:j+1] .= stroke
+    end
 
-	# Add axis marks
-	axis_lin = rows ÷ 2
-	axis_col = cols ÷ 2
-    result[axis_lin - 1:axis_lin + 1, :] .= RGBA(0, 1, 0, 1)
-	result[:,  axis_col - 1:axis_col + 1] .= RGBA(1, 0, 0, 1)
- 	return result
+    # Add axis marks
+    axis_lin = rows ÷ 2
+    axis_col = cols ÷ 2
+    result[axis_lin-1:axis_lin+1, :] .= RGBA(0, 1, 0, 1)
+    result[:, axis_col-1:axis_col+1] .= RGBA(1, 0, 0, 1)
+    return result
 end
 
 # ╔═╡ 55898e88-36a0-4f49-897f-e0850bd2b0df
 img = if show_grid
-	with_gridlines(img_original;n=ngrid)
+    with_gridlines(img_original; n = ngrid)
 else
-	img_original
+    img_original
 end;
 
 # ╔═╡ ca28189e-7e9a-11eb-21d6-bd819f3e0d3a
 [
-	begin
+    begin
         x, y = transform_ij_to_xy(i, j, pixels)
-	    X, Y = (T⁻¹∘scale(1/z)∘translate(-panx,-pany))([x,y])
-	    i, j = transform_xy_to_ij(img, X, Y)
-	    getpixel(img, i, j; circular=circular, r=r)
-	end
-	for i = 1:pixels, j = 1:pixels
+        X, Y = (T⁻¹ ∘ scale(1 / z) ∘ translate(-panx, -pany))([x, y])
+        i, j = transform_xy_to_ij(img, X, Y)
+        getpixel(img, i, j; circular = circular, r = r)
+    end for i = 1:pixels, j = 1:pixels
 ]
 
 
@@ -863,26 +881,26 @@ transform_xy_to_ij(img, 0.0, 0.0)  # Centro da imagem de partida
 
 # ╔═╡ da73d9f6-7a8d-11eb-2e6f-1b819bbb0185
 [
-	begin
-		 x, y = transform_ij_to_xy(i, j, test_pixels)
-		 X, Y =  T₁([x, y])
-		 i, j = transform_xy_to_ij(img, X, Y)
-		 getpixel(img, i, j)
-	end
+    begin
+        x, y = transform_ij_to_xy(i, j, test_pixels)
+        X, Y = T₁([x, y])
+        i, j = transform_xy_to_ij(img, X, Y)
+        getpixel(img, i, j)
+    end
 
-	for i = 1:test_pixels, j = 1:test_pixels
+    for i = 1:test_pixels, j = 1:test_pixels
 ]
 
 # ╔═╡ 30f522a0-7a8e-11eb-2181-8313760778ef
 [
-	begin
-		 x, y = transform_ij_to_xy(i, j, test_pixels)
-		 X, Y =  T₂([x, y])
-		 i, j = transform_xy_to_ij(img, X, Y)
-		 getpixel(img, i, j)
-	end
+    begin
+        x, y = transform_ij_to_xy(i, j, test_pixels)
+        X, Y = T₂([x, y])
+        i, j = transform_xy_to_ij(img, X, Y)
+        getpixel(img, i, j)
+    end
 
-	for i = 1:test_pixels, j = 1:test_pixels
+    for i = 1:test_pixels, j = 1:test_pixels
 ]
 
 # ╔═╡ c2e0e032-7c4c-11eb-2b2a-27fe69c42a01

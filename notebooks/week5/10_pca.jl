@@ -410,22 +410,36 @@ degrees = $(@bind degrees Slider(0:360, default=28, show_value=true))
 
 # ╔═╡ 3b71142c-f86f-11ea-0d43-47011d00786c
 p1 = begin
-	# Scatter points
-    scatter(M[1, :], M[2, :], ratio = 1, leg = false, ms = 2.5,  alpha = 0.5,                     framestyle = :origin)
+    # Scatter points
+    scatter(
+        M[1, :],
+        M[2, :],
+        ratio = 1,
+        leg = false,
+        ms = 2.5,
+        alpha = 0.5,
+        framestyle = :origin,
+    )
 
-	# The rotated axis is [cos(θ), sin(θ)]
-	# Plot the axis and set picture limits
-    plot!(0.7 .* [-cos(θ), cos(θ)], 0.7 .* [-sin(θ), sin(θ)],
-          lw = 1, arrow = true, c = :red, alpha = 0.3)
+    # The rotated axis is [cos(θ), sin(θ)]
+    # Plot the axis and set picture limits
+    plot!(
+        0.7 .* [-cos(θ), cos(θ)],
+        0.7 .* [-sin(θ), sin(θ)],
+        lw = 1,
+        arrow = true,
+        c = :red,
+        alpha = 0.3,
+    )
     xlims!(-0.7, 0.7)
     ylims!(-0.7, 0.7)
 
-	# Compute projections and plot them (try to derive the formula)		
-	projected = ([cos(θ) sin(θ)] * M) .* [cos(θ), sin(θ)]
+    # Compute projections and plot them (try to derive the formula)		
+    projected = ([cos(θ) sin(θ)] * M) .* [cos(θ), sin(θ)]
     scatter!(projected[1, :], projected[2, :], m = :3, alpha = 0.1, c = :green)
 
-	# Plot the lines from the original points to the respective projection
-	# Obs: the nan's make plot create separate lines 
+    # Plot the lines from the original points to the respective projection
+    # Obs: the nan's make plot create separate lines 
     lines_x = reduce(vcat, [M[1, i], projected[1, i], NaN] for i = 1:size(M, 2))
     lines_y = reduce(vcat, [M[2, i], projected[2, i], NaN] for i = 1:size(M, 2))
     plot!(lines_x, lines_y, ls = :dash, c = :black, alpha = 0.1)
@@ -441,40 +455,58 @@ md"""
 
 # ╔═╡ 88bbe1bc-f86f-11ea-3b6b-29175ddbea04
 p2 = begin
-	# Clockwise rotation matrix
-	R(θ) = [ cos(θ) sin(θ)
-             -sin(θ)  cos(θ) ]
-	
-	# Rotate the data
+    # Clockwise rotation matrix
+    R(θ) = [
+        cos(θ) sin(θ)
+        -sin(θ) cos(θ)
+    ]
+
+    # Rotate the data
     M2 = R(θ) * M
 
-	# Plot the rotated data
-    scatter(M2[1, :], M2[2, :], ratio = 1, leg = false, ms = 2.5, alpha = 0.3,
-		    framestyle = :origin, size = (500, 500))
+    # Plot the rotated data
+    scatter(
+        M2[1, :],
+        M2[2, :],
+        ratio = 1,
+        leg = false,
+        ms = 2.5,
+        alpha = 0.3,
+        framestyle = :origin,
+        size = (500, 500),
+    )
 
-	# Set limits
+    # Set limits
     xlims!(-0.7, 0.7)
     ylims!(-0.7, 0.7)
 
-	# Now the projection is just the first coordinate
-    scatter!(M2[1, :], zeros(size(xs_centered)), ms = 3, alpha = 0.1, ratio = 1,
-             leg = false, framestyle = :origin, c = :green)
+    # Now the projection is just the first coordinate
+    scatter!(
+        M2[1, :],
+        zeros(size(xs_centered)),
+        ms = 3,
+        alpha = 0.1,
+        ratio = 1,
+        leg = false,
+        framestyle = :origin,
+        c = :green,
+    )
 
-	
-	# Plot the lines from the original points to the respective projection
+
+    # Plot the lines from the original points to the respective projection
     lines2_x = reduce(vcat, [M2[1, i], M2[1, i], NaN] for i = 1:size(M2, 2))
     lines2_y = reduce(vcat, [M2[2, i], 0, NaN] for i = 1:size(M2, 2))
     plot!(lines2_x, lines2_y, ls = :dash, c = :black, alpha = 0.1)
 
-	# Calculate the standard deviation of the displacements
+    # Calculate the standard deviation of the displacements
     σ = std(M2[1, :])
-	
-	# Add the vertical lines that should contain most of the data
+
+    # Add the vertical lines that should contain most of the data
     vline!([-2σ, 2σ], ls = :dash, lw = 2)
     annotate!(2σ + 0.05, 0.05, text("2σ", 10, :green))
     annotate!(-2σ - 0.05, 0.05, text("-2σ", 10, :green))
 
-	# Present the standard deviation so that we can maximize it (or minimize it)
+    # Present the standard deviation so that we can maximize it (or minimize it)
     title!("σ = $(round(σ, digits=4))")
 end;
 
@@ -517,8 +549,8 @@ begin
     θmin = θs[argmin(fs)]
 
     fmax = variance(θmax)
-	fmin = variance(θmin)
-	fmax, fmin
+    fmin = variance(θmin)
+    fmax, fmin
 end
 
 # ╔═╡ 045b9b98-f8ff-11ea-0d49-5b209319e951
@@ -626,8 +658,10 @@ Além disso, exitem algoritmos robustos de álgebra linear computacional que per
 
 # ╔═╡ 453689c2-85a2-11eb-2cbc-7d6476b42f2f
 let
-    M = [ 2 1
-          1 1 ]
+    M = [
+        2 1
+        1 1
+    ]
 
     svd(M)
 end
@@ -656,7 +690,7 @@ t = $(@bind tt Slider(0:0.01:1, show_value=true))
 # ╔═╡ 40b87cbe-85a4-11eb-30f8-cf7b5e79c19a
 # Direct action of the matrix T
 pp1 = begin
-	T = [1+tt tt; tt 1]
+    T = [1+tt tt; tt 1]
     scatter(
         unit_disc[1, :],
         unit_disc[2, :],
@@ -739,9 +773,9 @@ Concluímos que a direção principal é dada pela primeira coluna de $U$. Como 
 
 # ╔═╡ f621e9de-80ba-47c5-918c-3aaa4c951885
 begin
-	UM, SM, VM = svd(M)
-	θsvd = acos(UM[1, 1])
-	variance(θmax), variance(θsvd)
+    UM, SM, VM = svd(M)
+    θsvd = acos(UM[1, 1])
+    variance(θmax), variance(θsvd)
 end
 
 # ╔═╡ 81dda8f7-d8c2-4199-ad38-2ecc5324896e
@@ -752,7 +786,7 @@ Podemos também ver o que ocorre quando transformamos o círculo que contem os p
 
 # ╔═╡ 15808ca3-c0b1-4533-a8e2-cda5e2e4316a
 begin
-	# Plot original points
+    # Plot original points
     scatter(
         xs_centered,
         ys_centered,
@@ -763,10 +797,10 @@ begin
         framestyle = :origin,
     )
 
-	# Find the radius of the ball tha encloses the points in V^T
-	radius = maximum(norm(VM[i, :]) for i in 1:size(M, 2))
+    # Find the radius of the ball tha encloses the points in V^T
+    radius = maximum(norm(VM[i, :]) for i = 1:size(M, 2))
 
-	# Compute the transformed elipssis and plot it
+    # Compute the transformed elipssis and plot it
     ellipse_svd = R(-θsvd) * diagm(SM) * (radius .* circle)
     plot!(
         ellipse_svd[1, :],

@@ -15,10 +15,10 @@ end
 
 # ╔═╡ 2f0e340d-4d19-406f-8104-596d9d76b388
 begin
-	# You use `using` to import the Package for local use
-	# this imports all the names exported by the package
-	using Compose
-	using PlutoUI
+    # You use `using` to import the Package for local use
+    # this imports all the names exported by the package
+    using Compose
+    using PlutoUI
 end
 
 # ╔═╡ fafae38e-e852-11ea-1208-732b4744e4c2
@@ -104,28 +104,28 @@ Devolva: $x^2$
 
 # ╔═╡ e02f7ea6-7024-11eb-3672-fd59a6cff79b
 function basic_square(x)
-	return 1 # isso está errado, você deve preencher com seu código aqui!
+    return 1 # isso está errado, você deve preencher com seu código aqui!
 end
 
 # ╔═╡ 6acef56c-7025-11eb-2524-819c30a75d39
 let
-	result = basic_square(5)
-	if !(result isa Number)
-		md"""
-!!! warning "Não é um número"
-    `basic_square` não retornou um número. Você esqueceu de escrever `return`?
-		"""
-	elseif abs(result - 5*5) < 0.01
-		md"""
-!!! correct
-    Ótimo!
-		"""
-	else
-		md"""
-!!! warning "Incorreto"
-    Continue tentando!
-		"""
-	end
+    result = basic_square(5)
+    if !(result isa Number)
+        md"""
+      !!! warning "Não é um número"
+          `basic_square` não retornou um número. Você esqueceu de escrever `return`?
+      		"""
+    elseif abs(result - 5 * 5) < 0.01
+        md"""
+      !!! correct
+          Ótimo!
+      		"""
+    else
+        md"""
+      !!! warning "Incorreto"
+          Continue tentando!
+      		"""
+    end
 end
 
 # ╔═╡ 348cea34-7025-11eb-3def-41bbc16c7512
@@ -135,10 +135,10 @@ Se quiser continuar e trabalhar um pouco mais, colocamos mais alguns exercícios
 
 # ╔═╡ b3c7a050-e855-11ea-3a22-3f514da746a4
 if student.email_dac === "j000000"
-	md"""
-!!! danger "Oops!"
-    **Antes de submeter**, lembre de preencher o seu nome e o email da DAC no topo desse caderno!
-	"""
+    md"""
+   !!! danger "Oops!"
+       **Antes de submeter**, lembre de preencher o seu nome e o email da DAC no topo desse caderno!
+   	"""
 end
 
 # ╔═╡ 339c2d5c-e6ce-11ea-32f9-714b3628909c
@@ -175,11 +175,11 @@ Isso faz sentido porque a raiz desejada está entre esses dois números `x/a` e 
 # ╔═╡ bccf0e88-e754-11ea-3ab8-0170c2d44628
 ex_1_1 = md"""
 Escreva sua resposta aqui. Agora é uma boa hora para ler sobre Markdown.
-""" 
+"""
 
 # ╔═╡ e7abd366-e7a6-11ea-30d7-1b6194614d0a
 if !(@isdefined ex_1_1)
-	md"""Do not change the name of the variable - write you answer as `ex_1_1 = "..."`"""
+    md"""Do not change the name of the variable - write you answer as `ex_1_1 = "..."`"""
 end
 
 # ╔═╡ d62f223c-e754-11ea-2470-e72a605a9d7e
@@ -188,8 +188,8 @@ md"### Exercício 1.2
 Escreava uma fnção `newton_sqrt` que implementa o algorimo descrito."
 
 # ╔═╡ 4896bf0c-e754-11ea-19dc-1380bb356ab6
-function newton_sqrt(x, error_margin=0.01, a=x/2) # a=x/2 é um chute padrão para o `a` inicial
-	return x #  Isto está errado, complete com seu código.
+function newton_sqrt(x, error_margin = 0.01, a = x / 2) # a=x/2 é um chute padrão para o `a` inicial
+    return x #  Isto está errado, complete com seu código.
 end
 
 # ╔═╡ 7a01a508-e78a-11ea-11da-999d38785348
@@ -197,23 +197,23 @@ newton_sqrt(2)
 
 # ╔═╡ 682db9f8-e7b1-11ea-3949-6b683ca8b47b
 let
-	result = newton_sqrt(2, 0.01)
-	if !(result isa Number)
-		md"""
-!!! warning "Não é um número"
-    `newton_sqrt` não retornou um número. Você esqueceu de digitar `return`?
-		"""
-	elseif abs(result - sqrt(2)) < 0.01
-		md"""
-!!! correct
-    Muito bem!
-		"""
-	else
-		md"""
-!!! warning "Incorreto"
-    Continue tentando!
-		"""
-	end
+    result = newton_sqrt(2, 0.01)
+    if !(result isa Number)
+        md"""
+      !!! warning "Não é um número"
+          `newton_sqrt` não retornou um número. Você esqueceu de digitar `return`?
+      		"""
+    elseif abs(result - sqrt(2)) < 0.01
+        md"""
+      !!! correct
+          Muito bem!
+      		"""
+    else
+        md"""
+      !!! warning "Incorreto"
+          Continue tentando!
+      		"""
+    end
 end
 
 # ╔═╡ 088cc652-e7a8-11ea-0ca7-f744f6f3afdd
@@ -245,16 +245,16 @@ md"Como na definição a função `sierpinksi` é _recursiva_: ela chama a si me
 complexity = 3
 
 # ╔═╡ 1eb79812-e7b5-11ea-1c10-63b24803dd8a
-if complexity == 3 
-	md"""
-Tente alterar valor de **`complexity` para `5`** na célular acima. 
+if complexity == 3
+    md"""
+   Tente alterar valor de **`complexity` para `5`** na célular acima. 
 
-Aperte `Shift+Enter` para a mudança fazer efeito.
-	"""
+   Aperte `Shift+Enter` para a mudança fazer efeito.
+   	"""
 else
-	md"""
-**Muito bem!** Como você pode ver as diferentes células do caderno estão ligadas pelas variáveis que elas definem e usam, como numa planilha de cálculo!
-	"""
+    md"""
+   **Muito bem!** Como você pode ver as diferentes células do caderno estão ligadas pelas variáveis que elas definem e usam, como numa planilha de cálculo!
+   	"""
 end
 
 # ╔═╡ d7e8202c-e7b5-11ea-30d3-adcd6867d5f5
@@ -276,20 +276,20 @@ area_sierpinski(1) = 0.??
 
 # ╔═╡ ca8d2f72-e7b6-11ea-1893-f1e6d0a20dc7
 function area_sierpinski(n)
-	return 1.0 # Complete com sua implementação
+    return 1.0 # Complete com sua implementação
 end
 
 # ╔═╡ 71c78614-e7bc-11ea-0959-c7a91a10d481
 if area_sierpinski(0) == 1.0 && area_sierpinski(1) == 3 / 4
-	md"""
-!!! correct
-    Muito bem!
-	"""
+    md"""
+   !!! correct
+       Muito bem!
+   	"""
 else
-	md"""
-!!! warning "Incorreto"
-    Continue tentando!
-	"""
+    md"""
+   !!! warning "Incorreto"
+       Continue tentando!
+   	"""
 end
 
 # ╔═╡ c21096c0-e856-11ea-3dc5-a5b0cbf29335
@@ -321,25 +321,27 @@ triangle() = compose(context(), polygon([(1, 1), (0, 1), (1 / 2, 0)]))
 # organização / compreensão.
 
 function place_in_3_corners(t)
-	# Uses the Compose library to place 3 copies of t
-	# in the 3 corners of a triangle.
-	# treat this function as a black box,
-	# or learn how it works from the Compose documentation here https://giovineitalia.github.io/Compose.jl/latest/tutorial/#Compose-is-declarative-1
-	compose(context(),
-			(context(1/4,   0, 1/2, 1/2), t),
-			(context(  0, 1/2, 1/2, 1/2), t),
-			(context(1/2, 1/2, 1/2, 1/2), t))
+    # Uses the Compose library to place 3 copies of t
+    # in the 3 corners of a triangle.
+    # treat this function as a black box,
+    # or learn how it works from the Compose documentation here https://giovineitalia.github.io/Compose.jl/latest/tutorial/#Compose-is-declarative-1
+    compose(
+        context(),
+        (context(1 / 4, 0, 1 / 2, 1 / 2), t),
+        (context(0, 1 / 2, 1 / 2, 1 / 2), t),
+        (context(1 / 2, 1 / 2, 1 / 2, 1 / 2), t),
+    )
 end
 
 # ╔═╡ e2848b9a-e703-11ea-24f9-b9131434a84b
 function sierpinski(n)
-	if n == 0
-		triangle()
-	else
-		t = sierpinski(n - 1) # constroi recursivamente um triângulo menor
-		place_in_3_corners(t) # Coloca os três triângulos menores nos cantos 
-		                      # para formar o triângulo maior.
-	end
+    if n == 0
+        triangle()
+    else
+        t = sierpinski(n - 1) # constroi recursivamente um triângulo menor
+        place_in_3_corners(t) # Coloca os três triângulos menores nos cantos 
+        # para formar o triângulo maior.
+    end
 end
 
 # ╔═╡ 9664ac52-e750-11ea-171c-e7d57741a68c

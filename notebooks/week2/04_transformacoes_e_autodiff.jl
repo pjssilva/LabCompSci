@@ -15,31 +15,31 @@ end
 
 # ╔═╡ d49682ff-d529-4283-871b-f8ee50a4e6ee
 filter!(LOAD_PATH) do path
-	path != "@v#.#"
+    path != "@v#.#"
 end;
 
 # ╔═╡ 2e8c4a48-d535-44ac-a1f1-4cb26c4aece6
 filter!(LOAD_PATH) do path
-	path != "@v#.#"
+    path != "@v#.#"
 end;
 
 # ╔═╡ 6b473b2d-4326-46b4-af38-07b61de287fc
 begin
-	import ImageIO
-	import PNGFiles
-	using Colors, ColorVectorSpace, ImageShow, FileIO
-	using PlutoUI
-	using HypertextLiteral
-	using LinearAlgebra
-	using ForwardDiff
-	using Printf
+    import ImageIO
+    import PNGFiles
+    using Colors, ColorVectorSpace, ImageShow, FileIO
+    using PlutoUI
+    using HypertextLiteral
+    using LinearAlgebra
+    using ForwardDiff
+    using Printf
 end
 
 # ╔═╡ 440d3d97-4b81-4a55-add1-2dcf87089ef2
 md"Tradução livre de [`transformations_and_autodiff.jl`](https://github.com/mitmath/18S191/blob/Spring21/notebooks/week2/transformations_and_autodiff.jl)"
 
 # ╔═╡ b7895bd2-7634-11eb-211e-ef876d23bd88
-PlutoUI.TableOfContents(aside=true)
+PlutoUI.TableOfContents(aside = true)
 
 # ╔═╡ e6a09409-f262-453b-a434-bfd935306719
 md"""
@@ -91,16 +91,16 @@ f₁(5)
 x -> sin(x)
 
 # ╔═╡ 98498f84-76ab-11eb-23cf-857c776a9163
-(x -> sin(x))(π/2)
+(x -> sin(x))(π / 2)
 
 # ╔═╡ c6c860a6-76ab-11eb-1dec-1b2f179a0fa9
 # Long version
-function f₃(x, α=3) # Valor default
-	return x^α      # O "return" é opcional
+function f₃(x, α = 3) # Valor default
+    return x^α      # O "return" é opcional
 end
 
 # ╔═╡ f07fbc6c-76ab-11eb-3382-87c7d65b4078
- f₃(5)
+f₃(5)
 
 # ╔═╡ f4fa8c1a-76ab-11eb-302d-bd410432e3cf
 f₃(5, 2)
@@ -114,7 +114,7 @@ Argumentos com nomes (keywords)
 f₄(x; α) = x^α
 
 # ╔═╡ 87b99c8a-76ac-11eb-1c94-8f1ffe3be593
-f₄(2, α=5)
+f₄(2, α = 5)
 
 # ╔═╡ 504076fc-76ac-11eb-30c3-bfa75c991cb2
 md"""
@@ -137,18 +137,16 @@ Essa definição sugere imediatamente a fórmula de diferenciação progressiva 
 
 # ╔═╡ 632a1f8c-76ae-11eb-2088-15c3e3c0a210
 begin
-	md"""
-	$(@bind e Slider(-12:-4, default=-12, show_value=true))
-	"""
+    md"""
+    $(@bind e Slider(-12:-4, default=-12, show_value=true))
+    """
 end
 
 # ╔═╡ 8a99f186-76af-11eb-031b-f1c288993c7f
 h = 10.0^e
 
 # ╔═╡ ca1dfb8a-76b0-11eb-1323-d100bdeedc2d
-@sprintf("Numérico = %.12f, Exato = %.12f",
-	(sin(1 + h) - sin(1)) / h, cos(1)
-)
+@sprintf("Numérico = %.12f, Exato = %.12f", (sin(1 + h) - sin(1)) / h, cos(1))
 
 # ╔═╡ fe01da74-76ac-11eb-12e3-8320340b6139
 md"""
@@ -179,8 +177,12 @@ Por fim, retomando o exemplo da função seno.
 """
 
 # ╔═╡ f8a7e203-b2b9-480c-817f-e2d440881775
-@sprintf("Numérico = %.12f, Exato = %.12f, Automático = %.12f",
-	(sin(1 + h) - sin(1)) / h, cos(1), ForwardDiff.derivative(sin,1))
+@sprintf(
+    "Numérico = %.12f, Exato = %.12f, Automático = %.12f",
+    (sin(1 + h) - sin(1)) / h,
+    cos(1),
+    ForwardDiff.derivative(sin, 1)
+)
 
 # ╔═╡ f7df6cda-76b1-11eb-11e4-8d0af0349651
 md"""
@@ -197,8 +199,8 @@ Observe que usamos o mesmo nome, porque é a mesma função e Julia sabe disting
 
 # ╔═╡ 8c6b0236-76b4-11eb-2acf-91da23bedf0e
 begin
-	f₅(v) = 5sin(v[1]*v[2]) + 2v[2]/4v[3]
-	f₅(x, y, z) = 5sin(x*y) + 2y/4z
+    f₅(v) = 5sin(v[1] * v[2]) + 2v[2] / 4v[3]
+    f₅(x, y, z) = 5sin(x * y) + 2y / 4z
 end
 
 # ╔═╡ a397d526-76b5-11eb-3cce-4374e33324d1
@@ -211,8 +213,8 @@ Melhor ainda, você pode escrever a função uma única vez e definir a outra ve
 
 # ╔═╡ bf23ab30-76b5-11eb-1adb-3d74a52cddfd
 begin
-	f₆(x, y, z) = 5sin(x*y) + 2y/4z
-	f₆(v) = f₆(v[1], v[2], v[3])
+    f₆(x, y, z) = 5sin(x * y) + 2y / 4z
+    f₆(v) = f₆(v[1], v[2], v[3])
 end
 
 # ╔═╡ d5d4ac48-76b6-11eb-1687-ed853c2db7c9
@@ -226,7 +228,7 @@ Uma das vantagens dessa forma é que torna possível criar funções que recebem
 """
 
 # ╔═╡ a8c28578-76ba-11eb-3f3f-af35ff0b6c74
-f₇((x, y, z)) = 5sin(x*y) + 2y/4z # more readable than 5sin(v[1]*v[2]) + 2*v[2]/4v[3]
+f₇((x, y, z)) = 5sin(x * y) + 2y / 4z # more readable than 5sin(v[1]*v[2]) + 2*v[2]/4v[3]
 
 # ╔═╡ d9e07084-76ba-11eb-18ac-c58b1bc972ba
 f₇([1, 2, 3]) # this works with vector arguments, but not scalars (f₇(1,2,3) error)
@@ -289,10 +291,10 @@ Podemos verificar numericamente o valor calculado fazendo diferença progressiva
 
 # ╔═╡ 2705bf34-76b8-11eb-3aaa-d363085784ff
 begin
-	∂f₅∂x =  (f₅(1+h, 2, 3  ) - f₅(1, 2, 3)) / h
-	∂f₅∂y =  (f₅(1, 2+h, 3  ) - f₅(1, 2, 3)) / h
-	∂f₅∂z =  (f₅(1, 2,   3+h) - f₅(1, 2, 3)) / h
-	∇f = [∂f₅∂x , ∂f₅∂y, ∂f₅∂z]
+    ∂f₅∂x = (f₅(1 + h, 2, 3) - f₅(1, 2, 3)) / h
+    ∂f₅∂y = (f₅(1, 2 + h, 3) - f₅(1, 2, 3)) / h
+    ∂f₅∂z = (f₅(1, 2, 3 + h) - f₅(1, 2, 3)) / h
+    ∇f = [∂f₅∂x, ∂f₅∂y, ∂f₅∂z]
 end
 
 # ╔═╡ dfb9d74c-76b8-11eb-24ff-e521f1294a6f
@@ -322,17 +324,17 @@ Vamos definir algumas funções simples que recebem vetores bidikmensionais e de
 
 # ╔═╡ d364f91a-76b9-11eb-1807-75e733940d53
 begin
-	 id((x, y)) = [x, y]
-	 lin1((x, y)) =  [2x + 3y, -5x + 4x]
-	 scalex(α) = ((x, y),) -> (α*x, y)
-	 scaley(α) = ((x, y),) -> (x,  α*y)
-	 rot(θ) = ((x, y),) -> [cos(θ)*x + sin(θ)*y, -sin(θ)*x + cos(θ)*y]
-	 shear(α) = ((x, y),) -> [x + α*y, y]
-	 genlin(a, b, c, d) = ((x, y),) -> [a*x + b*y; c*x + d*y]
+    id((x, y)) = [x, y]
+    lin1((x, y)) = [2x + 3y, -5x + 4x]
+    scalex(α) = ((x, y),) -> (α * x, y)
+    scaley(α) = ((x, y),) -> (x, α * y)
+    rot(θ) = ((x, y),) -> [cos(θ) * x + sin(θ) * y, -sin(θ) * x + cos(θ) * y]
+    shear(α) = ((x, y),) -> [x + α * y, y]
+    genlin(a, b, c, d) = ((x, y),) -> [a * x + b * y; c * x + d * y]
 end
 
 # ╔═╡ f25c6308-76b9-11eb-3563-1f0ef4cdf86a
-rot(π/2)([4,5])
+rot(π / 2)([4, 5])
 
 # ╔═╡ c9a148f0-76bb-11eb-0778-9d3e84369a19
 md"""
@@ -353,17 +355,17 @@ O que diferencia um tipo de outro?
 
 # ╔═╡ 78176284-76bc-11eb-3045-f584127f58b9
 begin
-	function warp(α)
-		((x, y), )  -> begin
-			r = √(x^2 + y^2)
-			θ = α*r
-			rot(θ)([x, y])
-		end
-	end
+    function warp(α)
+        ((x, y),) -> begin
+            r = √(x^2 + y^2)
+            θ = α * r
+            rot(θ)([x, y])
+        end
+    end
 
-	rθ(x) = (norm(x), atan(x[2], x[1])) # maybe vectors are more readable here?
+    rθ(x) = (norm(x), atan(x[2], x[1])) # maybe vectors are more readable here?
 
-	xy((r, θ)) = (r*cos(θ), r*sin(θ))
+    xy((r, θ)) = (r * cos(θ), r * sin(θ))
 end
 
 # ╔═╡ bf28c388-76bd-11eb-08a7-af2671218017
@@ -375,8 +377,8 @@ Já rθ, nada mais é do que a mudança para coordenadas polares e a xy sua inve
 
 # ╔═╡ 5655d2a6-76bd-11eb-3042-5b2dd3f6f44e
 begin
-	warp₂(α, x, y) = rot(α*√(x^2 + y^2))
-	warp₂(α) = ((x, y),) -> warp₂(α, x, y)([x, y])
+    warp₂(α, x, y) = rot(α * √(x^2 + y^2))
+    warp₂(α) = ((x, y),) -> warp₂(α, x, y)([x, y])
 end
 
 # ╔═╡ 852592d6-76bd-11eb-1265-5f200e39113d
@@ -393,7 +395,7 @@ Naturalmente `ForwardDiff` também consegue diferenciar automaticamente transfor
 """
 
 # ╔═╡ 9786e2be-76be-11eb-3755-b5669c37aa64
-ForwardDiff.jacobian( warp(3.0), [4,5] )
+ForwardDiff.jacobian(warp(3.0), [4, 5])
 
 # ╔═╡ 963694d6-76be-11eb-1b27-d5d063964d24
 md"""
@@ -402,9 +404,9 @@ What is this thing?
 
 # ╔═╡ b78ef2fe-76be-11eb-1f55-3d0874b298e8
 begin
-	∂w∂x = (warp(3.0)([4 + h, 5    ]) - warp(3.0)([4,5])) / h # This is a vector!
-	∂w∂y = (warp(3.0)([4,     5 + h]) - warp(3.0)([4,5])) / h # This too.
-	[∂w∂x ∂w∂y]
+    ∂w∂x = (warp(3.0)([4 + h, 5]) - warp(3.0)([4, 5])) / h # This is a vector!
+    ∂w∂y = (warp(3.0)([4, 5 + h]) - warp(3.0)([4, 5])) / h # This too.
+    [∂w∂x ∂w∂y]
 end
 
 # ╔═╡ ad728ee6-7639-11eb-0b23-c37f1366fb4e
@@ -421,33 +423,33 @@ Mas vocês já fizeram Álgebra Linear e lá aprenderam que matrizes são repres
 
 # ╔═╡ ce55beee-7643-11eb-04bc-b517703facff
 begin
-	transfs = Dict("Linear" => genlin, "Warp" => warp, "xy" => xy, "rθ" => rθ)
-	transfs_names = collect(keys(transfs))
-	md"""
-	#### Escolha uma transformação:
+    transfs = Dict("Linear" => genlin, "Warp" => warp, "xy" => xy, "rθ" => rθ)
+    transfs_names = collect(keys(transfs))
+    md"""
+    #### Escolha uma transformação:
 
-	$(@bind transf Select(transfs_names))
-	"""
+    $(@bind transf Select(transfs_names))
+    """
 end
 
 # ╔═╡ 005ca75a-7622-11eb-2ba4-9f450e71df1f
 let
-	range = -1.5:.1:1.5
-	md"""
-	Modifica a matriz para definir a transformação linear.
+    range = -1.5:0.1:1.5
+    md"""
+    Modifica a matriz para definir a transformação linear.
 
-	``(``
-	 $(@bind a Scrubbable( range; default=1.0))
-	 $(@bind b Scrubbable( range; default=0.0))
-	``)``
+    ``(``
+     $(@bind a Scrubbable( range; default=1.0))
+     $(@bind b Scrubbable( range; default=0.0))
+    ``)``
 
-	``(``
-	$(@bind c Scrubbable(range; default=0.0 ))
-	$(@bind d Scrubbable(range; default=1.0))
-	``)``
+    ``(``
+    $(@bind c Scrubbable(range; default=0.0 ))
+    $(@bind d Scrubbable(range; default=1.0))
+    ``)``
 
-		**Executando essa célula redifine a matriz para a identidade**
-	"""
+    	**Executando essa célula redifine a matriz para a identidade**
+    """
 end
 
 # ╔═╡ e04fa982-81fe-4f4e-bd2e-efb3392f246b
@@ -458,11 +460,11 @@ md"""Defina o parâmetro $\alpha$ da warp.
 
 # ╔═╡ 683bfffd-906d-45fc-b442-496639fb09cd
 if transf == "Warp"
-	T = warp(α)
+    T = warp(α)
 elseif transf == "Linear"
-	T = genlin(a, b, c, d)
+    T = genlin(a, b, c, d)
 else
-	T = transfs[transf]
+    T = transfs[transf]
 end
 
 # ╔═╡ 60532aa0-740c-11eb-0402-af8ff117f042
@@ -470,9 +472,9 @@ md"Show grid lines $(@bind show_grid CheckBox(default=true))"
 
 # ╔═╡ f085296d-48b1-4db6-bb87-db863bb54049
 A = [
-	a b
-	c d
-	]
+    a b
+    c d
+]
 
 # ╔═╡ d1757b2c-7400-11eb-1406-d937294d5388
 md"**_Det(A)_ = $a * $d - $c * $b =  $(det(A))**"
@@ -521,9 +523,12 @@ md"""
 
 # ╔═╡ 40655bcc-6d1e-4d1e-9726-41eab98d8472
 img_sources = [
-	"https://www.ime.unicamp.br/~pjssilva/images/ensino/labcompsci/carmel-arquelau-bV3RXy9Upqg-unsplash.png" => "Tucano",
-	"https://www.ime.unicamp.br/~pjssilva/images/ensino/labcompsci/matt-paul-catalano-MUwfuO5RXEo-unsplash.png" => "Onda",
-	"https://user-images.githubusercontent.com/6933510/108883855-39690f80-7606-11eb-8eb1-e595c6c8d829.png" => "Setas"
+    "https://www.ime.unicamp.br/~pjssilva/images/ensino/labcompsci/carmel-arquelau-bV3RXy9Upqg-unsplash.png" =>
+        "Tucano",
+    "https://www.ime.unicamp.br/~pjssilva/images/ensino/labcompsci/matt-paul-catalano-MUwfuO5RXEo-unsplash.png" =>
+        "Onda",
+    "https://user-images.githubusercontent.com/6933510/108883855-39690f80-7606-11eb-8eb1-e595c6c8d829.png" =>
+        "Setas",
 ]
 
 # ╔═╡ c0c90fec-0e55-4be3-8ea2-88b8705ee258
@@ -543,76 +548,76 @@ img_original = load(download(img_source));
 # ╔═╡ 74fe3391-21f0-4ab9-a41a-6eca0d88f889
 "Maps x ∈ [mino, maxo] to [mind, maxd]"
 function map_ints(x::Number, mino::Number, maxo::Number, mind::Number, maxd::Number)
-	return mind + (x - mino) / (maxo - mino) * (maxd - mind)
-end	
+    return mind + (x - mino) / (maxo - mino) * (maxd - mind)
+end
 
 # ╔═╡ 1726b965-acf6-4df5-83ef-8eb34308fc82
 begin
-	white(c::RGB) = RGB(1,1,1)
-	white(c::RGBA) = RGBA(1,1,1,0.75)
-	black(c::RGB) = RGB(0,0,0)
-	black(c::RGBA) = RGBA(0,0,0,0.75)
+    white(c::RGB) = RGB(1, 1, 1)
+    white(c::RGBA) = RGBA(1, 1, 1, 0.75)
+    black(c::RGB) = RGB(0, 0, 0)
+    black(c::RGBA) = RGBA(0, 0, 0, 0.75)
 end
 
 # ╔═╡ cb1f80dd-ba4a-4176-b439-652529b8fd1a
 function transform_image(T, img::AbstractMatrix)
-	nrows, ncols = size(img)
+    nrows, ncols = size(img)
 
-	# I will assume that the x range from [-1, 1] and calculate the respective y range
-	xmin, xmax = -1.0, 1.0
-	ymin, ymax = -nrows/ncols, nrows/ncols
-	
-	# Create a white image 	
-	out = fill(black(img[1, 1]), nrows, ncols)
-	
-	for col in 1:ncols, row in 1:nrows
-		# Map pixel position to cartesian plane, the image in the original
-		# zoom level will span half of the area
-		x = map_ints(col, 1, ncols, 0.5*xmin, 0.5*xmax)
-		y = map_ints(row, 1, nrows, 0.5*ymax, 0.5*ymin)
-		
-		x_dest, y_dest = T((x, y))
-		
-		# Paint transformed pixel
-		if xmin ≤ x_dest ≤ xmax && ymin ≤ y_dest ≤ ymax 
-			j = round(Int, map_ints(x_dest, xmin, xmax, 1, ncols))
-			i = round(Int, map_ints(y_dest, ymax, ymin, 1, nrows))
-			out[i, j] = img[round(Int, row), round(Int, col)]
-		end
-	end
-	return out
+    # I will assume that the x range from [-1, 1] and calculate the respective y range
+    xmin, xmax = -1.0, 1.0
+    ymin, ymax = -nrows / ncols, nrows / ncols
+
+    # Create a white image 	
+    out = fill(black(img[1, 1]), nrows, ncols)
+
+    for col = 1:ncols, row = 1:nrows
+        # Map pixel position to cartesian plane, the image in the original
+        # zoom level will span half of the area
+        x = map_ints(col, 1, ncols, 0.5 * xmin, 0.5 * xmax)
+        y = map_ints(row, 1, nrows, 0.5 * ymax, 0.5 * ymin)
+
+        x_dest, y_dest = T((x, y))
+
+        # Paint transformed pixel
+        if xmin ≤ x_dest ≤ xmax && ymin ≤ y_dest ≤ ymax
+            j = round(Int, map_ints(x_dest, xmin, xmax, 1, ncols))
+            i = round(Int, map_ints(y_dest, ymax, ymin, 1, nrows))
+            out[i, j] = img[round(Int, row), round(Int, col)]
+        end
+    end
+    return out
 end
 
 # ╔═╡ 83d45d42-7406-11eb-2a9c-e75efe62b12c
 function with_gridlines(img::Matrix; n = 10)
-	rows, cols = size(img)
-	result = copy(img)
+    rows, cols = size(img)
+    result = copy(img)
 
-	stroke = white(img[1, 1])
+    stroke = white(img[1, 1])
 
-	# Add grid
-	grid_lin = floor.(Int, LinRange(2, rows - 1, n))
-	grid_col = floor.(Int, LinRange(2, cols - 1, n))
-	for i in grid_lin
-		result[i - 1:i + 1, :] .= stroke
-	end
-	for j in grid_col
-		result[:, j - 1:j + 1] .= stroke
-	end
+    # Add grid
+    grid_lin = floor.(Int, LinRange(2, rows - 1, n))
+    grid_col = floor.(Int, LinRange(2, cols - 1, n))
+    for i in grid_lin
+        result[i-1:i+1, :] .= stroke
+    end
+    for j in grid_col
+        result[:, j-1:j+1] .= stroke
+    end
 
-	# Add axis marks
-	axis_lin = rows ÷ 2
-	axis_col = cols ÷ 2
-    result[axis_lin - 1:axis_lin + 1, :] .= RGBA(0, 1, 0, 1)
-	result[:,  axis_col - 1:axis_col + 1] .= RGBA(1, 0, 0, 1)
- 	return result
+    # Add axis marks
+    axis_lin = rows ÷ 2
+    axis_col = cols ÷ 2
+    result[axis_lin-1:axis_lin+1, :] .= RGBA(0, 1, 0, 1)
+    result[:, axis_col-1:axis_col+1] .= RGBA(1, 0, 0, 1)
+    return result
 end
 
 # ╔═╡ 55898e88-36a0-4f49-897f-e0850bd2b0df
 img = if show_grid
-	with_gridlines(img_original)
+    with_gridlines(img_original)
 else
-	img_original
+    img_original
 end;
 
 # ╔═╡ 8e0505be-359b-4459-9de3-f87ec7b60c23

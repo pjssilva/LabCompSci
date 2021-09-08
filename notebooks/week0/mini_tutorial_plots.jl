@@ -6,9 +6,9 @@ using InteractiveUtils
 
 # ╔═╡ 1ccb3a84-88d4-11eb-2499-91af66e78e89
 begin
-	import Pkg
-	Pkg.activate(mktempdir())
-	using Plots
+    import Pkg
+    Pkg.activate(mktempdir())
+    using Plots
 end
 
 # ╔═╡ 47452d72-88d6-11eb-27ef-bbc1d061060d
@@ -52,8 +52,8 @@ md"""
 
 # ╔═╡ 6b55e978-88d5-11eb-1fea-739e61bbb35a
 begin
-		plot!(rand(4))
-		scatter!(rand(4))
+    plot!(rand(4))
+    scatter!(rand(4))
 end
 
 # ╔═╡ c5dde003-4f55-4c03-8ca5-ed00da6854fe
@@ -71,7 +71,7 @@ A quantidade de parâmetros possíveis é muito grande, dê uma olhada na docume
 """
 
 # ╔═╡ 2b4cc1d0-88d5-11eb-0afd-3988abd9a870
-plot!(legend=false, axis=false, grid=false, ticks=false)
+plot!(legend = false, axis = false, grid = false, ticks = false)
 
 # ╔═╡ cf89db1e-88d7-11eb-2a92-850c7d46a296
 md"""
@@ -80,10 +80,10 @@ md"""
 
 # ╔═╡ da7b4c10-88d7-11eb-011e-dbb639e6fa2b
 let
-	angles = LinRange(0, 2π, 360)
-	x = cos.(angles)
-	y = sin.(angles)
-	plot(x, y, ratio=1, legend=false)
+    angles = LinRange(0, 2π, 360)
+    x = cos.(angles)
+    y = sin.(angles)
+    plot(x, y, ratio = 1, legend = false)
 end
 
 # ╔═╡ df146faa-edc8-4c7f-b3c0-87695336b0c9
@@ -102,7 +102,15 @@ Você pode apresentar matrizes como se fossem figuras. Os valores guardados na m
 A = [1 1000 1; 1 1 1; 1 1 1]
 
 # ╔═╡ e3f7d1ea-88d8-11eb-21bf-cbcdec1e8810
-heatmap(A, ratio=1, yflip=true, legend=false, axis=false, grid=false,  ticks=false)
+heatmap(
+    A,
+    ratio = 1,
+    yflip = true,
+    legend = false,
+    axis = false,
+    grid = false,
+    ticks = false,
+)
 
 # ╔═╡ f378e1a5-e3c1-474b-a58c-60255067ba2a
 md"""
@@ -110,7 +118,7 @@ Note o uso do parâmtro `yflip` acima. Tipicamente o heatmap tem o eixo x cresce
 """
 
 # ╔═╡ b059780e-88db-11eb-028c-6b07355fb1ab
-heatmap(rand(10, 10), ratio=1, clim=(0, 1), legend=false, axis=false, ticks=false)
+heatmap(rand(10, 10), ratio = 1, clim = (0, 1), legend = false, axis = false, ticks = false)
 
 # ╔═╡ 410bfac0-0d6d-4c02-b058-d9e0c13c5985
 md"""
@@ -121,11 +129,21 @@ Já no exemplo abaixo controlamos as cores passando diretamente um vetor de poss
 
 # ╔═╡ 48561d5a-8991-11eb-2a55-db793e4c9fea
 begin
-	MM = [0 1 0; 0 0 0; 1 0 0]
-	
-	whiteblack = [RGBA(1, 1, 1, 0), RGB(0, 0, 0)]
-	heatmap(MM, c=whiteblack, aspect_ratio = 1, ticks=.5:3.5, lims=(.5,3.5),
-		    gridalpha=1, legend=false, axis=false, ylabel="i", xlabel="j")
+    MM = [0 1 0; 0 0 0; 1 0 0]
+
+    whiteblack = [RGBA(1, 1, 1, 0), RGB(0, 0, 0)]
+    heatmap(
+        MM,
+        c = whiteblack,
+        aspect_ratio = 1,
+        ticks = 0.5:3.5,
+        lims = (0.5, 3.5),
+        gridalpha = 1,
+        legend = false,
+        axis = false,
+        ylabel = "i",
+        xlabel = "j",
+    )
 end
 
 # ╔═╡ 7870b9c2-a78a-459b-b706-e079755fe4a3

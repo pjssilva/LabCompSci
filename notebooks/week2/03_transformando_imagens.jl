@@ -15,27 +15,27 @@ end
 
 # ╔═╡ b310756a-af08-48b0-ae10-ee2e8dd0c968
 filter!(LOAD_PATH) do path
-	path != "@v#.#"
+    path != "@v#.#"
 end;
 
 # ╔═╡ 86f770fe-74a1-11eb-01f7-5b3ecf057124
 begin
-	import PNGFiles
-	import ImageIO
-	import ImageMagick
-	using PlutoUI
-	using Colors, ColorVectorSpace, ImageShow, FileIO
-	using Unitful
-	using ImageFiltering
-	using OffsetArrays
-	using Plots
+    import PNGFiles
+    import ImageIO
+    import ImageMagick
+    using PlutoUI
+    using Colors, ColorVectorSpace, ImageShow, FileIO
+    using Unitful
+    using ImageFiltering
+    using OffsetArrays
+    using Plots
 end
 
 # ╔═╡ f5c464b6-663a-4c4d-9e93-30e469d3a496
 md"Tradução livre de [`transforming_images.jl`](https://github.com/mitmath/18S191/blob/Spring21/notebooks/week2/transforming_images.jl)"
 
 # ╔═╡ 8d389d80-74a1-11eb-3452-f38eff03483b
-PlutoUI.TableOfContents(aside=true)
+PlutoUI.TableOfContents(aside = true)
 
 # ╔═╡ 9f1a72da-7532-11eb-079c-b7baccc6614a
 md"""
@@ -50,7 +50,9 @@ md"""
 """
 
 # ╔═╡ f7689472-74a8-11eb-32a1-8379ae5c88e1
-rotabook = PlutoUI.Resource("https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1348902666l/1646354.jpg")
+rotabook = PlutoUI.Resource(
+    "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1348902666l/1646354.jpg",
+)
 
 # ╔═╡ 0f2f9004-74a8-11eb-01a2-973dbe80f166
 md"""
@@ -83,17 +85,17 @@ century = 100u"yr" #  A u"yr" é uma string especial que denota a unidade de tem
 century * 2
 
 # ╔═╡ caf488d8-74f8-11eb-0075-0586d66c23c1
-century/200
+century / 200
 
 # ╔═╡ 02dd4a02-74f9-11eb-3d1e-53d83cee8062
 century^2
 
 # ╔═╡ 10ef13d2-74f9-11eb-2849-fb9f83db6ae9
-g = 9.8u"m"/u"s"^2
+g = 9.8u"m" / u"s"^2
 
 # ╔═╡ b76a56f4-74a9-11eb-1739-fbfc5e4958e8
 
-uconvert(u"minute", 1e-6*century) # Ôpa, aqui vemos quanto tempo é o microséculo!
+uconvert(u"minute", 1e-6 * century) # Ôpa, aqui vemos quanto tempo é o microséculo!
 
 # ╔═╡ 77fbf18a-74f9-11eb-1d9e-3f9d2097388f
 PotentialEnergy = (10u"kg") * g * (50u"m")
@@ -145,10 +147,12 @@ cachorro real.
 pixelated_corgi = load(download("https://i.redd.it/99lhfbnwpgd31.png"))
 
 # ╔═╡ 516e73e2-74fb-11eb-213e-9dbd9472e0db
-apolo =  load(download("https://www.ime.unicamp.br/~pjssilva/images/ensino/labcompsci/apolo1.png"))
+apolo = load(
+    download("https://www.ime.unicamp.br/~pjssilva/images/ensino/labcompsci/apolo1.png"),
+)
 
 # ╔═╡ b5d0ef90-74fb-11eb-3126-792f954c7be7
-@bind r Slider(1:20, show_value=true, default=20)
+@bind r Slider(1:20, show_value = true, default = 20)
 
 # ╔═╡ 754c3704-74fb-11eb-1199-2b9798d7251f
 downsample_apolo = apolo[1:r:end, 1:r:end]
@@ -193,10 +197,14 @@ vetores. Vamos agora combinar a imagem do Apolo.
 """
 
 # ╔═╡ 91a1bca4-74aa-11eb-3917-1dfd73d0ad9c
-apolohead = load(download("https://www.ime.unicamp.br/~pjssilva/images/ensino/labcompsci/cabeca_apolo.png"))
+apolohead = load(
+    download(
+        "https://www.ime.unicamp.br/~pjssilva/images/ensino/labcompsci/cabeca_apolo.png",
+    ),
+)
 
 # ╔═╡ 8e698bdc-7501-11eb-1d2e-c336ccbde0b0
-@bind c Slider(0:.1:3, show_value=true, default=1)
+@bind c Slider(0:0.1:3, show_value = true, default = 1)
 
 # ╔═╡ ab2bc924-7501-11eb-03ba-8dfc1ffe3f36
 c .* apolohead  # scaling the apolohead changes intensity
@@ -218,7 +226,7 @@ Vamos agora virar o Apolo de cabeça para baixo.
 """
 
 # ╔═╡ 9ce0b980-74aa-11eb-0678-01209451fb65
-upsidedown_apolohead = apolohead[end:-1:1 , :]
+upsidedown_apolohead = apolohead[end:-1:1, :]
 
 # ╔═╡ 68821bf4-7502-11eb-0d3c-03d7a00fdba4
 md"""
@@ -226,7 +234,7 @@ Vamos somar versões escaladas das duas iamgens e ver o que ocorre.
 """
 
 # ╔═╡ 447e7c9e-74b1-11eb-27ea-71aa4338b11a
-(.5 * upsidedown_apolohead .+ .5 * apolohead)
+(0.5 * upsidedown_apolohead .+ 0.5 * apolohead)
 
 # ╔═╡ c9dff6f4-7503-11eb-2715-0bf9d3ece9e1
 md"""
@@ -243,10 +251,10 @@ Vamos escrever abaixo uma versão interativa do código acima que nos permite ob
 """
 
 # ╔═╡ aa541288-74aa-11eb-1edc-ab6d7786f271
-    @bind α Slider(0:.01:1 , show_value=true, default = 1.0)
+@bind α Slider(0:0.01:1, show_value = true, default = 1.0)
 
 # ╔═╡ c9dcac48-74aa-11eb-31a6-23357180c1c8
-α .* apolohead .+ (1-α) .* upsidedown_apolohead
+α .* apolohead .+ (1 - α) .* upsidedown_apolohead
 
 # ╔═╡ 30b1c1f0-7504-11eb-1be7-a9463caea809
 md"""
@@ -318,29 +326,37 @@ Outros efeitos são possíveis de acordo com os valores da entrada da matriz. Va
 """
 
 # ╔═╡ 54448d18-7528-11eb-209a-9717affa0d02
- kernelize(M) = OffsetArray(M, -1:1, -1:1)
+kernelize(M) = OffsetArray(M, -1:1, -1:1)
 
 # ╔═╡ acbc563a-7528-11eb-3c38-75a5b66c9241
 begin
-	identity = [0 0 0
-		        0 1 0
-		        0 0 0]
-	edge_detect = [ 0 -1  0
-		           -1  4 -1
-		            0 -1  0]
-	sharpen = identity .+ edge_detect # Superposition!
-	box_blur = [1 1 1
-		        1 1 1
-		        1 1 1] / 9
-	∇x = [-1 0 1
-		  -1 0 1
-		  -1 0 1] / 2 # centered deriv in x
-	∇y = ∇x'
+    identity = [
+        0 0 0
+        0 1 0
+        0 0 0
+    ]
+    edge_detect = [
+        0 -1 0
+        -1 4 -1
+        0 -1 0
+    ]
+    sharpen = identity .+ edge_detect # Superposition!
+    box_blur = [
+        1 1 1
+        1 1 1
+        1 1 1
+    ] / 9
+    ∇x = [
+        -1 0 1
+        -1 0 1
+        -1 0 1
+    ] / 2 # centered deriv in x
+    ∇y = ∇x'
 
-	kernels = [identity, edge_detect, sharpen, box_blur, ∇x, ∇y]
-	kernel_keys = ["identity", "edge_detect", "sharpen", "box_blur", "∇x", "∇y"]
-	kernel_matrix = Dict(kernel_keys .=> kernels)
-	md"$(@bind kernel_name Select(kernel_keys))"
+    kernels = [identity, edge_detect, sharpen, box_blur, ∇x, ∇y]
+    kernel_keys = ["identity", "edge_detect", "sharpen", "box_blur", "∇x", "∇y"]
+    kernel_matrix = Dict(kernel_keys .=> kernels)
+    md"$(@bind kernel_name Select(kernel_keys))"
 end
 
 # ╔═╡ 995392ee-752a-11eb-3394-0de331e24f40
@@ -348,15 +364,15 @@ sel_kernel = kernelize(kernel_matrix[kernel_name])
 
 # ╔═╡ d22903d6-7529-11eb-2dcd-132cd27104c2
 begin
-	filtered = imfilter(apolohead, sel_kernel)
-	if kernel_name in ["edge_detect", "∇x", "∇y"]
-		# Edge style filters can return negative values naturally.
-		# Therefore we want the absolute value and it more sense in
-		# Black and White.
-		filtered = Gray.(3.0 .* abs.(filtered))
-	end
-	# Show both images side by side
-	filtered
+    filtered = imfilter(apolohead, sel_kernel)
+    if kernel_name in ["edge_detect", "∇x", "∇y"]
+        # Edge style filters can return negative values naturally.
+        # Therefore we want the absolute value and it more sense in
+        # Black and White.
+        filtered = Gray.(3.0 .* abs.(filtered))
+    end
+    # Show both images side by side
+    filtered
 end
 
 # ╔═╡ 275bf7ac-74b3-11eb-32c3-cda1e4f1f8c2
@@ -395,7 +411,7 @@ html"""
 """
 
 # ╔═╡ 34109062-7525-11eb-10b3-d59d3a6dfda6
-round.(Kernel.gaussian(1), digits=3)
+round.(Kernel.gaussian(1), digits = 3)
 
 # ╔═╡ 9ab89a3a-7525-11eb-186d-29e4b61deb7f
 md"""
@@ -404,8 +420,8 @@ Acima usamos a rotina Kernel.gaussian que já está pronta no pacote `ImageFilte
 
 # ╔═╡ 50034058-7525-11eb-345b-3334e71ac50e
 begin
-	G = [exp(-(i^2+j^2)/2) for i=-2:2, j=-2:2]
-	round.(G ./ sum(G), digits=3)
+    G = [exp(-(i^2 + j^2) / 2) for i = -2:2, j = -2:2]
+    round.(G ./ sum(G), digits = 3)
 end
 
 # ╔═╡ c0aec7ae-7505-11eb-2822-a151aad48fc9
@@ -414,7 +430,7 @@ Esse tipo de filtro é conhecido como desfocagem gaussiana. O nome vem da fórmu
 """
 
 # ╔═╡ 99eeb11c-7524-11eb-2154-df7d84976445
-@bind gparam Slider(0:9, show_value=true, default=1)
+@bind gparam Slider(0:9, show_value = true, default = 1)
 
 # ╔═╡ 2ddcfb90-7520-11eb-2df7-172d07118b7e
 kernel = Kernel.gaussian(gparam)
@@ -436,15 +452,17 @@ md"""
 """
 
 # ╔═╡ d127303a-7521-11eb-3507-7341a416211f
-kernel[0,0]
+kernel[0, 0]
 
 # ╔═╡ d4581b56-7522-11eb-2c15-991c0c790e67
-kernel[-2,2]
+kernel[-2, 2]
 
 # ╔═╡ 40c15c3a-7523-11eb-1f2a-bd90b127dad2
-M = [ 1  2  3  4  5
-	  6  7  8  9 10
-	 11 12 13 14 15]
+M = [
+    1 2 3 4 5
+    6 7 8 9 10
+    11 12 13 14 15
+]
 
 # ╔═╡ 08642690-7523-11eb-00dd-63d4cf6513dc
 Z = OffsetArray(M, -1:1, -2:2)
@@ -453,7 +471,7 @@ Z = OffsetArray(M, -1:1, -2:2)
 the_indices = [c.I for c ∈ CartesianIndices(Z)]
 
 # ╔═╡ 32887dfa-7524-11eb-35cd-051eff594fa9
-Z[1,-2]
+Z[1, -2]
 
 # ╔═╡ 0f765670-7506-11eb-2a37-931b15bb387f
 md"""

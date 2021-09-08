@@ -15,8 +15,8 @@ end
 
 # ╔═╡ da1d65a0-ec42-11ea-0141-334c9eeeb035
 begin
-	using PlutoUI
-	using Images
+    using PlutoUI
+    using Images
 end
 
 # ╔═╡ fbe33f22-672e-45b2-a1b1-30bb24033db8
@@ -25,7 +25,7 @@ Tradução livre de [`abstraction.jl`](https://github.com/mitmath/18S191/blob/Sp
 """
 
 # ╔═╡ 60ae819a-70a7-11eb-31d4-750c7f5dc6ca
-PlutoUI.TableOfContents(title="Índice", aside=true)
+PlutoUI.TableOfContents(title = "Índice", aside = true)
 
 # ╔═╡ 792c6a62-ec41-11ea-01f3-73e7eee23cc7
 md"""
@@ -96,24 +96,24 @@ Agora, vamos ver como trabalhar com uma coleção de uns, no caso uma matriz de 
 
 # ╔═╡ 19f4ddb0-ec44-11ea-20b9-5d97fb2b1cf4
 function insert(new, A, i, j)
-	B = copy(A)
-	B[i,j] = new
-	return B
+    B = copy(A)
+    B[i, j] = new
+    return B
 end
 
 # ╔═╡ 424f5f10-ec44-11ea-076d-f3cba4435e0c
 begin
-	max_i, max_j = 3, 4
-	md"""
-	i: $(@bind i Slider(1: max_i, show_value=true))
-	j: $(@bind j Slider(1: max_j, show_value=true))
-	"""
+    max_i, max_j = 3, 4
+    md"""
+    i: $(@bind i Slider(1: max_i, show_value=true))
+    j: $(@bind j Slider(1: max_j, show_value=true))
+    """
 end
 
 # ╔═╡ 71ac08ea-7145-11eb-237d-5506adfb9533
 begin
-	one_number_array = fill(1, max_i, max_j)
-	insert(5, one_number_array, i, j)
+    one_number_array = fill(1, max_i, max_j)
+    insert(5, one_number_array, i, j)
 end
 
 # ╔═╡ ee43d808-70fa-11eb-0cc6-337279f41494
@@ -139,31 +139,31 @@ md"""
 
 # ╔═╡ 1a2a9000-ec43-11ea-3f39-8312ea286a92
 begin
-	oneimage = load(download("https://gallery.yopriceville.com/var/albums/Free-Clipart-Pictures/Decorative-Numbers/Cute_Number_One_PNG_Clipart_Image.png?m=1437447301"))
-	rocket = load(download("https://upload.wikimedia.org/wikipedia/commons/thumb/e/eb/Bangabandhu_Satellite-1_Mission_%2842025499722%29.jpg/800px-Bangabandhu_Satellite-1_Mission_%2842025499722%29.jpg"))
-	nothing
+    oneimage = load(
+        download(
+            "https://gallery.yopriceville.com/var/albums/Free-Clipart-Pictures/Decorative-Numbers/Cute_Number_One_PNG_Clipart_Image.png?m=1437447301",
+        ),
+    )
+    rocket = load(
+        download(
+            "https://upload.wikimedia.org/wikipedia/commons/thumb/e/eb/Bangabandhu_Satellite-1_Mission_%2842025499722%29.jpg/800px-Bangabandhu_Satellite-1_Mission_%2842025499722%29.jpg",
+        ),
+    )
+    nothing
 end
 
 
 # ╔═╡ 0504ac94-70ee-11eb-1c4e-977d9e7d35c9
-one = [
-	1,
-	1.0,
-	"one",
-	1//1,
-	oneimage,
-	[1 0; 0 1],
-	rocket,
-]
+one = [1, 1.0, "one", 1 // 1, oneimage, [1 0; 0 1], rocket]
 
 # ╔═╡ 0b1668ba-ec42-11ea-3e50-ed97c5b17ced
 computer_ones = typeof.(one)
 
 # ╔═╡ b2239b96-70ef-11eb-0b85-21ecab25dc9f
 begin
-	one_keys = ["1", "1.0", "one", "1//1", "Cute One", "2x2 Identity", "One rocket"]
-	lookup_element = Dict(one_keys .=> one)
-	md"$(@bind element_key Select(one_keys))"
+    one_keys = ["1", "1.0", "one", "1//1", "Cute One", "2x2 Identity", "One rocket"]
+    lookup_element = Dict(one_keys .=> one)
+    md"$(@bind element_key Select(one_keys))"
 end
 
 # ╔═╡ 4251f668-70aa-11eb-3d89-35f8d53b7d9b
@@ -180,8 +180,8 @@ array = fill(element, 3, 4)
 
 # ╔═╡ 5363a400-ec44-11ea-284e-d13a8872551c
 begin
-	one_image_array = fill(oneimage, max_i, max_j)
-	insert(rocket, one_image_array, i, j)
+    one_image_array = fill(oneimage, max_i, max_j)
+    insert(rocket, one_image_array, i, j)
 end
 
 # ╔═╡ 00000000-0000-0000-0000-000000000001

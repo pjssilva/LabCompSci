@@ -15,11 +15,11 @@ end
 
 # ╔═╡ a4937996-f314-11ea-2ff9-615c888afaa8
 begin
-	using Colors
-	using PlutoUI
-	using Compose
-	using LinearAlgebra
-	import Unicode
+    using Colors
+    using PlutoUI
+    using Compose
+    using LinearAlgebra
+    import Unicode
 end
 
 # ╔═╡ 85cfbd10-f384-11ea-31dc-b5693630a4c5
@@ -87,7 +87,7 @@ rand(Char, 5)   # Amostra 5 caracteres aleatórios em toda tabela UTF-8
 
 # ╔═╡ b61722cc-f98f-11ea-22ae-d755f61f78c3
 String(rand(Char, 40))   # Une 40 caracteres aleatórios em uma 
-                         # cadeia de caractes (string)
+# cadeia de caractes (string)
 
 # ╔═╡ 59f2c600-2b64-4562-9426-2cfed9a864e4
 md"""
@@ -100,7 +100,7 @@ No lutar disso, vamos definir um vetor de caracteres, que vamos chamar de `alpha
 """
 
 # ╔═╡ 4efc051e-f92e-11ea-080e-bde6b8f9295a
-alphabet = ['a':'z' ; ' ']   # inclui o espaço em branco
+alphabet = ['a':'z'; ' ']   # inclui o espaço em branco
 
 # ╔═╡ 38d1ace8-f991-11ea-0b5f-ed7bd08edde5
 md"""
@@ -127,18 +127,18 @@ Nós também incluímos uma amostra de inglẽs, que será usada depois.
 
 # ╔═╡ d67034d0-f92d-11ea-31c2-f7a38ebb412f
 samples = (
-	Portuguese =  """
-Floresta é uma área com alta densidade de árvores.[1] Segundo dados da Organização das Nações Unidas para a Alimentação e a Agricultura, as florestas ocupavam em 2006 cerca de 4 bilhões de hectares ou aproximadamente 30% da superfície terrestre.[2] As florestas são vitais para a vida do ser humano, devido a muitos fatores principalmente de ordem climática.[3][4][2] As florestas são o ecossistema terrestre dominante da Terra e são distribuídas ao redor do globo.[5] De acordo com a definição amplamente utilizada, da Organização para a Alimentação e a Agricultura, as florestas cobriam 41 milhões de km² do globo em 1990 e 39,9 milhões de km² em 2016.[6]
+    Portuguese = """
+  Floresta é uma área com alta densidade de árvores.[1] Segundo dados da Organização das Nações Unidas para a Alimentação e a Agricultura, as florestas ocupavam em 2006 cerca de 4 bilhões de hectares ou aproximadamente 30% da superfície terrestre.[2] As florestas são vitais para a vida do ser humano, devido a muitos fatores principalmente de ordem climática.[3][4][2] As florestas são o ecossistema terrestre dominante da Terra e são distribuídas ao redor do globo.[5] De acordo com a definição amplamente utilizada, da Organização para a Alimentação e a Agricultura, as florestas cobriam 41 milhões de km² do globo em 1990 e 39,9 milhões de km² em 2016.[6]
 
-A mais conhecida floresta é a floresta Amazônica, maior que muitos países. Erroneamente considerada o Pulmão do Mundo, não é, pois foi comprovado cientificamente que a floresta Amazônica consome cerca de 65% do oxigênio que produz (com a fotossíntese) com a respiração e transpiração das plantas. A taiga siberiana é a maior floresta do mundo, sendo que este bioma estende-se para além da Sibéria, nomeadamente, pelo Alasca, Canadá, Groenlândia, Norte da Europa e Japão.[7] 
-	
-A origem das árvores e florestas no Devoniano Central foi um ponto de virada na história da Terra, marcando mudanças permanentes na ecologia terrestre, ciclos geoquímicos, níveis atmosféricos de CO2 e clima. Um sistema de raízes amplo, em solos fósseis na região de Catskill, perto do Cairo, Nova York, mostrando a presença de árvores com folhas e madeira, evidenciaram árvores de 385 milhões de anos que existiam durante o período devoniano.[8]	
-""",
-	English = """
-Although the word forest is commonly used, there is no universally recognised precise definition, with more than 800 definitions of forest used around the world.[4] Although a forest is usually defined by the presence of trees, under many definitions an area completely lacking trees may still be considered a forest if it grew trees in the past, will grow trees in the future,[9] or was legally designated as a forest regardless of vegetation type.[10][11]
-	
-The word forest derives from the Old French forest (also forès), denoting "forest, vast expanse covered by trees"; forest was first introduced into English as the word denoting wild land set aside for hunting[14] without the necessity in definition of having trees on the land.[15] Possibly a borrowing, probably via Frankish or Old High German, of the Medieval Latin foresta, denoting "open wood", Carolingian scribes first used foresta in the Capitularies of Charlemagne specifically to denote the royal hunting grounds of the King. The word was not endemic to Romance languages, e. g. native words for forest in the Romance languages derived from the Latin silva, which denoted "forest" and "wood(land)" (confer the English sylva and sylvan); confer the Italian, Spanish, and Portuguese selva; the Romanian silvă; and the Old French selve, and cognates in Romance languages, e. g. the Italian foresta, Spanish and Portuguese floresta, etc., are all ultimately derivations of the French word. 
-"""
+  A mais conhecida floresta é a floresta Amazônica, maior que muitos países. Erroneamente considerada o Pulmão do Mundo, não é, pois foi comprovado cientificamente que a floresta Amazônica consome cerca de 65% do oxigênio que produz (com a fotossíntese) com a respiração e transpiração das plantas. A taiga siberiana é a maior floresta do mundo, sendo que este bioma estende-se para além da Sibéria, nomeadamente, pelo Alasca, Canadá, Groenlândia, Norte da Europa e Japão.[7] 
+  	
+  A origem das árvores e florestas no Devoniano Central foi um ponto de virada na história da Terra, marcando mudanças permanentes na ecologia terrestre, ciclos geoquímicos, níveis atmosféricos de CO2 e clima. Um sistema de raízes amplo, em solos fósseis na região de Catskill, perto do Cairo, Nova York, mostrando a presença de árvores com folhas e madeira, evidenciaram árvores de 385 milhões de anos que existiam durante o período devoniano.[8]	
+  """,
+    English = """
+   Although the word forest is commonly used, there is no universally recognised precise definition, with more than 800 definitions of forest used around the world.[4] Although a forest is usually defined by the presence of trees, under many definitions an area completely lacking trees may still be considered a forest if it grew trees in the past, will grow trees in the future,[9] or was legally designated as a forest regardless of vegetation type.[10][11]
+   	
+   The word forest derives from the Old French forest (also forès), denoting "forest, vast expanse covered by trees"; forest was first introduced into English as the word denoting wild land set aside for hunting[14] without the necessity in definition of having trees on the land.[15] Possibly a borrowing, probably via Frankish or Old High German, of the Medieval Latin foresta, denoting "open wood", Carolingian scribes first used foresta in the Capitularies of Charlemagne specifically to denote the royal hunting grounds of the King. The word was not endemic to Romance languages, e. g. native words for forest in the Romance languages derived from the Latin silva, which denoted "forest" and "wood(land)" (confer the English sylva and sylvan); confer the Italian, Spanish, and Portuguese selva; the Romanian silvă; and the Old French selve, and cognates in Romance languages, e. g. the Italian foresta, Spanish and Portuguese floresta, etc., are all ultimately derivations of the French word. 
+   """,
 )
 
 # ╔═╡ a094e2ac-f92d-11ea-141a-3566552dd839
@@ -167,7 +167,7 @@ Nós já escrevemos uma função `isinalphabet`, que recebe um caracter e decide
 
 # ╔═╡ 5c74a052-f92e-11ea-2c5b-0f1a3a14e313
 function isinalphabet(character)
-	character ∈ alphabet
+    character ∈ alphabet
 end
 
 # ╔═╡ dcc4156c-f997-11ea-3e6f-057cd080d9db
@@ -210,7 +210,7 @@ Por fim, preciamos lidar com **acentos**: simplesmente apagar caracteres acentua
 """
 Turn `"áéíóúüñ asdf"` into `"aeiouun asdf"`.
 """
-unaccent(str) = Unicode.normalize(str, stripmark=true)
+unaccent(str) = Unicode.normalize(str, stripmark = true)
 
 # ╔═╡ d236b51e-f997-11ea-0c55-abb11eb35f4d
 french_word = "Égalité!"
@@ -229,7 +229,7 @@ md"""
 # ╔═╡ 4affa858-f92e-11ea-3ece-258897c37e51
 function clean(text)
 
-	return missing
+    return missing
 end
 
 # ╔═╡ e00d521a-f992-11ea-11e0-e9da8255b23b
@@ -247,9 +247,9 @@ first_sample = clean(first(samples))
 
 # ╔═╡ 571d28d6-f960-11ea-1b2e-d5977ecbbb11
 function letter_frequencies(txt)
-	ismissing(txt) && return missing
-	f = count.(string.(alphabet), txt)
-	f ./ sum(f)
+    ismissing(txt) && return missing
+    f = count.(string.(alphabet), txt)
+    f ./ sum(f)
 end
 
 # ╔═╡ 11e9a0e2-bc3d-4130-9a73-7c2003595caa
@@ -319,11 +319,7 @@ Para quantificar essa observação vamos fazer o mesmo que no último exercício
 
 # ╔═╡ fbb7c04e-f92d-11ea-0b81-0be20da242c8
 function transition_counts(cleaned_sample)
-	[
-	 count(string(a, b), cleaned_sample)
-	 for a in alphabet, 
-		 b in alphabet
-	]
+    [count(string(a, b), cleaned_sample) for a in alphabet, b in alphabet]
 end
 
 # ╔═╡ 80118bf8-f931-11ea-34f3-b7828113ffd8
@@ -353,10 +349,10 @@ sample_freq_matrix = transition_frequencies(first_sample);
 
 # ╔═╡ 39152104-fc49-11ea-04dd-bb34e3600f2f
 if first_sample === missing
-	md"""
-	!!! danger "Don't worry!"
-	    👆 These errors will disappear automatically once you have completed the earlier exercises!
-	"""
+    md"""
+    !!! danger "Don't worry!"
+        👆 These errors will disappear automatically once you have completed the earlier exercises!
+    """
 end
 
 # ╔═╡ e91c6fd8-f930-11ea-01ac-476bbde79079
@@ -422,7 +418,9 @@ Já deve até dar par usar o nosso modelo para gerar senhas aleatórias prounci�
 """
 
 # ╔═╡ b7446f34-f9b1-11ea-0f39-a3c17ba740e5
-@bind ex23_sample Select([v => String(k) for (k,v) in zip(fieldnames(typeof(samples)), samples)])
+@bind ex23_sample Select(
+    [v => String(k) for (k, v) in zip(fieldnames(typeof(samples)), samples)],
+)
 
 # ╔═╡ 4f97b572-f9b0-11ea-0a99-87af0797bf28
 md"""
@@ -441,28 +439,28 @@ md"""
 
 # ╔═╡ b5b8dd18-f938-11ea-157b-53b145357fd1
 function rand_sample(frequencies)
-	x = rand()
-	findfirst(z -> z >= x, cumsum(frequencies ./ sum(frequencies)))
+    x = rand()
+    findfirst(z -> z >= x, cumsum(frequencies ./ sum(frequencies)))
 end
 
 # ╔═╡ 0e872a6c-f937-11ea-125e-37958713a495
 function rand_sample_letter(frequencies)
-	alphabet[rand_sample(frequencies)]
+    alphabet[rand_sample(frequencies)]
 end
 
 # ╔═╡ 0e465160-f937-11ea-0ebb-b7e02d71e8a8
 function sample_text(A, n)
-	
-	first_index = rand_sample(vec(sum(A, dims=1)))
-	
-	indices = reduce(1:n; init=[first_index]) do word, _
-		prev = last(word)
-		freq = normalize_array(A[prev, :])
-		next = rand_sample(freq)
-		[word..., next]
-	end
-	
-	String(alphabet[indices])
+
+    first_index = rand_sample(vec(sum(A, dims = 1)))
+
+    indices = reduce(1:n; init = [first_index]) do word, _
+        prev = last(word)
+        freq = normalize_array(A[prev, :])
+        next = rand_sample(freq)
+        [word..., next]
+    end
+
+    String(alphabet[indices])
 end
 
 # ╔═╡ 6718d26c-f9b0-11ea-1f5a-0f22f7ddffe9
@@ -484,9 +482,12 @@ html"<h4 id='mystery-detect'>Exemplo misterioso</h4>
 <p>Entre com um texto qualquer abaixo -- nós vamos descobrir em qual língua ele foi escrito!</p>" # dont delete me
 
 # ╔═╡ 7e3282e2-f931-11ea-272f-d90779264456
-@bind mystery_sample TextField((70,8), default="""
+@bind mystery_sample TextField(
+    (70, 8),
+    default = """
 Small boats are typically found on inland waterways such as rivers and lakes, or in protected coastal areas. However, some boats, such as the whaleboat, were intended for use in an offshore environment. In modern naval terms, a boat is a vessel small enough to be carried aboard a ship. Anomalous definitions exist, as lake freighters 1,000 feet (300 m) long on the Great Lakes are called "boats". 
-""")
+""",
+)
 
 # ╔═╡ 7df55e6c-f931-11ea-33b8-fdc3be0b6cfa
 mystery_sample
@@ -515,18 +516,18 @@ Mas como comparar duas matrizes? Queremos usar uma _distância_ de matrizes, uma
 # ╔═╡ 13c89272-f934-11ea-07fe-91b5d56dedf8
 function matrix_distance(A, B)
 
-	return missing # do something with A .- B
+    return missing # do something with A .- B
 end
 
 # ╔═╡ 7d60f056-f931-11ea-39ae-5fa18a955a77
 distances = map(samples) do sample
-	matrix_distance(transition_frequencies(mystery_sample), transition_frequencies(sample))
+    matrix_distance(transition_frequencies(mystery_sample), transition_frequencies(sample))
 end
 
 # ╔═╡ 7d1439e6-f931-11ea-2dab-41c66a779262
 try
-	@assert !ismissing(distances.English)
-	"""<h2>Parece que esse texto está em *$(argmin(distances))*!</h2>""" |> HTML
+    @assert !ismissing(distances.English)
+    """<h2>Parece que esse texto está em *$(argmin(distances))*!</h2>""" |> HTML
 catch
 end
 
@@ -556,23 +557,26 @@ Para isso nós vamos treinhar o nosso modelo no livro "Dom Casmurro" de Machado 
 
 # ╔═╡ b7601048-fb57-11ea-0754-97dc4e0623a1
 dom_casmurro = let
-	raw_text = read(download("https://www.ime.unicamp.br/~pjssilva/research/dom_casmurro.txt"), String)
-	
-	first_words = "Dom Casmurro"
-	last_words = "FIM"
-	start_index = findfirst(first_words, raw_text)[1]
-	stop_index = findlast(last_words, raw_text)[end]
-	
-	raw_text[start_index:stop_index]
+    raw_text = read(
+        download("https://www.ime.unicamp.br/~pjssilva/research/dom_casmurro.txt"),
+        String,
+    )
+
+    first_words = "Dom Casmurro"
+    last_words = "FIM"
+    start_index = findfirst(first_words, raw_text)[1]
+    stop_index = findlast(last_words, raw_text)[end]
+
+    raw_text[start_index:stop_index]
 end;
 
 # ╔═╡ cc42de82-fb5a-11ea-3614-25ef961729ab
 function splitwords(text)
-	# clean up whitespace
-	cleantext = replace(text, r"\s+" => " ")
-	
-	# split on whitespace or other word boundaries
-	tokens = split(cleantext, r"(\s|\b)")
+    # clean up whitespace
+    cleantext = replace(text, r"\s+" => " ")
+
+    # split on whitespace or other word boundaries
+    tokens = split(cleantext, r"(\s|\b)")
 end
 
 # ╔═╡ d66fe2b2-fb5a-11ea-280f-cfb12b8296ac
@@ -603,11 +607,11 @@ gera
 
 # ╔═╡ 91e87974-fb78-11ea-3ce4-5f64e506b9d2
 function bigrams(words)
-	starting_positions = 1:length(words) - 1
-	
-	map(starting_positions) do i
-		words[i:i + 1]
-	end
+    starting_positions = 1:length(words)-1
+
+    map(starting_positions) do i
+        words[i:i+1]
+    end
 end
 
 # ╔═╡ 9f98e00e-fb78-11ea-0f6c-01206e7221d6
@@ -634,8 +638,8 @@ ngrams([1, 2, 3, 42], 2) == bigrams([1, 2, 3, 42])
 
 # ╔═╡ 7be98e04-fb6b-11ea-111d-51c48f39a4e9
 function ngrams(words, n)
-	
-	return missing
+
+    return missing
 end
 
 # ╔═╡ 052f822c-fb7b-11ea-382f-af4d6c2b4fdb
@@ -705,11 +709,11 @@ Dict(
 
 # ╔═╡ 8ce3b312-fb82-11ea-200c-8d5b12f03eea
 function word_counts(words::Vector)
-	counts = Dict()
+    counts = Dict()
 
-	# your code here
-	
-	return counts
+    # your code here
+
+    return counts
 end
 
 # ╔═╡ a2214e50-fb83-11ea-3580-210f12d44182
@@ -753,17 +757,17 @@ If the same n-gram occurs multiple times (e.g. "said Emma laughing"), then the l
 
 # ╔═╡ b726f824-fb5e-11ea-328e-03a30544037f
 function completion_cache(grams)
-	cache = Dict()
-	
-	# your code here
-	
-	cache
+    cache = Dict()
+
+    # your code here
+
+    cache
 end
 
 # ╔═╡ 18355314-fb86-11ea-0738-3544e2e3e816
 let
-	trigrams = ngrams(split("to be or not to be that is the question", " "), 3)
-	completion_cache(trigrams)
+    trigrams = ngrams(split("to be or not to be that is the question", " "), 3)
+    completion_cache(trigrams)
 end
 
 # ╔═╡ 472687be-995a-4cf9-b9f6-6b56ae159539
@@ -785,31 +789,31 @@ Nós temos tudo o que precisamos para gerar nosso próprio romance. O passo fina
 Given an array of ngrams (i.e. an array of arrays of words), generate a sequence of `num_words` words by sampling random ngrams.
 """
 function generate_from_ngrams(grams, num_words)
-	n = length(first(grams))
-	cache = completion_cache(grams)
-	
-	# we need to start the sequence with at least n-1 words.
-	# a simple way to do so is to pick a random ngram!
-	sequence = [rand(grams)...]
-	
-	# we iteratively add one more word at a time
-	for i ∈ n+1:num_words
-		# the previous n-1 words
-		tail = sequence[end-(n-2):end]
-		
-		# possible next words
-		completions = cache[tail]
-		
-		choice = rand(completions)
-		push!(sequence, choice)
-	end
-	sequence
+    n = length(first(grams))
+    cache = completion_cache(grams)
+
+    # we need to start the sequence with at least n-1 words.
+    # a simple way to do so is to pick a random ngram!
+    sequence = [rand(grams)...]
+
+    # we iteratively add one more word at a time
+    for i ∈ n+1:num_words
+        # the previous n-1 words
+        tail = sequence[end-(n-2):end]
+
+        # possible next words
+        completions = cache[tail]
+
+        choice = rand(completions)
+        push!(sequence, choice)
+    end
+    sequence
 end
 
 # ╔═╡ f83991c0-fb7c-11ea-0e6f-1f80709d00c1
 "Compute the ngrams of an array of words, but add the first n-1 at the end, to ensure that every ngram ends in the the beginning of another ngram."
 function ngrams_circular(words, n)
-	ngrams([words..., words[1:n-1]...], n)
+    ngrams([words..., words[1:n-1]...], n)
 end
 
 # ╔═╡ abe2b862-fb69-11ea-08d9-ebd4ba3437d5
@@ -821,25 +825,25 @@ completion_cache(ngrams_circular(sample_words, 3))
 
 Given a source text, generate a `String` that "looks like" the original text by satisfying the same ngram frequency distribution as the original.
 """
-function generate(source_text::AbstractString, s; n=3, use_words=true)
-	preprocess = if use_words
-		splitwords
-	else
-		collect
-	end
-	
-	words = preprocess(source_text)
-	if length(words) < n
-		""
-	else
-		grams = ngrams_circular(words, n)
-		result = generate_from_ngrams(grams, s)
-		if use_words
-			join(result, " ")
-		else
-			String(result)
-		end
-	end
+function generate(source_text::AbstractString, s; n = 3, use_words = true)
+    preprocess = if use_words
+        splitwords
+    else
+        collect
+    end
+
+    words = preprocess(source_text)
+    if length(words) < n
+        ""
+    else
+        grams = ngrams_circular(words, n)
+        result = generate_from_ngrams(grams, s)
+        if use_words
+            join(result, " ")
+        else
+            String(result)
+        end
+    end
 end
 
 # ╔═╡ d7b7a14a-fb90-11ea-3e2b-2fd8f379b4d8
@@ -850,7 +854,7 @@ Entre com o seu próprio texto na caixa abaixo e use-o como dado de treinamento 
 "
 
 # ╔═╡ 1939dbea-fb63-11ea-0bc2-2d06b2d4b26c
-@bind generate_demo_sample TextField((50,5), default=samples.Portuguese)
+@bind generate_demo_sample TextField((50, 5), default = samples.Portuguese)
 
 # ╔═╡ 70169682-fb8c-11ea-27c0-2dad2ff3080f
 md"""Using $(@bind generate_sample_n_letters NumberField(1:5))grams for characters"""
@@ -870,10 +874,10 @@ Descomente a célula abaixo para gerar texto machadiano:
 
 # ╔═╡ cc07f576-fbf3-11ea-2c6f-0be63b9356fc
 if student.email_dac === "j000000"
-	md"""
-!!! danger "Oops!"
-    **Antes de submeter**, lembre de preencher seu nome e email DAC no topo desse caderno!
-	"""
+    md"""
+   !!! danger "Oops!"
+       **Antes de submeter**, lembre de preencher seu nome e email DAC no topo desse caderno!
+   	"""
 end
 
 # ╔═╡ 6b4d6584-f3be-11ea-131d-e5bdefcc791b
@@ -883,7 +887,7 @@ Just some helper functions used in the notebook."
 
 # ╔═╡ 54b1e236-fb53-11ea-3769-b382ef8b25d6
 function Quote(text::AbstractString)
-	text |> Markdown.Paragraph |> Markdown.BlockQuote |> Markdown.MD
+    text |> Markdown.Paragraph |> Markdown.BlockQuote |> Markdown.MD
 end
 
 # ╔═╡ 7e09011c-71b5-4f05-ae4a-025d48daca1d
@@ -894,57 +898,56 @@ String(rand(alphabet, 400)) |> Quote
 
 # ╔═╡ be55507c-f9a7-11ea-189c-4ffe8377212e
 if sample_freqs !== missing
-	String([rand_sample_letter(sample_freqs) for _ in 1:400]) |> Quote
+    String([rand_sample_letter(sample_freqs) for _ = 1:400]) |> Quote
 end
 
 # ╔═╡ 46c905d8-f9b0-11ea-36ed-0515e8ed2621
 String(rand(alphabet, 400)) |> Quote
 
 # ╔═╡ 489b03d4-f9b0-11ea-1de0-11d4fe4e7c69
-String([rand_sample_letter(letter_frequencies(ex23_sample)) for _ in 1:400]) |> Quote
+String([rand_sample_letter(letter_frequencies(ex23_sample)) for _ = 1:400]) |> Quote
 
 # ╔═╡ fd202410-f936-11ea-1ad6-b3629556b3e0
 sample_text(transition_frequencies(clean(ex23_sample)), 400) |> Quote
 
 # ╔═╡ b5dff8b8-fb6c-11ea-10fc-37d2a9adae8c
-generate(
-	generate_demo_sample, 400; 
-	n=generate_sample_n_letters, 
-	use_words=false
-) |> Quote
+generate(generate_demo_sample, 400; n = generate_sample_n_letters, use_words = false) |>
+Quote
 
 # ╔═╡ ee8c5808-fb5f-11ea-19a1-3d58217f34dc
-generate(
-	generate_demo_sample, 100; 
-	n=generate_sample_n_words, 
-	use_words=true
-) |> Quote
+generate(generate_demo_sample, 100; n = generate_sample_n_words, use_words = true) |> Quote
 
 # ╔═╡ ddef9c94-fb96-11ea-1f17-f173a4ff4d89
-function compimg(img, labels=[c*d for c in replace(alphabet, ' ' => "_"), d in replace(alphabet, ' ' => "_")])
-	xmax, ymax = size(img)
-	xmin, ymin = 0, 0
-	arr = [(j-1, i-1) for i=1:ymax, j=1:xmax]
+function compimg(
+    img,
+    labels = [
+        c * d for c in replace(alphabet, ' ' => "_"), d in replace(alphabet, ' ' => "_")
+    ],
+)
+    xmax, ymax = size(img)
+    xmin, ymin = 0, 0
+    arr = [(j - 1, i - 1) for i = 1:ymax, j = 1:xmax]
 
-	compose(context(units=UnitBox(xmin, ymin, xmax, ymax)),
-		fill(vec(img)),
-		compose(context(),
-			fill("white"), font("monospace"), 
-			text(first.(arr) .+ .1, last.(arr) .+ 0.6, labels)),
-		rectangle(
-			first.(arr),
-			last.(arr),
-			fill(1.0, length(arr)),
-			fill(1.0, length(arr))))
+    compose(
+        context(units = UnitBox(xmin, ymin, xmax, ymax)),
+        fill(vec(img)),
+        compose(
+            context(),
+            fill("white"),
+            font("monospace"),
+            text(first.(arr) .+ 0.1, last.(arr) .+ 0.6, labels),
+        ),
+        rectangle(first.(arr), last.(arr), fill(1.0, length(arr)), fill(1.0, length(arr))),
+    )
 end
 
 # ╔═╡ b7803a28-fb96-11ea-3e30-d98eb322d19a
 function show_pair_frequencies(A)
-	imshow = let
-		to_rgb(x) = RGB(0.36x, 0.82x, 0.8x)
-		to_rgb.(2.0*A ./ maximum(abs.(A)))
-	end
-	compimg(imshow)
+    imshow = let
+        to_rgb(x) = RGB(0.36x, 0.82x, 0.8x)
+        to_rgb.(2.0 * A ./ maximum(abs.(A)))
+    end
+    compimg(imshow)
 end
 
 # ╔═╡ ace3dc76-f9ae-11ea-2bee-3d0bfa57cfbc
@@ -954,277 +957,325 @@ show_pair_frequencies(transition_frequencies(first_sample))
 hint(text) = Markdown.MD(Markdown.Admonition("hint", "Hint", [text]))
 
 # ╔═╡ 7df7ab82-f9ad-11ea-2243-21685d660d71
-hint(md"Você pode responder essa questão mesmo sem escrever código se tiver paciẽncia de olhar com calma o vetor `sample_freqs`.")
+hint(
+    md"Você pode responder essa questão mesmo sem escrever código se tiver paciẽncia de olhar com calma o vetor `sample_freqs`.",
+)
 
 # ╔═╡ 7711ecc5-9132-4223-8ed4-4d0417b5d5c1
 hint(md"Dê uma olhada na imagem de frequências de pares")
 
 # ╔═╡ e467c1c6-fbf2-11ea-0d20-f5798237c0a6
-hint(md"Comece com o código de `bigrams` e use a documentação de Julia para entender como ele funcina. Sabendo disso, pense em como generalizar `bigram` para obter a função `ngram`. Pode facilitar começar numa folha de papel primeiro.")
+hint(
+    md"Comece com o código de `bigrams` e use a documentação de Julia para entender como ele funcina. Sabendo disso, pense em como generalizar `bigram` para obter a função `ngram`. Pode facilitar começar numa folha de papel primeiro.",
+)
 
 # ╔═╡ ffc40ab2-f380-11ea-2136-63542ff0f386
 almost(text) = Markdown.MD(Markdown.Admonition("warning", "Quase lá!", [text]))
 
 # ╔═╡ ffceaed6-f380-11ea-3c63-8132d270b83f
-still_missing(text=md"Substitua `missing` com sua solução.") = Markdown.MD(Markdown.Admonition("warning", "Aqui vamos nós!", [text]))
+still_missing(text = md"Substitua `missing` com sua solução.") =
+    Markdown.MD(Markdown.Admonition("warning", "Aqui vamos nós!", [text]))
 
 # ╔═╡ ffde44ae-f380-11ea-29fb-2dfcc9cda8b4
-keep_working(text=md"A resposta não está certa ainda.") = Markdown.MD(Markdown.Admonition("danger", "Continue tentando!", [text]))
+keep_working(text = md"A resposta não está certa ainda.") =
+    Markdown.MD(Markdown.Admonition("danger", "Continue tentando!", [text]))
 
 # ╔═╡ ffe326e0-f380-11ea-3619-61dd0592d409
-yays = [md"Fantastic!", md"Splendid!", md"Great!", md"Yay ❤", md"Great! 🎉", md"Well done!", md"Keep it up!", md"Good job!", md"Awesome!", md"You got the right answer!", md"Let's move on to the next section."]
+yays = [
+    md"Fantastic!",
+    md"Splendid!",
+    md"Great!",
+    md"Yay ❤",
+    md"Great! 🎉",
+    md"Well done!",
+    md"Keep it up!",
+    md"Good job!",
+    md"Awesome!",
+    md"You got the right answer!",
+    md"Let's move on to the next section.",
+]
 
 # ╔═╡ fff5aedc-f380-11ea-2a08-99c230f8fa32
-correct(text=rand(yays)) = Markdown.MD(Markdown.Admonition("correct", "Deu certo!", [text]))
+correct(text = rand(yays)) =
+    Markdown.MD(Markdown.Admonition("correct", "Deu certo!", [text]))
 
 # ╔═╡ 954fc466-fb7b-11ea-2724-1f938c6b93c6
 let
-	output = ngrams([1, 2, 3, 42], 2)
+    output = ngrams([1, 2, 3, 42], 2)
 
-	if output isa Missing
-		still_missing()
-	elseif !(output isa Vector{<:Vector})
-		keep_working(md"Verifique que `ngrams` devolve um array de arrays.")
-	elseif output == [[1,2], [2,3], [3,42]]
-		if ngrams([1,2,3], 1) == [[1],[2],[3]]
-			if ngrams([1,2,3], 3) == [[1,2,3]]
-				if ngrams(["a"],1) == [["a"]]
-					correct()
-				else
-					keep_working(md"`ngrams` deve funcionar com qualquer tipo, não apenas inteiros!")
-				end
-			else
-				keep_working(md"`ngrams(x, 3)` não devolveu o resultado correto.")
-			end
-		else
-			keep_working(md"`ngrams(x, 1)` não devolveu o resultado correto.")			
-		end
-	else
-		keep_working(md"`ngrams(x, 2)` não devolveu os bigramas corretos. Comece a partir do código de `bigrams`.")
-	end
+    if output isa Missing
+        still_missing()
+    elseif !(output isa Vector{<:Vector})
+        keep_working(md"Verifique que `ngrams` devolve um array de arrays.")
+    elseif output == [[1, 2], [2, 3], [3, 42]]
+        if ngrams([1, 2, 3], 1) == [[1], [2], [3]]
+            if ngrams([1, 2, 3], 3) == [[1, 2, 3]]
+                if ngrams(["a"], 1) == [["a"]]
+                    correct()
+                else
+                    keep_working(
+                        md"`ngrams` deve funcionar com qualquer tipo, não apenas inteiros!",
+                    )
+                end
+            else
+                keep_working(md"`ngrams(x, 3)` não devolveu o resultado correto.")
+            end
+        else
+            keep_working(md"`ngrams(x, 1)` não devolveu o resultado correto.")
+        end
+    else
+        keep_working(
+            md"`ngrams(x, 2)` não devolveu os bigramas corretos. Comece a partir do código de `bigrams`.",
+        )
+    end
 end
 
 # ╔═╡ a9ffff9a-fb83-11ea-1efd-2fc15538e52f
 let
-	output = word_counts(["to", "be", "or", "not", "to", "be"])
+    output = word_counts(["to", "be", "or", "not", "to", "be"])
 
-	if output === nothing
-		keep_working(md"Você esqueceu de escrever `return`?")
-	elseif output == Dict()
-		still_missing(md"Escreva a função `word_counts` acima.")
-	elseif !(output isa Dict)
-		keep_working(md"Verifique que `word_counts` returna um `Dict`.")
-	elseif output == Dict("to" => 2, "be" => 2, "or" => 1, "not" => 1)
-		correct()
-	else
-		keep_working()
-	end
+    if output === nothing
+        keep_working(md"Você esqueceu de escrever `return`?")
+    elseif output == Dict()
+        still_missing(md"Escreva a função `word_counts` acima.")
+    elseif !(output isa Dict)
+        keep_working(md"Verifique que `word_counts` returna um `Dict`.")
+    elseif output == Dict("to" => 2, "be" => 2, "or" => 1, "not" => 1)
+        correct()
+    else
+        keep_working()
+    end
 end
 
 # ╔═╡ b8af4d06-b38a-4675-9399-81fb5977f077
 if capitu_count isa Missing
-	still_missing()
+    still_missing()
 elseif capitu_count == 337
-	correct()
+    correct()
 else
-	keep_working()
+    keep_working()
 end
 
 # ╔═╡ 00026442-f381-11ea-2b41-bde1fff66011
-not_defined(variable_name) = Markdown.MD(Markdown.Admonition("danger", "Oopsie!", [md"Vertifique que você definiu a variável chamada **$(Markdown.Code(string(variable_name)))**"]))
+not_defined(variable_name) = Markdown.MD(
+    Markdown.Admonition(
+        "danger",
+        "Oopsie!",
+        [
+            md"Vertifique que você definiu a variável chamada **$(Markdown.Code(string(variable_name)))**",
+        ],
+    ),
+)
 
 # ╔═╡ 6fe693c8-f9a1-11ea-1983-f159131880e9
 if !@isdefined(messy_sentence_1)
-	not_defined(:messy_sentence_1)
+    not_defined(:messy_sentence_1)
 elseif !@isdefined(cleaned_sentence_1)
-	not_defined(:cleaned_sentence_1)
+    not_defined(:cleaned_sentence_1)
 else
-	if cleaned_sentence_1 isa Missing
-		still_missing()
-	elseif cleaned_sentence_1 isa Vector{Char}
-		keep_working(md"Use `String(x)` para transformar um array de caracteres `x` em uma `String`.")
-	elseif cleaned_sentence_1 == filter(isinalphabet, messy_sentence_1)
-		correct()
-	else
-		keep_working()
-	end
+    if cleaned_sentence_1 isa Missing
+        still_missing()
+    elseif cleaned_sentence_1 isa Vector{Char}
+        keep_working(
+            md"Use `String(x)` para transformar um array de caracteres `x` em uma `String`.",
+        )
+    elseif cleaned_sentence_1 == filter(isinalphabet, messy_sentence_1)
+        correct()
+    else
+        keep_working()
+    end
 end
 
 # ╔═╡ cee0f984-f9a0-11ea-2c3c-53fe26156ea4
 if !@isdefined(messy_sentence_2)
-	not_defined(:messy_sentence_2)
+    not_defined(:messy_sentence_2)
 elseif !@isdefined(cleaned_sentence_2)
-	not_defined(:cleaned_sentence_2)
+    not_defined(:cleaned_sentence_2)
 else
-	if cleaned_sentence_2 isa Missing
-		still_missing()
-	elseif cleaned_sentence_2 isa Vector{Char}
-		keep_working(md"Use `String(x)` para transformar um array de caracteres `x` em uma `String`.")
-	elseif cleaned_sentence_2 == filter(isinalphabet, lowercase(messy_sentence_2))
-		correct()
-	else
-		keep_working()
-	end
+    if cleaned_sentence_2 isa Missing
+        still_missing()
+    elseif cleaned_sentence_2 isa Vector{Char}
+        keep_working(
+            md"Use `String(x)` para transformar um array de caracteres `x` em uma `String`.",
+        )
+    elseif cleaned_sentence_2 == filter(isinalphabet, lowercase(messy_sentence_2))
+        correct()
+    else
+        keep_working()
+    end
 end
 
 # ╔═╡ ddfb1e1c-f9a1-11ea-3625-f1170272e96a
 if !@isdefined(clean)
-	not_defined(:clean)
+    not_defined(:clean)
 else
-	let
-		input = "Aè !!!  x1"
-		output = clean(input)
-		
-		
-		if output isa Missing
-			still_missing()
-		elseif output isa Vector{Char}
-			keep_working(md"Use `String(x)` to turn an array of characters `x` into a `String`.")
-		elseif output == "ae   x"
-			correct()
-		else
-			keep_working()
-		end
-	end
+    let
+        input = "Aè !!!  x1"
+        output = clean(input)
+
+
+        if output isa Missing
+            still_missing()
+        elseif output isa Vector{Char}
+            keep_working(
+                md"Use `String(x)` to turn an array of characters `x` into a `String`.",
+            )
+        elseif output == "ae   x"
+            correct()
+        else
+            keep_working()
+        end
+    end
 end
 
 # ╔═╡ 95b81778-f9a5-11ea-3f51-019430bc8fa8
 if !@isdefined(unused_letters)
-	not_defined(:unused_letters)
+    not_defined(:unused_letters)
 else
-	if sample_freqs === missing
-		md"""
-		!!! warning "Oopsie!"
-		    Você precisa completar o exercício anterior antes.
-		"""
-	elseif unused_letters isa Missing
-		still_missing()
-	elseif unused_letters isa String
-		keep_working(md"Use `collect` transformar uma string em um vetor de caracteres.")
-	elseif Set(index_of_letter.(unused_letters)) == Set(findall(isequal(0.0), sample_freqs))
-		correct()
-	else
-		keep_working()
-	end
+    if sample_freqs === missing
+        md"""
+        !!! warning "Oopsie!"
+            Você precisa completar o exercício anterior antes.
+        """
+    elseif unused_letters isa Missing
+        still_missing()
+    elseif unused_letters isa String
+        keep_working(md"Use `collect` transformar uma string em um vetor de caracteres.")
+    elseif Set(index_of_letter.(unused_letters)) == Set(findall(isequal(0.0), sample_freqs))
+        correct()
+    else
+        keep_working()
+    end
 end
 
 # ╔═╡ 489fe282-f931-11ea-3dcb-35d4f2ac8b40
 if !@isdefined(lh_frequency)
-	not_defined(:lh_frequency)
+    not_defined(:lh_frequency)
 elseif !@isdefined(hl_frequency)
-	not_defined(:hl_frequency)
+    not_defined(:hl_frequency)
 else
-	if lh_frequency isa Missing  || hl_frequency isa Missing
-		still_missing()
-	elseif lh_frequency < hl_frequency
-		keep_working(md"Parece que você inverteu as repostas. Qual combinação é mais comum em português?")
-	elseif lh_frequency == sample_freq_matrix[index_of_letter('l'), index_of_letter('h')] && hl_frequency == sample_freq_matrix[index_of_letter('h'), index_of_letter('l')] 
-		correct()
-	else
-		keep_working()
-	end
+    if lh_frequency isa Missing || hl_frequency isa Missing
+        still_missing()
+    elseif lh_frequency < hl_frequency
+        keep_working(
+            md"Parece que você inverteu as repostas. Qual combinação é mais comum em português?",
+        )
+    elseif lh_frequency == sample_freq_matrix[index_of_letter('l'), index_of_letter('h')] &&
+           hl_frequency == sample_freq_matrix[index_of_letter('h'), index_of_letter('l')]
+        correct()
+    else
+        keep_working()
+    end
 end
 
 # ╔═╡ 671525cc-f930-11ea-0e71-df9d4aae1c05
 if !@isdefined(double_letters)
-	not_defined(:double_letters)
+    not_defined(:double_letters)
 else
-	let
-		result = double_letters
-		if result isa Missing
-			still_missing()
-		elseif result isa String
-			keep_working(md"Use `collect` to turn a string into an array of characters.")
-		elseif !(result isa AbstractVector{Char} || result isa AbstractSet{Char})
-			keep_working(md"Make sure that `double_letters` is a `Vector`.")
-		elseif Set(result) == Set(alphabet[diag(sample_freq_matrix) .!= 0])
-			correct()
-		elseif push!(Set(result), ' ') == Set(alphabet[diag(sample_freq_matrix) .!= 0])
-			almost(md"We also consider the space (`' '`) as one of the letters in our `alphabet`.")
-		else
-			keep_working()
-		end
-	end
+    let
+        result = double_letters
+        if result isa Missing
+            still_missing()
+        elseif result isa String
+            keep_working(md"Use `collect` to turn a string into an array of characters.")
+        elseif !(result isa AbstractVector{Char} || result isa AbstractSet{Char})
+            keep_working(md"Make sure that `double_letters` is a `Vector`.")
+        elseif Set(result) == Set(alphabet[diag(sample_freq_matrix).!=0])
+            correct()
+        elseif push!(Set(result), ' ') == Set(alphabet[diag(sample_freq_matrix).!=0])
+            almost(
+                md"We also consider the space (`' '`) as one of the letters in our `alphabet`.",
+            )
+        else
+            keep_working()
+        end
+    end
 end
 
 # ╔═╡ a5fbba46-f931-11ea-33e1-054be53d986c
 if !@isdefined(most_likely_to_follow_w)
-	not_defined(:most_likely_to_follow_w)
+    not_defined(:most_likely_to_follow_w)
 else
-	let
-		result = most_likely_to_follow_w
-		if result isa Missing
-			still_missing()
-		elseif !(result isa Char)
-			keep_working(md"Make sure that you return a `Char`. You might want to use the `alphabet` to index a character.")
-		elseif result == alphabet[map(alphabet) do c
-			sample_freq_matrix[index_of_letter('b'), index_of_letter(c)]
-				end |> argmax #==#]
-			correct()
-		else
-			keep_working()
-		end
-	end
+    let
+        result = most_likely_to_follow_w
+        if result isa Missing
+            still_missing()
+        elseif !(result isa Char)
+            keep_working(
+                md"Make sure that you return a `Char`. You might want to use the `alphabet` to index a character.",
+            )
+        elseif result == alphabet[map(alphabet) do c
+            sample_freq_matrix[index_of_letter('b'), index_of_letter(c)]
+        end|>argmax] #==#
+            correct()
+        else
+            keep_working()
+        end
+    end
 end
 
 # ╔═╡ ba695f6a-f931-11ea-0fbb-c3ef1374270e
 if !@isdefined(most_likely_to_precede_w)
-	not_defined(:most_likely_to_precede_w)
+    not_defined(:most_likely_to_precede_w)
 else
-	let
-		result = most_likely_to_precede_w
-		if result isa Missing
-			still_missing()
-		elseif !(result isa Char)
-			keep_working(md"Make sure that you return a `Char`. You might want to use the `alphabet` to index a character.")
-		elseif result == alphabet[map(alphabet) do c
-			sample_freq_matrix[index_of_letter(c), index_of_letter('b')]
-				end |> argmax #==#]
-			correct()
-		else
-			keep_working()
-		end
-	end
+    let
+        result = most_likely_to_precede_w
+        if result isa Missing
+            still_missing()
+        elseif !(result isa Char)
+            keep_working(
+                md"Make sure that you return a `Char`. You might want to use the `alphabet` to index a character.",
+            )
+        elseif result == alphabet[map(alphabet) do c
+            sample_freq_matrix[index_of_letter(c), index_of_letter('b')]
+        end|>argmax] #==#
+            correct()
+        else
+            keep_working()
+        end
+    end
 end
 
 # ╔═╡ b09f5512-fb58-11ea-2527-31bea4cee823
 if !@isdefined(matrix_distance)
-	not_defined(:matrix_distance)
+    not_defined(:matrix_distance)
 else
-	try
-	let
-		A = rand(Float64, (5,4))
-		B = rand(Float64, (5,4))
-		
-		output = matrix_distance(A,B)
-		
-		if output isa Missing
-			still_missing()
-		elseif !(output isa Number)
-			keep_working(md"Make sure that `matrix_distance` returns a nunmber.")
-		elseif output == 0.0
-			keep_working(md"Two different matrices should have non-zero distance.")
-		else
-			if matrix_distance(A,B) < 0 || matrix_distance(B,A) < 0
-				keep_working(md"The distance between two matrices should always be positive.")
-			elseif matrix_distance(A,A) != 0
-				almost(md"The distance between two identical matrices should be zero.")
-			elseif matrix_distance([1 -1], [0 0]) == 0.0
-				almost(md"`matrix_distance([1 -1], [0 0])` should not be zero.")
-			else
-				correct()
-			end
-		end
-	end
-	catch
-		keep_working(md"The function errored.")
-	end
+    try
+        let
+            A = rand(Float64, (5, 4))
+            B = rand(Float64, (5, 4))
+
+            output = matrix_distance(A, B)
+
+            if output isa Missing
+                still_missing()
+            elseif !(output isa Number)
+                keep_working(md"Make sure that `matrix_distance` returns a nunmber.")
+            elseif output == 0.0
+                keep_working(md"Two different matrices should have non-zero distance.")
+            else
+                if matrix_distance(A, B) < 0 || matrix_distance(B, A) < 0
+                    keep_working(
+                        md"The distance between two matrices should always be positive.",
+                    )
+                elseif matrix_distance(A, A) != 0
+                    almost(md"The distance between two identical matrices should be zero.")
+                elseif matrix_distance([1 -1], [0 0]) == 0.0
+                    almost(md"`matrix_distance([1 -1], [0 0])` should not be zero.")
+                else
+                    correct()
+                end
+            end
+        end
+    catch
+        keep_working(md"The function errored.")
+    end
 end
 
 # ╔═╡ 20c0bfc0-a6ce-4290-95e1-d01264114cb1
 todo(text) = HTML("""<div
-	style="background: rgb(220, 200, 255); padding: 2em; border-radius: 1em;"
-	><h1>TODO</h1>$(repr(MIME"text/html"(), text))</div>""")
+ style="background: rgb(220, 200, 255); padding: 2em; border-radius: 1em;"
+ ><h1>TODO</h1>$(repr(MIME"text/html"(), text))</div>""")
 
 # ╔═╡ 00115b6e-f381-11ea-0bc6-61ca119cb628
 bigbreak = html"<br><br><br><br><br>";

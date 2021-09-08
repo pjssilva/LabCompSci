@@ -16,19 +16,19 @@ end
 # ╔═╡ f4fda666-7b9c-11eb-0304-716c5e710462
 begin
     using Symbolics
-	using ForwardDiff
-	using ForwardDiff: jacobian
-	using Plots
-	using PlutoUI
-	using LaTeXStrings
-	using NonlinearSolve
+    using ForwardDiff
+    using ForwardDiff: jacobian
+    using Plots
+    using PlutoUI
+    using LaTeXStrings
+    using NonlinearSolve
 end
 
 # ╔═╡ 544c58c1-133e-4fa3-b43c-53b77cd58ae5
 md"Tradução livre de [`newton_method.jl`](https://raw.githubusercontent.com/mitmath/18S191/Spring21/notebooks/week3/newton_method.jl)"
 
 # ╔═╡ c403996b-ffaf-47ec-b206-3584453c9e8d
-PlutoUI.TableOfContents(aside=true)
+PlutoUI.TableOfContents(aside = true)
 
 # ╔═╡ d82f1eae-7b9c-11eb-24d8-e1dcb2eef71a
 md"""
@@ -115,7 +115,7 @@ f(z)
 f(z + η)
 
 # ╔═╡ 98158a38-7c30-11eb-0796-2335e97ec6d0
-expand( f(z + η) )
+expand(f(z + η))
 
 # ╔═╡ 9d778e36-7c30-11eb-1f4b-894af86a8f5d
 md"""
@@ -128,10 +128,10 @@ primeira ordem, ou seja a aproximação linear dada pela derivada:
 f′(z)
 
 # ╔═╡ ea741018-7c30-11eb-3912-a50475e6ec49
-f(z) + η*f′(z)
+f(z) + η * f′(z)
 
 # ╔═╡ e18f2470-7c31-11eb-2b74-d59d00d20ba4
-expand( f(z + η) ) - ( f(z) + η*f′(z) )
+expand(f(z + η)) - (f(z) + η * f′(z))
 
 # ╔═╡ 389e990e-7c40-11eb-37c4-5ba0f59173b3
 md"""
@@ -191,16 +191,16 @@ md"""
 """
 
 # ╔═╡ d690f83a-7c2e-11eb-14d7-79a250deb473
-function newton1D(f, x0=37.0)
+function newton1D(f, x0 = 37.0)
 
-	f′(x) = ForwardDiff.derivative(f, x)   # \prime<TAB>
+    f′(x) = ForwardDiff.derivative(f, x)   # \prime<TAB>
 
-	x = x0
-	for i in 1:10          # When to stop?
-		x -= f(x) / f′(x)
-	end
+    x = x0
+    for i = 1:10          # When to stop?
+        x -= f(x) / f′(x)
+    end
 
-	return x
+    return x
 
 end
 
@@ -223,7 +223,7 @@ Vamos ber o que ocorre quando perturbamos os argumento de uma transformação $T
 """
 
 # ╔═╡ 515c23b6-7c2d-11eb-28c9-1b1d92eb4ba0
-T(α) = ( (x, y), ) -> [x + α*y^2, y + α*x^2]
+T(α) = ((x, y),) -> [x + α * y^2, y + α * x^2]
 
 # ╔═╡ fe742fec-7c3e-11eb-1f54-55cdf02a1574
 md"""
@@ -235,7 +235,7 @@ md"""
 
 # ╔═╡ 3828b94c-7c2d-11eb-2e01-79038b0f5226
 # Exact expansion of T
-image = expand.(T(α)( [ (a + δ), (b + ϵ) ] ) )
+image = expand.(T(α)([(a + δ), (b + ϵ)]))
 
 # ╔═╡ 09b97be8-7c2e-11eb-05fd-65bbd097afb8
 # The Jacobian matrix, the deritivative of T
@@ -251,7 +251,7 @@ image - T(α)([a, b])
 
 # ╔═╡ 35b5c5c6-7c3f-11eb-2723-4b406a809114
 # What is left after we discount the linear part coming from the Jacobian
-simplify.( expand.( image - T(α)([a, b]) - jacobian(T(α), [a, b]) * [δ, ϵ] ) )
+simplify.(expand.(image - T(α)([a, b]) - jacobian(T(α), [a, b]) * [δ, ϵ]))
 
 # ╔═╡ 4dd2322c-7ba0-11eb-2b3b-af7c6c1d60a0
 md"""
@@ -307,24 +307,24 @@ md"""
 # ╔═╡ 1db66b0e-7ba4-11eb-2157-d5a399a73b1f
 function newton2D_step(T, x)
 
-	J = ForwardDiff.jacobian(T, x)   # should use StaticVectors if dimension is small
+    J = ForwardDiff.jacobian(T, x)   # should use StaticVectors if dimension is small
 
-	δ = J \ T(x)   # J^(-1) * T(x)
+    δ = J \ T(x)   # J^(-1) * T(x)
 
-	return x - δ
+    return x - δ
 end
 
 # ╔═╡ 923bde64-7ba4-11eb-21e9-a11993aaab2e
 "Looks for x such that T(x) = 0"
-function newton2D(T, x0, n=10)
+function newton2D(T, x0, n = 10)
 
-	x = x0
+    x = x0
 
-	for i in 1:n
-		x = newton2D_step(T, x)
-	end
+    for i = 1:n
+        x = newton2D_step(T, x)
+    end
 
-	return x
+    return x
 end
 
 # ╔═╡ 61905ae0-7ba6-11eb-0773-17e9aa4e9991
@@ -334,21 +334,21 @@ Lembrando que o método de Newton é escrito pensando em achar zeros, isto é, p
 
 # ╔═╡ ff8b6aec-7ba5-11eb-0d83-19803b1bdda7
 "Looks for x such that f(x) = y, i.e. f(x) - y = 0"
-function inverse(f, y, x0=[0, 0])
-	return newton2D(x -> f(x) - y, x0)
+function inverse(f, y, x0 = [0, 0])
+    return newton2D(x -> f(x) - y, x0)
 end
 
 # ╔═╡ 2e2e5f0e-7c31-11eb-0da7-770b07ee6202
 inverse(f) = y -> inverse(f, y)
 
 # ╔═╡ 07a754da-7c31-11eb-0394-4bef4d79fc30
-pre_imagem = inverse(T(α))( [0.3, 0.4] )
+pre_imagem = inverse(T(α))([0.3, 0.4])
 
 # ╔═╡ 02b1b470-7c31-11eb-28f4-411956f73f12
-T(α)( pre_imagem )
+T(α)(pre_imagem)
 
 # ╔═╡ 5faa2784-7c31-11eb-34f1-3f8224dbdbde
-( T(α) ∘ inverse(T(α)) )( [0.3, 0.4] )
+(T(α) ∘ inverse(T(α)))([0.3, 0.4])
 
 # ╔═╡ a5bba8fd-1100-4575-abc7-948b8e01afe8
 md"""
@@ -359,17 +359,17 @@ Como vocês podem esperar, Julia já possui um pacote que possui uma implementa�
 
 # ╔═╡ c387879d-c630-41e2-8026-fb6a907f46b7
 begin
-	function inverse_alt(f, y, u0=[0, 0])
-	    prob = NonlinearProblem{false}((u, p) -> f(u) - y, u0) # Ignoring p
-	    solution = solve(prob, NewtonRaphson(), tol = 1e-4)
-	    return solution.u
-	end
+    function inverse_alt(f, y, u0 = [0, 0])
+        prob = NonlinearProblem{false}((u, p) -> f(u) - y, u0) # Ignoring p
+        solution = solve(prob, NewtonRaphson(), tol = 1e-4)
+        return solution.u
+    end
 
-	inverse_alt(f) = y -> inverse_alt(f, y)
+    inverse_alt(f) = y -> inverse_alt(f, y)
 end
 
 # ╔═╡ e9c8fc52-d97e-4ac8-ade8-d3af785ead19
-inverse_alt(T(α))( [0.3, 0.4] ), inverse(T(α))( [0.3, 0.4] )
+inverse_alt(T(α))([0.3, 0.4]), inverse(T(α))([0.3, 0.4])
 
 # ╔═╡ ee91563e-7c3e-11eb-3f65-1f336073869a
 md"""
@@ -380,65 +380,77 @@ md"""
 straight(x0, y0, x, m) = y0 + m * (x - x0)
 
 # ╔═╡ f25af026-7b9c-11eb-1f11-77a8b06b2d71
-function standard_Newton(f, n, x_range, x0, ymin=-10, ymax=10)
+function standard_Newton(f, n, x_range, x0, ymin = -10, ymax = 10)
 
-	p = plot(f, x_range, lw=3, ylim=(ymin, ymax), legend=:false, size=(400, 300))
+    p = plot(f, x_range, lw = 3, ylim = (ymin, ymax), legend = :false, size = (400, 300))
 
-	hline!([0.0], c=:black)
-	scatter!([x0], [0], c=:green, ann=(x0, -5, L"x_0", 10))
+    hline!([0.0], c = :black)
+    scatter!([x0], [0], c = :green, ann = (x0, -5, L"x_0", 10))
 
     f′ = x -> ForwardDiff.derivative(f, x)
-	x = x0
-	for i in 1:n
-		# Avoid computing multiple times
-		val, deriv = f(x), f′(x)
+    x = x0
+    for i = 1:n
+        # Avoid computing multiple times
+        val, deriv = f(x), f′(x)
 
-		# Vertical line from (x, 0) to (x, f(x))
-		alpha_level = i/n
-		plot!([x, x], [0, val], c=:gray, alpha=0.5*alpha_level)
+        # Vertical line from (x, 0) to (x, f(x))
+        alpha_level = i / n
+        plot!([x, x], [0, val], c = :gray, alpha = 0.5 * alpha_level)
 
-		# Point (x, f(x))
-		scatter!([x], [val], c=:red, alpha=alpha_level)
+        # Point (x, f(x))
+        scatter!([x], [val], c = :red, alpha = alpha_level)
 
-		# Tangent line
-		plot!(x_range, [straight(x, val, xl, deriv) for xl in x_range],
-			  c=:blue, alpha=0.5*alpha_level, ls=:dash, lw=2)
+        # Tangent line
+        plot!(
+            x_range,
+            [straight(x, val, xl, deriv) for xl in x_range],
+            c = :blue,
+            alpha = 0.5 * alpha_level,
+            ls = :dash,
+            lw = 2,
+        )
 
-		# Newton step
-		x = x - val / deriv
+        # Newton step
+        x = x - val / deriv
 
-		# New point (x, 0)
-		if i < n
-			scatter!([x], [0], c="green", alpha=alpha_level)
-		else
-			scatter!([x], [0], c="green", annotate=(x, -5, L"x_{%$i}", 10), alpha=alpha_level)
-		end
-	end
+        # New point (x, 0)
+        if i < n
+            scatter!([x], [0], c = "green", alpha = alpha_level)
+        else
+            scatter!(
+                [x],
+                [0],
+                c = "green",
+                annotate = (x, -5, L"x_{%$i}", 10),
+                alpha = alpha_level,
+            )
+        end
+    end
 
-	p |> as_svg   # This is neat trick, it is like a pipe in bash
+    p |> as_svg   # This is neat trick, it is like a pipe in bash
 end
 
 # ╔═╡ ecb40aea-7b9c-11eb-1476-e54faf32d91c
 let
-	f(x) = x^2 - 2
+    f(x) = x^2 - 2
 
-	standard_Newton(f, n2, -1:0.01:10, x02, -10, 70)
+    standard_Newton(f, n2, -1:0.01:10, x02, -10, 70)
 end
 
 # ╔═╡ ec6c6328-7b9c-11eb-1c69-dba12ae522ad
 let
-	f(x) = 0.2x^3 - 4x + 1
+    f(x) = 0.2x^3 - 4x + 1
 
-	standard_Newton(f, n, -10:0.01:10, x0, -10, 70)
+    standard_Newton(f, n, -10:0.01:10, x0, -10, 70)
 end
 
 # ╔═╡ 886b1265-7495-4552-919a-19fffce66734
 # x |> f pega o x e chama o f nele
 begin
     foo(x) = x + 1
-	bar(x) = x^2
-	4 |> foo |> bar |> tau
-	#   tau(bar(foo(4)))
+    bar(x) = x^2
+    4 |> foo |> bar |> tau
+    #   tau(bar(foo(4)))
 end
 
 # ╔═╡ 00000000-0000-0000-0000-000000000001
