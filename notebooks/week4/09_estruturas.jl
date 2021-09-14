@@ -1,5 +1,5 @@
 ### A Pluto.jl notebook ###
-# v0.15.1
+# v0.16.0
 
 using Markdown
 using InteractiveUtils
@@ -244,7 +244,7 @@ Note que o formato CSC pode não ser ideal se houver muitas colunas "vazias", j�
 """
 
 # ╔═╡ 5de72b7c-f5d6-11ea-1b6f-35b830b5fb34
-# Creates a sparse matriz from rom indices (I), column Indices (J), and values (V)
+# Creates a sparse matriz from row indices (I), column Indices (J), and values (V)
 M2 = sparse([1, 2, 10^6], [4, 9, 10^6], [7, 8, 9])
 
 # ╔═╡ 8b60629e-f5d6-11ea-27c8-d934460d3a57
@@ -259,7 +259,7 @@ md"E lembre, matrizes esparsas podem ser usadas como matrizes usuais:"
 M3 = [1 0 2 0 10; 0 3 4 0 9; 0 0 0 5 8; 0 0 0 0 7]
 
 # ╔═╡ 2e87d4fe-81bc-11eb-0d16-b988bcedcc73
-M4 = M3 .* 0
+M4 = 0 .* M3
 
 # ╔═╡ cde79f38-f5d6-11ea-3297-0b5b240f7b9e
 Dump(sparse(M4))
@@ -414,14 +414,14 @@ md"Vamos somar duas (ou mais) tabelas de multiplicação:"
 A = sum(outer(rand(3), rand(3)) for i = 1:2)
 
 # ╔═╡ 0a79a7b4-f755-11ea-1b2d-21173567b257
-md"Será que é posspivel, a partir da matriz, recuperar a sua estrutura como soma de produtos externos (ou tabelas de multiplicação, ou matrizes de posto 1)?"
+md"Será que é possível, a partir da matriz, recuperar a sua estrutura como soma de produtos externos (ou tabelas de multiplicação, ou matrizes de posto 1)?"
 
 # ╔═╡ 5adb98c2-f6e0-11ea-1fde-53b0fd6639c3
 md"A resposta é sim: para isso usamos a **decomposição em valores singulares** (SVD)."
 
 # ╔═╡ 487d6f9c-81d0-11eb-3bb0-336a4beb9b38
 md"""
-Let's take the SVD and calculate the sum of two outer products:
+Vamos tomar a SVD e calcular a soma de dois produtos externos:
 """
 
 # ╔═╡ 5a493052-f601-11ea-2f5f-f940412905f2
