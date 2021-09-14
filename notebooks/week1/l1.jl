@@ -76,7 +76,7 @@ example_vector = [0.5, 0.4, 0.3, 0.2, 0.1, 0.0, 0.7, 0.0, 0.7, 0.9]
 # ╔═╡ ad6a33b0-eded-11ea-324c-cfabfd658b56
 md"""
 #### Exericício 1.1
-👉 Crie um vetor chamado `random_vect` de comprimento 10 usando a função `rand`. Você pode olhara a definição dessa função usando o sistema de ajuda do Pluto.
+👉 Crie um vetor chamado `random_vect` de comprimento 10 usando a função `rand`. Você pode olhar a definição dessa função usando o sistema de ajuda do Pluto.
 """
 
 # ╔═╡ f51333a6-eded-11ea-34e6-bfbb3a69bcb0
@@ -307,7 +307,7 @@ value_as_color(0.0), value_as_color(0.6), value_as_color(1.0)
 
 # ╔═╡ 3f1a670b-44c2-4cab-909c-65f4ae9ed14b
 md"""
-👉 Agora use as funções `get_reds` e `value_as_color` para visualizar o canal vermelho de `apolo_head`. Dica: pense em usar difusão (a sintaxe do ponto) para aplicar uma função _elmento-a-elemento_.
+👉 Agora use as funções `get_reds` e `value_as_color` para visualizar o canal vermelho de `apolo_head`. Dica: pense em usar difusão (a sintaxe do ponto) para aplicar uma função _elemento-a-elemento_.
 
 Use o botão ➕ do canto inferior esquerdo para adicionar mais células se for preciso..
 """
@@ -2145,7 +2145,7 @@ uuid = "3f19e933-33d8-53b3-aaab-bd5110c3b7a0"
 # ╠═bdc2df7c-ee0c-11ea-2e9f-7d2c085617c1
 # ╟─4139ee66-ee0a-11ea-2282-15d63bcca8b8
 # ╠═20402780-426b-4caa-af8f-ff1e7787b7f9
-# ╟─ed9fb2ac-2680-42b7-9b00-591e45a5e105
+# ╠═ed9fb2ac-2680-42b7-9b00-591e45a5e105
 # ╟─e87e0d14-43a5-490d-84d9-b14ece472061
 # ╠═d38c6958-9300-4f7a-89cf-95ca9e899c13
 # ╠═82f1e006-60fe-4ad1-b9cb-180fafdeb4da
