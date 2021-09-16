@@ -1,5 +1,5 @@
 ### A Pluto.jl notebook ###
-# v0.15.1
+# v0.16.0
 
 using Markdown
 using InteractiveUtils
@@ -15,14 +15,18 @@ end
 
 # ╔═╡ cf82077a-81c2-11eb-1de2-09ed6c35d810
 begin
-    import ImageMagick, ForwardDiff
+    import ImageMagick, ForwardDiff, PyPlot
     using PlutoUI
     using Colors, ColorSchemes, Images
     using Plots
+    gr()
     using LaTeXStrings
 
     using Statistics, LinearAlgebra  # standard libraries
 end
+
+# ╔═╡ 03825a62-7ffd-4bfe-8876-79db1a3131fa
+md"Tradução livre de [pca.jl](https://github.com/mitmath/18S191/blob/Spring21/notebooks/week5/pca.jl)."
 
 # ╔═╡ c593a748-81b6-11eb-295a-a9800f9dec6d
 PlutoUI.TableOfContents(aside = true)
@@ -33,7 +37,7 @@ md"""
 
 Vamos agora passar a olhar outros tipos de **dados** além de imagens. O nosso objetivo será extrair informação desses dados usando métodos estatísticos, nesse primeiro exemplo iremos usar [**análise de componentes principais**](https://en.wikipedia.org/wiki/Principal_component_analysis).  
 
-Esse método procura identificar quais são as _direções_ mais importantes para explicar os dados, para explicar a sua variação. Com isso seremos capazes de [diminuir a dimensionalidade](https://en.wikipedia.org/wiki/Dimensionality_reduction) (número de variáveis úteis ou explicativas) do dados.
+Esse método procura identificar quais são as _direções_ mais importantes para explicar os dados, para capturar a sua variação. Com isso seremos capazes de [diminuir a dimensionalidade](https://en.wikipedia.org/wiki/Dimensionality_reduction) (número de variáveis úteis ou explicativas) do dados.
 
 Podemos encarar essa ideia como uma forma de buscar **estrutura** especial nos dados e, então, explorar esse conhecimento. Ela também leva naturalmente a alguns conceitos de **aprendizgem de máquina**.
 """
@@ -53,7 +57,10 @@ md"Vamos relembrar algumas ideias da última aula. Mais especificamente os conce
 outer(v, w) = [x * y for x in v, y in w]
 
 # ╔═╡ 2e497e30-f895-11ea-09f1-d7f2c1f61193
-outer(1:10, 1:12)
+outer(1:10, 1:10)
+
+# ╔═╡ 4773686e-f955-4422-9b5c-18c51a3b6a8d
+collect(1:10) * collect(1:10)'
 
 # ╔═╡ cfdd04f8-815a-11eb-0409-79a2599c29ab
 md"""
@@ -86,7 +93,7 @@ md"## Posto de matriz"
 
 # ╔═╡ d9aa9af0-f865-11ea-379e-f16b452bd94c
 md"""
-Se uma matriz não nula pode ser escrita como uma _única_ tabela de multiplicação / produto externo, dizemos que ela tem **posto 1**. Isso porque o seu espaço imagem, que é o espaço gerado pelas colunas da matriz é obtido a partir de um único vetor que é "repetido" (a menos de fatores multiplicativos) em todas as colunas. Já se forem necessários a soma de dois produtos externos a matriz terá **posto 2** (pense um pouco sobre isso) e assim sucessivamente.
+Se uma matriz não nula pode ser escrita como uma _única_ tabela de multiplicação / produto externo, dizemos que ela tem **posto 1**. Isso porque o seu espaço imagem, que é o espaço gerado pelas colunas da matriz, é obtido a partir de um único vetor que é "repetido" (a menos de fatores multiplicativos) em todas as colunas. Já, se forem necessários a soma de dois produtos externos, a matriz terá **posto 2** (pense um pouco sobre isso) e assim sucessivamente.
 """
 
 # ╔═╡ 2e8ae92a-f867-11ea-0219-1bdd9627c1ea
@@ -127,7 +134,7 @@ md"""
 
 # ╔═╡ 9cf23f9a-f864-11ea-3a08-af448aceefd8
 md"""
-Mas, como vocês aprenderam em laboratório de física, dados nunca é obtido de maneira perfeita. Sempre algum algum **ruído** aleatório. O que ocorre se adicionamos ruído aleatório em uma matriz de posto 1?
+Mas, como vocês aprenderam em laboratório de física, dados nunca são obtido de maneira perfeita. Sempre algum algum **ruído** aleatório. O que ocorre se adicionamos ruído aleatório em uma matriz de posto 1?
 """
 
 # ╔═╡ a5b62530-f864-11ea-21e8-71ccfed487f8
@@ -177,7 +184,7 @@ begin
 
     scatter(xs, ys, label = "ruidoso", m = :., ms = 4)
 
-    scatter!(xx, yy, label = "Posto 1", m = :square, ms = 3, c = :red)
+    #scatter!(xx, yy, label = "Posto 1", m = :square, ms = 3, c = :red)
 
     title!("Plotar uma matriz de posto 1 gera uma reta!")
 end
@@ -266,7 +273,7 @@ mean(abs.(xs_centered))
 
 # ╔═╡ 5fcf832c-852f-11eb-1354-792933a891a5
 md"""
-Essa medida de dispersão parece adequado, mas vamos olhar uma outra medida possível que tem propriedades teóricas / analíticas melhores.
+Essa medida de dispersão parece adequada, mas vamos olhar uma outra medida possível que tem propriedades teóricas / analíticas melhores.
 """
 
 # ╔═╡ ef4a2a54-81bf-11eb-358b-0da2072f20c8
@@ -288,7 +295,7 @@ begin
 end
 
 # ╔═╡ 03ab44c0-f8fd-11ea-2243-1f3580f98a65
-md"Em torno dos ados originais, obtemos os seguinte limiares para a nuvem de dados:"
+md"Em torno dos dados originais, obtemos os seguinte limiares para a nuvem de dados:"
 
 # ╔═╡ 6dec0db8-ec93-11ea-24ad-e17870ee64c2
 begin
@@ -315,7 +322,7 @@ end
 
 # ╔═╡ 5fab2c32-f86b-11ea-2f27-ed5feaac1fa5
 md"""
-Para dados com distribuição normal, esperamos que a maior parte dele (cerca de 95%) esteja a até dois desvios padrão da média, ou seja entre $\mu \pm 2 \sigma$, em que $\mu$ é a média e $\sigma$ é o desviopadrão. is the standard deviation. A hipótese de distribuição normal não é de fato válida para os dados que estamos usando, mas de qualquer forma vemos que os intervalos dados capturam a maior parte dos dados.
+Para dados com distribuição normal, esperamos que a maior parte dele (cerca de 95%) esteja a até dois desvios padrão da média, ou seja entre $\mu \pm 2 \sigma$, em que $\mu$ é a média e $\sigma$ é o desviopadrão. A hipótese de distribuição normal não é de fato válida para os dados que estamos usando, mas de qualquer forma vemos que os intervalos dados capturam a maior parte dos dados.
 """
 
 # ╔═╡ ae9a2900-ec93-11ea-1ae5-0748221328fc
@@ -327,7 +334,7 @@ Por outro lado, ao olhar a figura vemos que claramente as direções dos eixos $
 
 Precisamos de alguma forma de obter essas direções *a partir dos dados em si*. De posse dessas direções podemos medir a extensão (largura) dos dados nessas direções. 
 
-Mas essas direções especiais, tipicamente, não podem ser obtidadas tentando olhar as vatiáveis $x$ e $y$ de forma isolada. De fato a informação que desejamos deve ser capaz de lançar luz sobre a *relação* que existe entre as variǘeis $x$ e $y$ que está aparente do conjunto dos dados. 
+Mas essas direções especiais, tipicamente, não podem ser obtidadas tentando olhar as vatiáveis $x$ e $y$ de forma isolada. De fato a informação que desejamos deve ser capaz de lançar luz sobre a *relação* que existe entre as variáveis $x$ e $y$ que está aparente do conjunto dos dados. 
 
 De fato nos nossos dados, se $x$ é um numero muito negativo, o mesmo ocorre com $y$. Enquanto que se $x$ cresce e fica grande e positivo, o $y$ vai atrás. Isso sugere que essas duas medidas são **correlacionadas**. Ao conhecermos algo sobre uma delas, aprendemos também algo sobre a outra. 
 
@@ -361,7 +368,7 @@ M = [xs_centered ys_centered]'
 
 # ╔═╡ 7eb51908-f906-11ea-19d2-e947d81cb743
 md"
-Na figura a seguir, estamos rotacionando o eixo (seta vermelha) e projetando os pontos originais no novo exito (e não mais no eixo $x$). 
+Na figura a seguir, estamos rotacionando o eixo (seta vermelha) e projetando os pontos originais no novo eixo (e não mais no eixo $x$). 
 
 Já a figura mais abaixo adota uma postura alternativa que é rodar os dados no sentido inverso. Aqui o eixo $x$ se mantem fixo e projetar o dados rotacionados sobre ele tem o mesmo efeito. 
 
@@ -490,8 +497,15 @@ variance(θ) = var((R(θ)*M)[1, :])
 
 # ╔═╡ 0935c870-f871-11ea-2a0b-b1b824379350
 p3 = begin
-    plot(0:360, variance.(range(0, 2π, length = 361)), leg = false, size = (400, 200))
-    scatter!([degrees], [σ^2])
+    plot(
+        0:360,
+        variance.(range(0, 2π, length = 361)),
+        leg = false,
+        ratio = :auto,
+        size = (400, 200),
+        alpha = 1,
+    )
+    scatter!([degrees], [σ^2], alpha = 1)
     xlabel!("θ")
     ylabel!("Variance in dir. θ")
 end
@@ -627,7 +641,7 @@ end
 
 # ╔═╡ 91b77acc-85a2-11eb-19bb-bd2bdd0c1a68
 md"""
-À luz dessa decomposição vamos interpretar a ção de uma matriz sobre o disco (ou bola) unitário. Para isso vamos gerar dados uniformemente no quadrado $[-1, 1]^2$ e *rejeitar* os que estão fora da bola.
+À luz dessa decomposição vamos interpretar a ação de uma matriz sobre o disco (ou bola) unitário. Para isso vamos gerar dados uniformemente no quadrado $[-1, 1]^2$ e *rejeitar* os que estão fora da bola.
 
 Obs: essa estratégia de gerar pontos uniformes num quadrado, ou retângulo, que contem a figura onde queremos amostrar e rejeitar os pontos que não pertecem à figura de interesse é conhecida como _amostragem por rejeição_ e é uma das formas mais simples de se atingir pontos uniformes em regiões complexa. No caso do disco, a solução inocente de amostrar uniformemente em coordenadas polares **não funciona**.
 """
@@ -649,7 +663,10 @@ t = $(@bind tt Slider(0:0.01:1, show_value=true))
 # ╔═╡ 40b87cbe-85a4-11eb-30f8-cf7b5e79c19a
 # Direct action of the matrix T
 pp1 = begin
-    T = [1+tt tt; tt 1]
+    T = [
+        1+tt tt
+        tt 1
+    ]
     scatter(
         unit_disc[1, :],
         unit_disc[2, :],
@@ -727,20 +744,22 @@ Já as colunas de $V^T$ são pontos da bola unitária de $\mathbb{R}^{300}$. Ass
 
 A seguir pegamos o resultado dessas operações e rotacionamos/refletimos pela matriz $U$, isso gera uma nova elipse que mapeia o eixo x na primeira coluna de $U$ que representa a direção do semi eixo principal da elipse final que são justamente os dados originais. 
 
-Concluímos que a direção principal é dada pela primeira coluna de $U$. Como ela é um vetor unitário, ela está na forma $(\cos \theta, \sin \theta)$ em que $\theta$ é o ângulo de rotação do eixo $x$ que buscávamos. De fato:
+Concluímos que a direção principal é dada pela primeira coluna de $U$. Como ela é um vetor unitário, ela está na forma $(\cos \theta, \sin \theta)$ em que $\theta$ é o ângulo de rotação do eixo $x$ que buscávamos. Ou equivalentemente, $-\theta$ é o ângulo de rotação dos dados que usamos na fução `variance`. De fato,
 """
 
 # ╔═╡ f621e9de-80ba-47c5-918c-3aaa4c951885
 begin
     UM, SM, VM = svd(M)
     θsvd = acos(UM[1, 1])
-    variance(θmax), variance(θsvd)
+    variance(θmax), variance(-θsvd), variance(θmax) < variance(-θsvd)
 end
 
-# ╔═╡ 81dda8f7-d8c2-4199-ad38-2ecc5324896e
-md"A variância é ainda levemente maior do que a melhor que tínhamos encontrado por força bruta.
+# ╔═╡ fd76305e-ec37-4f9d-aaab-459e97bf29d5
+md"Como você pode ver o $-\theta$ calculado a partir da SVD é ainda melhor que o valor calculado pelo método de aproximação por força bruta que usamos antes."
 
-Podemos também ver o que ocorre quando transformamos o círculo que contem os pontos de partida que estavam em $V^t$.
+# ╔═╡ 81dda8f7-d8c2-4199-ad38-2ecc5324896e
+md"
+Podemos também ver o que ocorre quando transformamos o círculo que contém os pontos de partida que estavam em $V^t$. A nossa discussão diz que esse círculo deve ser transformado na ellipse rotacionada com o tamanho certinho para caber todos os pontos no conjunto de dados.
 "
 
 # ╔═╡ 15808ca3-c0b1-4533-a8e2-cda5e2e4316a
@@ -825,6 +844,7 @@ LaTeXStrings = "b964fa9f-0449-5b57-a5c2-d3ea65f4040f"
 LinearAlgebra = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
 Plots = "91a5bcdd-55d7-5caf-9e0b-520d859cae80"
 PlutoUI = "7f904dfe-b85e-4ff6-b463-dae2292396a8"
+PyPlot = "d330b81b-6aea-500a-939a-2ce795aea3ee"
 Statistics = "10745b16-79ce-11e8-11f9-7d13ad32a3b2"
 
 [compat]
@@ -834,8 +854,9 @@ ForwardDiff = "~0.10.19"
 ImageMagick = "~1.2.1"
 Images = "~0.24.1"
 LaTeXStrings = "~1.2.1"
-Plots = "~1.21.3"
+Plots = "~1.22.0"
 PlutoUI = "~0.7.9"
+PyPlot = "~2.10.0"
 """
 
 # ╔═╡ 00000000-0000-0000-0000-000000000002
@@ -859,9 +880,9 @@ uuid = "0dad84c5-d112-42e6-8d28-ef12dabb789f"
 
 [[ArrayInterface]]
 deps = ["IfElse", "LinearAlgebra", "Requires", "SparseArrays", "Static"]
-git-tree-sha1 = "019303a0f26d6012f35ecdfa4618551d145fb9f2"
+git-tree-sha1 = "d84c956c4c0548b4caf0e4e96cf5b6494b5b1529"
 uuid = "4fba245c-0d91-5ea0-9b3e-6abc04ee57a9"
-version = "3.1.31"
+version = "3.1.32"
 
 [[Artifacts]]
 uuid = "56f22d72-fd6d-98f1-02f0-08ddc0907c33"
@@ -906,9 +927,9 @@ version = "0.2.2"
 
 [[ChainRulesCore]]
 deps = ["Compat", "LinearAlgebra", "SparseArrays"]
-git-tree-sha1 = "30ee06de5ff870b45c78f529a6b093b3323256a3"
+git-tree-sha1 = "4ce9393e871aca86cc457d9f66976c3da6902ea7"
 uuid = "d360d2e6-b24c-11e9-a2a3-2a2ae2dbcce4"
-version = "1.3.1"
+version = "1.4.0"
 
 [[ColorSchemes]]
 deps = ["ColorTypes", "Colors", "FixedPointNumbers", "Random"]
@@ -924,9 +945,9 @@ version = "0.11.0"
 
 [[ColorVectorSpace]]
 deps = ["ColorTypes", "FixedPointNumbers", "LinearAlgebra", "SpecialFunctions", "Statistics", "TensorCore"]
-git-tree-sha1 = "42a9b08d3f2f951c9b283ea427d96ed9f1f30343"
+git-tree-sha1 = "a66a8e024807c4b3d186eb1cab2aff3505271f8e"
 uuid = "c3611d14-8923-5661-9e6a-0046d554d3a4"
-version = "0.9.5"
+version = "0.9.6"
 
 [[Colors]]
 deps = ["ColorTypes", "FixedPointNumbers", "Reexport"]
@@ -942,9 +963,9 @@ version = "0.3.0"
 
 [[Compat]]
 deps = ["Base64", "Dates", "DelimitedFiles", "Distributed", "InteractiveUtils", "LibGit2", "Libdl", "LinearAlgebra", "Markdown", "Mmap", "Pkg", "Printf", "REPL", "Random", "SHA", "Serialization", "SharedArrays", "Sockets", "SparseArrays", "Statistics", "Test", "UUIDs", "Unicode"]
-git-tree-sha1 = "727e463cfebd0c7b999bbf3e9e7e16f254b94193"
+git-tree-sha1 = "4866e381721b30fac8dda4c8cb1d9db45c8d2994"
 uuid = "34da2185-b29b-5c13-b0c7-acf172513d20"
-version = "3.34.0"
+version = "3.37.0"
 
 [[CompilerSupportLibraries_jll]]
 deps = ["Artifacts", "Libdl"]
@@ -954,6 +975,12 @@ uuid = "e66e0078-7015-5450-92f7-15fbd957f2ae"
 git-tree-sha1 = "52cb3ec90e8a8bea0e62e275ba577ad0f74821f7"
 uuid = "ed09eef8-17a6-5b46-8889-db040fac31e3"
 version = "0.3.2"
+
+[[Conda]]
+deps = ["JSON", "VersionParsing"]
+git-tree-sha1 = "299304989a5e6473d985212c28928899c74e9421"
+uuid = "8f4d0f93-b110-5947-807f-2305c1781a2d"
+version = "1.5.2"
 
 [[Contour]]
 deps = ["StaticArrays"]
@@ -1066,21 +1093,21 @@ version = "0.3.1"
 
 [[FFTW]]
 deps = ["AbstractFFTs", "FFTW_jll", "LinearAlgebra", "MKL_jll", "Preferences", "Reexport"]
-git-tree-sha1 = "f985af3b9f4e278b1d24434cbb546d6092fca661"
+git-tree-sha1 = "463cb335fa22c4ebacfd1faba5fde14edb80d96c"
 uuid = "7a1cc6ca-52ef-59f5-83cd-3a7055c09341"
-version = "1.4.3"
+version = "1.4.5"
 
 [[FFTW_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg"]
-git-tree-sha1 = "3676abafff7e4ff07bbd2c42b3d8201f31653dcc"
+git-tree-sha1 = "c6033cc3892d0ef5bb9cd29b7f2f0331ea5184ea"
 uuid = "f5851436-0d7a-5f13-b9de-f02708fd171a"
-version = "3.3.9+8"
+version = "3.3.10+0"
 
 [[FileIO]]
 deps = ["Pkg", "Requires", "UUIDs"]
-git-tree-sha1 = "937c29268e405b6808d958a9ac41bfe1a31b08e7"
+git-tree-sha1 = "3c041d2ac0a52a12a27af2782b34900d9c3ee68c"
 uuid = "5789e2e9-d7fb-5bc7-8068-2c6fae9b9549"
-version = "1.11.0"
+version = "1.11.1"
 
 [[FixedPointNumbers]]
 deps = ["Statistics"]
@@ -1126,9 +1153,9 @@ version = "3.3.5+0"
 
 [[GR]]
 deps = ["Base64", "DelimitedFiles", "GR_jll", "HTTP", "JSON", "Libdl", "LinearAlgebra", "Pkg", "Printf", "Random", "Serialization", "Sockets", "Test", "UUIDs"]
-git-tree-sha1 = "182da592436e287758ded5be6e32c406de3a2e47"
+git-tree-sha1 = "c2178cfbc0a5a552e16d097fae508f2024de61a3"
 uuid = "28b8d3ca-fb5f-59d9-8090-bfdbd6d07a71"
-version = "0.58.1"
+version = "0.59.0"
 
 [[GR_jll]]
 deps = ["Artifacts", "Bzip2_jll", "Cairo_jll", "FFMPEG_jll", "Fontconfig_jll", "GLFW_jll", "JLLWrappers", "JpegTurbo_jll", "Libdl", "Libtiff_jll", "Pixman_jll", "Pkg", "Qt5Base_jll", "Zlib_jll", "libpng_jll"]
@@ -1455,9 +1482,9 @@ uuid = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
 
 [[LogExpFunctions]]
 deps = ["ChainRulesCore", "DocStringExtensions", "IrrationalConstants", "LinearAlgebra"]
-git-tree-sha1 = "1f5097e3bce576e1cdf6dc9f051ab8c6e196b29e"
+git-tree-sha1 = "34dc30f868e368f8a17b728a1238f3fcda43931a"
 uuid = "2ab3a3ac-af41-5b50-aa03-7779005ae688"
-version = "0.3.1"
+version = "0.3.3"
 
 [[Logging]]
 uuid = "56ddb016-857b-54e1-b83d-db4d58db5568"
@@ -1470,9 +1497,9 @@ version = "2021.1.1+1"
 
 [[MacroTools]]
 deps = ["Markdown", "Random"]
-git-tree-sha1 = "0fb723cd8c45858c22169b2e42269e53271a6df7"
+git-tree-sha1 = "5a5bc6bf062f0f95e62d0fe0a2d99699fed82dd9"
 uuid = "1914dd2f-81c6-5fcd-8719-6d5c9610ff09"
-version = "0.5.7"
+version = "0.5.8"
 
 [[MappedArrays]]
 git-tree-sha1 = "e8b359ef06ec72e8c030463fe02efe5527ee5142"
@@ -1500,9 +1527,9 @@ version = "0.3.1"
 
 [[Missings]]
 deps = ["DataAPI"]
-git-tree-sha1 = "2ca267b08821e86c5ef4376cffed98a46c2cb205"
+git-tree-sha1 = "bf210ce90b6c9eed32d25dbcae1ebc565df2687f"
 uuid = "e1d29d7a-bbdc-5cf2-9ac0-f12de2c33e28"
-version = "1.0.1"
+version = "1.0.2"
 
 [[Mmap]]
 uuid = "a63ad114-7e13-5084-954f-fe012c677804"
@@ -1631,15 +1658,15 @@ version = "2.0.1"
 
 [[PlotUtils]]
 deps = ["ColorSchemes", "Colors", "Dates", "Printf", "Random", "Reexport", "Statistics"]
-git-tree-sha1 = "9ff1c70190c1c30aebca35dc489f7411b256cd23"
+git-tree-sha1 = "2537ed3c0ed5e03896927187f5f2ee6a4ab342db"
 uuid = "995b91a9-d308-5afd-9ec6-746e21dbc043"
-version = "1.0.13"
+version = "1.0.14"
 
 [[Plots]]
 deps = ["Base64", "Contour", "Dates", "Downloads", "FFMPEG", "FixedPointNumbers", "GR", "GeometryBasics", "JSON", "Latexify", "LinearAlgebra", "Measures", "NaNMath", "PlotThemes", "PlotUtils", "Printf", "REPL", "Random", "RecipesBase", "RecipesPipeline", "Reexport", "Requires", "Scratch", "Showoff", "SparseArrays", "Statistics", "StatsBase", "UUIDs"]
-git-tree-sha1 = "2dbafeadadcf7dadff20cd60046bba416b4912be"
+git-tree-sha1 = "b1a708d607125196ea1acf7264ee1118ce66931b"
 uuid = "91a5bcdd-55d7-5caf-9e0b-520d859cae80"
-version = "1.21.3"
+version = "1.22.0"
 
 [[PlutoUI]]
 deps = ["Base64", "Dates", "InteractiveUtils", "JSON", "Logging", "Markdown", "Random", "Reexport", "Suppressor"]
@@ -1662,6 +1689,18 @@ deps = ["Distributed", "Printf"]
 git-tree-sha1 = "afadeba63d90ff223a6a48d2009434ecee2ec9e8"
 uuid = "92933f4c-e287-5a05-a399-4b506db050ca"
 version = "1.7.1"
+
+[[PyCall]]
+deps = ["Conda", "Dates", "Libdl", "LinearAlgebra", "MacroTools", "Serialization", "VersionParsing"]
+git-tree-sha1 = "169bb8ea6b1b143c5cf57df6d34d022a7b60c6db"
+uuid = "438e738f-606a-5dbb-bf0a-cddfbfd45ab0"
+version = "1.92.3"
+
+[[PyPlot]]
+deps = ["Colors", "LaTeXStrings", "PyCall", "Sockets", "Test", "VersionParsing"]
+git-tree-sha1 = "14c1b795b9d764e1784713941e787e1384268103"
+uuid = "d330b81b-6aea-500a-939a-2ce795aea3ee"
+version = "2.10.0"
 
 [[Qt5Base_jll]]
 deps = ["Artifacts", "CompilerSupportLibraries_jll", "Fontconfig_jll", "Glib_jll", "JLLWrappers", "Libdl", "Libglvnd_jll", "OpenSSL_jll", "Pkg", "Xorg_libXext_jll", "Xorg_libxcb_jll", "Xorg_xcb_util_image_jll", "Xorg_xcb_util_keysyms_jll", "Xorg_xcb_util_renderutil_jll", "Xorg_xcb_util_wm_jll", "Zlib_jll", "xkbcommon_jll"]
@@ -1695,9 +1734,9 @@ version = "1.1.2"
 
 [[RecipesPipeline]]
 deps = ["Dates", "NaNMath", "PlotUtils", "RecipesBase"]
-git-tree-sha1 = "d4491becdc53580c6dadb0f6249f90caae888554"
+git-tree-sha1 = "7ad0dfa8d03b7bcf8c597f59f5292801730c55b8"
 uuid = "01d81517-befc-4cb6-b9ec-a95719d0359c"
-version = "0.4.0"
+version = "0.4.1"
 
 [[Reexport]]
 git-tree-sha1 = "45e428421666073eab6f2da5c9d310d99bb12f9b"
@@ -1771,9 +1810,9 @@ version = "0.1.1"
 
 [[Static]]
 deps = ["IfElse"]
-git-tree-sha1 = "854b024a4a81b05c0792a4b45293b85db228bd27"
+git-tree-sha1 = "a8f30abc7c64a39d389680b74e749cf33f872a70"
 uuid = "aedffcd0-7271-4cad-89d0-dc628f76c6d3"
-version = "0.3.1"
+version = "0.3.3"
 
 [[StaticArrays]]
 deps = ["LinearAlgebra", "Random", "Statistics"]
@@ -1798,9 +1837,9 @@ version = "0.33.10"
 
 [[StructArrays]]
 deps = ["Adapt", "DataAPI", "StaticArrays", "Tables"]
-git-tree-sha1 = "1700b86ad59348c0f9f68ddc95117071f947072d"
+git-tree-sha1 = "f41020e84127781af49fc12b7e92becd7f5dd0ba"
 uuid = "09ab397b-f2b6-538f-b94a-2f83cf4a842a"
-version = "0.6.1"
+version = "0.6.2"
 
 [[Suppressor]]
 git-tree-sha1 = "a819d77f31f83e5792a76081eee1ea6342ab8787"
@@ -1819,9 +1858,9 @@ version = "1.0.1"
 
 [[Tables]]
 deps = ["DataAPI", "DataValueInterfaces", "IteratorInterfaceExtensions", "LinearAlgebra", "TableTraits", "Test"]
-git-tree-sha1 = "d0c690d37c73aeb5ca063056283fde5585a41710"
+git-tree-sha1 = "1162ce4a6c4b7e31e0e6b14486a6986951c73be9"
 uuid = "bd369af6-aec1-5ad0-b16a-f7cc5008161c"
-version = "1.5.0"
+version = "1.5.2"
 
 [[Tar]]
 deps = ["ArgTools", "SHA"]
@@ -1839,9 +1878,9 @@ uuid = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
 
 [[TiffImages]]
 deps = ["ColorTypes", "DocStringExtensions", "FileIO", "FixedPointNumbers", "IndirectArrays", "Inflate", "OffsetArrays", "OrderedCollections", "PkgVersion", "ProgressMeter"]
-git-tree-sha1 = "03fb246ac6e6b7cb7abac3b3302447d55b43270e"
+git-tree-sha1 = "632a8d4dbbad6627a4d2d21b1c6ebcaeebb1e1ed"
 uuid = "731e570b-9d59-4bfa-96dc-6df516fadf69"
-version = "0.4.1"
+version = "0.4.2"
 
 [[TiledIteration]]
 deps = ["OffsetArrays"]
@@ -1865,6 +1904,11 @@ version = "1.0.2"
 
 [[Unicode]]
 uuid = "4ec0a83e-493e-50e2-b9ac-8f72acf5a8f5"
+
+[[VersionParsing]]
+git-tree-sha1 = "80229be1f670524750d905f8fc8148e5a8c4537f"
+uuid = "81def892-9a0e-5fdd-b105-ffc91e053289"
+version = "1.2.0"
 
 [[Wayland_jll]]
 deps = ["Artifacts", "Expat_jll", "JLLWrappers", "Libdl", "Libffi_jll", "Pkg", "XML2_jll"]
@@ -2084,6 +2128,7 @@ version = "0.9.1+5"
 """
 
 # ╔═╡ Cell order:
+# ╟─03825a62-7ffd-4bfe-8876-79db1a3131fa
 # ╠═cf82077a-81c2-11eb-1de2-09ed6c35d810
 # ╠═c593a748-81b6-11eb-295a-a9800f9dec6d
 # ╟─deb2af50-8524-11eb-0dd4-9d799ff6d3e2
@@ -2092,6 +2137,7 @@ version = "0.9.1+5"
 # ╟─fed5845e-f863-11ea-2f95-c331d3c62647
 # ╠═0e1a6d80-f864-11ea-074a-5f7890180114
 # ╠═2e497e30-f895-11ea-09f1-d7f2c1f61193
+# ╠═4773686e-f955-4422-9b5c-18c51a3b6a8d
 # ╟─cfdd04f8-815a-11eb-0409-79a2599c29ab
 # ╟─ab3d55cc-f905-11ea-2f22-5398f3aca803
 # ╠═13b6c108-f864-11ea-2447-2b0741f15c7b
@@ -2123,7 +2169,7 @@ version = "0.9.1+5"
 # ╠═54977286-f908-11ea-166d-d1df33f38454
 # ╠═7b4e90b4-f866-11ea-26b3-95efde6c650b
 # ╟─f574ad7c-f866-11ea-0efa-d9d0602aa63b
-# ╠═8775b3fe-f866-11ea-3e6f-9732e39a3525
+# ╟─8775b3fe-f866-11ea-3e6f-9732e39a3525
 # ╠═1147cbda-f867-11ea-08fa-ef6ed2ae1e93
 # ╟─8a611e36-f867-11ea-121f-317b7c145fe3
 # ╟─f7371934-f867-11ea-3b53-d1566684585c
@@ -2143,7 +2189,7 @@ version = "0.9.1+5"
 # ╟─f5358ce4-f86a-11ea-2989-b1f37be89183
 # ╠═2c3721da-f86b-11ea-36cf-3fe4c6622dc6
 # ╟─03ab44c0-f8fd-11ea-2243-1f3580f98a65
-# ╟─6dec0db8-ec93-11ea-24ad-e17870ee64c2
+# ╠═6dec0db8-ec93-11ea-24ad-e17870ee64c2
 # ╟─5fab2c32-f86b-11ea-2f27-ed5feaac1fa5
 # ╟─ae9a2900-ec93-11ea-1ae5-0748221328fc
 # ╟─b81c9db2-ec93-11ea-0dbd-4bd0951cb2cc
@@ -2156,10 +2202,10 @@ version = "0.9.1+5"
 # ╟─4f1980ea-f86f-11ea-3df2-35cca6c961f3
 # ╟─f70065aa-835a-11eb-00cb-ffa27bcb486e
 # ╠═8b8e6b2e-8531-11eb-1ea6-637db25b28d5
-# ╟─3b71142c-f86f-11ea-0d43-47011d00786c
+# ╠═3b71142c-f86f-11ea-0d43-47011d00786c
 # ╟─c9da6e64-8540-11eb-3984-47fdf8be0dac
 # ╠═2ffe7ed0-f870-11ea-06aa-390581500ca1
-# ╟─88bbe1bc-f86f-11ea-3b6b-29175ddbea04
+# ╠═88bbe1bc-f86f-11ea-3b6b-29175ddbea04
 # ╟─a5cdad52-f906-11ea-0486-755a6403a367
 # ╠═0115c974-f871-11ea-1204-054510848849
 # ╠═0935c870-f871-11ea-2a0b-b1b824379350
@@ -2188,6 +2234,7 @@ version = "0.9.1+5"
 # ╠═701b2cd0-5160-4cd7-91e7-0883cc829a6b
 # ╟─8226e48e-b436-4b2b-b855-ca0caed7d914
 # ╠═f621e9de-80ba-47c5-918c-3aaa4c951885
+# ╟─fd76305e-ec37-4f9d-aaab-459e97bf29d5
 # ╟─81dda8f7-d8c2-4199-ad38-2ecc5324896e
 # ╠═15808ca3-c0b1-4533-a8e2-cda5e2e4316a
 # ╟─467e5a2c-9b6e-44d2-a645-aacf01fcdb0f
