@@ -1,5 +1,5 @@
 ### A Pluto.jl notebook ###
-# v0.15.1
+# v0.16.0
 
 using Markdown
 using InteractiveUtils
@@ -449,6 +449,7 @@ end
 begin
     foo(x) = x + 1
     bar(x) = x^2
+	tau(x) = x - 2
     4 |> foo |> bar |> tau
     #   tau(bar(foo(4)))
 end
