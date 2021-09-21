@@ -1,5 +1,5 @@
 ### A Pluto.jl notebook ###
-# v0.16.0
+# v0.16.1
 
 using Markdown
 using InteractiveUtils
@@ -40,7 +40,7 @@ Como já enfatizamos algumas vezes, aprender uma linguagem de programação não
 # ╔═╡ 4f9bd326-8724-11eb-2c9b-db1ac9464f1e
 md"""
 
-- Bibliote `Base` da Julia (não é preciso `using`):
+- Biblioteca `Base` da Julia (não é preciso `using`):
 
   - `if...else...end`.
   - `Dict`: o tipo dicionário de Julia.
@@ -116,7 +116,7 @@ distinguishable_colors(10)
 typeof(distinguishable_colors(10))
 
 # ╔═╡ 0926366a-86b2-11eb-0f6d-31ae6981598c
-rand(distinguishable_colors(3))   # from Colors.jl package
+rand(distinguishable_colors(10))   # from Colors.jl package
 
 # ╔═╡ 7c8d7b72-86b2-11eb-2dd5-4f77bc5fb8ff
 md"""
@@ -178,7 +178,7 @@ md"""
 md"""
 A função `rand` faz amostragem **uniforme**. Ou seja, a probabilidade de cada um dos valores possíveis é a mesma. 
 
-Para verificar isso podemos jogar um monte de moedas e contar o número de caras e coras usando a função  `countmap` de `StatsBase.jl`. Essa função devolve um dicionário que mapeia cada possível valor no número de vezes que ele foi sorteado.
+Para verificar isso podemos jogar várias moedas e contar o número de caras e coras usando a função  `countmap` de `StatsBase.jl`. Essa função devolve um dicionário que mapeia cada possível valor no número de vezes que ele foi sorteado.
 """
 
 # ╔═╡ 8fe715e4-8727-11eb-2e7f-15b723bb8d9d
@@ -201,7 +201,7 @@ prob_tail = toss_counts["tail"] / length(tosses)
 md"""
 Note tamtém que `countmap` retorna um **dicionário** (`Dict`). Esse tipo de estrutura de dados mapeia **chaves** em valores **values** e tem como principal característica uma alta velocidade no acesso. Por outro lado, ele não garante ordem, já que sua implementação está baseada em tabelas de colisão (_hash_). 
 
-Outro detalhe é que dicionários se mostram guardado pares de valore na forma "`hear` => 1`, vamos ver o que é isso.
+Outro detalhe é que dicionários se apresentam como se armazenassem pares de valore na forma "`head` => 1`, vamos ver o que é isso.
 """
 
 # ╔═╡ e4efdc99-53f0-4759-8cf8-fd68532a860c
@@ -211,7 +211,7 @@ Outro detalhe é que dicionários se mostram guardado pares de valore na forma "
 typeof("head" => 1)
 
 # ╔═╡ b0d18819-282a-4bc9-abaa-97a1d0d40491
-md"Esse é um tipo de dado específico em Julia, que simplesmente armazena dois valores em ordem dentro de uma estrutura. Notem que cada para diferente é único, os dois valores devem ser iguais para o par ser igual.
+md"Esse é um tipo de dado específico em Julia, que simplesmente armazena dois valores em ordem dentro de uma estrutura. Notem que cada par diferente é único, os dois valores devem ser exatamente iguais para o pares serem iguais.
 "
 
 # ╔═╡ 55f68bfe-7fe7-4f6f-ac36-d8a4f7287fcb
@@ -233,12 +233,12 @@ md"""
 
 # ╔═╡ 6a439c78-8728-11eb-1969-27a19d254704
 md"""
-Agora vamos pensar como podemos modelar uma moeda _viciada_ ou, sendo mais politicamente correto, uma moeda com _pesos_. Vamos tentar que saim mais caras do que coroas. Digamos que queremos que a probabilidade de sair cara seja $p = 0.7$. Consequentemente sobra $q = 0.3$ para coroa.
+Agora vamos pensar como podemos modelar uma moeda _viciada_ ou, sendo mais politicamente correto, uma moeda com _pesos_. Vamos tentar que sejam mais comuns caras do que coroas. Digamos que queremos que a probabilidade de sair cara seja $p = 0.7$. Consequentemente sobra $q = 0.3$ para coroa.
 """
 
 # ╔═╡ 9f8ac08c-8728-11eb-10ad-f93ca225ce38
 md"""
-Uma opção é escolher número de `1:10` e escolher um subconjunto com a probabilidade desejada para associar a cada valor. Por exemplo, se sair um número entre 1 e 7, escolhemos cara. Já se for de 8 a 10, coroa.
+Uma opção é escolher aleatoriamente número de `1:10` e selecionar um subconjunto com a probabilidade desejada para associar a cada valor. Por exemplo, se sair um número entre 1 e 7, associamos à cara. Já se for de 8 a 10, coroa.
 """
 
 # ╔═╡ 062b400a-8729-11eb-16c5-235cef648edb
@@ -253,6 +253,15 @@ function simple_weighted_coin()
     return outcome
 end
 
+# ╔═╡ beb01793-063d-49ed-ba03-ad95b795f3e1
+simple_weighted_coin()
+
+# ╔═╡ 97cb3dde-8746-11eb-0b00-690f20cb26dc
+# But for does't.
+result = for i in 1:10
+	10
+end
+
 # ╔═╡ 7c099606-8746-11eb-37fe-c3befde06e9d
 function simple_weighted_coin2()
     if rand(1:10) ≤ 7
@@ -260,11 +269,6 @@ function simple_weighted_coin2()
     else      # could have elseif
         "tails"
     end
-end
-
-# ╔═╡ 97cb3dde-8746-11eb-0b00-690f20cb26dc
-# But for does't.
-result = for i in 1:10
 end
 
 # ╔═╡ 9d8cdc8e-8746-11eb-2b9a-b30a52026f09
@@ -316,7 +320,7 @@ md"""
 
 # ╔═╡ f20504de-86b3-11eb-3125-3140e0e060b0
 md"""
-Uma vez que tivermos gerado vários objetos aleatórias é natural querer contar **quantas vezes** cada resultado ocorreu.
+Uma vez que tivermos gerado vários objetos aleatórios é natural querer contar **quantas vezes** cada resultado ocorreu.
 """
 
 # ╔═╡ 7f1a3766-86b4-11eb-353f-b13acaf1503e
@@ -415,7 +419,7 @@ md"""
 """
 
 # ╔═╡ d0c9814e-86b1-11eb-2f29-1d041bccc649
-# Rolls a 12 faces (fair) dice
+# Rolls n times 12 faces (fair) dices and add up the results
 roll_dice(n) = sum(rand(1:12, n))
 
 # ╔═╡ 7a16b674-86b7-11eb-3aa5-83712cdc8580
@@ -450,7 +454,7 @@ end
 
 # ╔═╡ a15fc456-8738-11eb-25bd-b15c2b16d461
 md"""
-Agora trocamos do gráfico de barras, para **histogramas** que são mais adequados quando imaginamos que o número de possíveis são números que não queremos encarar como categoriais. Histogramas agrupam todas as ocorrências que ocorrem em certa faixas ou **bins**. Para $n$ pequeno o experimeo é lançar um único dado e o resultado é uma distribuição uniforme para cada possível valor. Mas a partir daí os valores pequenos e  grandes ão ficanod menos prováveis e a soma passa a se grupar em torno de uma média. E a médida que o $n$ aumenta a distribuição de valores se parece cada vez mais com uma distribuição contínua e suave na reta devida a **agregação**. 
+Agora trocamos do gráfico de barras, para **histogramas** que são mais adequados quando imaginamos que o número de possíveis são números que não queremos encarar como categoriais. Histogramas agrupam todas as ocorrências que ocorrem em certa faixas ou **bins**. Para $n = 1$ o experimeto é lançar um único dado e o resultado é uma distribuição uniforme para cada possível valor. Mas a partir daí os valores pequenos e  grandes vão ficanod menos prováveis e a soma passa a se grupar em torno de uma média. E a medida que o $n$ aumenta a distribuição de valores se parece cada vez mais com uma distribuição contínua e suave na reta devida a **agregação**. 
 """
 
 # ╔═╡ dd753568-8736-11eb-1f20-1b81110ae807
@@ -509,7 +513,7 @@ Em primeiro lugar, vamos fazer como na aula passada: vamos centralizar os valore
 μ, σ = mean(data), std(data)
 
 # ╔═╡ 16023bea-8739-11eb-1e32-79f2d006b093
-normalised_data = (data .- mean(data)) ./ std(data)
+normalised_data = (data .- μ) ./ σ
 
 # ╔═╡ aa6126f8-873b-11eb-3b4a-0f96fe07b7fb
 begin
@@ -540,7 +544,7 @@ md"""
 md"""
 Usamos várias opções para a função `histogram` para controlar como o gráfico se comporta:
 - `legend=false` desliga a legenda dos gráficos, ou seja os rótulos de cada curva.
-- `bins=XX` define o úmero de **bins**. Podemos também passar um vetor com os extremos de cada bin.
+- `bins=XX` define o número de **bins**. Podemos também passar um vetor com os extremos de cada bin.
 - `linetype=:stephist`: vai usar linhas no lugar de barras.
 
 
@@ -553,7 +557,7 @@ Há várias formas de definir as cores. Há uma [lista de nomes de cores](http:/
 
 # ╔═╡ 900af0c8-86ba-11eb-2270-71b1869b9a1a
 md"""
-Note that `linetype=:stephist` will give a stepped version of the histogram:
+Observe que `linetype=:stephist` resulta em um curva de histograma em formato de escada, aon invés de usar barras.
 """
 
 # ╔═╡ be6e4c00-873c-11eb-1413-5326aba54216
@@ -1234,9 +1238,9 @@ uuid = "56ddb016-857b-54e1-b83d-db4d58db5568"
 
 [[MKL_jll]]
 deps = ["Artifacts", "IntelOpenMP_jll", "JLLWrappers", "LazyArtifacts", "Libdl", "Pkg"]
-git-tree-sha1 = "c253236b0ed414624b083e6b72bfe891fbd2c7af"
+git-tree-sha1 = "5455aef09b40e5020e1520f551fa3135040d4ed0"
 uuid = "856f044c-d86e-5d09-b602-aeab76dc8ba7"
-version = "2021.1.1+1"
+version = "2021.1.1+2"
 
 [[MacroTools]]
 deps = ["Markdown", "Random"]
@@ -1935,10 +1939,11 @@ version = "0.9.1+5"
 # ╠═112bfed2-96ea-4d1a-b265-594091dd213f
 # ╟─57125768-8728-11eb-3c3b-1dd37e1ac189
 # ╟─6a439c78-8728-11eb-1969-27a19d254704
-# ╟─9f8ac08c-8728-11eb-10ad-f93ca225ce38
+# ╠═9f8ac08c-8728-11eb-10ad-f93ca225ce38
 # ╠═062b400a-8729-11eb-16c5-235cef648edb
-# ╠═7c099606-8746-11eb-37fe-c3befde06e9d
+# ╠═beb01793-063d-49ed-ba03-ad95b795f3e1
 # ╠═97cb3dde-8746-11eb-0b00-690f20cb26dc
+# ╠═7c099606-8746-11eb-37fe-c3befde06e9d
 # ╠═9d8cdc8e-8746-11eb-2b9a-b30a52026f09
 # ╠═81a30c9e-8746-11eb-38c8-9be4f6ba2e80
 # ╟─5ea5838a-8729-11eb-1749-030533fb0656
@@ -1954,7 +1959,7 @@ version = "0.9.1+5"
 # ╟─f20504de-86b3-11eb-3125-3140e0e060b0
 # ╟─7f1a3766-86b4-11eb-353f-b13acaf1503e
 # ╠═02d03642-86b4-11eb-365a-63ff61ddd3b5
-# ╠═371838f8-86b4-11eb-1633-8d282e42a085
+# ╟─371838f8-86b4-11eb-1633-8d282e42a085
 # ╠═94688c1a-8747-11eb-13a3-eb36f731674c
 # ╠═ad701cdc-8747-11eb-3804-63a0fc881547
 # ╠═2405eb68-86b4-11eb-31b0-dff8e355d88e
@@ -1980,7 +1985,7 @@ version = "0.9.1+5"
 # ╠═514f6be0-86b8-11eb-30c9-d1020f783afe
 # ╟─a15fc456-8738-11eb-25bd-b15c2b16d461
 # ╟─dd753568-8736-11eb-1f20-1b81110ae807
-# ╠═8ab9001a-8737-11eb-1009-5717fbe83af7
+# ╟─8ab9001a-8737-11eb-1009-5717fbe83af7
 # ╟─f8b2dd20-8737-11eb-1593-43659c693109
 # ╠═14f0a090-8737-11eb-0ccf-391249267401
 # ╟─e305467e-8738-11eb-1213-eb11aaebe151
@@ -1990,7 +1995,7 @@ version = "0.9.1+5"
 # ╠═16023bea-8739-11eb-1e32-79f2d006b093
 # ╠═aa6126f8-873b-11eb-3b4a-0f96fe07b7fb
 # ╟─308547c6-873d-11eb-3a42-833f8bf496ae
-# ╠═cb2fb68e-8749-11eb-29ea-9729ac0c63b4
+# ╟─cb2fb68e-8749-11eb-29ea-9729ac0c63b4
 # ╟─e0a1863e-8735-11eb-1182-1b3c59b1e05a
 # ╟─900af0c8-86ba-11eb-2270-71b1869b9a1a
 # ╟─be6e4c00-873c-11eb-1413-5326aba54216
