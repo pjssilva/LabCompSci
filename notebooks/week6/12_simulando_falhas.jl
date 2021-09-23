@@ -102,27 +102,29 @@ md"""
 """
 
 # ╔═╡ 178631ec-8cac-11eb-1117-5d872ba7f66e
-function simulate(N, p)
-    v = fill(0, N, N)
-    t = 0
+function simulate(m, p, tmax = 100)
+	# We use tmax + 1 to indicate that the failure did not occur in
+	# the simulation time frame.
+    S = fill(tmax + 1, m, m)
 
-    while any(v .== 0) && t < 100
+	t = 0
+    while t < tmax && any(S .== tmax + 1)
         t += 1
 
-        for i = 1:N, j = 1:N
-            if rand() < p && v[i, j] == 0
-                v[i, j] = t
+        for i = 1:m, j = 1:m
+            if rand() < p && S[i, j] == tmax + 1
+                S[i, j] = t
             end
         end
 
     end
 
-    return v
+    return S
 end
 
 # ╔═╡ 179a4db2-8cac-11eb-374f-0f24dc81ebeb
 md"""
-M= $(@bind M Slider(2:20, show_value=true, default=8))
+m = $(@bind m Slider(2:20, show_value=true, default=8))
 """
 
 # ╔═╡ 17cf895a-8cac-11eb-017e-c79ffcab60b1
@@ -133,10 +135,7 @@ t = $(@bind tt Slider(1:100, show_value=true, default=1))
 """
 
 # ╔═╡ 17bbf532-8cac-11eb-1e3f-c54072021208
-simulation = simulate(M, prob)
-
-# ╔═╡ 18f2d99f-f16a-4678-b73d-132febd6e16e
-be
+simulation = simulate(m, prob)
 
 # ╔═╡ 18da7920-8cac-11eb-07f4-e109298fd5f1
 begin
@@ -156,20 +155,20 @@ begin
 
 	plot(size = (500, 500), ratio = 1, legend = false, axis = false, ticks = false, grid = false)
 
-    for i = 1:M, j = 1:M
-        plot!(rectangle(w, h, i, j), c = :black, fill = true, alpha = 0.5)
-        plot!(circle(0.3, i + 0.45, j + 0.45), c = c[i, j], fill = true, alpha = 0.5)
+    for i = 1:m, j = 1:m
+        plot!(rectangle(w, h, i, m - 1 - j), c = :black, fill = true, alpha = 0.5)
+        plot!(circle(0.3, i + 0.45, m - (j + 0.55)), c = c[j, i], fill = true, alpha = 0.5)
     end
 
-    for i = 1:M, j = 1:M
-        if simulation[i, j] < tt
-            annotate!(i + 0.45, j + 0.5, text("$(simulation[i, j])", 7, :white))
+    for i = 1:m, j = 1:m
+        if simulation[j, i] < tt
+            annotate!(i + 0.5, m - (j + 0.55), text("$(simulation[j, i])", 7, :white))
         end
     end
 
 
     plot!(
-        lims = (0.5, M + 1.1),
+        lims = (0, m + 1.1, 0, m + 1.1),
         title = "time = $(tt-1);  failed count: $(sum(simulation.<tt))",
     )
 end
@@ -180,12 +179,14 @@ begin
     plot(size = (500, 300))
     cdf = [count(simulation .≤ i) for i = 0:100]
     bar!(cdf, c = :purple, legend = false, xlim = (0, tt), alpha = 0.8)
+	title!("Total failed in time")
 end
 
 # ╔═╡ 1829091c-8cac-11eb-1b77-c5ed7dd1261b
 begin
     newcdf = [count(simulation .> i) for i = 0:100]
     bar!(newcdf, c = RGB(0, 1, 0), legend = false, xlim = (0, tt), alpha = 0.8)
+	title!("Glowing vs failed in time")
 end
 
 # ╔═╡ 1851dd6a-8cac-11eb-18e4-87dbe1714be0
@@ -195,6 +196,7 @@ bar(
     legend = false,
     xlim = (0, tt + 0.5),
     size = (500, 300),
+	title = "Number of failures at each period"
 )
 
 # ╔═╡ a9447530-8cb6-11eb-38f7-ff69a640e3c4
@@ -218,7 +220,7 @@ Em seguida, convertemos a string para HTML, usando o construtor`HTML(...)` e Plu
 url = "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b3/ETH-BIB-Bernoulli%2C_Daniel_%281700-1782%29-Portrait-Portr_10971.tif_%28cropped%29.jpg/440px-ETH-BIB-Bernoulli%2C_Daniel_%281700-1782%29-Portrait-Portr_10971.tif_%28cropped%29.jpg"
 
 # ╔═╡ 5a0b407e-8cb7-11eb-0c0d-c7767a6b0a1d
-s = "<img src=$(url) width=$(bernoulliwidth)>"
+s = "<img src=$url width=$bernoulliwidth>"
 
 # ╔═╡ fe53ee0c-8cb6-11eb-19bc-2976da1abe16
 md"""
@@ -532,7 +534,7 @@ md"""
 md"""
 No instante $0$ existem $N_0$ lâmpadas funcinando. Quandas ficam ``{\color{red} \text{vermelhas}}`` (queimam) no primeiro passo? Vamos chamar isso de $\Delta N_0$.
 
-Intuitivamente, a média é $\langle \Delta N_0 \rangle = p N_0$. Mas isso não captura tudo. De fato, $\Delta N_0$ é uma variável aleatório. Em princípio, pode ocorrer que nenhuma lâmpada queime, ou mesmo que todos queimem ao mesmo tempo. Mas esses dois eventos têm probabilidade baixa.
+Intuitivamente, a média é $\langle \Delta N_0 \rangle = p N_0$. Mas isso não captura tudo. De fato, $\Delta N_0$ é uma variável aleatória. Em princípio, pode ocorrer que nenhuma lâmpada queime, ou mesmo que todos queimem ao mesmo tempo. Mas esses dois eventos têm probabilidade baixa.
 
 Para cada uma das $N_0$ Lâmpadas, $i=1, \ldots, N_0$, temos uma variável aleatória Bernoulli que nos diz se a lâmpada $i$ vai queimar. Vamos denotar esse variável  $B_0^i$.
 
@@ -1565,11 +1567,10 @@ version = "0.9.1+5"
 # ╟─f9a75ac4-08d9-11eb-3167-011eb698a32c
 # ╟─17812c7c-8cac-11eb-1d0a-6512415f6938
 # ╠═178631ec-8cac-11eb-1117-5d872ba7f66e
-# ╠═179a4db2-8cac-11eb-374f-0f24dc81ebeb
+# ╟─179a4db2-8cac-11eb-374f-0f24dc81ebeb
 # ╠═17bbf532-8cac-11eb-1e3f-c54072021208
 # ╟─17cf895a-8cac-11eb-017e-c79ffcab60b1
-# ╠═17e0d142-8cac-11eb-2d6a-fdf175f5d419
-# ╠═18f2d99f-f16a-4678-b73d-132febd6e16e
+# ╟─17e0d142-8cac-11eb-2d6a-fdf175f5d419
 # ╟─18da7920-8cac-11eb-07f4-e109298fd5f1
 # ╠═17fe87a0-8cac-11eb-2938-2d9cd19ecc0f
 # ╟─1829091c-8cac-11eb-1b77-c5ed7dd1261b
