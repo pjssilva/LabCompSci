@@ -55,7 +55,7 @@ Submetido por: **_$(student.name)_** ($(student.email_dac)@unicamp.br)
 # ╔═╡ 938185ec-f384-11ea-21dc-b56b7469f798
 md"""
 #### Iniciando pacotes
-Quando executado a primeira vez pode demorar por instalar paoctes.
+Quando executado a primeira vez pode demorar por instalar pacotes.
 """
 
 # ╔═╡ 0f271e1d-ae16-4eeb-a8a8-37951c70ba31
