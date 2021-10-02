@@ -13,391 +13,263 @@ macro bind(def, element)
     end
 end
 
-# ╔═╡ 97e807b2-9237-11eb-31ef-6fe0d4cc94d3
+# ╔═╡ 85b45a43-d7bf-4597-a1a6-329b41dce20d
 begin
-	using Plots
+	using LinearAlgebra
+	using SparseArrays
+	using Random
 	using PlutoUI
+	using Plots
+	using PlotThemes
 	using BenchmarkTools
 end
 
+# ╔═╡ e46441c4-97bd-11eb-330c-97bd5ac41f9e
+md"Tradução livre de [random\_walks\_ii.jl](https://github.com/mitmath/18S191/blob/Spring21/notebooks/week8/random_walks_II.jl)"
 
-# ╔═╡ c05b483f-17d3-4603-8270-bd15ddfcc370
-md"Tradução livre de [random_walks.jl](https://github.com/mitmath/18S191/blob/Spring21/notebooks/week7/random_walks.jl)"
-
-# ╔═╡ 5f0d7a44-91e0-11eb-10ae-d73156f965e6
+# ╔═╡ 85c26eb4-c258-4a8b-9415-7b5f7ddff02a
 TableOfContents(aside=true)
 
-# ╔═╡ 9647147a-91ab-11eb-066f-9bc190368fb2
+# ╔═╡ 2d48bfc6-9617-11eb-3a85-279bebd21332
 md"""
-# Conceitos de Julia e programação
+# Conceitos de Julia
 
-- Benchmark: BenchmarkTools.jl.
-- Desenhando com loops.
-- Programação genérica
-- Estruturas mutáveis vs imutáveis.
-- Vetores de vetores.
-- `cumsum`
+- Visão customizada de objetos.
+- Matrizes estruturadas em Julia.
+- `heatmap` (Plots.jl)
+- `surface` (Plots.jl)
+- Animações (Plots.jl)
 """
 
-# ╔═╡ ff1aca1e-91e7-11eb-343e-0f89d9570b06
+# ╔═╡ 30162386-039f-4cd7-9121-a3382be3c294
 md"""
-# Motivatição: Dinâmicas de discos rígidos
+# Triângulo de Pascal
+
 """
 
-# ╔═╡ 66a2f510-9232-11eb-3be9-131febc0039f
+# ╔═╡ 4e7b163e-dfd0-457e-b1f3-8807a4d8060a
 md"""
-Brown observou o **movimento browniano** em 1827: grandes partículas como poeira ou pollen se movimentam na água de maneira aparentemente aleatória. Einstein explicou isso em 1905 como o resultado dos repetidos choques entre as moléculas de água. 
-
-Nós podemos visualizar esse fenômeno com uma simulação de discos rígidos chocando-se uns contra os outros. Apesar da dinâmica não ser aleatória -- já que cada disco segue as leis de Newton -- ao olharmos cada um deles isoladamente o movimento de fato "parece" aleatório.
+Vamos começar pensando um pouco sobre o triângulo de Pascal. (obs: [Pascal não foi a primeira pessoa a estudar esses números](https://en.wikipedia.org/wiki/Pascal%27s_triangle).)
 """
 
-# ╔═╡ bd3170e6-91ae-11eb-06f8-ebb6b2e7869f
+# ╔═╡ e8ceab7b-45db-4393-bb8e-e000ecf78d2c
+pascal(N) = [binomial(n, k) for n = 0:N, k=0:N]
+
+# ╔═╡ 2d4dffb9-39e4-48de-9688-980b96814c9f
+pascal(10)
+
+# ╔═╡ 8ff66523-bc2e-4c53-975b-8ba4f99eb1c6
 md"""
-## Visualizando passeis aleatórios
+As entradas não nulas da matriz são **coeficientes binomiais**: a k-ésima entrada da $n$-ésima coluna é o coeficiente de $x^k$ na expansão de $(1 + x)^n$, iniciando em $n = 0$ na primeira linha e $k = 0$ na primeira coluna.
 """
 
-# ╔═╡ a304c842-91df-11eb-3fac-6dd63087f6de
+# ╔═╡ 2868dd57-7164-4162-8c5d-30628dedeb7a
 md"""
-Um **passeio aleatório** modela um movimento aleatório no tempo e espaço. A cada passo de tempo o objeto se move em uma direção aleatória. 
+Observe que há 0s acima da diagonal principal, ou seja a matriz é **triangular inferior**. Esse tipo de matriz, com estrutura especial, é razoavelmente comum em álgebra linear computacinal. Julia possui tipos específicos que representam visões de matrizes densas com informações sobre a estrutura especial de algumas matrizes que ocorrem naturalmente em álgebra linear computacional. Ao deixarmos isso claro para o sistema estamos liberando-o para usar rotinas mais especializadas que aproveitem a estrutura. Pense na solução de um sistema linear a partir de uma matriz triangular, por exemplo.
 
-Vamos visualisar uma dessas simulações ocorrendo no plano.
+Esse tipos especiais estão definidos no pacote (padrão) `LinearAlgebra`.
 """
 
-# ╔═╡ 798507d6-91db-11eb-2e4a-3ba02f12ba65
+# ╔═╡ f6009473-d3c1-444f-88ae-814f770e811b
+L = LowerTriangular(pascal(10))
+
+# ╔═╡ 9a368602-acd3-43fb-9dff-e407a4bab930
 md"""
-N = $(@bind N Slider(1:6, show_value=true, default=1))
+Observe que a própria visualização da matriz muda: os zeros _estruturais_ são agora representados por pontos, deixando claro que eles estarão sempre ali.
 """
 
-# ╔═╡ 3504168a-91de-11eb-181d-1d580d5dc071
+# ╔═╡ 67517333-175f-48c4-a915-76658cbf1304
 md"""
-t = $(@bind t Slider(1:10^N, show_value=true, default=1))
+Como já vimos, Julia também possui um tipo para representar matrizes esparsas que poderíamos ter usado nesse caso. Ele está definido na biblioteca (padrão), `SparseArrays`."""
 
-$t \in [1, 10^N]$
+# ╔═╡ d6832372-d336-4a54-bbcf-d0bb70e4de64
+sparse(pascal(10))  
+
+# ╔═╡ 35f14826-f1e4-4977-a31a-0f6148fe25ad
+md"""
+Mas de fato, o tipo `LowerTriangular` é mais adequado nesse caso. Ele pega exatamente a estrutura da matriz. De novo, pense no caso da resolução de sistemas lineares. Se queremos resolver um sistema linear com um matriz triangular, não há necessidade de fatorações. Basta usar um algoritmo de subtituição. Julia, ao tentar resolver um sistema com uma matriz `LowerTriangular` vai saber isso e usar a estratégia adequada. Já se a matriz fosse "apenas" esparsa, a linguagem iria ainda tentar calcular uma fatoração (esparsa) para resolver sistemas.
+
+Um fato interessante sobre o triângulo de Pascal fica evidente quando destamos as suas entrada ímpares. Vamos fazer isso e ainda um _Slider_.
 """
 
-# ╔═╡ b62c4af8-9232-11eb-2f66-dd27dcb87d20
-md"""
-Esse tipo de dinâmica lembra, do ponto de vista qualitativo, a trajetória de
-um disco rígido. 
+# ╔═╡ 7468fc5d-7f35-45e2-b5fc-7e63b562bc8f
+@bind n_pascal Slider(1:63, show_value=true, default=1)
 
-Veremos abaixo como fazer essa simulação de maneira simples e eficiente em Julia.
+# ╔═╡ 1ca8aa3b-b05d-40f6-a925-2f0248b79ca2
+sparse(isodd.(pascal(n_pascal)))
+
+# ╔═╡ 38d88b7c-3b4f-430b-8d3c-f672ab0c7a49
+md"""
+Note que a represetação visual inicia com números, mas depois de um tempo ela passa a enfatizar apenas a estrutura de esparsidade, destando as entradas não nulas. Isso revela a **estrutura de esparsidade** da matriz: as posições onde encontramos números não nulos. Essas posições são então apresentadas com pontos (e os zeros ficam como espaços em branco).
 """
 
-# ╔═╡ 905379ce-91ad-11eb-295d-8354ecf5c5b1
+# ╔═╡ f4c9b02b-738b-4de1-9e9d-05b1616bee0b
 md"""
-# Por que usar passeios aleatórios?
-
-#### Porque devemos fazer modelagem baseada em processos aleatórios?
-
-- Por vezes o processo é tão complexo que não conseguimos levantar todos os dados para sua caracterização completa e nessa situação a hipótese de aleatoridade pode ser uma saída.
-
-- Mesmo que seja _possível_ levantar todos os detalhes, o uso de um modelo simplificado que use aleatoridade pode ajudar na compreesão do processo.
-
-#### Exemplos:
-
-
-- Preços de ações que sobem e descem.
-
-
-- Poluentes se dispersando no ar.
-
-
-- Genes neutros se movendo (transmitindo) numa população.
+O padrão que emerge é bem interessante e é parente próximo de uma outra figura que já vimos: o triângulo de Sierpinski.
 """
 
-# ╔═╡ 5c4f0f26-91ad-11eb-033b-2bd221f0bdba
+# ╔═╡ d1c47afa-ab7f-4543-a161-e3ceb6f11eb4
 md"""
-# Passeio aleatório simples
-
-A versão mais simples é chamado de **passeio aleatório simples**: um objeto "salta" entre inteiros. A cada tempo movendo-se para esquerda e direita.
-
-Cada um desses saltos é uma nova variável aleatória, tomando valores $\pm 1$ a cada passo de tempo, com probabilidades iguais (a $1/2$) nesse caso mais simples. Em outros casos podemos usar uma Bernoulli mais geral.
-
-Para simular isso, precisamos pensar como gerar os saltos.
+Outro fato interessante emerge quando olhamos uma variação do triângulo de Pascal onde cada coluna fixa o número de elementos dos subcojuntos das combinações. 
 """
 
-# ╔═╡ da98b676-91e0-11eb-0d97-57b8a8aadf2a
+# ╔═╡ bf78e00f-05d9-4a05-8512-4924ef9e25f7
+[binomial(i + j, i) for i = 0:10, j = 0:10]
+
+# ╔═╡ b948830f-ead1-4f36-a237-c998f2f7deb8
 md"""
-## Julia: Avaliação de desempenho (Benchmarking)
+E, ainda mais interessante, essa mesma matriz pode ser obtida do triângulo original usando multiplicação de matrizes.
 """
 
-# ╔═╡ e0b607c0-91e0-11eb-10aa-53ec33570e59
-md"""
-Há várias maneira de gerar valores aleatórios $\pm 1$. Vamos aproveitar essa oportunidade para ver mais as técnicas de avaliação de desempenho (benchmarking) medindo o tempo necessário para execução de diferentes soluções e comparar a performance. Nesse caso faremos "micro-benchmarks", em que iremos comparar pequenos trechos de códigos que irão rodar, potencialmente, milhões de vezes. Deste modo pequenas diferenças podem ser importantes.
+# ╔═╡ 15223c51-8d31-4a50-a8ff-1cb7d35de454
+pascal(10) * pascal(10)'
 
-Vamos, mais uma vez, usar de novo o pacote `BenchmarkTools.jl` que disponibiliza ferrementas simples para fazer essas medidas de tempo e colecionar estatísticas. Um exemplo é a macro `@btime` que ajuda a estimar o tempo real de execução. Para evitar o problema de performance associado a variáveis globais, todos os trechos que serão avaliados serão encapsulados em funções.
+# ╔═╡ 0bd45c4a-3286-427a-a927-15869be2ebfe
+md"""
+## Convoluções presentes no triângulo de Pascal
 """
 
-# ╔═╡ fa1635d4-91e3-11eb-31bd-cf61c502ad35
+# ╔═╡ 999fb608-fb1a-46cb-82ca-f3f31fe617e1
+pascal(6)
+
+# ╔═╡ 6509e69a-6e50-4816-a98f-67ba437383fb
 md"""
-Aqui estão algumas formas diferentes de gerar os passos aleatórios:
+Esse triângulo ainda guarda várias propriedades, e por isso mesmo é tão estudado e interessante. 
+
+Por exemplo, no ensino médio aprendemos que podemos calcular novos valores somando dois **elementos adjacentes**. O seu resultado é o elemento abaixo do último elemento somado.
 """
 
-# ╔═╡ f7f9e4c6-91e3-11eb-1a56-8b98f0b09b46
+# ╔═╡ e58976a9-1784-441e-bb76-3011538b8ad0
+md"""
+Notem que esse tipo de operação, somar elementos de uma matriz já existente para obter novos elementos pode ser visto como uma operação de convolução como as operações que fizemos em imagens. É como se fosse uma convolução com o vetor $[1, 1]$.
+"""
+
+# ╔═╡ 61f9bbfc-09cc-4d0b-b79d-262235ff10a2
+md"""
+## É mais rápido mesmo?
+
+Vamos fazer alguns testes para ver se Julia é de fato esperta o suficiente para pegar informação de estrutura e aproveitar isso ao fazer, por exemplo, multiplicações de matrizes por vetores e/ou resolução de sistemas lineares.
+"""
+
+# ╔═╡ 834e3dce-9a65-4452-b6dc-9a87a86aeb13
 begin
-	step1() = rand( (-1, +1) )
-	
-	step2() = 2 * (rand() < 0.5) - 1
-	
-	step3() = 2 * rand(Bool) - 1
-	
-	step4() = sign(randn())
+	Random.seed!(10)
+	dim = 1500
+	A = rand(dim, dim)
+	ltA = LowerTriangular(rand(dim, dim))
+	symA = Symmetric(A + A')
+	dpA = Symmetric(A*A')
+	spA = sprand(dim, dim, 0.005)
+	densespA = Matrix(spA)
+	b = rand(dim)
 end
 
-# ╔═╡ 5da7b076-91b4-11eb-3eba-b3f5849efabb
+# ╔═╡ 80acaa77-a399-448b-81f6-3a645d3895be
+rank(spA)
+
+# ╔═╡ 6658a4e4-1dbb-457f-95e5-5b59853fae88
 with_terminal() do
-	@btime step1()
-	@btime step2()
-	@btime step3()
-	@btime step4()
+	print("General:             ")
+	@btime x = $A \ $b
+	print("Lower triangular:    ")
+	@btime x = $ltA \ $b
+	print("Symmetric:           ")
+	@btime x = $symA \ $b
+	print("Symmetric pos. def.: ")
+	@btime x = $dpA \ $b
 end
 
-# ╔═╡ ea9e77e2-91b1-11eb-185d-cd006db11f60
-md"""
-## Trajetória de um passeio aleatório
-"""
-
-# ╔═╡ 12b4d528-9239-11eb-2824-8ddb5e2ba892
-md"""
-Pronto, agora sabemos como gerar os saltos e até a forma mais eficiente de fazê-lo. Podemos calcular a **trajetória** de um passeio aleatório 1D ao longo de vários passos. A partícula começa em algum ponto, por exemplo no 0, e partir daí inicia os seus saltos.
-"""
-
-# ╔═╡ 2f525796-9239-11eb-1865-9b01eadcf548
-function walk1D(N)
-	x = 0
-	xs = [x]
-	
-	for i in 1:N
-		x += step1()
-		push!(xs, x)
-	end
-	
-	return xs
+# ╔═╡ af357814-f0a1-48b3-9e49-ee0ad1cee609
+with_terminal() do
+	print("Cholesky: ")
+	@btime x = cholesky($dpA) \ $b
 end
 
-# ╔═╡ 51abfe6e-9239-11eb-362a-259570250663
-begin
-	plot()
-	
-	for i in 1:10
-		plot!(walk1D(100), leg=false, size=(500, 300), lw=2, alpha=0.5)
-	end
-	
-	plot!()
+# ╔═╡ 27040653-4639-419f-9c07-a826c9c8f8f5
+with_terminal() do
+	print("Linear system with sparse matrix: ")
+	@btime x = $spA \ $b
+	print("Linear system with dense matrix:  ")
+	@btime x = $densespA \ $b
 end
 
-# ╔═╡ b847b5ca-9239-11eb-02fe-db4d9625bc5f
-md"""
-Mas como de fato essa simulação é feita? Vamos ver isso abaixo.
-
-# Vamos fazer isso de forma genérica: passeios aleatórios usando tipos
-"""
-
-# ╔═╡ c2deb090-9239-11eb-0739-a74379c15ce6
-md"""
-Sabemos que vamos começar com simulações de passeios aleatórios 1D, mas que depois vamos querer nos mover para simulações no plano, ou mesmo no espaço.
-
-Nesse sentido, já vimos que pode ser uma boa ideia organizar o nosso código em torno de tipos, identificando as operações fundamentais e como elas se combinam para gerar a simulação completa. Vamos fazer isso abaixo.
-
-## O caso unidimensional
-"""
-
-# ╔═╡ d420d492-91d9-11eb-056d-33cc8f0aed74
-# First we create an abstrct type to allow for general coding when possible.
-abstract type Walker end
-
-# ╔═╡ ad2d4dd8-91d5-11eb-27af-6f0c6e61a86a
-# A type to represent a walker (a particule) on the line.
-struct Walker1D <: Walker
-	pos::Int
+# ╔═╡ c4b1a791-e318-47e5-80ed-7476f658f647
+with_terminal() do 
+	print("Sparse matrix times vector: ")
+	@btime y = $spA * b
+	print("Dense matrix times vector:  ")
+	@btime y = $A * b
 end
-
-# ╔═╡ d0f81f28-91d9-11eb-2e79-61461ef5b132
-# Walkers should be able to tell where they are.
-position(w::Walker) = w.pos
-
-# ╔═╡ b8f2c508-91d5-11eb-31b5-61810f171270
-# Model a jump, a step, in the random process. Note that we use the
-# fastest option from our micro-benchmark.
-step(w::Walker1D) = rand( (-1, +1) )
-
-# ╔═╡ 3c3971e2-91da-11eb-384c-01c627318bdc
-# Update the Walker position, since Walker is immutable, we opt to create a new Walker representing it in the new position
-update(w::W, step) where{W <: Walker} = W(position(w) .+ step)  # W is a type parameter, explain
-
-# ╔═╡ c9228413-1c5b-4ab4-b8d0-dfbbb300bd48
-md"### O caso bidimensional
-
-Podemos agora preparar o caso bidimensional, aproveitando a interface descrita acima.
-"
-
-# ╔═╡ 23b84ce2-91da-11eb-01f8-c308ac4d1c7a
-begin
-	struct Walker2D <: Walker
-		pos::Tuple{Int64, Int64}
-	end
 	
-	Walker2D(x, y) = Walker2D( (x, y) )
-end
 
-# ╔═╡ 5b972296-91da-11eb-29b1-074f3926181e
-step(w::Walker2D) = rand( ( (1, 0), (0, 1), (-1, 0), (0, -1) ) )
-
-# ╔═╡ cb0ef266-91d5-11eb-314b-0545c0c817d0
-# Run a simulation with N time steps. Note that the code is fully generic using
-# only methods associate with Walker types
-function trajectory(w::Walker, N)
-	ws = [position(w)]
-
-	for i in 1:N
-		w = update(w, step(w))
-		push!(ws, position(w))
-	end
-	
-	return ws
-end
-
-# ╔═╡ 048fac02-91da-11eb-0d26-4f258b4cd043
-trajectory(Walker1D(0), 10)
-
-# ╔═╡ 74182fe0-91da-11eb-219a-01f13b86406d
-traj = trajectory(Walker2D(0, 0), 10^N)
-
-# ╔═╡ 4c8d8294-91db-11eb-353d-c3696c615b3d
-begin
-	plot(traj[1:t], ratio=1, leg=false, alpha=0.5, lw=2)
-	scatter!([ traj[1], traj[t] ], c=[:red, :green])
-	
-	xlims!(minimum(first.(traj)) - 1, maximum(first.(traj)) + 1)
-	ylims!(minimum(last.(traj)) - 1, maximum(last.(traj)) + 1)
-	
-end
-
-# ╔═╡ 57972a32-91e5-11eb-1d62-fbc22c494db9
+# ╔═╡ 1efc2b68-9313-424f-9850-eb4496cc8486
 md"""
-## Passeios aleatórios como soma de variáveis (aleatórias)
+# Relembrando passeios aleatórios
+
+## Variáveis aleatórias independentes e identicamente distribuídas
 """
 
-# ╔═╡ 63122dd0-91e5-11eb-34c3-b1b5c87809b8
+# ╔═╡ 6e93ffda-217b-4d46-86b5-534ddc1bae90
 md"""
-Podemos achar mais uma conexão com o assunto da última aula sobre soma de variáveis aleatórias: a posição $S_n$ de um passeio aleatório no instante $n$ é uma variável aleatória que pode ser entendida como a soma de $n$ variáveis aleatórias que são, tipicamente, independentes e identicamente distribuídas (IID):
+A discussão acima sob o triângulo de Pascal e convoluções vai, surpreendentemente, aparece na discussão abaixo sobre *passeios aleatórios*.
 
-$$S_n = X_1 + \cdots + X_n,$$
+Lembre-se que, num passeio aleatório, a cada instante do tempo um passo, ou salto, aleatório é escolhido. Digamos para direita ou para esquerda.
 
-em que cada $X_i$ é uma variável aleatória modelando o $i$-ésimo passo (ou salto) do passeio.
+Como cada passo é aleatório, eles podem ser modelados usando uma *variável aleatória* que possui uma certa distribuição de probabilidade. Por exemplo, podemos usar uma variável aleatória com valores possíveis $+1$, com probabiliade $\frac{1}{2}$, e $-1$ com igual chance.
 
-Em princípio, nós podemos usar o método da última aula para modelar esse conceito. Por outro lado isso pode trazer dificuldades, pois estamos interessandos em todos os passos intermediários. 
+Tipicamente, estudamos passeios aleatórios que possuem todos os passos "iguais". Mas o que quer dizer "igual" nesse contexto? É claro que não pode ser que todos os passos são os mesmos, afinal de contas eles são aleatórios. O igual aqui está relacionado a distribuição dos possíveis valores dos saltos. Ou sejam, todos os passos são *cópias de uma mesma variável aleatória*.
 
-Note que o valores $S_n$ e $S_{n - 1}$ não são independentes, apesar dos saltos $X_i$ serem. Por exemplo se $S_{n - 1}$ é um inteiro grande, $S_{n}$ também o será. Mas, pelo menos, a dependência não se estende no tempo. Para saber quais os possíveis valores e a distribuição de probabilidade de $S_{n}$, basta conhecer $S_{n - 1}$. O processo é estocástico.
+Também consideramos que os passos são *independentes* uns dos outros. Ou seja, que a escolha de uma direação em um passo anterior não influecia a escolha em um passo subsequente. Portanto o passeio é descrito por uma **coleção de variáveis aleatórias independentes e identicamente distribuídas (IID)**.
 """
 
-# ╔═╡ bd013582-91e7-11eb-2d79-e18e45f6d639
+# ╔═╡ 396d2490-3cb9-4f68-8fdf-9209d2010e02
 md"""
-## Somas acumuladas
+## Passeios aleatórios como somas acumuladas
 """
 
-# ╔═╡ c092ab72-91e7-11eb-2bd1-13c8c8bb30e4
+# ╔═╡ dc1c22e8-1c7b-43b7-8421-c2ca708931a5
 md"""
-Suponha que geramos os passos $X_i$, ou sejae
-"""
+Como vimos na última aula, os passeios aleatórios podem então ser visto como somas acumuladas dessas variáveis IID. Relembrando, se $S_n$ a posição da partícula no instante $n$ temos que (para um passeio que sem $S_0 = 0$:
 
-# ╔═╡ cfb0f9ba-91e7-11eb-26b5-5f0f59d03cff
-steps = rand( (-1, +1), 10 )
+$$S_t = X_1 + \cdots + X_n = \sum_{t^\prime=1}^t X_{t^\prime}.$$
 
-# ╔═╡ d6edb326-91e7-11eb-03b1-d93e3bc83ca6
-md"""
-A trajetória, ou caminho amostrado, do passeio aleatório, é a coleção de posições ao longo to tempo obtidas a partir das _somas parciais_ (estamos considerando que $S_0 = 0$):
+Ainda, como fizemos antes, podemos nos perguntar qual a distribuição de probabilidade da posição $S_t$ para um certo intante $t$ fixo. Podemos também estar interessados em como essas distribuições evoluem no tempo.
 
-$$\begin{align}
-S_1 & = X_1 \\
-S_2 &= X_1 + X_2 \\
-S_3 &= X_1 + X_2 + X_3
-\end{align}$$
-
-etc.
-"""
-
-# ╔═╡ 4ef42cec-91e8-11eb-2976-0950ffe5de6c
-md"""
-Nós podemos calcular esses valores através da função `cumsum` (soma acumulada, você terá que escrever sua própria versão dessa função na lista):
-"""
-
-# ╔═╡ ace8658e-91e8-11eb-0b9d-4b759635e417
-cumsum(steps)
-
-# ╔═╡ b049ff58-91e8-11eb-203b-4f4b5ee5f01f
-md"""
-Vamos graficar isso:
-"""
-
-# ╔═╡ b6775d3a-91e8-11eb-0187-618cb538d142
-plot(cumsum(steps), m=:o, leg=false, size=(500, 300))
-
-# ╔═╡ 8b1441b6-91e4-11eb-16b2-d7eadd3fd69c
-md"""
-# Trajetórias versus evolução de distribuições de probabilidade
-"""
-
-# ╔═╡ d1315f94-91e4-11eb-1076-81156e24d2f1
-md"""
-Até o momento observamos trajetórias individuais de passeios aleatórios. Nós podemos pensar que isso é equivalente a amostrar usando `rand`. Suponha que amostramos milhões ou bilhões de trajetórias do passeio aleatório. A _cada passo do tempo_ podemos pensar na distribuição de probabilidade no _espaço_ considerando todas essas trajetórias. Uma forma de fazer isso é de fato computar todas as trajetórias e calcular histogramas. Outra forma é tentar pensar conceitualmenmte de como as probabilidades se propagam.
-
-Vamos chamar de $p_i^t$ a probabilidade de se estar na posição $i$ no instante $t$. Podemos então nos perguntar qual é a probabilidade de se estar na posição $i$ no instante $t + 1$. Para isso é preciso que no instante anterior a partícula estivesse em uma das posições vizinhas, no caso 1D isso diz que:
+A chave para isso é escrever a fórmula recusiva de como os vetores de que descrevem a probabilidade da particular estar na posição $i$ no instante $t$, $p^t_i$. Vimos que isso pode ser capturado por _equações mestre_ como
 
 $$p_i^{t+1} = \textstyle \frac{1}{2} (p_{i-1}^{t} + p_{i+1}^{t}).$$
 
-Esse tipo de recorrência é por fazes chamada de **equação mestre** (apesar de ser um nome que não explica muito). Ela descreve como a distribuição de probabilidade se propaga no tempo. 
+Ainda na última aula apresentamos uma implementação para calcular como essas probabilidades evoluem e fizemos duas visualiações.
 
-No tempo $t$ podemos pensar que temos toda a distribuição de probabilidade em um vetor $p^t$. Podemos assim escrever uma função que evolui esse vetor de probabilidade no tempo para o próximo instante.
+Como discutimos antes, esse processo pode também ser visto como uma aplicação sucessiva de convoluções, assim como o triângulo de Pascal. É muito interessante ver como o mesmo conceito aparece em diferentes lugares.
 """
 
-# ╔═╡ b7a98dba-91eb-11eb-3c78-074aa835b5fb
+# ╔═╡ fb804fe2-58be-46c9-9200-ceb8863d052c
 function evolve(p)
 	p′ = similar(p)   # make a vector of the same length and type
 	                  # to store the probability vector at the next time step
 	
-	for i in 2:length(p)-1
+	for i in 2:length(p)-1   # iterate over the *bulk* of the system
 		p′[i] = 0.5 * (p[i-1] + p[i+1])
 	end
 	
+	# boundary conditions:
 	p′[1] = 0
 	p′[end] = 0
 	
 	return p′
-	
 end
 
-# ╔═╡ f7f17c0c-91eb-11eb-3fa5-3bd90bb7044e
-md"""
-Ops...  você reconhece isso?
-
-Já vimos isso antes! Isso é uma **convolução**, como um núcleo desfocagem unidimensional (com a diferença é que nesse modelo o  `p[i]` não contribui para o valor na mesma posição para o `p′[i]`).
-"""
-
-# ╔═╡ f0aed302-91eb-11eb-13fb-d9418ef327a8
-md"""
-Note que há o mesmo problema das imagens: o que fazer com as bordas? Precisamos especificar **condições de contorno**. No caso acima colocamos 0s na fronteira. Isso corresponde a considerar que qualquer partícula que chega na fronteira em um certo instante do tempo irá escapar do sistema. _Em algumas situações químicas isso está relacionado com um químico que desaparece._ Obs: eu não tenho ideia do que essa frase quer dizer, fica para os nossos colegas químicos esclarecer. 
-"""
-
-# ╔═╡ c1062e00-922b-11eb-1f31-ddbd03f8f986
-md"""
-Também precisamos especificar a condição inicial do sistema $\mathbf{p}_0$. Isso nos diz onde o andarilho está no instante $0$. Vamos colocá-lo no meio do nosso vetor com probabilidade 1 e 0 nas outras posições.
-"""
-
-# ╔═╡ 547188ea-9233-11eb-1a89-5ff9468b31f7
+# ╔═╡ 0b26efab-4e93-4d53-9c4d-faea68d12174
 function initial_condition(n)
-	p0 = zeros(n)
-	p0[n ÷ 2 + 1] = 1
 	
-	return p0
+	p₀ = zeros(n)
+	p₀[n ÷ 2 + 1] = 1
+	
+	return p₀
 end
 
-# ╔═╡ 2920abfe-91ec-11eb-19bc-935fa1ba0a96
-md"""
-Vamos tentar visualizar a evolução temporal.
-"""
-
-# ╔═╡ 3fadf88c-9236-11eb-19fa-d191ac5a6191
+# ╔═╡ b48e55b7-4b56-41aa-9796-674d04adf5df
 function time_evolution(p0, N)
 	ps = [p0]
 	p = p0
@@ -410,43 +282,157 @@ function time_evolution(p0, N)
 	return ps
 end
 
-# ╔═╡ 58653a70-9236-11eb-3dae-47adc2a77cb4
-p0 = initial_condition(101)
+# ╔═╡ 53a36c1a-0b8c-4099-8854-08d73c9f118e
+md"""
+Let's visualise this:
+"""
 
-# ╔═╡ 5d02f21e-9236-11eb-26ea-6593aa80a2eb
-ps = time_evolution(p0, 100)
+# ╔═╡ 6b298184-32c6-412d-a900-b113d6bd3d53
+begin
+	grid_size = 101
+	max_time = 100
+	p0 = initial_condition(grid_size)
+end
 
-# ╔═╡ b803406e-9236-11eb-3aad-056b7f2c9b4b
+# ╔═╡ b84a7255-7b0a-4ba1-8c87-9f5d3fa32ef3
+ps = time_evolution(p0, max_time)
+
+# ╔═╡ 242ea831-c421-4a76-b658-2a57fa924a4f
 md"""
 t = $(@bind tt Slider(1:length(ps), show_value=true, default=1))
 """
 
-# ╔═╡ cc7aaeea-9236-11eb-3fad-2b5ad3962ec1
+# ╔═╡ d0f89707-eccf-4155-82d5-780643e1b447
 plot(ps[tt], ylim=(0, 1), xlim=(1, 100), leg=false, size=(500, 300))
 
-# ╔═╡ dabb5766-9236-11eb-3be9-9b33ba5af68a
-ps[tt]
-
-# ╔═╡ 8fa1651a-4723-4841-94f2-954dbd9b94eb
+# ╔═╡ 049feaa2-050a-45eb-85a1-75c758c08e87
 sum(ps[tt])
 
-# ╔═╡ 6cde6ef4-9236-11eb-219a-4d20adaf9988
+# ╔═╡ 65946621-a2af-4370-8c4d-b2207b63fc51
+md"# Múltiplas visualizações da mesma informação
+
+Uma das tarefas mais importantes em computação científica é a visualização dos dados e resultados de simulações. Boas visualizações muitas vezes são a diferença entre se entender um fenômeno ou comunicar os seus resultados.
+
+Na última aula apresentamos duas visualizações da evolução das probabiidades. A primeira, apresentada acima e outra onde víamos uma matriz com todas as probabilidades ao longo do tempo. 
+
+Vamos agora explorar outras possibilidades de visualização e ensinar mais alguns truques de Julia e Plots.
+
+Uma primeira alteração, é o formato da figura acima com os picos cuneiformes. Eles não estão exatamente corretos, não há uma mudança contínua, e linear, das probabilidades 0 para probabilidades positivas. A mudança é abrupta, são valores discretos. Um gráfico de barras faz melhor esse serviço.
+"	
+	
+
+# ╔═╡ aeaef573-1e90-45f3-a7fe-31ec5e2808c4
+bar(ps[tt], ylim=(0, 1), leg=false, size=(500, 300), alpha=0.5)
+
+# ╔═╡ 610b2349-9ae6-4967-8b50-9b30b34d18d8
+md"""
+Uma mudança simples, mas que já produz um resultado mais agradável.
+
+Outra característica é que a visualização acima só consegue capturar a evolução das probabilidades ao deslizarmos o slider. Não seria mais interessantes gerarmos uma animação que evolui a probabilidade no tempo. Por sorte, Plots já tem isso "pronto".
+"""
+
+# ╔═╡ 602fb644-bd1d-4f9d-979f-0b190931d649
+begin
+	anim = @animate for ttt in 1:max_time
+		bar(ps[ttt], ylim=(0, 1), leg=false, alpha=0.5, dpi=200)
+		title!("Time = $ttt")
+	end 
+	gif(anim, fps=10)
+end
+
+# ╔═╡ 1baafa2c-73c6-4e6f-832c-8b5c330b55d7
+md"Nada mal para um código tão simples"
+
+# ╔═╡ efe186da-3273-4767-aafc-fc8eae01dbd9
+md"""
+## Vendo tudo de uma vez: a versão matricial
+"""
+
+# ╔═╡ 61201091-b8b3-4776-9be9-4c23d5ba88ba
+md"""
+Outra opção é olhar todo o vetor de distribuições de probabilidade como fizemos na última aula. Para isso concatenamos todos em uma matriz.
+"""
+
+# ╔═╡ 66c4aed3-a04b-4a09-b954-79e816d2a3f7
 M = reduce(hcat, ps)'
 
-# ╔═╡ 7e8c1a2a-9236-11eb-20e9-57f6601f5472
+# ╔═╡ b135f6be-5e82-4c72-af11-0eb0d4141dec
+md"""
+E podemos reproduzir a visualização da última aula baseada em **mapas de calor**.
+"""
+
+# ╔═╡ e74e18e3-ad08-4a53-a803-cd53564dca65
 heatmap(M, yflip=true)
+
+# ╔═╡ 4d88a51b-ca51-4f37-90cf-b42fe14f081b
+md"""
+Sou só eu ou a visualização acima ficou escura demais?
+
+Uma opção a isso é usar outro "tema" para os gráficos de Julia que ajudem a enfatizar melhor as cores. Para isso vamos usar temas disponíveis no pacote `PlotThemes.jl`. Vamos testar alguns.
+"""
+
+# ╔═╡ 2a39913c-0840-4152-914c-a2b61287ef15
+begin
+	theme(:default)
+	#them(:dark)
+	#theme(:lime)
+	#theme(:wong)
+	#theme(:vibrant)
+	heatmap(M, yflip=true)
+end
+
+# ╔═╡ ed02f00f-1bcd-43fa-a56c-7be9968614cc
+md"""
+Outra tentativa interessante é observar os dados como uma superfície 3D. Para podermos manipular o gráfico dentro do browser, vamos trocar o sistema que o `Plots.jl` usa para gerar as imagens para o `plotly`. Esse engenho é baseado em javascript, e como todo browser é capaz de lidar nativamente como javascript, esse backend permite iteração com as imagens diretamente de dentro do `Pluto`.
+"""
+
+# ╔═╡ 8d453f89-4a4a-42d0-8a00-9b153a3f435e
+plotly()
+
+# ╔═╡ f7de29b5-2a51-45e4-a0a5-f7f602681303
+surface(M)
+
+# ╔═╡ 7e817bad-dc51-4c29-a4fc-f7a8bb3663ca
+md"""
+Mas ainda não ficou bom. Que tal tentarmos gerar uma sequência de histogramas evoluindo ao longo do tempo? Vamos voltar para o engenho `gr` (que gera figuras mais agrdáveis, mais isso é ao gosto do freguês) e tentar fazer isso.
+"""
+
+# ╔═╡ 403d607b-6171-431b-a058-0aad0909846f
+gr()
+
+# ╔═╡ c8c16c14-26b0-4f83-8135-4f862ed90686
+begin
+	plot(leg=false)
+	
+	endtime = 15
+	for t in 1:endtime
+		for i in 1:length(ps[t])
+			# Draws a vertical line from 0 to the high of the probaility 
+			plot!([t, t], [-grid_size÷2 + i, -grid_size÷2 + i], [0, ps[t][i]],
+		          c = t, alpha = 0.8, lw = 2)
+		end
+	end
+
+	xlims!(1, endtime - 1)
+	plot!(xaxis = "Time", yaxis = "Space", zaxis = "Probability")
+end
 
 # ╔═╡ 00000000-0000-0000-0000-000000000001
 PLUTO_PROJECT_TOML_CONTENTS = """
 [deps]
 BenchmarkTools = "6e4b80f9-dd63-53aa-95a3-0cdb28fa8baf"
+LinearAlgebra = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
+PlotThemes = "ccf2f8ad-2431-5c83-bf29-c5338b663b6a"
 Plots = "91a5bcdd-55d7-5caf-9e0b-520d859cae80"
 PlutoUI = "7f904dfe-b85e-4ff6-b463-dae2292396a8"
+Random = "9a3f8284-a2c9-5f02-9a11-845980a1fd5c"
+SparseArrays = "2f01184e-e22b-5df5-ae63-d93ebab69eaf"
 
 [compat]
 BenchmarkTools = "~1.2.0"
+PlotThemes = "~2.0.1"
 Plots = "~1.22.3"
-PlutoUI = "~0.7.12"
+PlutoUI = "~0.7.14"
 """
 
 # ╔═╡ 00000000-0000-0000-0000-000000000002
@@ -1285,68 +1271,70 @@ version = "0.9.1+5"
 """
 
 # ╔═╡ Cell order:
-# ╟─c05b483f-17d3-4603-8270-bd15ddfcc370
-# ╠═97e807b2-9237-11eb-31ef-6fe0d4cc94d3
-# ╠═5f0d7a44-91e0-11eb-10ae-d73156f965e6
-# ╟─9647147a-91ab-11eb-066f-9bc190368fb2
-# ╟─ff1aca1e-91e7-11eb-343e-0f89d9570b06
-# ╟─66a2f510-9232-11eb-3be9-131febc0039f
-# ╟─bd3170e6-91ae-11eb-06f8-ebb6b2e7869f
-# ╟─a304c842-91df-11eb-3fac-6dd63087f6de
-# ╟─798507d6-91db-11eb-2e4a-3ba02f12ba65
-# ╟─3504168a-91de-11eb-181d-1d580d5dc071
-# ╟─4c8d8294-91db-11eb-353d-c3696c615b3d
-# ╟─b62c4af8-9232-11eb-2f66-dd27dcb87d20
-# ╟─905379ce-91ad-11eb-295d-8354ecf5c5b1
-# ╟─5c4f0f26-91ad-11eb-033b-2bd221f0bdba
-# ╟─da98b676-91e0-11eb-0d97-57b8a8aadf2a
-# ╟─e0b607c0-91e0-11eb-10aa-53ec33570e59
-# ╟─fa1635d4-91e3-11eb-31bd-cf61c502ad35
-# ╠═f7f9e4c6-91e3-11eb-1a56-8b98f0b09b46
-# ╠═5da7b076-91b4-11eb-3eba-b3f5849efabb
-# ╟─ea9e77e2-91b1-11eb-185d-cd006db11f60
-# ╟─12b4d528-9239-11eb-2824-8ddb5e2ba892
-# ╠═2f525796-9239-11eb-1865-9b01eadcf548
-# ╠═51abfe6e-9239-11eb-362a-259570250663
-# ╟─b847b5ca-9239-11eb-02fe-db4d9625bc5f
-# ╟─c2deb090-9239-11eb-0739-a74379c15ce6
-# ╠═d420d492-91d9-11eb-056d-33cc8f0aed74
-# ╠═ad2d4dd8-91d5-11eb-27af-6f0c6e61a86a
-# ╠═d0f81f28-91d9-11eb-2e79-61461ef5b132
-# ╠═b8f2c508-91d5-11eb-31b5-61810f171270
-# ╠═3c3971e2-91da-11eb-384c-01c627318bdc
-# ╠═cb0ef266-91d5-11eb-314b-0545c0c817d0
-# ╠═048fac02-91da-11eb-0d26-4f258b4cd043
-# ╟─c9228413-1c5b-4ab4-b8d0-dfbbb300bd48
-# ╠═23b84ce2-91da-11eb-01f8-c308ac4d1c7a
-# ╠═5b972296-91da-11eb-29b1-074f3926181e
-# ╟─74182fe0-91da-11eb-219a-01f13b86406d
-# ╟─57972a32-91e5-11eb-1d62-fbc22c494db9
-# ╟─63122dd0-91e5-11eb-34c3-b1b5c87809b8
-# ╟─bd013582-91e7-11eb-2d79-e18e45f6d639
-# ╟─c092ab72-91e7-11eb-2bd1-13c8c8bb30e4
-# ╠═cfb0f9ba-91e7-11eb-26b5-5f0f59d03cff
-# ╟─d6edb326-91e7-11eb-03b1-d93e3bc83ca6
-# ╟─4ef42cec-91e8-11eb-2976-0950ffe5de6c
-# ╠═ace8658e-91e8-11eb-0b9d-4b759635e417
-# ╟─b049ff58-91e8-11eb-203b-4f4b5ee5f01f
-# ╠═b6775d3a-91e8-11eb-0187-618cb538d142
-# ╟─8b1441b6-91e4-11eb-16b2-d7eadd3fd69c
-# ╟─d1315f94-91e4-11eb-1076-81156e24d2f1
-# ╠═b7a98dba-91eb-11eb-3c78-074aa835b5fb
-# ╟─f7f17c0c-91eb-11eb-3fa5-3bd90bb7044e
-# ╟─f0aed302-91eb-11eb-13fb-d9418ef327a8
-# ╟─c1062e00-922b-11eb-1f31-ddbd03f8f986
-# ╠═547188ea-9233-11eb-1a89-5ff9468b31f7
-# ╟─2920abfe-91ec-11eb-19bc-935fa1ba0a96
-# ╠═3fadf88c-9236-11eb-19fa-d191ac5a6191
-# ╠═58653a70-9236-11eb-3dae-47adc2a77cb4
-# ╠═5d02f21e-9236-11eb-26ea-6593aa80a2eb
-# ╟─b803406e-9236-11eb-3aad-056b7f2c9b4b
-# ╠═cc7aaeea-9236-11eb-3fad-2b5ad3962ec1
-# ╠═dabb5766-9236-11eb-3be9-9b33ba5af68a
-# ╠═8fa1651a-4723-4841-94f2-954dbd9b94eb
-# ╠═6cde6ef4-9236-11eb-219a-4d20adaf9988
-# ╠═7e8c1a2a-9236-11eb-20e9-57f6601f5472
+# ╟─e46441c4-97bd-11eb-330c-97bd5ac41f9e
+# ╠═85b45a43-d7bf-4597-a1a6-329b41dce20d
+# ╠═85c26eb4-c258-4a8b-9415-7b5f7ddff02a
+# ╟─2d48bfc6-9617-11eb-3a85-279bebd21332
+# ╟─30162386-039f-4cd7-9121-a3382be3c294
+# ╟─4e7b163e-dfd0-457e-b1f3-8807a4d8060a
+# ╠═e8ceab7b-45db-4393-bb8e-e000ecf78d2c
+# ╠═2d4dffb9-39e4-48de-9688-980b96814c9f
+# ╟─8ff66523-bc2e-4c53-975b-8ba4f99eb1c6
+# ╟─2868dd57-7164-4162-8c5d-30628dedeb7a
+# ╠═f6009473-d3c1-444f-88ae-814f770e811b
+# ╟─9a368602-acd3-43fb-9dff-e407a4bab930
+# ╟─67517333-175f-48c4-a915-76658cbf1304
+# ╠═d6832372-d336-4a54-bbcf-d0bb70e4de64
+# ╟─35f14826-f1e4-4977-a31a-0f6148fe25ad
+# ╠═7468fc5d-7f35-45e2-b5fc-7e63b562bc8f
+# ╠═1ca8aa3b-b05d-40f6-a925-2f0248b79ca2
+# ╟─38d88b7c-3b4f-430b-8d3c-f672ab0c7a49
+# ╟─f4c9b02b-738b-4de1-9e9d-05b1616bee0b
+# ╟─d1c47afa-ab7f-4543-a161-e3ceb6f11eb4
+# ╠═bf78e00f-05d9-4a05-8512-4924ef9e25f7
+# ╟─b948830f-ead1-4f36-a237-c998f2f7deb8
+# ╠═15223c51-8d31-4a50-a8ff-1cb7d35de454
+# ╟─0bd45c4a-3286-427a-a927-15869be2ebfe
+# ╠═999fb608-fb1a-46cb-82ca-f3f31fe617e1
+# ╟─6509e69a-6e50-4816-a98f-67ba437383fb
+# ╟─e58976a9-1784-441e-bb76-3011538b8ad0
+# ╟─61f9bbfc-09cc-4d0b-b79d-262235ff10a2
+# ╠═834e3dce-9a65-4452-b6dc-9a87a86aeb13
+# ╠═80acaa77-a399-448b-81f6-3a645d3895be
+# ╠═6658a4e4-1dbb-457f-95e5-5b59853fae88
+# ╠═af357814-f0a1-48b3-9e49-ee0ad1cee609
+# ╠═27040653-4639-419f-9c07-a826c9c8f8f5
+# ╠═c4b1a791-e318-47e5-80ed-7476f658f647
+# ╟─1efc2b68-9313-424f-9850-eb4496cc8486
+# ╟─6e93ffda-217b-4d46-86b5-534ddc1bae90
+# ╟─396d2490-3cb9-4f68-8fdf-9209d2010e02
+# ╟─dc1c22e8-1c7b-43b7-8421-c2ca708931a5
+# ╠═fb804fe2-58be-46c9-9200-ceb8863d052c
+# ╠═0b26efab-4e93-4d53-9c4d-faea68d12174
+# ╠═b48e55b7-4b56-41aa-9796-674d04adf5df
+# ╟─53a36c1a-0b8c-4099-8854-08d73c9f118e
+# ╠═6b298184-32c6-412d-a900-b113d6bd3d53
+# ╠═b84a7255-7b0a-4ba1-8c87-9f5d3fa32ef3
+# ╟─242ea831-c421-4a76-b658-2a57fa924a4f
+# ╠═d0f89707-eccf-4155-82d5-780643e1b447
+# ╠═049feaa2-050a-45eb-85a1-75c758c08e87
+# ╟─65946621-a2af-4370-8c4d-b2207b63fc51
+# ╠═aeaef573-1e90-45f3-a7fe-31ec5e2808c4
+# ╟─610b2349-9ae6-4967-8b50-9b30b34d18d8
+# ╠═602fb644-bd1d-4f9d-979f-0b190931d649
+# ╟─1baafa2c-73c6-4e6f-832c-8b5c330b55d7
+# ╟─efe186da-3273-4767-aafc-fc8eae01dbd9
+# ╟─61201091-b8b3-4776-9be9-4c23d5ba88ba
+# ╠═66c4aed3-a04b-4a09-b954-79e816d2a3f7
+# ╟─b135f6be-5e82-4c72-af11-0eb0d4141dec
+# ╠═e74e18e3-ad08-4a53-a803-cd53564dca65
+# ╟─4d88a51b-ca51-4f37-90cf-b42fe14f081b
+# ╠═2a39913c-0840-4152-914c-a2b61287ef15
+# ╟─ed02f00f-1bcd-43fa-a56c-7be9968614cc
+# ╠═8d453f89-4a4a-42d0-8a00-9b153a3f435e
+# ╠═f7de29b5-2a51-45e4-a0a5-f7f602681303
+# ╟─7e817bad-dc51-4c29-a4fc-f7a8bb3663ca
+# ╠═403d607b-6171-431b-a058-0aad0909846f
+# ╠═c8c16c14-26b0-4f83-8135-4f862ed90686
 # ╟─00000000-0000-0000-0000-000000000001
 # ╟─00000000-0000-0000-0000-000000000002
