@@ -263,7 +263,7 @@ end
 md"""
 #### Exercício 2.2
 
-👉 Escreva uma função `geometric(p)`. Ela deve executar uma simulação com probabilidade $p$ de falha diária múltiplas vezes e esperar *até* que a falha ocorra. O seu retorne é o número de dias até a falha. Esse tempo resultante é uma **variável aleatória geometrica**, ou uma variável aleatória que obedece a uma **distribuição (de probabilidades) gemétrica**
+👉 Escreva uma função `geometric(p)`. Ela deve executar uma simulação com probabilidade $p$ de falha diária múltiplas vezes e esperar *até* que a falha ocorra. O seu retorno é o número de dias até a falha. Esse tempo resultante é uma **variável aleatória geométrica**, ou uma variável aleatória que obedece a uma **distribuição (de probabilidades) gemétrica**
 """
 
 # ╔═╡ 08028df8-8c50-11eb-3b22-fdf5104a4d52
@@ -533,7 +533,7 @@ md"""
 md"""
 #### Exercício 3.4
 
-Se $p$ for *pequeno*, digamos $ p = 0.001$, então o algoritmo que usamos no exercício 2 será muito lento. Ele fica lá "parado" calculando um monte de `false` até que o improvável `true` apareça.
+Se $p$ for *pequeno*, digamos $p = 0.001$, então o algoritmo que usamos no exercício 2 será muito lento. Ele fica lá "parado" calculando um monte de `false` até que o improvável `true` apareça.
 """
 
 # ╔═╡ 9240f9dc-aa34-4e7b-8b82-86ea1376f527
@@ -543,12 +543,12 @@ Vamos desenvolver um algoritmo melhor. Imagine cada $P_n$ como intervalos (com o
 
 # ╔═╡ d24ddb61-3d65-4bea-ad8f-d5a3ac44a563
 md"""
-Agora considere que escolhemos um ponto $r$ uniformente entre $0$ e $1$. Ele vai cair em um desses subintervalos, correspondendo ao $P_n$, retornamos então $n$ como o tempo de falha. A chance de escolher um valor é a mesma que o processo qeu fica lá esperando aparecer o `true` mas não precisa um laço de `false` até atingir um `true`! Ele é muito mais rápido. Vamos nos mover na direção dessa implementação. 
+Agora considere que escolhemos um ponto $r$ uniformente entre $0$ e $1$. Ele vai cair em um desses subintervalos, correspondendo ao $P_n$, retornamos então $n$ como o tempo de falha. A chance de escolher um valor é a mesma que o processo que fica lá esperando aparecer o `true` mas não precisa um laço de `false` até atingir um `true`! Ele é muito mais rápido. Vamos nos mover na direção dessa implementação. 
 """
 
 # ╔═╡ 430e0975-8eb6-420c-a18e-f3493182c5c7
 md"""
-👉 Para desenhar esse figura, precisamos somar os comprimentos dos intervalos de $1$ a $#n$ para cada $n$, isto é, queremos calcular uma soma acumulada de elementos. Escreva uma rotina `cumulative_sum` que recebe um vetor e devolve a soma acumulada de seus elementos.
+👉 Para desenhar esse figura, precisamos somar os comprimentos dos intervalos de $1$ a $n$ para cada $n$, isto é, queremos calcular uma soma acumulada de elementos. Escreva uma rotina `cumulative_sum` que recebe um vetor e devolve a soma acumulada de seus elementos.
 """
 
 # ╔═╡ 5185c938-8c53-11eb-132d-83342e0c775f
@@ -586,7 +586,7 @@ C_n := \sum_{k=1}^n P_k = my \cdot answer \cdot here
 
 # ╔═╡ fa599248-8c52-11eb-147a-99b5fb75d131
 md"""
-👉 Use a fórmula anterior para encontrar (analiticamente) em qual o subintervalo $n$ um valor dado $r \in [0, 1]$ cai, usando a desigualdade $P_{n+1} \le r \le P_n$.
+👉 Use a fórmula anterior para encontrar (analiticamente) em qual o subintervalo $n$ um valor dado $r \in [0, 1]$ cai, usando a desigualdade $C_{n} \le r \le C_{n + 1}$.
 """
 
 # ╔═╡ 16b4e98c-4ae7-4145-addf-f43a0a96ec82
@@ -600,7 +600,7 @@ n(r,p) = my \cdot answer \cdot here
 md"""
 #### Exercício 3.6
 
-👉 Implemente essa fórmula como a função `geomtric_bin(r, p)`, use a função `floor`.
+👉 Implemente essa fórmula como a função `geometric_bin(r, p)`, use a função `floor`.
 """
 
 # ╔═╡ 47d56992-8c54-11eb-302a-eb3153978d26
@@ -1202,9 +1202,9 @@ version = "1.0.2"
 
 [[HTTP]]
 deps = ["Base64", "Dates", "IniFile", "Logging", "MbedTLS", "NetworkOptions", "Sockets", "URIs"]
-git-tree-sha1 = "24675428ca27678f003414a98c9e473e45fe6a21"
+git-tree-sha1 = "14eece7a3308b4d8be910e265c724a6ba51a9798"
 uuid = "cd3eb016-35fb-5094-929b-558a96fad6f3"
-version = "0.9.15"
+version = "0.9.16"
 
 [[HarfBuzz_jll]]
 deps = ["Artifacts", "Cairo_jll", "Fontconfig_jll", "FreeType2_jll", "Glib_jll", "Graphite2_jll", "JLLWrappers", "Libdl", "Libffi_jll", "Pkg"]
@@ -1434,9 +1434,9 @@ version = "8.44.0+0"
 
 [[Parsers]]
 deps = ["Dates"]
-git-tree-sha1 = "9d8c00ef7a8d110787ff6f170579846f776133a9"
+git-tree-sha1 = "a8709b968a1ea6abc2dc1967cb1db6ac9a00dfb6"
 uuid = "69de0a69-1ddd-5017-9359-2bf0b02dc9f0"
-version = "2.0.4"
+version = "2.0.5"
 
 [[Pixman_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg"]
@@ -1456,9 +1456,9 @@ version = "2.0.1"
 
 [[PlotUtils]]
 deps = ["ColorSchemes", "Colors", "Dates", "Printf", "Random", "Reexport", "Statistics"]
-git-tree-sha1 = "2537ed3c0ed5e03896927187f5f2ee6a4ab342db"
+git-tree-sha1 = "b084324b4af5a438cd63619fd006614b3b20b87b"
 uuid = "995b91a9-d308-5afd-9ec6-746e21dbc043"
-version = "1.0.14"
+version = "1.0.15"
 
 [[Plots]]
 deps = ["Base64", "Contour", "Dates", "Downloads", "FFMPEG", "FixedPointNumbers", "GR", "GeometryBasics", "JSON", "Latexify", "LinearAlgebra", "Measures", "NaNMath", "PlotThemes", "PlotUtils", "Printf", "REPL", "Random", "RecipesBase", "RecipesPipeline", "Reexport", "Requires", "Scratch", "Showoff", "SparseArrays", "Statistics", "StatsBase", "UUIDs"]
@@ -1468,9 +1468,9 @@ version = "1.22.3"
 
 [[PlutoUI]]
 deps = ["Base64", "Dates", "HypertextLiteral", "IOCapture", "InteractiveUtils", "JSON", "Logging", "Markdown", "Random", "Reexport", "UUIDs"]
-git-tree-sha1 = "f35ae11e070dbf123d5a6f54cbda45818d765ad2"
+git-tree-sha1 = "d1fb76655a95bf6ea4348d7197b22e889a4375f4"
 uuid = "7f904dfe-b85e-4ff6-b463-dae2292396a8"
-version = "0.7.12"
+version = "0.7.14"
 
 [[Preferences]]
 deps = ["TOML"]
@@ -1555,9 +1555,9 @@ uuid = "2f01184e-e22b-5df5-ae63-d93ebab69eaf"
 
 [[StaticArrays]]
 deps = ["LinearAlgebra", "Random", "Statistics"]
-git-tree-sha1 = "3240808c6d463ac46f1c1cd7638375cd22abbccb"
+git-tree-sha1 = "3c76dde64d03699e074ac02eb2e8ba8254d428da"
 uuid = "90137ffa-7385-5640-81b9-e52037218182"
-version = "1.2.12"
+version = "1.2.13"
 
 [[Statistics]]
 deps = ["LinearAlgebra", "SparseArrays"]
@@ -1592,9 +1592,9 @@ version = "1.0.1"
 
 [[Tables]]
 deps = ["DataAPI", "DataValueInterfaces", "IteratorInterfaceExtensions", "LinearAlgebra", "TableTraits", "Test"]
-git-tree-sha1 = "1162ce4a6c4b7e31e0e6b14486a6986951c73be9"
+git-tree-sha1 = "fed34d0e71b91734bf0a7e10eb1bb05296ddbcd0"
 uuid = "bd369af6-aec1-5ad0-b16a-f7cc5008161c"
-version = "1.5.2"
+version = "1.6.0"
 
 [[Tar]]
 deps = ["ArgTools", "SHA"]
@@ -1917,7 +1917,7 @@ version = "0.9.1+5"
 # ╠═b763b6e8-8221-4b08-9a8e-8d5e63cbd144
 # ╟─d2e4185e-8c51-11eb-3c31-637902456634
 # ╟─06412687-b44d-4a69-8d6c-0cf4eb51dfad
-# ╠═a82728c4-8c4c-11eb-31b8-8bc5fcd8afb7
+# ╟─a82728c4-8c4c-11eb-31b8-8bc5fcd8afb7
 # ╟─23a1b76b-7393-4a4c-b6a5-40fb15dadd29
 # ╠═45735d82-8c52-11eb-3735-6ff9782dde1f
 # ╠═dd80b2eb-e4c3-4b2f-ad5c-526a241ac5e6
