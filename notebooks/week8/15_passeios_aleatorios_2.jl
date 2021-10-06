@@ -15,20 +15,20 @@ end
 
 # ╔═╡ 85b45a43-d7bf-4597-a1a6-329b41dce20d
 begin
-	using LinearAlgebra
-	using SparseArrays
-	using Random
-	using PlutoUI
-	using Plots
-	using PlotThemes
-	using BenchmarkTools
+    using LinearAlgebra
+    using SparseArrays
+    using Random
+    using PlutoUI
+    using Plots
+    using PlotThemes
+    using BenchmarkTools
 end
 
 # ╔═╡ e46441c4-97bd-11eb-330c-97bd5ac41f9e
 md"Tradução livre de [random\_walks\_ii.jl](https://github.com/mitmath/18S191/blob/Spring21/notebooks/week8/random_walks_II.jl)"
 
 # ╔═╡ 85c26eb4-c258-4a8b-9415-7b5f7ddff02a
-TableOfContents(aside=true)
+TableOfContents(aside = true)
 
 # ╔═╡ 2d48bfc6-9617-11eb-3a85-279bebd21332
 md"""
@@ -53,7 +53,7 @@ Vamos começar pensando um pouco sobre o triângulo de Pascal. (obs: [Pascal nã
 """
 
 # ╔═╡ e8ceab7b-45db-4393-bb8e-e000ecf78d2c
-pascal(N) = [binomial(n, k) for n = 0:N, k=0:N]
+pascal(N) = [binomial(n, k) for n = 0:N, k = 0:N]
 
 # ╔═╡ 2d4dffb9-39e4-48de-9688-980b96814c9f
 pascal(10)
@@ -83,7 +83,7 @@ md"""
 Como já vimos, Julia também possui um tipo para representar matrizes esparsas que poderíamos ter usado nesse caso. Ele está definido na biblioteca (padrão), `SparseArrays`."""
 
 # ╔═╡ d6832372-d336-4a54-bbcf-d0bb70e4de64
-sparse(pascal(10))  
+sparse(pascal(10))
 
 # ╔═╡ 35f14826-f1e4-4977-a31a-0f6148fe25ad
 md"""
@@ -93,7 +93,7 @@ Um fato interessante sobre o triângulo de Pascal fica evidente quando destamos 
 """
 
 # ╔═╡ 7468fc5d-7f35-45e2-b5fc-7e63b562bc8f
-@bind n_pascal Slider(1:63, show_value=true, default=1)
+@bind n_pascal Slider(1:63, show_value = true, default = 1)
 
 # ╔═╡ 1ca8aa3b-b05d-40f6-a925-2f0248b79ca2
 sparse(isodd.(pascal(n_pascal)))
@@ -153,15 +153,15 @@ Vamos fazer alguns testes para ver se Julia é de fato esperta o suficiente para
 
 # ╔═╡ 834e3dce-9a65-4452-b6dc-9a87a86aeb13
 begin
-	Random.seed!(10)
-	dim = 1500
-	A = rand(dim, dim)
-	ltA = LowerTriangular(rand(dim, dim))
-	symA = Symmetric(A + A')
-	dpA = Symmetric(A*A')
-	spA = sprand(dim, dim, 0.005)
-	densespA = Matrix(spA)
-	b = rand(dim)
+    Random.seed!(10)
+    dim = 1500
+    A = rand(dim, dim)
+    ltA = LowerTriangular(rand(dim, dim))
+    symA = Symmetric(A + A')
+    dpA = Symmetric(A * A')
+    spA = sprand(dim, dim, 0.005)
+    densespA = Matrix(spA)
+    b = rand(dim)
 end
 
 # ╔═╡ 80acaa77-a399-448b-81f6-3a645d3895be
@@ -169,38 +169,38 @@ rank(spA)
 
 # ╔═╡ 6658a4e4-1dbb-457f-95e5-5b59853fae88
 with_terminal() do
-	print("General:             ")
-	@btime x = $A \ $b
-	print("Lower triangular:    ")
-	@btime x = $ltA \ $b
-	print("Symmetric:           ")
-	@btime x = $symA \ $b
-	print("Symmetric pos. def.: ")
-	@btime x = $dpA \ $b
+    print("General:             ")
+    @btime x = $A \ $b
+    print("Lower triangular:    ")
+    @btime x = $ltA \ $b
+    print("Symmetric:           ")
+    @btime x = $symA \ $b
+    print("Symmetric pos. def.: ")
+    @btime x = $dpA \ $b
 end
 
 # ╔═╡ af357814-f0a1-48b3-9e49-ee0ad1cee609
 with_terminal() do
-	print("Cholesky: ")
-	@btime x = cholesky($dpA) \ $b
+    print("Cholesky: ")
+    @btime x = cholesky($dpA) \ $b
 end
 
 # ╔═╡ 27040653-4639-419f-9c07-a826c9c8f8f5
 with_terminal() do
-	print("Linear system with sparse matrix: ")
-	@btime x = $spA \ $b
-	print("Linear system with dense matrix:  ")
-	@btime x = $densespA \ $b
+    print("Linear system with sparse matrix: ")
+    @btime x = $spA \ $b
+    print("Linear system with dense matrix:  ")
+    @btime x = $densespA \ $b
 end
 
 # ╔═╡ c4b1a791-e318-47e5-80ed-7476f658f647
-with_terminal() do 
-	print("Sparse matrix times vector: ")
-	@btime y = $spA * b
-	print("Dense matrix times vector:  ")
-	@btime y = $A * b
+with_terminal() do
+    print("Sparse matrix times vector: ")
+    @btime y = $spA * b
+    print("Dense matrix times vector:  ")
+    @btime y = $A * b
 end
-	
+
 
 # ╔═╡ 1efc2b68-9313-424f-9850-eb4496cc8486
 md"""
@@ -246,40 +246,40 @@ Como discutimos antes, esse processo pode também ser visto como uma aplicação
 
 # ╔═╡ fb804fe2-58be-46c9-9200-ceb8863d052c
 function evolve(p)
-	p′ = similar(p)   # make a vector of the same length and type
-	                  # to store the probability vector at the next time step
-	
-	for i in 2:length(p)-1   # iterate over the *bulk* of the system
-		p′[i] = 0.5 * (p[i-1] + p[i+1])
-	end
-	
-	# boundary conditions:
-	p′[1] = 0
-	p′[end] = 0
-	
-	return p′
+    p′ = similar(p)   # make a vector of the same length and type
+    # to store the probability vector at the next time step
+
+    for i = 2:length(p)-1   # iterate over the *bulk* of the system
+        p′[i] = 0.5 * (p[i-1] + p[i+1])
+    end
+
+    # boundary conditions:
+    p′[1] = 0
+    p′[end] = 0
+
+    return p′
 end
 
 # ╔═╡ 0b26efab-4e93-4d53-9c4d-faea68d12174
 function initial_condition(n)
-	
-	p₀ = zeros(n)
-	p₀[n ÷ 2 + 1] = 1
-	
-	return p₀
+
+    p₀ = zeros(n)
+    p₀[n÷2+1] = 1
+
+    return p₀
 end
 
 # ╔═╡ b48e55b7-4b56-41aa-9796-674d04adf5df
 function time_evolution(p0, N)
-	ps = [p0]
-	p = p0
-	
-	for i in 1:N
-		p = evolve(p)
-		push!(ps, copy(p))
-	end
-	
-	return ps
+    ps = [p0]
+    p = p0
+
+    for i = 1:N
+        p = evolve(p)
+        push!(ps, copy(p))
+    end
+
+    return ps
 end
 
 # ╔═╡ 53a36c1a-0b8c-4099-8854-08d73c9f118e
@@ -289,9 +289,9 @@ Let's visualise this:
 
 # ╔═╡ 6b298184-32c6-412d-a900-b113d6bd3d53
 begin
-	grid_size = 101
-	max_time = 100
-	p0 = initial_condition(grid_size)
+    grid_size = 101
+    max_time = 100
+    p0 = initial_condition(grid_size)
 end
 
 # ╔═╡ b84a7255-7b0a-4ba1-8c87-9f5d3fa32ef3
@@ -303,7 +303,7 @@ t = $(@bind tt Slider(1:length(ps), show_value=true, default=1))
 """
 
 # ╔═╡ d0f89707-eccf-4155-82d5-780643e1b447
-plot(ps[tt], ylim=(0, 1), xlim=(1, 100), leg=false, size=(500, 300))
+plot(ps[tt], ylim = (0, 1), xlim = (1, 100), leg = false, size = (500, 300))
 
 # ╔═╡ 049feaa2-050a-45eb-85a1-75c758c08e87
 sum(ps[tt])
@@ -318,11 +318,11 @@ Na última aula apresentamos duas visualizações da evolução das probabiidade
 Vamos agora explorar outras possibilidades de visualização e ensinar mais alguns truques de Julia e Plots.
 
 Uma primeira alteração, é o formato da figura acima com os picos cuneiformes. Eles não estão exatamente corretos, não há uma mudança contínua, e linear, das probabilidades 0 para probabilidades positivas. A mudança é abrupta, são valores discretos. Um gráfico de barras faz melhor esse serviço.
-"	
-	
+"
+
 
 # ╔═╡ aeaef573-1e90-45f3-a7fe-31ec5e2808c4
-bar(ps[tt], ylim=(0, 1), leg=false, size=(500, 300), alpha=0.5)
+bar(ps[tt], ylim = (0, 1), leg = false, size = (500, 300), alpha = 0.5)
 
 # ╔═╡ 610b2349-9ae6-4967-8b50-9b30b34d18d8
 md"""
@@ -333,11 +333,11 @@ Outra característica é que a visualização acima só consegue capturar a evol
 
 # ╔═╡ 602fb644-bd1d-4f9d-979f-0b190931d649
 begin
-	anim = @animate for ttt in 1:max_time
-		bar(ps[ttt], ylim=(0, 1), leg=false, alpha=0.5, dpi=200)
-		title!("Time = $ttt")
-	end 
-	gif(anim, fps=10)
+    anim = @animate for ttt = 1:max_time
+        bar(ps[ttt], ylim = (0, 1), leg = false, alpha = 0.5, dpi = 200)
+        title!("Time = $ttt")
+    end
+    gif(anim, fps = 10)
 end
 
 # ╔═╡ 1baafa2c-73c6-4e6f-832c-8b5c330b55d7
@@ -362,7 +362,7 @@ E podemos reproduzir a visualização da última aula baseada em **mapas de calo
 """
 
 # ╔═╡ e74e18e3-ad08-4a53-a803-cd53564dca65
-heatmap(M, yflip=true)
+heatmap(M, yflip = true)
 
 # ╔═╡ 4d88a51b-ca51-4f37-90cf-b42fe14f081b
 md"""
@@ -373,12 +373,12 @@ Uma opção a isso é usar outro "tema" para os gráficos de Julia que ajudem a 
 
 # ╔═╡ 2a39913c-0840-4152-914c-a2b61287ef15
 begin
-	theme(:default)
-	#them(:dark)
-	#theme(:lime)
-	#theme(:wong)
-	#theme(:vibrant)
-	heatmap(M, yflip=true)
+    theme(:default)
+    #them(:dark)
+    #theme(:lime)
+    #theme(:wong)
+    #theme(:vibrant)
+    heatmap(M, yflip = true)
 end
 
 # ╔═╡ ed02f00f-1bcd-43fa-a56c-7be9968614cc
@@ -402,19 +402,25 @@ gr()
 
 # ╔═╡ c8c16c14-26b0-4f83-8135-4f862ed90686
 begin
-	plot(leg=false)
-	
-	endtime = 15
-	for t in 1:endtime
-		for i in 1:length(ps[t])
-			# Draws a vertical line from 0 to the high of the probaility 
-			plot!([t, t], [-grid_size÷2 + i, -grid_size÷2 + i], [0, ps[t][i]],
-		          c = t, alpha = 0.8, lw = 2)
-		end
-	end
+    plot(leg = false)
 
-	xlims!(1, endtime - 1)
-	plot!(xaxis = "Time", yaxis = "Space", zaxis = "Probability")
+    endtime = 15
+    for t = 1:endtime
+        for i = 1:length(ps[t])
+            # Draws a vertical line from 0 to the high of the probaility 
+            plot!(
+                [t, t],
+                [-grid_size ÷ 2 + i, -grid_size ÷ 2 + i],
+                [0, ps[t][i]],
+                c = t,
+                alpha = 0.8,
+                lw = 2,
+            )
+        end
+    end
+
+    xlims!(1, endtime - 1)
+    plot!(xaxis = "Time", yaxis = "Space", zaxis = "Probability")
 end
 
 # ╔═╡ 00000000-0000-0000-0000-000000000001

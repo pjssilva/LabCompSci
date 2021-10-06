@@ -15,22 +15,22 @@ end
 
 # ╔═╡ d155ea12-9628-11eb-347f-7754a33fd403
 begin
-	using Plots
-	using PlutoUI
-	using HypertextLiteral 
-	using LightGraphs
-	using GraphPlot
-	using Printf
-	using SpecialFunctions
-	using Statistics
-	using Distributions
+    using Plots
+    using PlutoUI
+    using HypertextLiteral
+    using LightGraphs
+    using GraphPlot
+    using Printf
+    using SpecialFunctions
+    using Statistics
+    using Distributions
 end
 
 # ╔═╡ bad1ae0f-0b0b-4cdd-94ff-e9a55fad6dfe
 md"Traduação livre de [discrete\_and\_continuos.jl](https://github.com/mitmath/18S191/blob/Spring21/notebooks/week8/discrete_and_continuous.jl)"
 
 # ╔═╡ 01506de2-918a-11eb-2a4d-c554a6e54631
-TableOfContents(title="📚 Table of Contents", aside=true)
+TableOfContents(title = "📚 Table of Contents", aside = true)
 
 # ╔═╡ ee349b52-9189-11eb-2b86-b5dc15ebe432
 md"""
@@ -62,7 +62,7 @@ md"""
 """
 
 # ╔═╡ 45ecee7e-970e-11eb-22fd-01f56876684e
-gplot( barabasi_albert(150, 2) )
+gplot(barabasi_albert(150, 2))
 
 # ╔═╡ 61ffe0f2-9615-11eb-37d5-f9e30a31c111
 md"""
@@ -127,8 +127,8 @@ collect(2:2:20)[7] # Extracts an element from Memory (of course there is an addr
 
 # ╔═╡ 0a379cae-386d-4daa-ab6f-9d0424c1cdc1
 begin
-	f(x)=2x
-	f(7)     # Compute 2*7
+    f(x) = 2x
+    f(7)     # Compute 2*7
 end
 
 # ╔═╡ 890c0fa2-c247-4f14-84f6-2bed69d0f0c5
@@ -155,24 +155,49 @@ n = $(@bind sides Slider(3:100, show_value=true, default=6))
 """
 
 # ╔═╡ f20da096-9712-11eb-2a67-cd33f6ab8750
-area(s) = (s/2) * sin(2π/s)  # You can derive this formula yourself!
+area(s) = (s / 2) * sin(2π / s)  # You can derive this formula yourself!
 
 # ╔═╡ 02784976-9566-11eb-125c-a7f1f1bafd6b
 begin
-	θ = (0:.01:1)*2π
-		plot( cos.(θ),sin.(θ), ratio=1, axis=false, legend=false, ticks=false, lw=4, color=:black, fill=false)
-	plot!( cos.(θ),sin.(θ), ratio=1, axis=false, legend=false, ticks=false, lw=4, color=:white, fill=true, alpha=.6)
-	
-	
-	ϕ = (0:sides)*2π/sides
-	for i=1:sides
-	   plot!( Shape( [0,cos(ϕ[i]),cos(ϕ[i+1])],[0,sin(ϕ[i]),sin(ϕ[i+1])]), fill=true,lw=0)
-	end
-	title!("Area = ($sides/2)sin(2π/$sides) ≈  $(area(sides)/π )  π")
+    θ = (0:0.01:1) * 2π
+    plot(
+        cos.(θ),
+        sin.(θ),
+        ratio = 1,
+        axis = false,
+        legend = false,
+        ticks = false,
+        lw = 4,
+        color = :black,
+        fill = false,
+    )
+    plot!(
+        cos.(θ),
+        sin.(θ),
+        ratio = 1,
+        axis = false,
+        legend = false,
+        ticks = false,
+        lw = 4,
+        color = :white,
+        fill = true,
+        alpha = 0.6,
+    )
+
+
+    ϕ = (0:sides) * 2π / sides
+    for i = 1:sides
+        plot!(
+            Shape([0, cos(ϕ[i]), cos(ϕ[i+1])], [0, sin(ϕ[i]), sin(ϕ[i+1])]),
+            fill = true,
+            lw = 0,
+        )
+    end
+    title!("Area = ($sides/2)sin(2π/$sides) ≈  $(area(sides)/π )  π")
 end
 
 # ╔═╡ 6fd93018-c33b-4682-91c3-7a20a41d9b03
-area0 = area.( 2 .^ (2:10) ) # Area of polygons with # sides  = [4, 8, ..., 1024]
+area0 = area.(2 .^ (2:10)) # Area of polygons with # sides  = [4, 8, ..., 1024]
 
 # ╔═╡ a306559f-e095-4f6d-94e8-b0be160e77fa
 π
@@ -183,10 +208,10 @@ O que acontece se fizermos uma convolução "mágica" [-1/3,4/3]?
 """
 
 # ╔═╡ 103c93ae-8175-4996-ab8f-5d537691defc
-area1 = [ 4/3 * area0[i+1] .-  1/3 * area0[i] for i = 1:length(area0)-1 ]
+area1 = [4 / 3 * area0[i+1] .- 1 / 3 * area0[i] for i = 1:length(area0)-1]
 
 # ╔═╡ a76ac67b-27b9-4e2b-9fca-61480dca5264
-area2 = [16/15 * area1[i+1] .-  1/15 * area1[i] for i = 1:length(area1)-1 ]
+area2 = [16 / 15 * area1[i+1] .- 1 / 15 * area1[i] for i = 1:length(area1)-1]
 
 # ╔═╡ c742742a-765b-4eb5-bd65-dc0cd6328255
 md"""
@@ -194,10 +219,10 @@ Outra convolução cuidadosamente escolhida: [-1/15,16/15]. Você vê um padrão
 """
 
 # ╔═╡ 4dd03325-2498-4fe7-9212-f964081a0300
-area3 = [64/63 * area2[i+1] .-  1/63 * area2[i] for i = 1:length(area2)-1 ]
+area3 = [64 / 63 * area2[i+1] .- 1 / 63 * area2[i] for i = 1:length(area2)-1]
 
 # ╔═╡ 626242ea-544c-49fc-9884-c70dd6800902
-area4 = [128/127 * area3[i+1] .-  1/127 * area3[i] for i = 1:length(area3)-1 ]
+area4 = [128 / 127 * area3[i+1] .- 1 / 127 * area3[i] for i = 1:length(area3)-1]
 
 # ╔═╡ dbccc2d5-c2af-48c4-8726-a95c09da78ae
 md"""
@@ -231,7 +256,7 @@ Nesse exemplo já atingimos o número total de dígitos significativos em um nú
 """
 
 # ╔═╡ d4f83a20-62cf-47f1-a622-d5c4c34e4813
-areab(s) = (s/2) * sin(2*big(π)/s)  # Using Big Float that defaults to 256 digits
+areab(s) = (s / 2) * sin(2 * big(π) / s)  # Using Big Float that defaults to 256 digits
 
 # ╔═╡ 37fc6e56-9714-11eb-1427-b75613800366
 big(π)
@@ -244,54 +269,66 @@ Há, de fato várias formas de se tentar estender a noção de área para figura
 """
 
 # ╔═╡ de9066e2-d5eb-49e3-be71-edda8e8e31dd
-@bind s Slider(2:40, show_value=true)
+@bind s Slider(2:40, show_value = true)
 
 # ╔═╡ 4d4705d0-9568-11eb-085c-0fc556c4cfe7
 let
-	
-    plot()
-	for i=-s:s
-		plot!([i/s,i/s],[-1,1],color=RGB(0,1,0),lw=1)
-		plot!([-1,1],[i/s,i/s],color=RGB(0,1,0),lw=1)
-	end
-		P = plot!( cos.(θ),sin.(θ), ratio=1, axis=false, legend=false, ticks=false, lw=3, color=:black)
-	plot!(P)
-	
-	h = 1/s
-	a = 0
-	
-	
-	xx=  floor(√2/2h)
-	x = xx*h
-	y=x
-	plot!( Shape([-x, -x, x ,x],[-y, y ,y, -y]), color=RGB(1,0,0),alpha=.7)
-	
-	a = a+Int(2*xx)^2
 
-	
-	 for i=-s:(-xx-1), j=-s:(-1)
-	   x = i*h
-	    y = j*h
-	   if (x^2+y^2≤1) & ( (x+h)^2+(y+h)^2 ≤1) & (x^2+(y+h)^2 ≤1) & ((x+h)^2+y^2 ≤1)
-	 	 plot!( Shape([x, x, x+h ,x+h],[y, y+h ,y+h, y]), color=:blue)
-		 plot!( Shape([-x-h, -x-h, -x ,-x],[y, y+h ,y+h, y]), color=:blue)
-	     plot!( Shape([x, x, x+h ,x+h],[-y-h, -y ,-y, -y-h]), color=:blue)
-		 plot!( Shape([-x-h, -x-h, -x ,-x],[-y-h, -y ,-y, -y-h]), color=:blue)
-		 plot!( Shape([y, y+h ,y+h, y],[x, x, x+h ,x+h]), color=:blue)
-		 plot!( Shape([-y-h, -y ,-y, -y-h],[x, x, x+h ,x+h]), color=:blue)
-		 plot!( Shape([y, y+h ,y+h, y],[-x-h, -x-h, -x ,-x]), color=:blue)
-		 plot!( Shape([-y-h, -y ,-y, -y-h],[-x-h, -x-h, -x ,-x]), color=:blue)
-	 		a += 8
-	 	end
-	 end
-	
-	
-	xlabel!("s  =  $s")
-	
-	title!( "$(a//s^2) =  $(a*h^2/π) π")
-	plot!()
-	
-	
+    plot()
+    for i = -s:s
+        plot!([i / s, i / s], [-1, 1], color = RGB(0, 1, 0), lw = 1)
+        plot!([-1, 1], [i / s, i / s], color = RGB(0, 1, 0), lw = 1)
+    end
+    P = plot!(
+        cos.(θ),
+        sin.(θ),
+        ratio = 1,
+        axis = false,
+        legend = false,
+        ticks = false,
+        lw = 3,
+        color = :black,
+    )
+    plot!(P)
+
+    h = 1 / s
+    a = 0
+
+
+    xx = floor(√2 / 2h)
+    x = xx * h
+    y = x
+    plot!(Shape([-x, -x, x, x], [-y, y, y, -y]), color = RGB(1, 0, 0), alpha = 0.7)
+
+    a = a + Int(2 * xx)^2
+
+
+    for i = -s:(-xx-1), j = -s:(-1)
+        x = i * h
+        y = j * h
+        if (x^2 + y^2 ≤ 1) &
+           ((x + h)^2 + (y + h)^2 ≤ 1) &
+           (x^2 + (y + h)^2 ≤ 1) &
+           ((x + h)^2 + y^2 ≤ 1)
+            plot!(Shape([x, x, x + h, x + h], [y, y + h, y + h, y]), color = :blue)
+            plot!(Shape([-x - h, -x - h, -x, -x], [y, y + h, y + h, y]), color = :blue)
+            plot!(Shape([x, x, x + h, x + h], [-y - h, -y, -y, -y - h]), color = :blue)
+            plot!(Shape([-x - h, -x - h, -x, -x], [-y - h, -y, -y, -y - h]), color = :blue)
+            plot!(Shape([y, y + h, y + h, y], [x, x, x + h, x + h]), color = :blue)
+            plot!(Shape([-y - h, -y, -y, -y - h], [x, x, x + h, x + h]), color = :blue)
+            plot!(Shape([y, y + h, y + h, y], [-x - h, -x - h, -x, -x]), color = :blue)
+            plot!(Shape([-y - h, -y, -y, -y - h], [-x - h, -x - h, -x, -x]), color = :blue)
+            a += 8
+        end
+    end
+
+
+    xlabel!("s  =  $s")
+
+    title!("$(a//s^2) =  $(a*h^2/π) π")
+    plot!()
+
+
 end
 
 # ╔═╡ e6884c6c-9712-11eb-288b-f1a439b0aba3
@@ -315,33 +352,33 @@ Um passeio aletório é uma função aleatória discreta. Ela está definida sob
 
 # ╔═╡ 4f845436-9646-11eb-2445-c12746a9e556
 begin
-	N  = 1024
-	h =  1/N
-	#dist(N) = sqrt(h) .* randn(N) # Normal with 0 mean and h variance
-	#dist(N) = sqrt(12*h) .* (rand(N) .- 0.5)  # Uniform with 0 mean and h variance
-	dist(N) = sqrt(h) .* (rand(Erlang(), N) .- 1.0) # Erlang with unit shape and scale
-	# Try other distribuitions
-	v = dist(N)
+    N = 1024
+    h = 1 / N
+    #dist(N) = sqrt(h) .* randn(N) # Normal with 0 mean and h variance
+    #dist(N) = sqrt(12*h) .* (rand(N) .- 0.5)  # Uniform with 0 mean and h variance
+    dist(N) = sqrt(h) .* (rand(Erlang(), N) .- 1.0) # Erlang with unit shape and scale
+    # Try other distribuitions
+    v = dist(N)
 end
 
 # ╔═╡ 155241b0-9646-11eb-180e-89c8651536c6
-@bind j Slider(1:9, show_value=true, default=6)
+@bind j Slider(1:9, show_value = true, default = 6)
 
 # ╔═╡ 31d56008-9646-11eb-1985-2b68af354773
 begin
-	J = N ÷ 2^j
-	timestep = J*h
+    J = N ÷ 2^j
+    timestep = J * h
 end
 
 # ╔═╡ 1761187e-9645-11eb-3778-b132f856696d
 begin
-	plot()	
+    plot()
     w = [0; cumsum(v)]
-	plot!( (0:N) ./N, w )
-	scatter!( (0:J:N) ./ N, w[1:J:end], legend = false, m = :o, ms = 5, color = :red, lw = 5)	   
-	plot!(ylims = (-2,2))
-	xlabel!("time")
-	ylabel!("position")
+    plot!((0:N) ./ N, w)
+    scatter!((0:J:N) ./ N, w[1:J:end], legend = false, m = :o, ms = 5, color = :red, lw = 5)
+    plot!(ylims = (-2, 2))
+    xlabel!("time")
+    ylabel!("position")
 end
 
 # ╔═╡ 48eed5ae-b3cf-4998-ba2f-ba50e120b557
@@ -351,24 +388,24 @@ Vamos ver como ficam a distribuições das posíveis possições em um tempo t�
 
 # ╔═╡ 59a8b92c-0454-4a9c-89d8-e4a044d156d3
 begin
-	t′ = 0.5
-	
-	time = cumsum(h*ones(N))
-	ind = argmin(abs.(t′ .- time))
-	samples = Float64[]
-	for i = 1:10000
-		w = cumsum(dist(N))	
-		push!(samples, w[ind])
-	end
-	histogram(samples, nbis=20, normalize = true, legend = false)
-	
-	normalpdf(x, σ²) = exp(-x^2/(2*σ²)) / √(2π*σ²) 
-	xs = range(-4.0, 4.0, length=200)
-	plot!(xs, normalpdf.(xs, time[ind]), lw=3)
-	title!("Positions at time $t′")
-	
+    t′ = 0.5
+
+    time = cumsum(h * ones(N))
+    ind = argmin(abs.(t′ .- time))
+    samples = Float64[]
+    for i = 1:10000
+        w = cumsum(dist(N))
+        push!(samples, w[ind])
+    end
+    histogram(samples, nbis = 20, normalize = true, legend = false)
+
+    normalpdf(x, σ²) = exp(-x^2 / (2 * σ²)) / √(2π * σ²)
+    xs = range(-4.0, 4.0, length = 200)
+    plot!(xs, normalpdf.(xs, time[ind]), lw = 3)
+    title!("Positions at time $t′")
+
 end
-	
+
 
 # ╔═╡ 2c0c01fe-9f54-4d5b-9f7f-b7ef0d3a8474
 md"""
@@ -387,12 +424,12 @@ Indeed what happens as discrete objects get larger and larger, their complexity 
 """
 
 # ╔═╡ 9c519eca-9710-11eb-20dc-3f76801545d1
-@bind t Slider(.01:.01:8, show_value=true)
+@bind t Slider(0.01:0.01:8, show_value = true)
 
 # ╔═╡ 7c4b82c8-9710-11eb-101e-53616e278289
 begin
-	x = -3 : .01 : 3 
-	plot( x, normalpdf.(x,t), ylims=(0,1), legend=false)
+    x = -3:0.01:3
+    plot(x, normalpdf.(x, t), ylims = (0, 1), legend = false)
 end
 
 # ╔═╡ 236347f9-71c3-4299-9537-14d89eac2b93
@@ -400,13 +437,13 @@ plotly()
 
 # ╔═╡ 021d7e9a-9711-11eb-063b-11441afa2e69
 begin
-	surface(-2:.05:2, .2:.01:1, normalpdf, alpha=.4, c=:Reds, legend=false)
-	for t = .2 : .1 :1
-		plot!(-2:.05:2, fill(t,length(-2:.05:2)), normalpdf.(-2:.05:2,t), c=:black)
-	end
-	xlabel!("x")
-	ylabel!("time")
-	plot!()
+    surface(-2:0.05:2, 0.2:0.01:1, normalpdf, alpha = 0.4, c = :Reds, legend = false)
+    for t = 0.2:0.1:1
+        plot!(-2:0.05:2, fill(t, length(-2:0.05:2)), normalpdf.(-2:0.05:2, t), c = :black)
+    end
+    xlabel!("x")
+    ylabel!("time")
+    plot!()
 end
 
 # ╔═╡ bb8dc4fe-918d-11eb-2bde-bb00c47a1c27
@@ -449,124 +486,126 @@ md"## Funções auxiliares"
 
 # ╔═╡ 686904c9-1cc4-4476-860b-159e56471e38
 function colorgoodbad(should_be, given)
-	indexofmistake = something(
-		findfirst(collect(should_be) .!== collect(given)),
-		length(given)+1,
-	)
-	@htl("""
-		<span style="color:black">$(given[1:indexofmistake-1])</span><span style="color: red">$(given[indexofmistake:end])</span>
-		""")
+    indexofmistake =
+        something(findfirst(collect(should_be) .!== collect(given)), length(given) + 1)
+    @htl(
+        """
+    <span style="color:black">$(given[1:indexofmistake-1])</span><span style="color: red">$(given[indexofmistake:end])</span>
+    """
+    )
 end
 
 # ╔═╡ bcfd1585-8161-43a2-8b19-ed654df2e0e1
-colorgoodbad(string(float(π)) , string(22/7))
+colorgoodbad(string(float(π)), string(22 / 7))
 
 # ╔═╡ 43d20d56-d56a-47a8-893e-f726c1a99651
-pp(x) =  colorgoodbad( string(float(π)) , (@sprintf "%.15f" x) )
+pp(x) = colorgoodbad(string(float(π)), (@sprintf "%.15f" x))
 
 # ╔═╡ 01631c38-9713-11eb-30bf-3d23cf0d3dc8
 begin
-	area0b = areab.(big.([2^i for i = 1:16])) # Goes to 65536
-	colorgoodbad( (@sprintf "%.80f" big(π)) , (@sprintf "%.80f" big(area0b[end])))
+    area0b = areab.(big.([2^i for i = 1:16])) # Goes to 65536
+    colorgoodbad((@sprintf "%.80f" big(π)), (@sprintf "%.80f" big(area0b[end])))
 end
 
 # ╔═╡ 553bdb0a-9714-11eb-1646-413a969d6884
 begin
-	area1b = [ 4//3 * area0b[i+1] .-  1//3 * area0b[i] for i = 1:length(area0b)-1 ]
-	colorgoodbad( (@sprintf "%.80f" big(π)) , (@sprintf "%.80f" big(area1b[end])))
+    area1b = [4 // 3 * area0b[i+1] .- 1 // 3 * area0b[i] for i = 1:length(area0b)-1]
+    colorgoodbad((@sprintf "%.80f" big(π)), (@sprintf "%.80f" big(area1b[end])))
 end
 
 # ╔═╡ 8bcd29e2-41db-4969-9932-3cc56edfdc18
-colorgoodbad( (@sprintf "%.30f" big(π)) , (@sprintf "%.30f" big(area1b[end])))
+colorgoodbad((@sprintf "%.30f" big(π)), (@sprintf "%.30f" big(area1b[end])))
 
 # ╔═╡ 453f2585-157d-490a-9d1c-0b02939d0a11
 begin
-	area2b = [16//15 * area1b[i+1] .-  1//15 * area1b[i] for i = 1:length(area1b)-1 ]
-	colorgoodbad( (@sprintf "%.80f" big(π)) , (@sprintf "%.80f" big(area2b[end])))
+    area2b = [16 // 15 * area1b[i+1] .- 1 // 15 * area1b[i] for i = 1:length(area1b)-1]
+    colorgoodbad((@sprintf "%.80f" big(π)), (@sprintf "%.80f" big(area2b[end])))
 end
 
 # ╔═╡ bc1efddd-c959-4407-9a86-ba73a64508a8
 begin
-	area3b = [64//63 * area2b[i+1] .-  1//63 * area2b[i] for i = 1:length(area2b)-1 ]
-	colorgoodbad( (@sprintf "%.80f" big(π)) , (@sprintf "%.80f" big(area3b[end])))
+    area3b = [64 // 63 * area2b[i+1] .- 1 // 63 * area2b[i] for i = 1:length(area2b)-1]
+    colorgoodbad((@sprintf "%.80f" big(π)), (@sprintf "%.80f" big(area3b[end])))
 end
 
 # ╔═╡ 516b69d8-5d94-4b4d-9596-2db0dfbf4038
 begin
-	area4b = [256//255 * area3b[i+1] .-  1//255 * area3b[i] for i = 1:length(area3b)-1 ]
-	colorgoodbad( (@sprintf "%.80f" big(π)) , (@sprintf "%.80f" big(area4b[end])))
+    area4b = [256 // 255 * area3b[i+1] .- 1 // 255 * area3b[i] for i = 1:length(area3b)-1]
+    colorgoodbad((@sprintf "%.80f" big(π)), (@sprintf "%.80f" big(area4b[end])))
 end
 
 # ╔═╡ cec13915-8adb-4627-b220-591377239997
 begin
-	area5b = [1024//1023 * area4b[i+1] .-  1//1023 * area4b[i] for i = 1:length(area4b)-1 ]
-	colorgoodbad( (@sprintf "%.80f" big(π)) , (@sprintf "%.80f" big(area5b[end])))
+    area5b =
+        [1024 // 1023 * area4b[i+1] .- 1 // 1023 * area4b[i] for i = 1:length(area4b)-1]
+    colorgoodbad((@sprintf "%.80f" big(π)), (@sprintf "%.80f" big(area5b[end])))
 end
 
 # ╔═╡ 6d954628-6290-4867-8144-dd486551545d
 begin
-	area6b = [4096//4095 * area5b[i+1] .-  1//4095 * area5b[i] for i = 1:length(area5b)-1 ]
-	colorgoodbad( (@sprintf "%.80f" big(π)) , (@sprintf "%.80f" big(area6b[end])))
+    area6b =
+        [4096 // 4095 * area5b[i+1] .- 1 // 4095 * area5b[i] for i = 1:length(area5b)-1]
+    colorgoodbad((@sprintf "%.80f" big(π)), (@sprintf "%.80f" big(area6b[end])))
 end
 
 # ╔═╡ 00478b2c-5dcc-44fc-a7be-a3dadf6300e7
 begin
-	area7b = [16384//16383 * area6b[i+1] .-  1//16383 * area6b[i] for i = 1:length(area6b)-1 ]
-	colorgoodbad( (@sprintf "%.80f" big(π)) , (@sprintf "%.80f" big(area7b[end])))
+    area7b =
+        [16384 // 16383 * area6b[i+1] .- 1 // 16383 * area6b[i] for i = 1:length(area6b)-1]
+    colorgoodbad((@sprintf "%.80f" big(π)), (@sprintf "%.80f" big(area7b[end])))
 end
 
 # ╔═╡ 23d1186e-7d56-40bf-b208-c6e9a3ff120b
 begin
-	area8b = [65536//65535 * area7b[i+1] .-  1//65535 * area7b[i] for i = 1:length(area7b)-1 ]
-	colorgoodbad( (@sprintf "%.80f" big(π)) , (@sprintf "%.80f" big(area8b[end])))
+    area8b =
+        [65536 // 65535 * area7b[i+1] .- 1 // 65535 * area7b[i] for i = 1:length(area7b)-1]
+    colorgoodbad((@sprintf "%.80f" big(π)), (@sprintf "%.80f" big(area8b[end])))
 end
 
 # ╔═╡ c03d45f8-9188-11eb-2e11-0fafa39f253d
-function pyramid(rows::Vector{<:Vector}; 
-		horizontal=false,
-		padding_x=8,
-		padding_y=2,
-	)
-	
-	style = (; padding = "$(padding_y)px $(padding_x)px")
-	render_row(xs) = @htl("""<div><padder></padder>$([@htl("<span style=$(style)>$(x)</span>") for x in xs])<padder></padder></div>""")
-	
-	@htl("""
-		<style>
-		.pyramid {
-			flex-direction: column;
-			display: flex;
-		    font-family: monospace;
-		    font-size: 0.75rem;
-		}
-		.pyramid.horizontal {
-			flex-direction: row;
-		}
-		.pyramid div {
-			display: flex;
-			flex-direction: row;
-		}
-		.pyramid.horizontal div {
-			flex-direction: column;
-		}
-		.pyramid div>span:hover {
-			background: rgb(255, 220, 220);
-			font-weight: 900;
-		}
-		.pyramid div padder {
-			flex: 1 1 auto;
-		}
-		.pyramid div span {
-			text-align: center;
-		}
-		
-		
-		</style>
-		<div class=$(["pyramid", (horizontal ? "horizontal" : "vertical")])>
-		$(render_row.(rows))
-		</div>
-		
-		""")
+function pyramid(rows::Vector{<:Vector}; horizontal = false, padding_x = 8, padding_y = 2)
+
+    style = (; padding = "$(padding_y)px $(padding_x)px")
+    render_row(xs) = @htl(
+        """<div><padder></padder>$([@htl("<span style=$(style)>$(x)</span>") for x in xs])<padder></padder></div>"""
+    )
+
+    @htl("""
+     <style>
+     .pyramid {
+     	flex-direction: column;
+     	display: flex;
+         font-family: monospace;
+         font-size: 0.75rem;
+     }
+     .pyramid.horizontal {
+     	flex-direction: row;
+     }
+     .pyramid div {
+     	display: flex;
+     	flex-direction: row;
+     }
+     .pyramid.horizontal div {
+     	flex-direction: column;
+     }
+     .pyramid div>span:hover {
+     	background: rgb(255, 220, 220);
+     	font-weight: 900;
+     }
+     .pyramid div padder {
+     	flex: 1 1 auto;
+     }
+     .pyramid div span {
+     	text-align: center;
+     }
+
+
+     </style>
+     <div class=$(["pyramid", (horizontal ? "horizontal" : "vertical")])>
+     $(render_row.(rows))
+     </div>
+
+     """)
 end
 
 # ╔═╡ d2d1366b-9b6d-4e54-a0c4-7087f5f063c4
