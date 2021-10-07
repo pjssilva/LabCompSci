@@ -222,7 +222,7 @@ Outra convolução cuidadosamente escolhida: [-1/15,16/15]. Você vê um padrão
 area3 = [64 / 63 * area2[i+1] .- 1 / 63 * area2[i] for i = 1:length(area2)-1]
 
 # ╔═╡ 626242ea-544c-49fc-9884-c70dd6800902
-area4 = [128 / 127 * area3[i+1] .- 1 / 127 * area3[i] for i = 1:length(area3)-1]
+area4 = [256 / 255 * area3[i+1] .- 1 / 255 * area3[i] for i = 1:length(area3)-1]
 
 # ╔═╡ dbccc2d5-c2af-48c4-8726-a95c09da78ae
 md"""
@@ -347,7 +347,7 @@ Um passeio aletório é uma função aleatória discreta. Ela está definida sob
 1. Normalizamos o intervalo de tempo para o [0, 1].
 2. Esse intervalo então é dividido em N subintervalos de comprimento h = 1/N.
 3. Iniciando no tempo 0, definimos um passeio aleatório que a cada instante do tempo t escolhe a próxima posição a partir da posição atual mais um variável aleatória **com qualquer distribuição** de média 0 e variância h (o comprimento dos subitervalos).
-4. Aumentamos N e vemos o que obemos no limite.
+4. Aumentamos N e vemos o que obtemos no limite.
 """
 
 # ╔═╡ 4f845436-9646-11eb-2445-c12746a9e556
@@ -412,17 +412,6 @@ md"""
 É uma normal com média 0 e variância t′, com prometido. Esse processo limite convege então para um passeio aleatório em tempo contínuo em que a cada instante t′ a distribuição das possíveis posições é essa normal. Esse processo aleatório é chamado de **movimento browniano**.
 """
 
-# ╔═╡ c32e0f9c-918e-11eb-1cf9-a340786db24a
-md"""
-Alan's essay:
-
-In what sense does the continuous even exist?  The fact of the matter is that there are limits that give the same answer no matter how you get there, and these limits
-are important to us. For example, no matter how you cover an area, by little rectangles, the sum always converges to what we intuitively call area.
-The normal distribution is interesting in that no matter which starting finite distribution we might take, if add n independent copies and normalize to variance 1 we get the same limit.  Again, there are so many ways to start, and yet we always end up with the same thing.  Continuous mathematics is full of so many examples, where discrete objects end up behaving the same.
-
-Indeed what happens as discrete objects get larger and larger, their complexity gets out of control if one wants to keep track of every detail, but they get simpler in their aggregate behavior.
-"""
-
 # ╔═╡ 9c519eca-9710-11eb-20dc-3f76801545d1
 @bind t Slider(0.01:0.01:8, show_value = true)
 
@@ -445,6 +434,9 @@ begin
     ylabel!("time")
     plot!()
 end
+
+# ╔═╡ f16cb73d-4289-4ba2-93de-7acd0c51bb57
+md"## Outros exemplos que já vimos:"
 
 # ╔═╡ bb8dc4fe-918d-11eb-2bde-bb00c47a1c27
 md"""
@@ -479,6 +471,19 @@ md"""
 # ╔═╡ 906758c6-918d-11eb-08ae-b3c4f7870b4e
 md"""
 #### Transformadas de Fourier discreta e contínua
+"""
+
+# ╔═╡ c32e0f9c-918e-11eb-1cf9-a340786db24a
+md"""
+Termino deixando com vocês um ensaio original do Alan Edelman, autor original desta palestra. 
+
+Alan's essay:
+
+In what sense does the continuous even exist?  The fact of the matter is that there are limits that give the same answer no matter how you get there, and these limits
+are important to us. For example, no matter how you cover an area, by little rectangles, the sum always converges to what we intuitively call area.
+The normal distribution is interesting in that no matter which starting finite distribution we might take, if add n independent copies and normalize to variance 1 we get the same limit.  Again, there are so many ways to start, and yet we always end up with the same thing.  Continuous mathematics is full of so many examples, where discrete objects end up behaving the same.
+
+Indeed what happens as discrete objects get larger and larger, their complexity gets out of control if one wants to keep track of every detail, but they get simpler in their aggregate behavior.
 """
 
 # ╔═╡ e115c506-ce45-42e4-9fb4-fe07fc5512a1
@@ -1651,11 +1656,11 @@ version = "0.9.1+5"
 # ╟─48eed5ae-b3cf-4998-ba2f-ba50e120b557
 # ╠═59a8b92c-0454-4a9c-89d8-e4a044d156d3
 # ╟─2c0c01fe-9f54-4d5b-9f7f-b7ef0d3a8474
-# ╟─c32e0f9c-918e-11eb-1cf9-a340786db24a
 # ╠═9c519eca-9710-11eb-20dc-3f76801545d1
 # ╠═7c4b82c8-9710-11eb-101e-53616e278289
 # ╠═236347f9-71c3-4299-9537-14d89eac2b93
 # ╠═021d7e9a-9711-11eb-063b-11441afa2e69
+# ╠═f16cb73d-4289-4ba2-93de-7acd0c51bb57
 # ╟─bb8dc4fe-918d-11eb-2bde-bb00c47a1c27
 # ╟─c4a3bf6c-918d-11eb-1d50-911f83b6df81
 # ╟─d99dc494-918d-11eb-2733-29ce93ba584e
@@ -1663,6 +1668,7 @@ version = "0.9.1+5"
 # ╟─a7c5ef96-918d-11eb-0632-f94386eb64f2
 # ╟─75672be6-918d-11eb-1e10-07fbcc72abbd
 # ╟─906758c6-918d-11eb-08ae-b3c4f7870b4e
+# ╟─c32e0f9c-918e-11eb-1cf9-a340786db24a
 # ╟─e115c506-ce45-42e4-9fb4-fe07fc5512a1
 # ╟─686904c9-1cc4-4476-860b-159e56471e38
 # ╟─c03d45f8-9188-11eb-2e11-0fafa39f253d
