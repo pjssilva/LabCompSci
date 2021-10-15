@@ -19,12 +19,15 @@ begin
     using Statistics, LinearAlgebra, Distributions
 end
 
+# ╔═╡ adda160f-2db3-47b9-9faa-88fbb450b398
+md"Tradução livre de [liinearmodel_datascience.jl](https://github.com/mitmath/18S191/blob/Spring21/notebooks/week9/linearmodel_datascience.jl)."
+
 # ╔═╡ 01506de2-918a-11eb-2a4d-c554a6e54631
 TableOfContents(title = "📚 Índice", aside = true)
 
 # ╔═╡ 877deb2c-702b-457b-a54b-f27c277928d4
 md"""
-# Julia alguns conceitos para ciência de dados
+# Julia alguns conceitos para estatística
 
 Como já disse, o valor prático de uma linguagem não reside apenas em sua sintaxe e funcionalidades principais, mas também no seu ecossistema de pacotes. Já vimos vários exemplos disso e agora veremos mais um: ciência de dados. Um dos principais desafios em ciência de dados é ler as grandes bases de dados e disponibilizá-las para serem manipuladas com facilidade pela linguagem. Nesse mundo uma biblioteca dominou: Pandas (de Python). Vamos agora ver uma alternativa disponível em Julia, que adotou algumas opções diferentes, mas que procurar preencher o mesmo nicho.
 
@@ -279,6 +282,8 @@ howmany = 100_000
 
 # ╔═╡ d2971801-2cdb-4b9f-8ec8-c74cbb2a0b31
 md"""
+Desvio padrão para ser usado nos experimentos:
+
 σ = $(@bind σ Slider(0:.1:3, show_value=true, default=1))
 """
 
@@ -286,7 +291,7 @@ md"""
 s = simulate(σ, howmany)
 
 # ╔═╡ d451af49-3139-4329-a885-a210b1760f74
-s[1] # first simulation,  intercept, slope, estimation of noise σ
+s[1] # first simulation,  intercept, slope, estimation of noise σ²
 
 # ╔═╡ c7455f7a-9c72-42f5-8238-1799cad96f6c
 md"""
@@ -394,7 +399,7 @@ begin
 end
 
 # ╔═╡ 37550225-41a9-486a-a028-510edda4a772
-md"Média experimental de σ"
+md"Média experimental de σ²"
 
 # ╔═╡ 75f9b5e9-775d-4767-9da6-222f977da686
 mean(last.(s))
@@ -1571,6 +1576,7 @@ version = "0.9.1+5"
 """
 
 # ╔═╡ Cell order:
+# ╟─adda160f-2db3-47b9-9faa-88fbb450b398
 # ╠═d155ea12-9628-11eb-347f-7754a33fd403
 # ╠═01506de2-918a-11eb-2a4d-c554a6e54631
 # ╟─877deb2c-702b-457b-a54b-f27c277928d4
@@ -1641,7 +1647,7 @@ version = "0.9.1+5"
 # ╠═61d1c1f7-e070-413b-8a92-76f44d237206
 # ╟─94d80ad6-0403-4322-aa9f-647c291c19d7
 # ╠═ce89b805-39a2-49e6-8781-c557aa73ed27
-# ╟─37550225-41a9-486a-a028-510edda4a772
+# ╠═37550225-41a9-486a-a028-510edda4a772
 # ╠═75f9b5e9-775d-4767-9da6-222f977da686
 # ╠═797c9f2f-0b85-4435-b1c0-edc8cf67f738
 # ╟─559da1b3-a1f0-4abc-9aa9-be0b69650fd0
