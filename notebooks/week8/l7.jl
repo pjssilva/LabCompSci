@@ -152,7 +152,7 @@ Vamos verificar que os novo método funciona corretamente. Quantos métodos de c
 # ╔═╡ 8631a536-0403-11eb-0379-bb2e56927727
 md"""
 #### Exercício 1.3
-👉 Escreva funções `set_status!(a)` e `set_num_infected!(a)` que modificam os repectivos campos de `Agent`. Verifique que funcione. Note a conveção de usar o ponto de exclamação no final do nome das funções como forma de indicar que elas _alteram_ os seus argumentos.
+👉 Escreva funções `set_status!(a)` e `inc_num_infected!(a)` que modificam o campo `status` de  `Agent` pra `a` e adiciona um no campo `num_infected` respectivamte. Verifique que funcione. Note a conveção de usar o ponto de exclamação no final do nome das funções como forma de indicar que elas _alteram_ os seus argumentos.
 
 """
 
@@ -165,7 +165,7 @@ end
 
 # ╔═╡ 866299e8-0403-11eb-085d-2b93459cc141
 md"""
-👉 Nós também vamos precisar das funções `is_susceptible` e `is_infected` que verificam se um dado agente está em um desses estados (repectivamente).
+👉 Nós também vamos precisar das funções `is_susceptible` e `is_infected` que verificam se um dado agente está em um desses estados (repectivamente). Além disso, defina a função `get_num_infected` que simplesmente devolve o número de infectados pelo agente.
 """
 
 # ╔═╡ 9a837b52-0425-11eb-231f-a74405ff6e23
@@ -176,6 +176,12 @@ end
 
 # ╔═╡ a8dd5cae-0425-11eb-119c-bfcbf832d695
 function is_infected(agent::Agent)
+	
+	return missing
+end
+
+# ╔═╡ 46977c5a-e176-45f6-87bb-23bc964d25e6
+function get_num_infected(agent::Agent)
 	
 	return missing
 end
@@ -586,12 +592,15 @@ else
 	let
 		result1 = is_susceptible(Agent(I,2))
 		result2 = is_infected(Agent(I,2))
+		result3 = get_num_infected(Agent(I, 2))
 		
-		if result1 isa Missing || result2 isa Missing
+		if result1 isa Missing || result2 isa Missing || result3 isa Missing
 			still_missing()
 		elseif !(result1 isa Bool) || !(result2 isa Bool)
 			keep_working(md"Make sure that you return either `true` or `false`.")
-		elseif result1 === false && result2 === true
+		elseif !(result3 isa Int)
+			keep_working(md"For `get_num_infected` return an `Int`.")
+		elseif result1 === false && result2 === true && result3 == 2
 			if is_susceptible(Agent(S,3)) && !is_infected(Agent(R,9))
 				correct()
 			else
@@ -1621,12 +1630,13 @@ version = "0.9.1+5"
 # ╠═18d308c4-0424-11eb-176d-49feec6889cf
 # ╟─190deebc-0424-11eb-19fe-615997093e14
 # ╠═82f2580a-04c8-11eb-1eea-bdb4e50eee3b
-# ╠═8631a536-0403-11eb-0379-bb2e56927727
+# ╟─8631a536-0403-11eb-0379-bb2e56927727
 # ╠═98beb336-0425-11eb-3886-4f8cfd210288
 # ╟─7c515a7a-04d5-11eb-0f36-4fcebff709d5
 # ╟─866299e8-0403-11eb-085d-2b93459cc141
 # ╠═9a837b52-0425-11eb-231f-a74405ff6e23
 # ╠═a8dd5cae-0425-11eb-119c-bfcbf832d695
+# ╠═46977c5a-e176-45f6-87bb-23bc964d25e6
 # ╟─c4a8694a-04d4-11eb-1eef-c9e037e6b21f
 # ╟─8692bf42-0403-11eb-191f-b7d08895274f
 # ╠═7946d83a-04a0-11eb-224b-2b315e87bc84
