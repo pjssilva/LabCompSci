@@ -110,18 +110,17 @@ Agora definimos a condição inicial, $u_0$ e o intervalo de tempo com respeito 
 # ╔═╡ 264a27cd-9ace-48cc-9556-7eb798298f17
 begin
     u0 = 100.0
-
     time_span = (0.0, 10.0)
 end
-
-# ╔═╡ 70ebe76d-6107-492d-a3d2-84c1dd7f59fb
-md"""
-Para definir uma instância da EDO usamos o tipo `ODEProblem` definido pela `DifferentialEquations.jl`. Ele é usado para passar informação necessária sobre o problema que queremos resolver. Os parâmetros devem ser dados na seguinte ordem:
-"""
 
 # ╔═╡ 475ef0e5-7f3a-4bbb-b513-8be29abfd3f9
 md"""
 p = $(@bind p Slider(0.0:0.1:2.0, default = 0.1, show_value = true))
+"""
+
+# ╔═╡ 70ebe76d-6107-492d-a3d2-84c1dd7f59fb
+md"""
+Para definir uma instância da EDO usamos o tipo `ODEProblem` definido pela `DifferentialEquations.jl`. Ele é usado para passar informação necessária sobre o problema que queremos resolver. Os parâmetros devem ser dados na seguinte ordem:
 """
 
 # ╔═╡ 6e7c8e9e-bef0-4bf8-b1b1-d50c82aa203e
@@ -151,6 +150,9 @@ Vamos tentar graficar o objeto `solution`:
 
 # ╔═╡ b07de2ce-640b-42d6-8b60-39fcbcd116e7
 plot(solution, size = (500, 300), label = "solution")
+
+# ╔═╡ 7480b07d-1b19-4ba8-8490-763d1bc26fb4
+typeof(solution)
 
 # ╔═╡ 0b1855de-a8c9-492e-a249-3238e41fe84c
 md"""
@@ -211,9 +213,19 @@ let
     title!("p = $p")
 end
 
+# ╔═╡ ccb0c0a0-d8fb-463b-a254-7eb014b8643e
+md"Podemos também computar os erros em vários pontos do tempo."
+
+# ╔═╡ 3b144731-7bd6-4591-bb80-c04f858c7dda
+begin
+	exact(t) = u0 * exp(-p * t)
+	tts = range(0, 10, length=100)
+	error = abs.(exact.(tts) - solution.(tts)) ./ abs.(exact.(tts))
+end
+
 # ╔═╡ cf9a293c-aa0f-40ce-960b-d4c3b82b8346
 md"""
-Vems que a solução numérica e a análica são indistinguíveis aos olhos. E o pacote é sufientemente eficiente para calculá-la quase que instantaneamente.
+Vemos que a solução numérica e a análica são indistinguíveis aos olhos. E o pacote é sufientemente eficiente para calculá-la quase que instantaneamente.
 """
 
 # ╔═╡ efcfdc1a-5a80-4780-ba56-43c5e2d6ea36
@@ -259,21 +271,11 @@ function SIR(x, p, t)
 
 end
 
-# ╔═╡ 7aa45efe-865d-4e0e-9c71-0c032c72c40d
-md"""
-Vemos que o solver reconheceu que o sistema é vetorial e assim retornou um vetor para cada instante do tempo escolhido.
-
-Mais uma vez podemos graficar a solução facilmente.
-"""
-
-# ╔═╡ bca8112f-cb61-43dc-ae87-383915c8a89b
-gr()
-
 # ╔═╡ 76cbc37d-54c8-4626-8bfe-58b63a602c38
 md"""
-β = $(@bind β Slider(-0.5:0.01:2.0, default=1.0, show_value=true))
+β = $(@bind β Slider(0.0:0.01:1.0, default=0.5, show_value=true))
 
-γ = $(@bind γ Slider(-0.5:0.01:2.0, default=0.1, show_value=true))
+γ = $(@bind γ Slider(0.0:0.01:1.0, default=0.1, show_value=true))
 """
 
 # ╔═╡ d0f40681-73df-4cd3-bbd5-3edb8193153e
@@ -285,8 +287,18 @@ SIR_problem = ODEProblem(SIR, x0, (0.0, 50.0), params)
 # ╔═╡ 8ac7da6b-46e0-470b-91b3-1a61c226fa4a
 sol = solve(SIR_problem)
 
+# ╔═╡ 7aa45efe-865d-4e0e-9c71-0c032c72c40d
+md"""
+Vemos que o solver reconheceu que o sistema é vetorial e assim retornou um vetor para cada instante do tempo escolhido.
+
+Mais uma vez podemos graficar a solução facilmente.
+"""
+
+# ╔═╡ bca8112f-cb61-43dc-ae87-383915c8a89b
+gr()
+
 # ╔═╡ a766a141-5d7b-499f-9e18-48bf926ee7ea
-plot(sol)
+plot(sol, lw = 2)
 
 # ╔═╡ c2765282-bcc7-4110-9822-10557326461e
 md"""
@@ -344,7 +356,7 @@ Isso não é possível em todos tipos. Por exemplo, se temos uma matrix
 """
 
 # ╔═╡ 6630cbc8-1b2f-4ea9-bcd6-e4f4fcb2e844
-A = rand(2, 2)
+Foo = rand(2, 2)
 
 # ╔═╡ 5c1c7016-69aa-4009-8dc8-0c68c925ee66
 md"""
@@ -352,7 +364,7 @@ Não podemos chamá-la para atuar em um vetor, mesmo que isso faça todo sentido
 """
 
 # ╔═╡ 83719ef1-e8d6-44d0-98ab-a851b1082fa5
-A(rand(2))
+Foo(rand(2))
 
 # ╔═╡ e4d36db5-352b-4fb2-9169-da5c6a3458b7
 md"""
@@ -360,7 +372,7 @@ Agora se dejássemos fazer isso, isso é possível em Júlia. Para isso usamos a
 """
 
 # ╔═╡ 167015ff-1caf-42a8-85f1-070da3e5d5c5
-# (A::Matrix)(x) = A * x
+# (X::Matrix)(x) = X * x
 
 # ╔═╡ f8bcd82d-089c-49a2-99d0-b17a5ac5c509
 md"""
@@ -464,6 +476,9 @@ De maneira análoga, podemos também olhar dentro do objeto com a solução.
 # ╔═╡ 17d6021b-0d21-4d04-a8ae-64743cc01404
 fieldnames(typeof(solution))
 
+# ╔═╡ 9dc06bcf-b5ad-44a5-9ee5-8d67e22d0d00
+solution.alg_choice
+
 # ╔═╡ f4c3b174-57ac-461b-a816-869460d8896d
 Dump(solution)
 
@@ -515,15 +530,15 @@ md"""
 md"""
 Vamos ver como criar tipos parametrizados.
 
-Mais uma vez vamos pensar um pouco como seria um tipo para representar a saída do método de Euler, `EulerOutput`, que nós começamos a escrever mais acima. O que ocorreria se quizéssemos, assim como em  `DifferentialEquations.jl`, lidar, ao mesmo tempo, com EDOs *escalares* EDOs (uma única variável dependente real), e EDOs *veroriais*?
+Mais uma vez vamos pensar um pouco como seria um tipo para representar a saída do método de Euler, `EulerOutput`, que nós começamos a escrever mais acima. O que ocorreria se quizéssemos, assim como em  `DifferentialEquations.jl`, lidar, ao mesmo tempo, com EDOs *escalares* EDOs (uma única variável dependente real), e EDOs *vetoriais*?
 
 Agora não podemos mais sber, a priori qual o tipo da saída. Ele pode não ser mais  `Vector{Float64}`, então teríamos que deixá-lo indefinido:
 """
 
 # ╔═╡ c7c16e89-3ccf-4d70-9cdb-d5ae71a5ea49
 struct SimpleEulerOutput2
-    times::Any
-    values::Any
+    times::Vector{Float64}
+    values::Vector{Vector{Float64}}
 end
 
 # ╔═╡ 1872c30d-aece-44a5-b3b6-36e82c072609
@@ -541,7 +556,7 @@ Vamos definir nosso tipo  `MyODEProblem` como um exemplo simples. Para isso defi
 """
 
 # ╔═╡ 62d55814-c863-4d4d-8582-908721d37326
-struct MyODEProblem{T,U}
+struct MyODEProblem{T <: Number,U}
     t0::T
     tfinal::T
 
@@ -591,8 +606,8 @@ md"""
 E podemos usar vetores.
 """
 
-# ╔═╡ 73016af9-5efe-4af2-9e99-ce1a7de6fa96
-MyODEProblem(3, 4, [17.0, 18.0])
+# ╔═╡ a3928bdd-aa2b-40fa-8491-38c64a83d2af
+MyODEProblem(3.0, 5.0, [99.0, 0.01, 0.0])
 
 # ╔═╡ 00000000-0000-0000-0000-000000000001
 PLUTO_PROJECT_TOML_CONTENTS = """
@@ -2187,14 +2202,15 @@ version = "0.9.1+5"
 # ╟─f16644d0-e2d2-44ac-988c-aa5b178844f5
 # ╟─1ea2acfe-6ba1-44d3-9a24-a904a5fac0c4
 # ╠═264a27cd-9ace-48cc-9556-7eb798298f17
-# ╟─70ebe76d-6107-492d-a3d2-84c1dd7f59fb
 # ╟─475ef0e5-7f3a-4bbb-b513-8be29abfd3f9
+# ╟─70ebe76d-6107-492d-a3d2-84c1dd7f59fb
 # ╠═6e7c8e9e-bef0-4bf8-b1b1-d50c82aa203e
 # ╟─b5379dc2-d97f-47ed-8737-35e3fe59285c
 # ╟─0ed8e007-2137-43e0-93b8-6f5dfb9496f5
 # ╠═ff91515a-89a4-4423-a186-5572c712493d
 # ╟─64b26404-1ca0-4aa4-bea0-3c9075b08298
 # ╠═b07de2ce-640b-42d6-8b60-39fcbcd116e7
+# ╠═7480b07d-1b19-4ba8-8490-763d1bc26fb4
 # ╟─0b1855de-a8c9-492e-a249-3238e41fe84c
 # ╟─0190bdb0-97bf-4c35-b3c8-e97c1940b702
 # ╟─555a6328-8aff-4f9f-87f5-51a67450002d
@@ -2204,6 +2220,8 @@ version = "0.9.1+5"
 # ╠═180bcdc1-5f51-4b32-8b9c-5000605cdf32
 # ╟─13b38f88-2ead-46b3-bc96-eae2ea10204d
 # ╠═0ed6d65c-707d-4666-b203-2ad0ea822687
+# ╟─ccb0c0a0-d8fb-463b-a254-7eb014b8643e
+# ╠═3b144731-7bd6-4591-bb80-c04f858c7dda
 # ╟─cf9a293c-aa0f-40ce-960b-d4c3b82b8346
 # ╟─efcfdc1a-5a80-4780-ba56-43c5e2d6ea36
 # ╟─5d7a81d7-8080-4390-924a-72c34c0a5e23
@@ -2253,6 +2271,7 @@ version = "0.9.1+5"
 # ╟─32e9f6e5-8df6-4d40-8092-efaf2bce28d3
 # ╟─6dfc2699-fe5e-4b55-8437-0866f715170a
 # ╠═17d6021b-0d21-4d04-a8ae-64743cc01404
+# ╠═9dc06bcf-b5ad-44a5-9ee5-8d67e22d0d00
 # ╠═f4c3b174-57ac-461b-a816-869460d8896d
 # ╟─500973f5-faa7-4a31-b812-d0b20dbb9d82
 # ╟─4a575627-32c2-4842-a540-52253f79ff89
@@ -2280,6 +2299,6 @@ version = "0.9.1+5"
 # ╟─67e36f7c-0cb9-4ead-82ad-4c47639802a8
 # ╠═cdc25238-ed48-42e5-9db4-2367577b215d
 # ╟─f66b6078-bab5-48ef-9241-8d5fb0dc78ea
-# ╠═73016af9-5efe-4af2-9e99-ce1a7de6fa96
+# ╠═a3928bdd-aa2b-40fa-8491-38c64a83d2af
 # ╟─00000000-0000-0000-0000-000000000001
 # ╟─00000000-0000-0000-0000-000000000002
