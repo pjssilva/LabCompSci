@@ -749,6 +749,12 @@ else
 	let
 		N = 200
 		result = initialize(N, 1)
+		if !(result isa Missing)
+			n_S = sum(a -> a.status == S, result)
+			n_I = sum(a -> a.status == I, result)
+		else
+			n_S, n_I = 0, 0
+		end
 		
 		if result isa Missing
 			still_missing()
@@ -758,7 +764,7 @@ else
 			keep_working(md"Make sure that you return a `Vector` of `Agent`s.")
 		elseif length(Set(result)) != N
 			keep_working(md"Make sure that you create `N` **new** `Agent`s. Do not repeat the same agent multiple times.")
-		elseif sum(a -> a.status == S, result) == N-1 && sum(a -> a.status == I, result) == 1
+		elseif  n_S == N-1 &&  n_I == 1
 			if 8 <= length(Set(a.position for a in result)) <= 9
 				correct()
 			else
