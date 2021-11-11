@@ -1,5 +1,5 @@
 ### A Pluto.jl notebook ###
-# v0.16.4
+# v0.17.1
 
 using Markdown
 using InteractiveUtils
@@ -7,8 +7,9 @@ using InteractiveUtils
 # This Pluto notebook uses @bind for interactivity. When running this notebook outside of Pluto, the following 'mock version' of @bind gives bound variables a default value (instead of an error).
 macro bind(def, element)
     quote
+        local iv = try Base.loaded_modules[Base.PkgId(Base.UUID("6e696c72-6542-2067-7265-42206c756150"), "AbstractPlutoDingetjes")].Bonds.initial_value catch; b -> missing; end
         local el = $(esc(element))
-        global $(esc(def)) = Core.applicable(Base.get, el) ? Base.get(el) : missing
+        global $(esc(def)) = Core.applicable(Base.get, el) ? Base.get(el) : iv(el)
         el
     end
 end
@@ -2227,7 +2228,7 @@ version = "0.9.1+5"
 # ╠═7187ae25-239d-4752-898e-6674009b5de6
 # ╟─5123525a-3437-4b76-813c-8ad6b158f7f2
 # ╠═2f19cbac-4f13-4c2b-9b11-fb92e8055527
-# ╠═2b66ffaf-a9a3-4ca2-a6e9-732912c9d48e
+# ╟─2b66ffaf-a9a3-4ca2-a6e9-732912c9d48e
 # ╟─b186d026-d02c-4f06-8097-aa54b363f4fb
 # ╟─edafca88-dd4a-4fe4-8ffc-bb50f7bd561d
 # ╠═9b97e41b-76ff-4cc2-90c1-446d59c4ece7

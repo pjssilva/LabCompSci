@@ -12,7 +12,7 @@ begin
 end
 
 # ╔═╡ 89f23045-e484-437c-9f96-ce1389cfc4c3
-md"Tradução livre de [`how\_to\_collaborate\_on\_softweare.jl](https://github.com/mitmath/18S191/blob/Spring21/notebooks/week12/how_to_collaborate_on_software.jl)."
+md"Tradução livre de [how\_to\_collaborate\_on\_softweare.jl](https://github.com/mitmath/18S191/blob/Spring21/notebooks/week12/how_to_collaborate_on_software.jl)."
 
 # ╔═╡ ef4eea24-bc1c-43be-b9b6-d073ac2433cf
 md"""
