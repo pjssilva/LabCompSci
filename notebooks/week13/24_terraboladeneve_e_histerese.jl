@@ -20,6 +20,9 @@ using DifferentialEquations, Plots, PlutoUI, LinearAlgebra
 # ╔═╡ ef8d6690-720d-4772-a41f-b260d306b5b2
 TableOfContents(title = "📚 Índice", indent = true, depth = 4, aside = true)
 
+# ╔═╡ c425cb36-eeaf-4e39-90f8-8a70b8930679
+
+
 # ╔═╡ 26e1879d-ab57-452a-a09f-49493e65b774
 md"""
 # Ideias em Julia
@@ -364,47 +367,6 @@ em que $f(x) = \alpha x + \beta$ é um função _linear_ de $x$. Uma equação l
 Nessa aula vamos ver que uma pequena modificação na equação que faz com que um termo no nosso modelo climático simples torne-se não linear. Isso muda completamente a dinâmica, permitindo a existência de dois equilíbrios: a "Terra bola de neve" e o clima relativamente quente do período pré-industrial que permitiu que os seres humanos florececem.
 """
 
-# ╔═╡ 4bdc0f0c-e696-4d87-b10c-8a0da9a0ee5b
-md"""
-### 1) Plano de fundo: Terra bola de neve
-
-Evidências geológicas mostram que na período Neoproterozoico (de 550 a 1000 milhões de anos atrás) é caracterizados por dois eventos de glaciação global, durante os quais a superfície da Terra estava coberta de gelo do equador aos polo (veja  uma revisão dobre esse assunto autorada por [Pierrehumbert et al. 2011](https://www.annualreviews.org/doi/full/10.1146/annurev-earth-040809-152447)).
-"""
-
-# ╔═╡ 7b7b631e-2ba3-4ed3-bad0-ec6ecb70ad49
-html"""
-
-<img src="https://news.cnrs.fr/sites/default/files/styles/asset_image_full/public/assets/images/frise_earths_glaciations_72dpi.jpg?itok=MgKrHlIV" height=500>
-"""
-
-# ╔═╡ 70ec6ae9-601f-4862-96cb-f251d4b5a7fd
-html"""
-<img src="https://upload.wikimedia.org/wikipedia/commons/d/df/Ice_albedo_feedback.jpg" height=350>
-"""
-
-# ╔═╡ 2bafd1a4-32a3-4787-807f-0a5132d66c28
-md"""
-Nós podemos representar o retorno neve-albedo grosseiramente em nosso modelo de balanço de energia permitindo que o albedo dependa da temparatura:
-
-$\alpha(T) = \begin{cases}
-\alpha_{i} & \mbox{if }\;\; T \leq -10\text{°C} &\text{(completely frozen)}\\
-\alpha_{i} + (\alpha_{0}-\alpha_{i})\frac{T + 10}{20} & \mbox{if }\;\; -10\text{°C} \leq T \leq 10\text{°C} &\text{(partially frozen)}\\
-\alpha_{0} &\mbox{if }\;\; T \geq 10\text{°C} &\text{(no ice)}
-\end{cases}$
-"""
-
-# ╔═╡ fca6c4ec-4d0c-4f97-b966-ce3a81a18710
-md"""
-##### 1.2) Adicionando o retorno neve-albedo no nosso modelo climático simplificado
-
-Começamos programando o albedo como uma função da temperatura.
-"""
-
-# ╔═╡ cfde8137-cfcd-46de-9c26-8abb64b6b3a9
-md"""
-Para adicionar essa função na nossa solução simplificada (por Euler) do modelo, basta atualizar o valor $\alpha$ a cada passo em função da temperatura atual.  Isso é feito abaixo em um código copiado que resolve o modelo simplificado. Nele basta atualizar a função `timestep!` para atualizar o albedo antes de executar um passo de integração:
-"""
-
 # ╔═╡ 4351b05f-f9bf-4046-9f95-a0a56b1e8cc9
 module Model
 
@@ -525,13 +487,49 @@ end
 
 end
 
+# ╔═╡ 4bdc0f0c-e696-4d87-b10c-8a0da9a0ee5b
+md"""
+### 1) Plano de fundo: Terra bola de neve
+
+Evidências geológicas mostram que na período Neoproterozoico (de 550 a 1000 milhões de anos atrás) é caracterizados por dois eventos de glaciação global, durante os quais a superfície da Terra estava coberta de gelo do equador aos polo (veja  uma revisão dobre esse assunto autorada por [Pierrehumbert et al. 2011](https://www.annualreviews.org/doi/full/10.1146/annurev-earth-040809-152447)).
+"""
+
+# ╔═╡ 7b7b631e-2ba3-4ed3-bad0-ec6ecb70ad49
+html"""
+
+<img src="https://news.cnrs.fr/sites/default/files/styles/asset_image_full/public/assets/images/frise_earths_glaciations_72dpi.jpg?itok=MgKrHlIV" height=500>
+"""
+
 # ╔═╡ 066743eb-c890-40b9-9f6b-9f79b7ebcbd2
 md"""##### 1.1) O retorno (retroalimentação) neve-albedo
 
 Anteriomente usamos um valor **constante**  $α =$ $(Model.hist.α) para o albedo da Terra. Isso é razoável para pequenas variações climáticas relativas ao presente, como quando comparamos o clima atual e o pré-industrial. Porém, quando as variações são grande, essa aproximação não é muito confiável.
 
-Se por um lado os oceanos são escuros e abosorventes, $α_{ocean} \approx 0.05$,
+Se por um lado os oceanos são escuros e abosorventes, $α_{ocean} \approx 0.3$,
 o gelo e a neve são claros e reflectivos: $\alpha_{ice,\,snow} \approx 0.5$ a $0.9$. Desse modo, se grande parte da superfície oceânica congelar, é esperado que o albedo da Terra aumente de forma dramática, refletindo mais radiação solar para o espaço. Isso, por sua vez, causa mais resfriamento, aumentando o congelamento dos oceanos. Esse é um efeito de *retorno não-linear positivo* conhecido como **retorno neve-albedo**. Veja a ilustração abaixo.
+"""
+
+# ╔═╡ 70ec6ae9-601f-4862-96cb-f251d4b5a7fd
+html"""
+<img src="https://upload.wikimedia.org/wikipedia/commons/d/df/Ice_albedo_feedback.jpg" height=350>
+"""
+
+# ╔═╡ 2bafd1a4-32a3-4787-807f-0a5132d66c28
+md"""
+Nós podemos representar o retorno neve-albedo grosseiramente em nosso modelo de balanço de energia permitindo que o albedo dependa da temparatura:
+
+$\alpha(T) = \begin{cases}
+\alpha_{i} & \mbox{if }\;\; T \leq -10\text{°C} &\text{(completely frozen)}\\
+\alpha_{i} + (\alpha_{0}-\alpha_{i})\frac{T + 10}{20} & \mbox{if }\;\; -10\text{°C} \leq T \leq 10\text{°C} &\text{(partially frozen)}\\
+\alpha_{0} &\mbox{if }\;\; T \geq 10\text{°C} &\text{(no ice)}
+\end{cases}$
+"""
+
+# ╔═╡ fca6c4ec-4d0c-4f97-b966-ce3a81a18710
+md"""
+##### 1.2) Adicionando o retorno neve-albedo no nosso modelo climático simplificado
+
+Começamos programando o albedo como uma função da temperatura.
 """
 
 # ╔═╡ b1fee17b-6522-4cf0-a614-5ff8aa8f8614
@@ -572,6 +570,11 @@ begin
     annotate!(-0.3, 0.252, text("partially frozen", 10, :darkgrey))
 
 end
+
+# ╔═╡ cfde8137-cfcd-46de-9c26-8abb64b6b3a9
+md"""
+Para adicionar essa função na nossa solução simplificada (por Euler) do modelo, basta atualizar o valor $\alpha$ a cada passo em função da temperatura atual.  Isso é feito abaixo em um código copiado que resolve o modelo simplificado. Nele basta atualizar a função `timestep!` para atualizar o albedo antes de executar um passo de integração:
+"""
 
 # ╔═╡ e9942719-93cc-4203-8d37-8f91539104b1
 function Model.timestep!(ebm)
@@ -2735,6 +2738,7 @@ version = "0.9.1+5"
 # ╔═╡ Cell order:
 # ╠═a0b3813e-adab-11eb-2983-616cf2bb6f5e
 # ╠═ef8d6690-720d-4772-a41f-b260d306b5b2
+# ╠═c425cb36-eeaf-4e39-90f8-8a70b8930679
 # ╟─26e1879d-ab57-452a-a09f-49493e65b774
 # ╟─fd12468f-de16-47cc-8210-9266ca9548c2
 # ╟─30969341-9079-4732-bf55-d6bba2c2c16c
