@@ -18,7 +18,7 @@ end
 using Plots, PlutoUI, LinearAlgebra
 
 # ╔═╡ 19fe1ee8-0970-11eb-2a0d-7d25e7d773c6
-md"_Lista 9, versão_ 1_"
+md"_Lista 9, versão 1_"
 
 # ╔═╡ 2848996c-0970-11eb-19eb-c719d797c322
 md"_Vamos importar alguns pacotes que serão úteis_"
@@ -1146,9 +1146,9 @@ uuid = "8f399da3-3557-5675-b5ff-fb832c97cbdb"
 
 [[Libffi_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg"]
-git-tree-sha1 = "761a393aeccd6aa92ec3515e428c26bf99575b3b"
+git-tree-sha1 = "0b4a5d71f3e5200a7dff793393e09dfc2d874290"
 uuid = "e9f186c6-92d2-5b65-8a66-fee21dc1b490"
-version = "3.2.2+0"
+version = "3.2.2+1"
 
 [[Libgcrypt_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Libgpg_error_jll", "Pkg"]
@@ -1681,8 +1681,8 @@ version = "0.9.1+5"
 """
 
 # ╔═╡ Cell order:
-# ╟─19fe1ee8-0970-11eb-2a0d-7d25e7d773c6
-# ╟─1bba5552-0970-11eb-1b9a-87eeee0ecc36
+# ╠═19fe1ee8-0970-11eb-2a0d-7d25e7d773c6
+# ╠═1bba5552-0970-11eb-1b9a-87eeee0ecc36
 # ╠═2848996c-0970-11eb-19eb-c719d797c322
 # ╠═2dcb18d0-0970-11eb-048a-c1734c6db842
 # ╟─49567f8e-09a2-11eb-34c1-bb5c0b642fe8
