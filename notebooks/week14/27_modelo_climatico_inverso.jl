@@ -1,5 +1,5 @@
 ### A Pluto.jl notebook ###
-# v0.14.5
+# v0.17.1
 
 using Markdown
 using InteractiveUtils
@@ -7,8 +7,9 @@ using InteractiveUtils
 # This Pluto notebook uses @bind for interactivity. When running this notebook outside of Pluto, the following 'mock version' of @bind gives bound variables a default value (instead of an error).
 macro bind(def, element)
     quote
+        local iv = try Base.loaded_modules[Base.PkgId(Base.UUID("6e696c72-6542-2067-7265-42206c756150"), "AbstractPlutoDingetjes")].Bonds.initial_value catch; b -> missing; end
         local el = $(esc(element))
-        global $(esc(def)) = Core.applicable(Base.get, el) ? Base.get(el) : missing
+        global $(esc(def)) = Core.applicable(Base.get, el) ? Base.get(el) : iv(el)
         el
     end
 end
@@ -39,143 +40,23 @@ begin
 	Plots.default(linewidth=5)
 end;
 
-# ╔═╡ 6a9d271c-b8b4-11eb-0a11-5ddd2d17f186
-html"""
-<div style="
-position: absolute;
-width: calc(100% - 30px);
-border: 50vw solid #282936;
-border-top: 500px solid #282936;
-border-bottom: none;
-box-sizing: content-box;
-left: calc(-50vw + 15px);
-top: -500px;
-height: 500px;
-pointer-events: none;
-"></div>
-
-<div style="
-height: 500px;
-width: 100%;
-background: #282936;
-color: #fff;
-padding-top: 68px;
-">
-<span style="
-font-family: Vollkorn, serif;
-font-weight: 700;
-font-feature-settings: 'lnum', 'pnum';
-"> <p style="
-font-size: 1.5rem;
-opacity: .8;
-"><em>Section 3.10</em></p>
-<p style="text-align: center; font-size: 2rem;">
-<em> Inverse climate modeling </em>
-</p>
-
-<p style="
-font-size: 1.5rem;
-text-align: center;
-opacity: .8;
-"><em>Lecture Video</em></p>
-<div style="display: flex; justify-content: center;">
-<div  notthestyle="position: relative; right: 0; top: 0; z-index: 300;">
-<iframe src="https://www.youtube.com/embed/nm86_hDwYTU" width=400 height=250  frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>
-</div>
-</div>
-
-<style>
-body {
-overflow-x: hidden;
-}
-</style>"""
-
 # ╔═╡ 9a48a08e-7281-473c-8afc-7ad3e0771269
-TableOfContents()
-
-# ╔═╡ 331c45b7-b5f2-4a78-b180-5b918d1806ee
-md"""
-# Emissions mitigation and carbon dioxide removal to minimize climate suffering
-
-This interactive article lets *you*– the reader– run [MARGO](https://github.com/ClimateMARGO/ClimateMARGO.jl), a simple climate model, to explore what it takes to avoid the catastrophic impacts of global warming. The code in this webpage is *reactive*, meaning that the graphs and numbers automatically update whenever you change the climate model's inputs.
-
-## _Can you limit human-caused global warming to "well-below 2ºC?_
-
-"""
+TableOfContents(title = "Índice")
 
 # ╔═╡ 94415ff2-32a2-4b0f-9911-3b93e202f548
 initial_1 = Dict("M" => [2090, 6]);
 
-# ╔═╡ 6533c123-34fe-4c0d-9ecc-7fef11379253
-md"""
-![image](https://user-images.githubusercontent.com/6933510/118835384-3ad36c80-b8c3-11eb-995d-70cba3b23846.png)
-
-_From: [ClimateMARGO.jl](https://github.com/ClimateMARGO/ClimateMARGO.jl)_
-"""
-
-# ╔═╡ 50d24c91-61ae-4544-98fa-5749bafe3d41
-md"""
-## Overview of the climate problem: from greenhouse gas emissions to climate suffering
-
-Human emissions of greenhouse gases, especially Carbon Dioxide (CO₂), increase the stock of greenhouse gases in the atmosphere. For every molecule of CO₂ emitted, about 50% are taken up by plants, soils, or the ocean within a few years, while the rest remains in the atmosphere. (The effects of other greenhouse gases, such as Methane and CFCs, and other forcing agents, can approximately be converted into the "CO₂-equivalent"– or CO₂ₑ– concentrations that would lead to the same climate forcing).
-
-Greenhouse gases get their name because they trap invisible heat radiation emitted by Earth's surface and atmosphere from escaping to space, much like greenhouses trap hot air from rising when it is warmed by the Sun. This "greenhouse effect" causes the temperature to rise globally, although some places warm *more* and *faster* than others. Warmer temperatures exacerbate both the frequency and intensity of "natural" disasters, such as heat waves, coastal flooding from major hurricanes, and inland flooding from torrential rain. These climate impacts lead to enhanced climate suffering, which economics typically attempt to quantify suffering in terms of lost money or welfare.
-
-In the interactive article below, we invite you to explore the benefits of emissions mitigation and carbon dioxide removal in reducing climate suffering, and the trade-offs with their costs.
-"""
-
-# ╔═╡ ec325089-8418-4fed-ac0e-e8ae21b433ab
-md"""
-## Mitigating emissions
-Human greenhouse gas emissions are the result of fossil fuel burning (e.g. for transportation, electricity generation, heating, industry), unsustainable agriculture, and land use changes. We refer to any actions or policies that reduce these emissions as *mitigation*.
-
-The MARGO model lumps all potential mitigation into a single number: the percentage of *baseline* emissions that are mitigated in a given year. Baseline emissions are the emissions that would arise in a hypothetical future world absent of climate policy. In our hypothetical no-policy world, we assume that emissions will go to zero by 2150 even without climate policy, perhaps because of public health concerns regarding other forms of air pollution, the development of new zero-carbon technologies, or running out of extractable fossil fuels resources.
-
-*In the plot below, drag the blue dot around* to vary the amount and timing of mitigation, and observe how these changes affect key climate variables, using the drop-box menu: CO₂ₑ emissions, CO₂ₑ concentrations, and global temperature.
-"""
-
 # ╔═╡ e810a90f-f964-4d7d-acdb-fc3a159dc12e
 initial_2 = Dict("M" => [2080, .7]);
 
-# ╔═╡ 30218715-6469-4a0f-bf90-f3243219e7b5
-md"""
-## Cost & damages
-"""
-
 # ╔═╡ a3422533-2b78-4bc2-92bd-737da3c8982d
 initial_3 = Dict("M" => [2080, .7]);
-
-# ╔═╡ 4c7fccc5-450c-4903-96a6-ce36ff60d280
-md"""
-## Picking up the slack: carbon dioxide removal
-
-While substantial emissions mitigations are necessary to reduce future climate suffering, they can not make up for the hundreds of billions of tons of CO₂ that humans have already emitted. However, both natural and technological methods for removing CO₂ from the atmosphere exist. Although they are presently miniscule compared to the tens-of-gigatons scale of global emissions, experts expect that they will play a key role in the future. In MARGO, we do not distinguish between different carbon dioxide removal methods, and further assume that the carbon is stored permanently.
-
-*Drag the yellow dot in the figure below to modify the amount and timing of carbon dioxide removal*.
-"""
 
 # ╔═╡ bb66d347-99be-4a95-8ba8-57dc9d33384b
 initial_4 = Dict(
 	"M" => [2080, 0.7],
 	"R" => [2120, 0.2],
 );
-
-# ╔═╡ b2d65726-df99-4710-9d03-9f6838036c87
-md"""
-## MARGO's automated optimization
-
-In the above example, *you* manually adjusted the timing and amount of mitigation and carbon dioxide removal, but did not have much control on the shape of curves. Using a computer algorithm, we can do this optimization step *automatically* and *faster*, without having to assume anything about the shape of the mitigation and carbon dioxide removal curves.
-"""
-
-# ╔═╡ 944e835a-47a2-4bf0-a4a1-dbcfd174dcea
-md"""
-> Go to [computationalthinking.mit.edu](computationalthinking.mit.edu) to run this model yourself!
-"""
-
-# ╔═╡ 64c9f002-3d5d-4f14-b39a-980738fd824d
-md"""
-# Appendix
-"""
 
 # ╔═╡ 3094a9eb-074d-46c3-9c1e-0a9c94c6ad43
 blob(el, color = "red") = @htl("""<div style="
@@ -265,7 +146,7 @@ colors = (
 )
 
 # ╔═╡ 73e01bd8-f56b-4bb5-a9a2-85ad223c9e9b
-names = (
+nnames = (
 	baseline="Baseline",
 	baseline_emissions="Baseline",
 	baseline_concentrations="Baseline",
@@ -288,7 +169,7 @@ names = (
 )
 
 # ╔═╡ ae92ba1f-5175-4704-8240-2de8432df752
-@assert keys(colors) == keys(names)
+@assert keys(colors) == keys(nnames)
 
 # ╔═╡ 8ac04d55-9034-4c29-879b-3b10887a616d
 begin
@@ -323,19 +204,6 @@ Tmax_9_slider = @bind Tmax_9 Slider(0:0.1:5; default=2);
 
 # ╔═╡ 6bcb9b9e-e0ab-45d3-b9b9-3d7282f89df6
 allow_overshoot_9_cb = @bind allow_overshoot_9 CheckBox();
-
-# ╔═╡ a0a1bb20-ec9b-446d-a36a-272840b8d35c
-blob(
-	md"""
-	#### Maximum temperature
-
-	`0.0 °C` $(Tmax_9_slider) `5.0 °C`
-	
-	_Allow **temperature overshoot**:_ $(allow_overshoot_9_cb)
-
-	""",
-	"#c5710014"
-)
 
 # ╔═╡ b428e2d3-e1a9-4e4e-a64f-61048572102f
 function multiplier(unit::Real, factor::Real=2, suffix::String="%")
@@ -492,53 +360,6 @@ function Carousel(
 	BondDefault(h,1)
 end
 
-# ╔═╡ 8433cb38-915a-46c1-b3db-8e7905351c1b
-@bind cost_benefits_narrative_slide Carousel([
-		  md"""
-		### 1. The costs of climate suffering
-
-		In the absence of climate action, temperatures would rise over 4.5ºC above preindustrial levels (1800 to 1850 average), causing catastrophic climate impacts. MARGO attempts to quantify this suffering by translating the degree of warming into economic damages (in \$ / year). The curve below shows how climate damages rise over time, as a percentage of the World Gross Domestic Product (WGDP) in that year, due to uncontrolled temperature increases.
-
-		""",
-
-		md"""### 2. Avoiding climate damages
-		Emissions mitigation limits future warming and climate suffering (_Damages_ curve). The economic benefits of mitigation are given by the difference in damages relative to the no-policy scenario (_Baseline_ curve minus _Damages_ curve).
-
-		In the figure below, drag around the blue dot to change the future mitigation strategy, and observe how the _Avoided damages_ (the grey area) change!
-
-		""",
-
-		md"""### 3. Cost-benefit analysis
-
-		Unfortunately, mitigating CO₂ₑ emissions also carries a cost. In MARGO, the *marginal* cost of mitigation is proportional to the fraction of CO₂ₑ emissions that have been mitigated in a given year, increasing up to a maximum of $70 per metric ton of CO₂ₑ at 100% mitigation.
-
-		This naturally leads to a **cost-benefit analysis**. We search for the most beneficial, or *optimal*, scenario: the one with the *maximum net present benefits*. In the figure below, try finding a mitigation strategy that optimizes these _Net benefits_.
-		"""
-]; wraparound=false)
-
-# ╔═╡ 11d62228-476c-4616-9e7d-de6c05a6a53d
-if cost_benefits_narrative_slide == 1
-	hidecloack("cost_benefits_narrative_input")
-end
-
-# ╔═╡ 14623e1f-7719-47b1-8854-8070d5ef8e17
-md"""
-## Plot functions
-"""
-
-# ╔═╡ d9d20714-0689-449f-8e52-603dc804c93f
-yearticks = collect(2020:20:2200)
-
-# ╔═╡ cabc3214-1036-433b-aae1-6964bb780be8
-function finish!(p)
-	plot!(p;
-		xlim=(2020,2201),
-		xticks=yearticks,
-		size=(680,200),
-		grid=false,
-	)
-end
-
 # ╔═╡ c7cbc172-daed-406f-b24b-5da2cc234c29
 preindustrial_concentrations = 280
 
@@ -548,13 +369,8 @@ end_of_oil = 2150 # cannot mitigate when fossil fuels are depleted
 # ╔═╡ ec760706-15ac-4a50-a67e-c338d70f3b0a
 pp = (;
 	((k, (:color => c, :label => n))
-	for (k, c, n) in zip(keys(names), colors, names))...
+	for (k, c, n) in zip(keys(nnames), colors, nnames))...
 );
-
-# ╔═╡ ab557633-e0b5-4439-bc81-d274770f2e65
-md"""
-## Plot dots input magic
-"""
 
 # ╔═╡ bb4b25e4-0db5-414b-a384-0a27fe7efb66
 gauss_stdev = 30
@@ -818,164 +634,8 @@ function plotclicktracker(p::Plots.Plot; draggable::Bool=false)
 		</script>""")
 end
 
-# ╔═╡ 2758b185-cd54-484e-bb7d-d4cfcd2d39f4
-md"""
-## Running the model
-"""
-
 # ╔═╡ 7e540eaf-8700-4176-a96c-77ee2e4c384b
 years = 2020:12.0:2200
-
-# ╔═╡ 2fec1e12-0218-4e93-a6b5-3711e6910d79
-function plot_costs(result::ClimateModel; 
-		show_baseline::Bool=true,
-		show_controls::Bool=true,
-		show_damages::Bool=true,
-		title="Control costs & climate damages"
-	)
-	
-	p = plot(; 
-		ylim=(0,6.1), 
-		ylabel="trillion USD / year",
-	)
-	title === nothing || plot!(p; title=title)
-	
-
-	# baseline
-	show_baseline && plot!(p,
-		years, damage(result; discounting=true);
-		pp.baseline_damages...,
-		fillrange=zero(years),
-		fillopacity=.2,
-		linestyle=:dash,
-	)
-	
-	# control costs
-	controlled_damages = damage(result; M=true, R=true, G=true, A=true, discounting=true)
-	
-	show_controls && plot!(p,
-		years, controlled_damages .+ cost(result; M=true, R=true, G=true, A=true, discounting=true);
-		fillrange=controlled_damages,
-		fillopacity=.2,
-		pp.controls...
-	)
-	
-
-	# controlled damages
-	show_damages && plot!(p,
-		years, controlled_damages;
-		fillrange=zero(years),
-		fillopacity=.2,
-		pp.damages...
-	)
-	
-	finish!(p)
-	
-end
-
-# ╔═╡ cff9f952-4850-4d55-bb8d-c0a759d1b7d8
-function plot_concentrations(result::ClimateModel; 
-		relative_to_preindustrial::Bool=true)
-	Tmax = 5
-	p = relative_to_preindustrial ? plot(; 
-		ylim=(0,4.5),
-		yticks=[1,2,3,4],
-		yformatter=x -> string(Int(x), "×"),
-		title="Atmospheric CO₂ₑ concentration, relative to 1800-1850",
-	) : plot(;
-		ylim=(0,1400),
-		ylabel="ppm",
-		title="Atmospheric CO₂ₑ concentration",
-	)
-	
-	factor = relative_to_preindustrial ? preindustrial_concentrations : 1
-
-	# baseline
-	plot!(p,
-		years, c(result) ./ factor;
-		pp.baseline_concentrations...,
-		linestyle=:dash,
-	)
-	# controlled temperature
-	plot!(p,
-		years, c(result; M=true, R=true) ./ factor;
-		pp.concentrations...
-	)
-	
-
-	finish!(p)
-end
-
-# ╔═╡ 6634bcf1-8af6-4000-9b00-a5b4c02596c6
-function plot_emissions(result::ClimateModel)
-	
-	p = plot(; 
-		ylim=(-3,11), 
-		ylabel="ppm / year",
-		title="Global CO₂ₑ emissions",
-	)
-
-	
-	
-
-	# baseline
-	plot!(p,
-		years, effective_emissions(result);
-		pp.baseline_emissions...,
-		linestyle=:dash,
-	)
-	# controlled
-	plot!(p,
-		years, effective_emissions(result; M=true, R=true);
-		fillrange=zero(years),
-		fillopacity=.2,
-		pp.emissions...
-	)
-	
-
-	finish!(p)
-	
-end
-
-# ╔═╡ 424940e1-06ef-453a-8ffb-deb24dadb334
-function plot_emissions_pretty(result::ClimateModel)
-	# offset the x values so that framestyle=:origin will make the y-axis pass through 2020 instead of 0. yuck
-	R = x -> x + 2020
-	L = x -> x - 2020
-	
-	Tmax = 5
-	p = plot(; 
-		ylim=(-3,11), 
-		ylabel="ppm / year",
-		framestyle = :origin,
-		xformatter=string ∘ Int ∘ R,
-	)
-
-	
-	
-
-	# baseline
-	plot!(p,
-		L.(years), effective_emissions(result);
-		pp.baseline_emissions...,
-		linestyle=:dash,
-	)
-	# controlled temperature
-	plot!(p,
-		L.(years), effective_emissions(result; M=true, R=true);
-		fillrange=zero(L.(years)),
-		fillopacity=.2,
-		pp.emissions...
-	)
-	
-
-	finish!(p)
-	
-	plot!(p;
-		xlim=L.(extrema(years)),
-		xticks = L.(yearticks),
-		)
-end
 
 # ╔═╡ 646591c4-cb60-41cd-beb9-506807ce17d2
 function gaussish(mean, magnitude)
@@ -1003,6 +663,9 @@ function default_parameters()::ClimateModelParameters
     result.economics.extra_CO₂ = zeros(size(result.economics.baseline_emissions))
 	return result
 end
+
+# ╔═╡ 8311d458-a1bb-484c-86e7-5a671d36f94d
+default_parameters()
 
 # ╔═╡ 785c428d-d4f7-431e-94d7-039b0708a78a
 function opt_controls_temp(model_parameters = default_parameters(); opt_parameters...)
@@ -1127,11 +790,6 @@ model_results(model::ClimateModel) = Dict(
 )
 
 
-# ╔═╡ 7ffad0f8-082b-4ca1-84f7-37c08d5f7266
-md"""
-## Cost bars
-"""
-
 # ╔═╡ ec5d87a6-354b-4f1d-bb73-b3db08589d9b
 total_discounted(costs, model) = sum(costs .* model.domain.dt)
 
@@ -1139,7 +797,7 @@ total_discounted(costs, model) = sum(costs .* model.domain.dt)
 colors_js = Dict((k,string("#", hex(v))) for (k,v) in pairs(colors));
 
 # ╔═╡ ac779b93-e19e-41de-94cb-6a2a919bcd2e
-names_js = Dict(pairs(names));
+names_js = Dict(pairs(nnames));
 
 # ╔═╡ 5c484595-4646-484f-9e75-a4a3b4c2af9b
 function plotclicktracker2(p::Plots.Plot, initial::Dict; draggable::Bool=true)
@@ -1335,11 +993,6 @@ function plotclicktracker2(p::Plots.Plot, initial::Dict; draggable::Bool=true)
 		</script>""")
 end
 
-# ╔═╡ 7f9df132-61de-4fec-a674-176c4a43335c
-md"""
-## MRGA struct
-"""
-
 # ╔═╡ 060cbeab-5503-4eda-95d8-3f554765b2ee
 begin
 	mutable struct MRGA{T}
@@ -1376,6 +1029,236 @@ begin
 	MRGA
 end
 
+# ╔═╡ f957229f-5e48-458d-bbbc-1efc1356d704
+md"Tradução livre de [inverse_climate_model.j](https://github.com/mitmath/18S191/blob/Spring21/notebooks/week14/inverse_climate_model.jl)."
+
+# ╔═╡ 331c45b7-b5f2-4a78-b180-5b918d1806ee
+md"""
+# Mitigação de emissões e remoção de dióxido de carbono para mininizar o sofrimento climático
+
+Esse caderno iterativo permite que *você* execute [MARGO](https://github.com/ClimateMARGO/ClimateMARGO.jl), um modelo climático simples, para explorar as ações que serão necessárias para evitar os impactos catastróficos do aquecimento global. Lembre-se que o código desse caderno é *reativo*, ou seja, os gráficos e números calculados serão automaticamente atualizados empre que você alterar as entradas do modelo climático.
+
+## _Você consegue limitar o aquecimento climático de causa humana "bem abaixo de 2ºC"?_
+"""
+
+# ╔═╡ 7553b243-226c-457c-9532-1297f1e8d869
+md"## Como intervir?
+
+### Mitigação
+
+### Remoção
+
+### Geo-engenharia
+
+### Adaptação
+"
+
+# ╔═╡ 6533c123-34fe-4c0d-9ecc-7fef11379253
+md"""
+![image](https://user-images.githubusercontent.com/6933510/118835384-3ad36c80-b8c3-11eb-995d-70cba3b23846.png)
+
+_From: [ClimateMARGO.jl](https://github.com/ClimateMARGO/ClimateMARGO.jl)_
+"""
+
+# ╔═╡ 50d24c91-61ae-4544-98fa-5749bafe3d41
+md"""
+## Visão geral do problema climático: das emissões de gases de efeito estufa ao sofrimento climático
+
+As emissões humanas de gases de efeito estufa, principalmente Dióxido de Carbono (CO₂), aumentam seu estoque na atmosfera. Para cada molécula de CO₂ emitida, cerca de 50% são absorvidos pelas plantas, solos ou oceano em poucos anos. O restante permanece na atmosfera. (Os efeitos de outros gases de efeito estufa, como metano e CFCs, e outros agentes forçantes, podem ser convertidos, aproximadamente, no "equivalente de CO₂" - ou concentrações de CO₂ₑ que levariam ao mesmo efeito climático).
+
+Os gases de efeito estufa recebem esse nome porque impedem que parte da radiação de calor invisível emitida pela superfície da Terra e pela atmosfera escape para o espaço, de forma análoga às estufas que evitam que o ar quente suba quando é aquecido pelo sol. Este "efeito estufa" faz com que a temperatura aumente globalmente, embora alguns lugares aqueçam *mais* e *mais rápido* do que outros. As temperaturas mais altas exacerbam a frequência e a intensidade dos desastres "naturais", como ondas de calor, inundações costeiras causadas por grandes furacões e inundações internas causadas por chuvas torrenciais. Esses impactos climáticos levam a um maior sofrimento climático. A economia normalmente tenta quantificar o sofrimento em função de perda de dinheiro ou bem-estar.
+
+No caderno abaixo, convidamos você a explorar os benefícios da mitigação de emissões e remoção de dióxido de carbono na redução do sofrimento climático e balaço que deve ser considerado com seus custos.
+"""
+
+# ╔═╡ ec325089-8418-4fed-ac0e-e8ae21b433ab
+md"""
+## Mitigação de emissões
+
+As emissões humanas de gases de efeito estufa são o resultado da queima de combustíveis fósseis (para transporte, geração de eletricidade, aquecimento, indústria, etc.), agricultura insustentável e mudanças no uso da terra. Chamamos de *mitigação* quaisquer ações ou políticas que reduzam essas emissões.
+
+O modelo MARGO agrupa todas as mitigações potenciais em um único número: a porcentagem de *emissões de linha de base* evitadas em um determinado ano. Emissões de linha de base são as emissões que surgiriam em um hipotético mundo futuro sem uma política climática. Em nosso hipotético mundo sem políticas, presumimos que as emissões chegarão a zero até 2150, mesmo sem uma política climática, talvez devido a preocupações de saúde pública em relação a outras formas de poluição do ar, o desenvolvimento de novas tecnologias de carbono zero ou ao esgotamento dos combustíveis fósseis.
+
+* No gráfico abaixo, arraste o ponto azul * para alterar a quantidade e o tempo de mitigação e observe como essas mudanças afetam as principais variáveis ​​climáticas, usando o menu drop-box: emissões de CO₂ₑ, concentrações de CO₂ₑ e temperatura global.
+"""
+
+# ╔═╡ 30218715-6469-4a0f-bf90-f3243219e7b5
+md"""
+## Custos e prejuízos
+"""
+
+# ╔═╡ 8433cb38-915a-46c1-b3db-8e7905351c1b
+@bind cost_benefits_narrative_slide Carousel([
+		  md"""### 1. Os custos do sofrimento climático
+		
+		Na ausência de ação climática, as temperaturas subiriam mais de 4,5ºC acima dos níveis pré-industriais (média de 1800 a 1850), causando impactos climáticos catastróficos. MARGO tenta quantificar esse sofrimento traduzindo o grau de aquecimento em danos econômicos (em \$ / ano). A curva abaixo mostra como os danos climáticos aumentam ao longo do tempo, como uma porcentagem do Produto Interno Bruto Mundial (WGDP) naquele ano, devido a aumentos descontrolados de temperatura.
+
+		""",
+
+		md"""### 2. Evitando danos climáticos
+
+		A mitigação de emissões limita o aquecimento futuro e o sofrimento climático (curva de _Danos_). Os benefícios econômicos da mitigação são dados pela diferença nos danos em relação ao cenário sem política (curva _base_ menos curva _Danos_).
+		
+		Na figura abaixo, arraste ao redor do ponto azul para alterar a estratégia de mitigação futura e observe como os _Danos evitados_ (a área cinza) mudam!
+
+		""",
+
+		md"""### 3. Análise de custo-benefício
+
+		Infelizmente, mitigar as emissões de CO₂ₑ também tem um custo. Em MARGO, o custo *marginal* de mitigação é proporcional à fração das emissões de CO₂ₑ que foram mitigadas em um determinado ano, aumentando até um máximo de $70 por tonelada métrica de CO₂ₑ a 100% de mitigação.
+		
+		Isso naturalmente leva a uma **análise de custo-benefício**. Procuramos o cenário mais benéfico ou *ideal*: aquele que possui os *benefícios atuais líquidos máximos*. Na figura abaixo, tente encontrar uma estratégia de mitigação que otimize esses _benefícios líquidos_.
+
+		"""
+]; wraparound=false)
+
+# ╔═╡ 11d62228-476c-4616-9e7d-de6c05a6a53d
+if cost_benefits_narrative_slide == 1
+	hidecloack("cost_benefits_narrative_input")
+end
+
+# ╔═╡ 4c7fccc5-450c-4903-96a6-ce36ff60d280
+md"""
+## Pegando o execesso: remoção de dióxido de carbono
+
+Embora mitigações substanciais de emissões sejam necessárias para reduzir o sofrimento climático futuro, elas não podem compensar as centenas de bilhões de toneladas de CO₂ que os humanos já emitiram. No entanto, existem métodos naturais e tecnológicos para remover o CO₂ da atmosfera. Embora atualmente sejam minúsculos em comparação com a escala de dezenas de gigatoneladas das emissões globais, os especialistas acreditam que desempenharão um papel fundamental no futuro. No MARGO, não fazemos distinção entre os diferentes métodos de remoção de dióxido de carbono e, além disso, assumimos que o carbono é armazenado permanentemente.
+
+*Arraste o ponto amarelo na figura abaixo para modificar a quantidade e o tempo de remoção do dióxido de carbono*. 
+"""
+
+# ╔═╡ b2d65726-df99-4710-9d03-9f6838036c87
+md"""
+## Otimização automatizada do MARGO
+
+No exemplo acima, *você* ajustou manualmente o tempo e a quantidade de mitigação e remoção de dióxido de carbono, mas não teve muito controle sobre o formato das curvas. Usando um algoritmo de computador, podemos fazer esta etapa de otimização *automaticamente* e *mais rápido*, sem ter que assumir nada sobre a forma das curvas de mitigação e remoção de dióxido de carbono.
+"""
+
+# ╔═╡ a0a1bb20-ec9b-446d-a36a-272840b8d35c
+blob(
+	md"""
+	#### Maximum temperature
+
+	`0.0 °C` $(Tmax_9_slider) `5.0 °C`
+	
+	_Allow **temperature overshoot**:_ $(allow_overshoot_9_cb)
+	""",
+	"#c5710014"
+)
+
+# ╔═╡ 44ad72e3-efb7-48a3-bfd7-593312f4fd30
+blob(md"Maximum allowed temperature increade = $Tmax_9.", "#c5710014")
+
+# ╔═╡ 64c9f002-3d5d-4f14-b39a-980738fd824d
+md"""
+# Apêndice
+"""
+
+# ╔═╡ 14623e1f-7719-47b1-8854-8070d5ef8e17
+md"""
+## Funções para gráficos
+"""
+
+# ╔═╡ a9b1e7fa-0318-41d8-b720-b8615c047bcd
+plot_controls(c::ClimateMARGO.Models.Controls) = plot_controls(MRGA(
+		c.mitigate, 
+		c.remove, 
+		c.geoeng,
+		c.adapt
+))
+
+# ╔═╡ d9d20714-0689-449f-8e52-603dc804c93f
+yearticks = collect(2020:20:2200)
+
+# ╔═╡ cabc3214-1036-433b-aae1-6964bb780be8
+function finish!(p)
+	plot!(p;
+		xlim=(2020,2201),
+		xticks=yearticks,
+		size=(680,200),
+		grid=false,
+	)
+end
+
+# ╔═╡ 2fec1e12-0218-4e93-a6b5-3711e6910d79
+function plot_costs(result::ClimateModel; 
+		show_baseline::Bool=true,
+		show_controls::Bool=true,
+		show_damages::Bool=true,
+		title="Control costs & climate damages"
+	)
+	
+	p = plot(; 
+		ylim=(0,6.1), 
+		ylabel="trillion USD / year",
+	)
+	title === nothing || plot!(p; title=title)
+	
+
+	# baseline
+	show_baseline && plot!(p,
+		years, damage(result; discounting=true);
+		pp.baseline_damages...,
+		fillrange=zero(years),
+		fillopacity=.2,
+		linestyle=:dash,
+	)
+	
+	# control costs
+	controlled_damages = damage(result; M=true, R=true, G=true, A=true, discounting=true)
+	
+	show_controls && plot!(p,
+		years, controlled_damages .+ cost(result; M=true, R=true, G=true, A=true, discounting=true);
+		fillrange=controlled_damages,
+		fillopacity=.2,
+		pp.controls...
+	)
+	
+
+	# controlled damages
+	show_damages && plot!(p,
+		years, controlled_damages;
+		fillrange=zero(years),
+		fillopacity=.2,
+		pp.damages...
+	)
+	
+	finish!(p)
+	
+end
+
+# ╔═╡ cff9f952-4850-4d55-bb8d-c0a759d1b7d8
+function plot_concentrations(result::ClimateModel; 
+		relative_to_preindustrial::Bool=true)
+	Tmax = 5
+	p = relative_to_preindustrial ? plot(; 
+		ylim=(0,4.5),
+		yticks=[1,2,3,4],
+		yformatter=x -> string(Int(x), "×"),
+		title="Atmospheric CO₂ₑ concentration, relative to 1800-1850",
+	) : plot(;
+		ylim=(0,1400),
+		ylabel="ppm",
+		title="Atmospheric CO₂ₑ concentration",
+	)
+	
+	factor = relative_to_preindustrial ? preindustrial_concentrations : 1
+
+	# baseline
+	plot!(p,
+		years, c(result) ./ factor;
+		pp.baseline_concentrations...,
+		linestyle=:dash,
+	)
+	# controlled temperature
+	plot!(p,
+		years, c(result; M=true, R=true) ./ factor;
+		pp.concentrations...
+	)
+	
+
+	finish!(p)
+end
+
 # ╔═╡ c73c89a7-f652-4554-95e9-20f47a818996
 function plot_controls(controls::MRGA; title=nothing)
 	
@@ -1399,13 +1282,76 @@ function plot_controls(controls::MRGA; title=nothing)
 	
 end
 
-# ╔═╡ a9b1e7fa-0318-41d8-b720-b8615c047bcd
-plot_controls(c::ClimateMARGO.Models.Controls) = plot_controls(MRGA(
-		c.mitigate, 
-		c.remove, 
-		c.geoeng,
-		c.adapt
-))
+# ╔═╡ 6634bcf1-8af6-4000-9b00-a5b4c02596c6
+function plot_emissions(result::ClimateModel)
+	
+	p = plot(; 
+		ylim=(-3,11), 
+		ylabel="ppm / year",
+		title="Global CO₂ₑ emissions",
+	)
+
+	
+	
+
+	# baseline
+	plot!(p,
+		years, effective_emissions(result);
+		pp.baseline_emissions...,
+		linestyle=:dash,
+	)
+	# controlled
+	plot!(p,
+		years, effective_emissions(result; M=true, R=true);
+		fillrange=zero(years),
+		fillopacity=.2,
+		pp.emissions...
+	)
+	
+
+	finish!(p)
+	
+end
+
+# ╔═╡ 424940e1-06ef-453a-8ffb-deb24dadb334
+function plot_emissions_pretty(result::ClimateModel)
+	# offset the x values so that framestyle=:origin will make the y-axis pass through 2020 instead of 0. yuck
+	R = x -> x + 2020
+	L = x -> x - 2020
+	
+	Tmax = 5
+	p = plot(; 
+		ylim=(-3,11), 
+		ylabel="ppm / year",
+		framestyle = :origin,
+		xformatter=string ∘ Int ∘ R,
+	)
+
+	
+	
+
+	# baseline
+	plot!(p,
+		L.(years), effective_emissions(result);
+		pp.baseline_emissions...,
+		linestyle=:dash,
+	)
+	# controlled temperature
+	plot!(p,
+		L.(years), effective_emissions(result; M=true, R=true);
+		fillrange=zero(L.(years)),
+		fillopacity=.2,
+		pp.emissions...
+	)
+	
+
+	finish!(p)
+	
+	plot!(p;
+		xlim=L.(extrema(years)),
+		xticks = L.(yearticks),
+		)
+end
 
 # ╔═╡ 700f982d-85da-4dc1-9319-f3b2527d0308
 function plot_temp(result::ClimateModel)
@@ -1446,6 +1392,16 @@ function plot_temp(result::ClimateModel)
 
 	finish!(p)
 end
+
+# ╔═╡ ab557633-e0b5-4439-bc81-d274770f2e65
+md"""
+## "Mágica" para pegar informações com pontos em gráficos
+"""
+
+# ╔═╡ 2758b185-cd54-484e-bb7d-d4cfcd2d39f4
+md"""
+## Executando o modelo
+"""
 
 # ╔═╡ 611c25ab-a454-4d52-b8fb-a58b0d1f5ca6
 function forward_controls_temp(controls::MRGA=MRGA(), model_parameters=default_parameters())
@@ -1696,6 +1652,11 @@ plot!(plot_temp(output_9.result),
 	pp.T_max...
 	)
 
+# ╔═╡ 7ffad0f8-082b-4ca1-84f7-37c08d5f7266
+md"""
+## Barras de custos
+"""
+
 # ╔═╡ 608b50e7-4419-4dfb-8d9e-5144d4034c05
 function avoided_damages_bars(result)
 	td(x) = total_discounted(x, result)
@@ -1758,6 +1719,9 @@ end
 if cost_benefits_narrative_slide >= 2
 	avoided_damages_bars(result_3)
 end
+
+# ╔═╡ df1060d4-3aa6-4eea-bd9a-0f9f95d95a67
+	avoided_damages_bars(output_9.result)
 
 # ╔═╡ 31a30755-1d8b-451b-8c9a-2c32a3a1d0b4
 function cost_bars(result; offset_damages=false)
@@ -1834,21 +1798,30 @@ else
 	bigbreak
 end
 
+# ╔═╡ 0cbf23b9-78da-4cf8-b03a-d25b2fcd01a0
+cost_bars(output_9.result; offset_damages=true)
+
+# ╔═╡ 7f9df132-61de-4fec-a674-176c4a43335c
+md"""
+## Estrutura MRGA 
+"""
+
 # ╔═╡ 354b9d8a-7c3f-456b-9da9-4396ac975743
 function MR(x::T,y::T) where T
 	MRGA{T}(x, y, zero(x), zero(x))
 end
 
 # ╔═╡ Cell order:
-# ╟─6a9d271c-b8b4-11eb-0a11-5ddd2d17f186
+# ╟─f957229f-5e48-458d-bbbc-1efc1356d704
 # ╠═1c8d2d00-b7d9-11eb-35c4-47f2a2aa1593
 # ╟─9a48a08e-7281-473c-8afc-7ad3e0771269
 # ╟─331c45b7-b5f2-4a78-b180-5b918d1806ee
 # ╟─9aa73ce0-cec6-4d53-bbbc-f5c85de7b521
 # ╟─65d31fbf-322d-459a-a2dd-2894edbecc4d
 # ╟─470d2f6f-fe97-4edd-8aaa-142bc8046fe8
-# ╟─94415ff2-32a2-4b0f-9911-3b93e202f548
+# ╠═94415ff2-32a2-4b0f-9911-3b93e202f548
 # ╟─eb7f34c3-1cd9-411d-8f34-d8547ba6ac29
+# ╟─7553b243-226c-457c-9532-1297f1e8d869
 # ╟─6533c123-34fe-4c0d-9ecc-7fef11379253
 # ╟─50d24c91-61ae-4544-98fa-5749bafe3d41
 # ╟─cf5f7459-fbbe-4595-baa4-b6b85017005a
@@ -1876,13 +1849,16 @@ end
 # ╟─70173466-c9b5-4227-8fba-6256fc1ecace
 # ╟─6bcb9b9e-e0ab-45d3-b9b9-3d7282f89df6
 # ╟─a0a1bb20-ec9b-446d-a36a-272840b8d35c
+# ╟─44ad72e3-efb7-48a3-bfd7-593312f4fd30
 # ╟─8e89f521-c19d-4f87-9497-f9b61c19c176
 # ╟─a83e47fa-4b48-4bbc-b210-382d1cf19f55
 # ╟─242f3109-244b-4884-a0e9-6ea8950ca47e
 # ╟─6978acad-9cac-4490-85fb-7e43d9558aca
 # ╟─7a435e46-4f36-4037-a9a6-d296b20bf6ac
-# ╟─944e835a-47a2-4bf0-a4a1-dbcfd174dcea
-# ╠═f861935a-8b03-426e-aebe-6963e034ad49
+# ╟─df1060d4-3aa6-4eea-bd9a-0f9f95d95a67
+# ╠═0cbf23b9-78da-4cf8-b03a-d25b2fcd01a0
+# ╟─f861935a-8b03-426e-aebe-6963e034ad49
+# ╠═8311d458-a1bb-484c-86e7-5a671d36f94d
 # ╟─64c9f002-3d5d-4f14-b39a-980738fd824d
 # ╟─3094a9eb-074d-46c3-9c1e-0a9c94c6ad43
 # ╟─b428e2d3-e1a9-4e4e-a64f-61048572102f
