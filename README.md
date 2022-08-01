@@ -1,7 +1,8 @@
 # Laboratório de computação científica
+
 ## About this material / Sobre esse material
 
-This repository is a fork of the course material from
+This repository is based on the course material from
 ["Computational Thinking, a live online Julia/Pluto textbook](https://computationalthinking.mit.edu/)
 that is available at [Github](https://github.com/mitmath/18S191).
 
@@ -11,7 +12,7 @@ Assistant Bola Malek, and Techinical Assistants Fons van der Plas, Logan
 Kilpatrick for making available such wonderful material under a Creative Commons
 Licence that allows remix the original content.
 
-Esse repositório é um *fork* do material do
+Esse repositório é baseado no material de
 ["Computational Thinking, a live online Julia/Pluto textbook](https://computationalthinking.mit.edu/)
 que está disponível no [Github](https://github.com/mitmath/18S191).
 
@@ -25,65 +26,84 @@ adaptação e re-uso.
 
 Esse é um curso de laboratório de computação científica que irá usar a
 [linguagem de programação Julia](http://www.julialang.org) em exemplos "do mundo
-real" em que aplicaremos ideias de análise de dados de modelagem matemática e
-computacional. A ideia é ter um curso do tipo "mão na massa", onde escrever
-e entender código será nossa principal forma de comunicação.
+real" em que aplicaremos ideias modelagem matemática e computacional e também de
+análise de dados. A ideia é ter um curso do tipo "mão na massa", onde escrever e
+entender código será nossa principal forma de comunicação.
 
 ## Logística do curso
 
-As aulas serão terças e quintas às 8hs da manhã. Durante as aulas apresentarei
-cadernos Julia com código e discutirei os problemas que vamos estudar mostrando
-como usar técnicas modernas de programação e matemática aplicada para atacá-los.
-Além disso temos o Moodle da disciplina onde podemos interagir em fóruns.
+As aulas serão terças e quintas às 14hs. Durante as aulas apresentarei cadernos
+Julia com código e discutirei os problemas que vamos estudar mostrando como usar
+técnicas modernas de programação e matemática aplicada para atacá-los. Além
+disso, temos o servidor Discord da disciplina onde podemos interagir em fóruns.
+
 ## Detalhes burocráticos
-### Ementa
-
-Programação para aplicações científicas baseadas em linguagens dinâmicas de alto
-desempenho, com bibliotecas estáveis e de alta performance. Introdução a
-conceitos como programação por arrays, paralelismo, linguagens de modelagem,
-resolução de equações diferenciais serão introduzidas com exemplos práticos
-ligados a problemas reais. O objetivo é ter um curso com ênfase prática para dar
-segurança aos alunos no uso de sistemas avançados de programação. Dessa forma,
-as aulas, quando em formato presencial, devem ser oferecidas preferencialmente
-em ambiente de laboratório para que os alunos possam realizar pequenos
-exercícios ao longo da discussão.
-
-### Programa da disciplina
-
-1. Introdução a uma linguagem dinâmica para computação de alto desempenho,
-   considerações sobre eficiência em programas de computadores (num primeiro
-   oferecimento a linguagem será Julia).
-2. Funções matemáticas em linguagens de programação, diferenciação automática,
-   despacho múltiplo.
-3. Programação por arrays (em um primeiro oferecimento com exemplos em
-   processamento de imagens).
-4. Noções de programação dinâmica e programação com grafos.
-5. Noções de programação paralela.
-6. Aleatoriedade e simulação estocástica em computadores (em um primeiro
-   oferecimento com exemplos em dinâmica de partículas).
-7. Resolução numérica de equações deferenciais através de pacotes computacionais
-   (em um primeiro oferecimento com exemplos em modelagem climática).
 
 ### Avaliação
 
-Será feita através de trabalhos computacionais durante o semestre.
+Será feita através de trabalhos computacionais durante o semestre e duas provas
+presenciais no laboratório.
+
+### Ementa 
+
+Programação para aplicações científicas baseadas em linguagens dinâmicas de alto
+desempenho. Introdução a conceitos como programação por arrays, programação
+dinâmica, paralelismo, aleatoriedade, simulações estocásticas, resolução
+numérica de equações diferenciais e otimização. 
+
+### Conteúdo Programático
+
+O curso busca apresentar um ambiente moderno de computação científica resolvendo
+problemas reais para motivar os alunos. As aulas devem ser ministradas em
+ambiente de laboratório, para que os alunos possam testar os exemplos de código
+e fazer modificações ao longo da discussão.
+
+#### Tópicos 
+
+1. Introdução a uma linguagem dinâmica para computação de alto
+   desempenho. Conceitos de estruturação de código em tornos de tipos e
+   programação polimórfica.
+
+2. Funções matemáticas em linguagens de programação, diferenciação
+   automática.
+
+3. Programação por arrays e operações em múltiplos objetos com exemplos em
+   aplicações científicas.
+
+4. Noções de programação dinâmica com exemplos em aplicações científicas. 
+
+5. Noções de programação paralela com exemplos em aplicações científicas.
+
+6. Aleatoriedade e simulação estocástica com exemplos em aplicações científicas.
+
+7. Resolução numérica de equações deferenciais através de pacotes
+   computacionais com exemplos em aplicações científicas.
+
+8. Exemplos do uso de otimização no controle de equações diferenciais com
+   exemplos em aplicações científicas. 
 
 ### Bibliografia
+
+* Introduction to computational thinking for real-world problems.
+  https://github.com/mitmath/18S191
+
+* Balbaert, I. Julia 1.0 Programming: Dynamic and high-performance programming
+  to build fast scientific applications, 2ª edição: Packt Publishing, 2018.
+
+* Führer, Claus, Olivier Verdier, e Jan Erik Solem. Scientific Computing with
+  Python: High-Performance Scientific Computing with NumPy, SciPy, and Pandas.
+  Second edition. Birmingham: Packt Publishing, 2021.
 
 * Bezanson, J.; Edelman, A.; Karpinski, S.; Shah, V. B. Julia: A Fresh Approach
   to Numerical Computing. SIAM Rev. 2017, 59 (1), 65–98.
   https://doi.org/10.1137/141000671.
 
-* Balbaert, I. Julia 1.0 Programming: Dynamic and high-performance programming
-  to build fast scientific applications, 2nd Edition, 2º edição.; Packt
-  Publishing, 2018.
+* Sengupta, Avik. Julia High Performance: Optimizations, Distributed Computing,
+  Multithreading, and GPU Programming with Julia 1.0 and Beyond. Second edition.
+  Birmingham Mumbai: Packt Publishing, 2019.
 
-* Manual da linguagem Julia. https://docs.julialang.org/en/v1/
+* Johansson, Robert. Numerical Python. New York, NY: Apress, 2018.
 
-* Introduction to computational thinking for real-world problems.
-  https://github.com/mitmath/18S191
-
-## Pré-requisitos
+### Pré-requisitos 
 
 MC102, MS211
-
