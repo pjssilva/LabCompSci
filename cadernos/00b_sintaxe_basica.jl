@@ -1,5 +1,5 @@
 ### A Pluto.jl notebook ###
-# v0.15.1
+# v0.19.11
 
 using Markdown
 using InteractiveUtils
@@ -9,20 +9,20 @@ md"# Um pouco de Julia
 
 Lembre-se que para executar esse caderno em sua máquina é preciso primeiro instalar a linguagem Julia e o Pluto.
 
-Obs: Esse caderno é apenas uma introcução bem rápida à Julia para quem nunca viu a linguagem. Ele não tenta de fato ensinar Julia, apenas faz um sobrevoo parnorâmico. Para apresnder Julia sugiro fortemente que você procure um texto introdutório completo ou mesmo um livro.
+Obs: Esse caderno é apenas uma introdução bem rápida à Julia para quem nunca viu a linguagem. Ele não tenta de fato ensiná-la, apenas faz um sobrevoo panorâmico. Para aprender Julia sugiro fortemente que você procure um texto introdutório completo ou mesmo um livro.
 
 Uma boa opção, em português, é o capítulo 1 do [texto do Leandro Martínez](http://leandro.iqm.unicamp.br/m3g/main/didatico/simulacoes2/simulacoes2.pdf), do IQ. Um bom livro é o [Julia 1.0 Programming](https://www.packtpub.com/product/julia-1-0-programming-second-edition/9781788999090) do Balbert.
 
-Outra ótima fonte de informção é o [manual da linguagem](https://docs.julialang.org/en/v1/).
+Outra ótima fonte de informação é o [manual da linguagem](https://docs.julialang.org/en/v1/).
 "
 
 
 # ╔═╡ 3b038ee0-edeb-11ea-0977-97cc30d1c6ff
 md"## Variáveis
 
-Em Julia definimos variáveis usando a atribuição `=`, nos moldes de linguagens dinâmicas como Python. O tipo da variável é então o tipo do valor que lhe foi atribuido. Há formas de se definir tipos explícitos de parâmetros de função e/ou variáveis locais para limitar os possíveis valores que elas podem receber, para ver isso consulte outro texto.
+Em Julia definimos variáveis usando a atribuição `=`, nos moldes de linguagens dinâmicas como Python. O tipo da variável é então o tipo do valor que lhe foi atribuído. Há formas de se definir tipos explícitos de parâmetros de função e/ou variáveis locais para limitar os possíveis valores que elas podem receber, para ver isso consulte outro texto.
 
-De posse de uma variável é possível fazer conta com elas, que lembram os valores que lhe foram atribuidos (afinal de contas, essa é a função das variáveis). Note também que em Julia, quando não há dúvida, é possível omitir o sinal de multiplicação, assim como na notação matemática usual
+De posse de uma variável é possível fazer conta com elas, que lembram os valores que lhe foram atribuídos (afinal de contas, essa é a função das variáveis). Note também que em Julia, quando não há dúvida, é possível omitir o sinal de multiplicação, assim como na notação matemática usual
 "
 
 # ╔═╡ 3e8e0ea0-edeb-11ea-22e0-c58f7c2168ce
@@ -33,7 +33,7 @@ x = 3
 y = 2x
 
 # ╔═╡ 5e062a24-edeb-11ea-256a-d938f77d7815
-md"Ao executar uma expressão Julia, tipicamente, devolve o o valor calculado. Assim o Pluto apresenta esse valor final como resposta da respectiva célula. Caso você queira suprimir esse valord e reposta, impedido que ele seja impresso, coloque um `;` no final.
+md"Ao executar uma expressão Julia, tipicamente, devolve o valor calculado. Assim o Pluto apresenta esse valor final como resposta da respectiva célula. Caso você queira suprimir esse valor e reposta, impedido que ele seja impresso, adicione um `;` no final.
 "
 
 # ╔═╡ 7e46f0e8-edeb-11ea-1092-4b5e8acd9ee0
@@ -56,7 +56,7 @@ md"O nome da função a representa, ele é uma variável como outra qualquer. Ao
 "
 
 # ╔═╡ a92ff397-cd8d-4cd6-8b1a-d1b8703ea11f
-md"Agora podemos reutilizar o nome e definir uma funçao f que recebe dois valores. Note que depois disso o nome `f` está associada às dus funções concretas que são distintas. Julia sabe qual função chamar pelo número de parâmetros. É também possível usar o tipo dos parâmetros para fazer a distinção."
+md"Agora podemos reutilizar o nome e definir uma função f que recebe dois valores. Note que depois disso o nome `f` está associada às duas funções concretas que são distintas. Julia sabe qual função chamar pelo número de parâmetros. É também possível usar o tipo dos parâmetros para fazer a distinção."
 
 # ╔═╡ 2f0acda8-b30c-4fa1-bd69-3d97ffcf84f0
 f(x, y) = x*y + 2
@@ -74,7 +74,7 @@ f
 "f(10) = $(f(10)), f(3, 5) = $(f(3, 5))"
 
 # ╔═╡ b5e2339d-ffc5-4083-b917-b7e4425f2419
-md"Acima usamos outra característica de Julia: a interpolação de valores. Se dentro de uma cadeia de caracteres (string) Julia encontra o símbolo `$` a linguagem interpretao que vem a seguir como uma expressão que deve ser avaliada e substituida pela resposta.
+md"Acima usamos outra característica de Julia: a interpolação de valores. Se dentro de uma cadeia de caracteres (string) Julia encontra o símbolo `$` a linguagem interpretado que vem a seguir como uma expressão que deve ser avaliada e substituída pela resposta.
 "
 
 # ╔═╡ ce9667c2-edeb-11ea-2665-d789032abd11
@@ -226,9 +226,24 @@ md"Ou ainda usar a sintaxe alternatica de compreensão de arrays mas agora com d
 # ╔═╡ 6348edce-edef-11ea-1ab4-019514eb414f
 [i + j for i in 1:5, j in 1:6]
 
+# ╔═╡ 00000000-0000-0000-0000-000000000001
+PLUTO_PROJECT_TOML_CONTENTS = """
+[deps]
+"""
+
+# ╔═╡ 00000000-0000-0000-0000-000000000002
+PLUTO_MANIFEST_TOML_CONTENTS = """
+# This file is machine-generated - editing it directly is not advised
+
+julia_version = "1.7.3"
+manifest_format = "2.0"
+
+[deps]
+"""
+
 # ╔═╡ Cell order:
 # ╟─0d3aec92-edeb-11ea-3adb-cd0dc17cbdab
-# ╟─3b038ee0-edeb-11ea-0977-97cc30d1c6ff
+# ╠═3b038ee0-edeb-11ea-0977-97cc30d1c6ff
 # ╠═3e8e0ea0-edeb-11ea-22e0-c58f7c2168ce
 # ╠═59b66862-edeb-11ea-2d62-71dcc79dbfab
 # ╟─5e062a24-edeb-11ea-256a-d938f77d7815
@@ -286,3 +301,5 @@ md"Ou ainda usar a sintaxe alternatica de compreensão de arrays mas agora com d
 # ╟─4cb33c04-edef-11ea-2b35-1139c246c331
 # ╟─54e47e9e-edef-11ea-2d75-b5f550902528
 # ╠═6348edce-edef-11ea-1ab4-019514eb414f
+# ╟─00000000-0000-0000-0000-000000000001
+# ╟─00000000-0000-0000-0000-000000000002
