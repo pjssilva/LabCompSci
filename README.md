@@ -44,6 +44,14 @@ disso, temos o servidor Discord da disciplina onde podemos interagir em fóruns.
 Será feita através de trabalhos computacionais durante o semestre e duas provas
 presenciais no laboratório.
 
+No segundo semestre de 2022 as datas das provas são **29/09 e 01/12**.
+
+Médias: Definimos `ME` = "média aritméticas das listas descartando as duas
+piores notas", e `MP` = "média aritmética das provas". A média ao final do
+semestre será `M = 0.4*ME + 0.6*MP`. Se `M >= 5`, o aluno está aprovado. Se `2.0
+<= M < 5.0`, o aluno deverá fazer o exame no dia **15/12**. A média final será
+então `max(M, 0.5*M + 0.5*Exame)`. Se `MF >= 5.0`, o aluno estará aprovado.
+
 ### Ementa 
 
 Programação para aplicações científicas baseadas em linguagens dinâmicas de alto
