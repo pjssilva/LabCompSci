@@ -1,5 +1,5 @@
 ### A Pluto.jl notebook ###
-# v0.15.1
+# v0.19.11
 
 using Markdown
 using InteractiveUtils
@@ -7,22 +7,23 @@ using InteractiveUtils
 # This Pluto notebook uses @bind for interactivity. When running this notebook outside of Pluto, the following 'mock version' of @bind gives bound variables a default value (instead of an error).
 macro bind(def, element)
     quote
+        local iv = try Base.loaded_modules[Base.PkgId(Base.UUID("6e696c72-6542-2067-7265-42206c756150"), "AbstractPlutoDingetjes")].Bonds.initial_value catch; b -> missing; end
         local el = $(esc(element))
-        global $(esc(def)) = Core.applicable(Base.get, el) ? Base.get(el) : missing
+        global $(esc(def)) = Core.applicable(Base.get, el) ? Base.get(el) : iv(el)
         el
     end
 end
 
 # ╔═╡ 2f0e340d-4d19-406f-8104-596d9d76b388
 begin
-    # You use `using` to import the Package for local use
-    # this imports all the names exported by the package
+    # Você usa `using` para importar um pacote para uso local
+    # Isso importa todos os nomes definidos nos pacotes
     using Compose
     using PlutoUI
 end
 
 # ╔═╡ fafae38e-e852-11ea-1208-732b4744e4c2
-md"Lista 0, versão 1 -- 2º sem 2021_"
+md"Lista 0, versão 2 -- 2º sem 2022"
 
 # ╔═╡ 7308bc54-e6cd-11ea-0eab-83f7535edf25
 # Edite o código abaixo com o seu nome e email da DAC (sem o @unincamp.br)
@@ -45,9 +46,9 @@ Submetido por: **_$(student.name)_** ($(student.email_dac)@unicamp.br)
 md"""
 # Lista 0: Ficando pronto para o jogo
 
-L0 data disponível: Terça, 10 de agosto de 2021.
+Disponível em: Terça, 16 de agosto de 2022.
 
-**L0 data de entrega: Quinta 12 de agosto de 2021. Mas é melhor entregar na quarta para estar pronto para a aula da quinta**.
+**L0 data de entrega: Quinta 18 de agosto de 2022. Mas é melhor entregar na quarta para estar pronto para a aula da quinta**.
 
 Em primeiro lugar: **bem vindo ao curso**. Estou muito animado em dividir com vocês ferramentas e ideias que uso cotidianamente para atacar probemas _reais_.
 
@@ -57,31 +58,34 @@ Espero que todos submetam essa **lista 0**, isso vai ajudar a saber quem consegu
 # ╔═╡ 31a8fbf8-e6ce-11ea-2c66-4b4d02b41995
 md"""## Logística das listas
 
-As listas serão feita com [notebooks PLuto](https://github.com/fonsp/Pluto.jl). Você deve completar o que for pedido e submeter o notebook no [Moodle](https://moodle.ggte.unicamp.br/course/view.php?id=11421).
+As listas serão feita com [notebooks PLuto](https://github.com/fonsp/Pluto.jl). Você deve completar o que for pedido e submeter o notebook no [Google Sala de Aula](https://classroom.google.com/u/1/c/NTM3ODgzMTk5NTUy?hl=pt-BR).
 
-As listas serão tipicamente disponibilizadas nas quintas e devem ser entregues na quinta seguint até as 11:59 da noite.
+As listas serão tipicamente disponibilizadas nas quintas e devem ser entregues na quinta seguinte até as 11:59 da noite.
 
-Homeworks will be released on Thursdays and due on Thursdays 11:59pm Eastern time.
-
-O objetivo da L0 é você configurar o seu sistema corretament e testar a entrega. Vocẽ deve entregá-la mas ela não vai contar para a sua nota.
+O objetivo da L0 é você configurar o seu sistema corretamente e testar a entrega. **Vocẽ deve entregá-la mas ela não vai contar para a sua nota**.
 """
 
 # ╔═╡ f9d7250a-706f-11eb-104d-3f07c59f7174
 md"## Requisitos desta lista
 
-- Instalar Julia e Pluto.    
+- Instalar Julia e Pluto (ou acessar um computador onde possa trabalhar).  
 - Resolver o exercício 0.
 
-Isso é tdo. se quiser pode também tentar fazer os outros exercícios quesão _opcionais_. "
+Isso é tudo. Se quiser pode também tentar fazer os outros exercícios. Eles são _opcionais_."
 
 # ╔═╡ 430a260e-6cbb-11eb-34af-31366543c9dc
 md"""# Instalação
 
-Para conseguir executar esse notebook a contento você terá que instalar a linguagem Julia e o Pluto, siga as istruções do vídeo da primeira aula. Veja-o no Moodle.
+Para conseguir executar esse notebook a contento você terá que instalar a linguagem Julia e o Pluto, siga as istruções dadas na primeira. Em particular, lembrem do [Gihub da Matéria](https://github.com/pjssilva/LabCompSci). Lá há muitas dicas. Executáveis da Julia podem ser obtidos no [site da linguagem](https://www.julialang.org). Quem usas Windows pode baixar direto da loja do sistema.
+
+Depois disso entre no interpretador Julia e para instalar
 
 Uma vez instalado, inicie o Pluto a partir do REPL da Julia, digitando
 
 ```julia
+import Pkg
+Pkg.add("Pluto")
+
 import Pluto
 Pluto.run()
 ```
@@ -91,7 +95,7 @@ Use o browser para carregar o arquivo do notebook e siga as instruções para re
 """
 
 # ╔═╡ a05d2bc8-7024-11eb-08cb-196543bbb8fd
-md"## (Requerido) Exercício 0 - _Escrevendo sua prmeira função básica_
+md"## (Requerido) Exercício 0 - _Escrevendo sua primeira função básica_
 
 Calcule o quadrado de um número, isso é fácil basta mutiplicá-lo por si mesmo. 
 ##### Algoritmo:
@@ -129,7 +133,7 @@ let
 end
 
 # ╔═╡ 348cea34-7025-11eb-3def-41bbc16c7512
-md"Isso é tudo que deve ser feito nessa lista. Agora submita o notebook no Moodle. Nosso objetivo é saber se você tem um sistema que está funcionando.
+md"Isso é tudo que deve ser feito nessa lista. Agora submita o notebook no Classroom. Nosso objetivo é saber se você tem um sistema que está funcionando.
 
 Se quiser continuar e trabalhar um pouco mais, colocamos mais alguns exercícios abaixo."
 
@@ -161,7 +165,7 @@ Saída: $\sqrt{x}$
 
 Pode ocorrer de você nunca obter `x/a` _exatamente igual_ a `a`, lembre de novo de cálculo numérico. Então se o seu código tentar continuar até que `x/a == a`, ele pode não parar nunca.
 
-Então o seu algotimo deve possuir um parâmetro `error_margin`, que será usado para decidir quando `x/a` e `a` são tão parecidos que é permitido parar.
+Então o seu algoritmo deve possuir um parâmetro `error_margin`, que será usado para decidir quando `x/a` e `a` são tão parecidos que é permitido parar.
 "
 
 # ╔═╡ 56866718-e6ce-11ea-0804-d108af4e5653
@@ -188,7 +192,8 @@ md"### Exercício 1.2
 Escreava uma fnção `newton_sqrt` que implementa o algorimo descrito."
 
 # ╔═╡ 4896bf0c-e754-11ea-19dc-1380bb356ab6
-function newton_sqrt(x, error_margin = 0.01, a = x / 2) # a=x/2 é um chute padrão para o `a` inicial
+function newton_sqrt(x, error_margin = 0.01, a = x / 2) 
+	# a=x/2 é um chute padrão para o `a` inicial
     return x #  Isto está errado, complete com seu código.
 end
 
@@ -225,9 +230,9 @@ md"""
 # ╔═╡ 5e24d95c-e6ce-11ea-24be-bb19e1e14657
 md"## (Opcional) Exercício 2 - _triângulo de Sierpinksi_
 
-O triângulo de Sierpinski triangle é definido _recursivamente_:
+O triângulo de Sierpinski é definido _recursivamente_:
 
-- Um triângulo Sierpinski de complexidade N é uma figura na forma de um triângulo que é formada por 3 figuras triângulares que são por sua vez triângulos de Sierpinski de complexidade N-1.
+- Um triângulo Sierpinski de complexidade N é uma figura na forma de um triângulo que é formada por 3 figuras triângulares que são por sua vez triângulos de Sierpinski de complexidade N - 1.
 
 - Um triângulo Sierpinski de complexidade 0 é um triângulo sólido simples e equilátero.
 "
@@ -293,7 +298,7 @@ else
 end
 
 # ╔═╡ c21096c0-e856-11ea-3dc5-a5b0cbf29335
-md"**Let's try it out below:**"
+md"**Podemos brincar abaixo movendo o Slider e chamar sua função de áreas:**"
 
 # ╔═╡ 52533e00-e856-11ea-08a7-25e556fb1127
 md"Complexity = $(@bind n Slider(0:6, show_value=true))"
@@ -340,7 +345,7 @@ function sierpinski(n)
     else
         t = sierpinski(n - 1) # constroi recursivamente um triângulo menor
         place_in_3_corners(t) # Coloca os três triângulos menores nos cantos 
-        # para formar o triângulo maior.
+                              # para formar o triângulo maior.
     end
 end
 
@@ -353,12 +358,11 @@ sierpinski.(0:6)
 # ╔═╡ 147ed7b0-e856-11ea-0d0e-7ff0d527e352
 md"""
 
-Sierpinski's triangle of complexity $(n)
+Triângulo de Sierpinski de complexidade $(n)
 
  $(sierpinski(n))
 
-has area **$(area_sierpinski(n))**
-
+tem área **$(area_sierpinski(n))**
 """
 
 # ╔═╡ 00000000-0000-0000-0000-000000000001
@@ -376,228 +380,246 @@ PlutoUI = "~0.7.9"
 PLUTO_MANIFEST_TOML_CONTENTS = """
 # This file is machine-generated - editing it directly is not advised
 
-[[ArgTools]]
+julia_version = "1.7.3"
+manifest_format = "2.0"
+
+[[deps.ArgTools]]
 uuid = "0dad84c5-d112-42e6-8d28-ef12dabb789f"
 
-[[Artifacts]]
+[[deps.Artifacts]]
 uuid = "56f22d72-fd6d-98f1-02f0-08ddc0907c33"
 
-[[Base64]]
+[[deps.Base64]]
 uuid = "2a0f44e3-6c83-55bd-87e4-b1978d98bd5f"
 
-[[ColorTypes]]
+[[deps.ColorTypes]]
 deps = ["FixedPointNumbers", "Random"]
 git-tree-sha1 = "024fe24d83e4a5bf5fc80501a314ce0d1aa35597"
 uuid = "3da002f7-5984-5a60-b8a6-cbb66c0b333f"
 version = "0.11.0"
 
-[[Colors]]
+[[deps.Colors]]
 deps = ["ColorTypes", "FixedPointNumbers", "Reexport"]
 git-tree-sha1 = "417b0ed7b8b838aa6ca0a87aadf1bb9eb111ce40"
 uuid = "5ae59095-9a9b-59fe-a467-6f913c188581"
 version = "0.12.8"
 
-[[Compat]]
+[[deps.Compat]]
 deps = ["Base64", "Dates", "DelimitedFiles", "Distributed", "InteractiveUtils", "LibGit2", "Libdl", "LinearAlgebra", "Markdown", "Mmap", "Pkg", "Printf", "REPL", "Random", "SHA", "Serialization", "SharedArrays", "Sockets", "SparseArrays", "Statistics", "Test", "UUIDs", "Unicode"]
 git-tree-sha1 = "344f143fa0ec67e47917848795ab19c6a455f32c"
 uuid = "34da2185-b29b-5c13-b0c7-acf172513d20"
 version = "3.32.0"
 
-[[Compose]]
+[[deps.CompilerSupportLibraries_jll]]
+deps = ["Artifacts", "Libdl"]
+uuid = "e66e0078-7015-5450-92f7-15fbd957f2ae"
+
+[[deps.Compose]]
 deps = ["Base64", "Colors", "DataStructures", "Dates", "IterTools", "JSON", "LinearAlgebra", "Measures", "Printf", "Random", "Requires", "Statistics", "UUIDs"]
 git-tree-sha1 = "c6461fc7c35a4bb8d00905df7adafcff1fe3a6bc"
 uuid = "a81c6b42-2e10-5240-aca2-a61377ecd94b"
 version = "0.9.2"
 
-[[DataStructures]]
+[[deps.DataStructures]]
 deps = ["Compat", "InteractiveUtils", "OrderedCollections"]
 git-tree-sha1 = "7d9d316f04214f7efdbb6398d545446e246eff02"
 uuid = "864edb3b-99cc-5e75-8d2d-829cb0a9cfe8"
 version = "0.18.10"
 
-[[Dates]]
+[[deps.Dates]]
 deps = ["Printf"]
 uuid = "ade2ca70-3891-5945-98fb-dc099432e06a"
 
-[[DelimitedFiles]]
+[[deps.DelimitedFiles]]
 deps = ["Mmap"]
 uuid = "8bb1440f-4735-579b-a4ab-409b98df4dab"
 
-[[Distributed]]
+[[deps.Distributed]]
 deps = ["Random", "Serialization", "Sockets"]
 uuid = "8ba89e20-285c-5b6f-9357-94700520ee1b"
 
-[[Downloads]]
-deps = ["ArgTools", "LibCURL", "NetworkOptions"]
+[[deps.Downloads]]
+deps = ["ArgTools", "FileWatching", "LibCURL", "NetworkOptions"]
 uuid = "f43a241f-c20a-4ad4-852c-f6b1247861c6"
 
-[[FixedPointNumbers]]
+[[deps.FileWatching]]
+uuid = "7b1f6079-737a-58dc-b8bc-7a2ca5c1b5ee"
+
+[[deps.FixedPointNumbers]]
 deps = ["Statistics"]
 git-tree-sha1 = "335bfdceacc84c5cdf16aadc768aa5ddfc5383cc"
 uuid = "53c48c17-4a7d-5ca2-90c5-79b7896eea93"
 version = "0.8.4"
 
-[[InteractiveUtils]]
+[[deps.InteractiveUtils]]
 deps = ["Markdown"]
 uuid = "b77e0a4c-d291-57a0-90e8-8db25a27a240"
 
-[[IterTools]]
+[[deps.IterTools]]
 git-tree-sha1 = "05110a2ab1fc5f932622ffea2a003221f4782c18"
 uuid = "c8e1da08-722c-5040-9ed9-7db0dc04731e"
 version = "1.3.0"
 
-[[JSON]]
+[[deps.JSON]]
 deps = ["Dates", "Mmap", "Parsers", "Unicode"]
 git-tree-sha1 = "8076680b162ada2a031f707ac7b4953e30667a37"
 uuid = "682c06a0-de6a-54ab-a142-c8b1cf79cde6"
 version = "0.21.2"
 
-[[LibCURL]]
+[[deps.LibCURL]]
 deps = ["LibCURL_jll", "MozillaCACerts_jll"]
 uuid = "b27032c2-a3e7-50c8-80cd-2d36dbcbfd21"
 
-[[LibCURL_jll]]
+[[deps.LibCURL_jll]]
 deps = ["Artifacts", "LibSSH2_jll", "Libdl", "MbedTLS_jll", "Zlib_jll", "nghttp2_jll"]
 uuid = "deac9b47-8bc7-5906-a0fe-35ac56dc84c0"
 
-[[LibGit2]]
+[[deps.LibGit2]]
 deps = ["Base64", "NetworkOptions", "Printf", "SHA"]
 uuid = "76f85450-5226-5b5a-8eaa-529ad045b433"
 
-[[LibSSH2_jll]]
+[[deps.LibSSH2_jll]]
 deps = ["Artifacts", "Libdl", "MbedTLS_jll"]
 uuid = "29816b5a-b9ab-546f-933c-edad1886dfa8"
 
-[[Libdl]]
+[[deps.Libdl]]
 uuid = "8f399da3-3557-5675-b5ff-fb832c97cbdb"
 
-[[LinearAlgebra]]
-deps = ["Libdl"]
+[[deps.LinearAlgebra]]
+deps = ["Libdl", "libblastrampoline_jll"]
 uuid = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
 
-[[Logging]]
+[[deps.Logging]]
 uuid = "56ddb016-857b-54e1-b83d-db4d58db5568"
 
-[[Markdown]]
+[[deps.Markdown]]
 deps = ["Base64"]
 uuid = "d6f4376e-aef5-505a-96c1-9c027394607a"
 
-[[MbedTLS_jll]]
+[[deps.MbedTLS_jll]]
 deps = ["Artifacts", "Libdl"]
 uuid = "c8ffd9c3-330d-5841-b78e-0817d7145fa1"
 
-[[Measures]]
+[[deps.Measures]]
 git-tree-sha1 = "e498ddeee6f9fdb4551ce855a46f54dbd900245f"
 uuid = "442fdcdd-2543-5da2-b0f3-8c86c306513e"
 version = "0.3.1"
 
-[[Mmap]]
+[[deps.Mmap]]
 uuid = "a63ad114-7e13-5084-954f-fe012c677804"
 
-[[MozillaCACerts_jll]]
+[[deps.MozillaCACerts_jll]]
 uuid = "14a3606d-f60d-562e-9121-12d972cd8159"
 
-[[NetworkOptions]]
+[[deps.NetworkOptions]]
 uuid = "ca575930-c2e3-43a9-ace4-1e988b2c1908"
 
-[[OrderedCollections]]
+[[deps.OpenBLAS_jll]]
+deps = ["Artifacts", "CompilerSupportLibraries_jll", "Libdl"]
+uuid = "4536629a-c528-5b80-bd46-f80d51c5b363"
+
+[[deps.OrderedCollections]]
 git-tree-sha1 = "85f8e6578bf1f9ee0d11e7bb1b1456435479d47c"
 uuid = "bac558e1-5e72-5ebc-8fee-abe8a469f55d"
 version = "1.4.1"
 
-[[Parsers]]
+[[deps.Parsers]]
 deps = ["Dates"]
 git-tree-sha1 = "477bf42b4d1496b454c10cce46645bb5b8a0cf2c"
 uuid = "69de0a69-1ddd-5017-9359-2bf0b02dc9f0"
 version = "2.0.2"
 
-[[Pkg]]
+[[deps.Pkg]]
 deps = ["Artifacts", "Dates", "Downloads", "LibGit2", "Libdl", "Logging", "Markdown", "Printf", "REPL", "Random", "SHA", "Serialization", "TOML", "Tar", "UUIDs", "p7zip_jll"]
 uuid = "44cfe95a-1eb2-52ea-b672-e2afdf69b78f"
 
-[[PlutoUI]]
+[[deps.PlutoUI]]
 deps = ["Base64", "Dates", "InteractiveUtils", "JSON", "Logging", "Markdown", "Random", "Reexport", "Suppressor"]
 git-tree-sha1 = "44e225d5837e2a2345e69a1d1e01ac2443ff9fcb"
 uuid = "7f904dfe-b85e-4ff6-b463-dae2292396a8"
 version = "0.7.9"
 
-[[Printf]]
+[[deps.Printf]]
 deps = ["Unicode"]
 uuid = "de0858da-6303-5e67-8744-51eddeeeb8d7"
 
-[[REPL]]
+[[deps.REPL]]
 deps = ["InteractiveUtils", "Markdown", "Sockets", "Unicode"]
 uuid = "3fa0cd96-eef1-5676-8a61-b3b8758bbffb"
 
-[[Random]]
-deps = ["Serialization"]
+[[deps.Random]]
+deps = ["SHA", "Serialization"]
 uuid = "9a3f8284-a2c9-5f02-9a11-845980a1fd5c"
 
-[[Reexport]]
+[[deps.Reexport]]
 git-tree-sha1 = "5f6c21241f0f655da3952fd60aa18477cf96c220"
 uuid = "189a3867-3050-52da-a836-e630ba90ab69"
 version = "1.1.0"
 
-[[Requires]]
+[[deps.Requires]]
 deps = ["UUIDs"]
 git-tree-sha1 = "4036a3bd08ac7e968e27c203d45f5fff15020621"
 uuid = "ae029012-a4dd-5104-9daa-d747884805df"
 version = "1.1.3"
 
-[[SHA]]
+[[deps.SHA]]
 uuid = "ea8e919c-243c-51af-8825-aaa63cd721ce"
 
-[[Serialization]]
+[[deps.Serialization]]
 uuid = "9e88b42a-f829-5b0c-bbe9-9e923198166b"
 
-[[SharedArrays]]
+[[deps.SharedArrays]]
 deps = ["Distributed", "Mmap", "Random", "Serialization"]
 uuid = "1a1011a3-84de-559e-8e89-a11a2f7dc383"
 
-[[Sockets]]
+[[deps.Sockets]]
 uuid = "6462fe0b-24de-5631-8697-dd941f90decc"
 
-[[SparseArrays]]
+[[deps.SparseArrays]]
 deps = ["LinearAlgebra", "Random"]
 uuid = "2f01184e-e22b-5df5-ae63-d93ebab69eaf"
 
-[[Statistics]]
+[[deps.Statistics]]
 deps = ["LinearAlgebra", "SparseArrays"]
 uuid = "10745b16-79ce-11e8-11f9-7d13ad32a3b2"
 
-[[Suppressor]]
+[[deps.Suppressor]]
 git-tree-sha1 = "a819d77f31f83e5792a76081eee1ea6342ab8787"
 uuid = "fd094767-a336-5f1f-9728-57cf17d0bbfb"
 version = "0.2.0"
 
-[[TOML]]
+[[deps.TOML]]
 deps = ["Dates"]
 uuid = "fa267f1f-6049-4f14-aa54-33bafae1ed76"
 
-[[Tar]]
+[[deps.Tar]]
 deps = ["ArgTools", "SHA"]
 uuid = "a4e569a6-e804-4fa4-b0f3-eef7a1d5b13e"
 
-[[Test]]
+[[deps.Test]]
 deps = ["InteractiveUtils", "Logging", "Random", "Serialization"]
 uuid = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
 
-[[UUIDs]]
+[[deps.UUIDs]]
 deps = ["Random", "SHA"]
 uuid = "cf7118a7-6976-5b1a-9a39-7adc72f591a4"
 
-[[Unicode]]
+[[deps.Unicode]]
 uuid = "4ec0a83e-493e-50e2-b9ac-8f72acf5a8f5"
 
-[[Zlib_jll]]
+[[deps.Zlib_jll]]
 deps = ["Libdl"]
 uuid = "83775a58-1f1d-513f-b197-d71354ab007a"
 
-[[nghttp2_jll]]
+[[deps.libblastrampoline_jll]]
+deps = ["Artifacts", "Libdl", "OpenBLAS_jll"]
+uuid = "8e850b90-86db-534c-a0d3-1478176c7d93"
+
+[[deps.nghttp2_jll]]
 deps = ["Artifacts", "Libdl"]
 uuid = "8e850ede-7688-5339-a07c-302acd2aaf8d"
 
-[[p7zip_jll]]
+[[deps.p7zip_jll]]
 deps = ["Artifacts", "Libdl"]
 uuid = "3f19e933-33d8-53b3-aaab-bd5110c3b7a0"
 """
@@ -637,7 +659,7 @@ uuid = "3f19e933-33d8-53b3-aaab-bd5110c3b7a0"
 # ╟─f22222b4-e7b5-11ea-0ea0-8fa368d2a014
 # ╠═ca8d2f72-e7b6-11ea-1893-f1e6d0a20dc7
 # ╟─71c78614-e7bc-11ea-0959-c7a91a10d481
-# ╟─c21096c0-e856-11ea-3dc5-a5b0cbf29335
+# ╠═c21096c0-e856-11ea-3dc5-a5b0cbf29335
 # ╟─52533e00-e856-11ea-08a7-25e556fb1127
 # ╟─147ed7b0-e856-11ea-0d0e-7ff0d527e352
 # ╟─c1ecad86-e7bc-11ea-1201-23ee380181a1

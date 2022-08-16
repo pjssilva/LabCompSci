@@ -28,7 +28,6 @@ De posse de uma variável é possível fazer conta com elas, que lembram os valo
 # ╔═╡ 3e8e0ea0-edeb-11ea-22e0-c58f7c2168ce
 x = 3
 
-
 # ╔═╡ 59b66862-edeb-11ea-2d62-71dcc79dbfab
 y = 2x
 
@@ -52,11 +51,11 @@ md"Há duas formas de definir funções. Uma mais simples e adequada para funç�
 f(x) = 2 + x
 
 # ╔═╡ b341db4e-edeb-11ea-078b-b71ac00089d7
-md"O nome da função a representa, ele é uma variável como outra qualquer. Ao se digitar o nome de uma função obtemos alguma informação ela: quantos *métodos* ela define. Aqui vemos algo novo, na verdade o nome de uma função representa todo um conjunto de funções concretas que são diferentes entre si pelos número e tipos dos parâmetros de entrada. Essas funções concretas são chamadas de métodos. Vamos pegar inicialmente informação sobre a função que acabamos de criar.
+md"O nome da função a representa, ele é uma variável como outra qualquer. Ao se digitar o nome de uma função obtemos alguma informação ela: quantos *métodos* ela define. Aqui vemos algo novo, na verdade o nome de uma função representa todo um conjunto de funções concretas que são diferentes entre si pelos número e tipos dos parâmetros de entrada. Essas funções concretas são chamadas de _métodos_. Vamos pegar inicialmente informação sobre a função que acabamos de criar.
 "
 
 # ╔═╡ a92ff397-cd8d-4cd6-8b1a-d1b8703ea11f
-md"Agora podemos reutilizar o nome e definir uma função f que recebe dois valores. Note que depois disso o nome `f` está associada às duas funções concretas que são distintas. Julia sabe qual função chamar pelo número de parâmetros. É também possível usar o tipo dos parâmetros para fazer a distinção."
+md"Agora podemos reutilizar o nome e definir uma função `f` que recebe dois valores. Note que, depois disso, o nome `f` está associado às duas funções concretas (métodos) que são distintas. Julia sabe qual função chamar pelo número de parâmetros. É também possível usar o tipo dos parâmetros para fazer a distinção."
 
 # ╔═╡ 2f0acda8-b30c-4fa1-bd69-3d97ffcf84f0
 f(x, y) = x*y + 2
@@ -74,11 +73,11 @@ f
 "f(10) = $(f(10)), f(3, 5) = $(f(3, 5))"
 
 # ╔═╡ b5e2339d-ffc5-4083-b917-b7e4425f2419
-md"Acima usamos outra característica de Julia: a interpolação de valores. Se dentro de uma cadeia de caracteres (string) Julia encontra o símbolo `$` a linguagem interpretado que vem a seguir como uma expressão que deve ser avaliada e substituída pela resposta.
+md"Acima usamos outra característica de Julia: a interpolação de valores. Se dentro de uma cadeia de caracteres (string) Julia encontra o símbolo `$` a linguagem interpreta que vem a seguir como uma expressão que deve ser avaliada e substituída pela resposta.
 "
 
 # ╔═╡ ce9667c2-edeb-11ea-2665-d789032abd11
-md"Funções mais longas, que envolvam mais do que uma simples expressão, são definidas iniciando com a palavra reservada `function` e terminando com 'end`:"
+md"Funções mais longas, que envolvam mais do que uma simples expressão, são definidas iniciando com a palavra reservada `function` e terminando com `end`:"
 
 # ╔═╡ d73d3400-edeb-11ea-2dea-95e8c4a6563b
 function g(x, y)
@@ -106,13 +105,13 @@ let s = 0
 end
 
 # ╔═╡ 394b0ec8-eded-11ea-31fb-27392068ef8f
-md"A expressão `1:10` representa uma sequência de números que inicia no 1 e vai a 10 (pulando de 1 em 1). Esse tipo de expressão receveo o nome de `Range`."
+md"A expressão `1:10` representa uma sequência de números que inicia no 1 e vai a 10 (pulando de 1 em 1). Esse tipo de expressão recebe o nome de `Range`."
 
 # ╔═╡ 4dc00908-eded-11ea-25c5-0f7b2b7e18f9
 typeof(1:10)
 
 # ╔═╡ 6c44abb4-edec-11ea-16bd-557800b5f9d2
-md"Acima usamos um bloco `let` para criar uma nova variável local `s`. Essa variável existe apenas dentro do bloco. Mas o uso de variáveis locais é bem mais comum dentro de fuções, e de fato funções são preferíveis por serem reutilizáveis. Por exemplo, podemos reescrever o código acima para usar quantas vezes quisermos:"
+md"Acima usamos um bloco `let` para criar uma nova variável local `s`. Essa variável existe apenas dentro do bloco. Mas o uso de variáveis locais é bem mais comum dentro de fuções. De fato, funções são preferíveis por serem reutilizáveis. Por exemplo, podemos reescrever o código acima para usar quantas vezes quisermos:"
 
 # ╔═╡ 683af3e2-eded-11ea-25a5-0d90bf099d98
 function mysum(n)
@@ -148,11 +147,10 @@ if a < 5
 	"small"	
 else
 	"big"
-	
 end
 
 # ╔═╡ cfb21014-eded-11ea-1261-3bc30952a88e
-md"""Note que o `if` também funciona como uma expressão, restornando o último valor que foi avaliado. No exemplo isso o resultado foi a string `"small"`. Se a condição fosse falsa seria `"big"`. Como Pluto é um caderno *reativo* se você mudar o valor de `a` na célula que o define, o valor restulstando do `if` é atualizado!"""
+md"""Note que o `if` também funciona como uma expressão, retornando o último valor que foi avaliado. No exemplo, o resultado foi a string `"small"`. Se a condição fosse falsa seria `"big"`. Como Pluto é um caderno *reativo* se você mudar o valor de `a` na célula que o define, o valor restulstando do `if` é atualizado!"""
 
 # ╔═╡ ffee7d80-eded-11ea-26b1-1331df204c67
 md"## Arrays"
@@ -181,7 +179,7 @@ v[2]
 v[2] = 10
 
 # ╔═╡ a9b48e54-edee-11ea-1333-a96181de0185
-md"Observe que o Pluto não atualiza células automaticamente quando o dos elementos do vetor é modificado, mas o valor é de fato modificado."
+md"Observe que o Pluto não atualiza células automaticamente quando algum dos elementos do vetor é modificado, mas o valor é de fato modificado."
 
 # ╔═╡ 68c4ead2-edef-11ea-124a-03c2d7dd6a1b
 md"Uma forma bastante versátil para a criação de vetores é a **compreenção de arrays** que também existe em Python:"
@@ -212,16 +210,16 @@ md"Há ainda funções específicas para criar matrizes maiores. Por exemplo, é
 zeros(5, 5)
 
 # ╔═╡ a8f26af8-edef-11ea-2fc7-2b776f515aea
-md"A função `zeros` devolve uma matriz com elementos do tipo `Float64`s como padrão. Para alterar esse comportamento é possível definir o tipo além do número de elementos."
+md"A função `zeros` devolve uma matriz com elementos do tipo `Float64` como padrão. Para alterar esse comportamento é possível definir o tipo além do número de elementos."
 
 # ╔═╡ b595373e-edef-11ea-03e2-6599ef14af20
 zeros(Int, 4, 5)
 
 # ╔═╡ 4cb33c04-edef-11ea-2b35-1139c246c331
-md"Depois disso podemos preencher a matriz com quaisquer valores elemento por elemento, por exemplo usando laços `for` encaixados."
+md"Depois disso, podemos preencher a matriz com quaisquer valores elemento por elemento, por exemplo usando laços `for` encaixados."
 
 # ╔═╡ 54e47e9e-edef-11ea-2d75-b5f550902528
-md"Ou ainda usar a sintaxe alternatica de compreensão de arrays mas agora com dois laços `for` (encaixados). Note que nesse caso o primeiro laço percorre as linhas e o segundo laço percorre as colunas. As matrizes em Julia são guardas por colunas, uma após a outra."
+md"Ou ainda usar a sintaxe alternativa de compreensão de arrays mas agora com dois laços `for` (encaixados). Note que nesse caso o primeiro laço percorre as linhas e o segundo laço percorre as colunas. As matrizes em Julia são guardas por colunas, uma após a outra."
 
 # ╔═╡ 6348edce-edef-11ea-1ab4-019514eb414f
 [i + j for i in 1:5, j in 1:6]
@@ -243,7 +241,7 @@ manifest_format = "2.0"
 
 # ╔═╡ Cell order:
 # ╟─0d3aec92-edeb-11ea-3adb-cd0dc17cbdab
-# ╠═3b038ee0-edeb-11ea-0977-97cc30d1c6ff
+# ╟─3b038ee0-edeb-11ea-0977-97cc30d1c6ff
 # ╠═3e8e0ea0-edeb-11ea-22e0-c58f7c2168ce
 # ╠═59b66862-edeb-11ea-2d62-71dcc79dbfab
 # ╟─5e062a24-edeb-11ea-256a-d938f77d7815
