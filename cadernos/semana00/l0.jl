@@ -50,19 +50,19 @@ Disponível em: Terça, 16 de agosto de 2022.
 
 **L0 data de entrega: Quinta 18 de agosto de 2022. Mas é melhor entregar na quarta para estar pronto para a aula da quinta**.
 
-Em primeiro lugar: **bem vindo ao curso**. Estou muito animado em dividir com vocês ferramentas e ideias que uso cotidianamente para atacar probemas _reais_.
+Em primeiro lugar: **bem vindo ao curso**. Estou muito animado em dividir com vocês ferramentas e ideias que uso cotidianamente para atacar problemas _reais_.
 
-Espero que todos submetam essa **lista 0**, isso vai ajudar a saber quem conseguiu instalar o ambiente mínimo de uso do curso e tomar alguma atitude corretiva se for necessário. Mesm que você não tenha conseguido fazer muito, pelo menos coloque o seu nome e email da DAC e mande assim mesmo. A nota dessa lista não conta para o curso.🙂
+Espero que todos submetam essa **lista 0**, isso vai ajudar a saber quem conseguiu instalar o ambiente mínimo de uso do curso e tomar alguma atitude corretiva se for necessário. Mesmo que você não tenha conseguido fazer muito, pelo menos coloque o seu nome e email da DAC e mande assim mesmo. A nota dessa lista não conta para o curso.🙂
 """
 
 # ╔═╡ 31a8fbf8-e6ce-11ea-2c66-4b4d02b41995
 md"""## Logística das listas
 
-As listas serão feita com [notebooks PLuto](https://github.com/fonsp/Pluto.jl). Você deve completar o que for pedido e submeter o notebook no [Google Sala de Aula](https://classroom.google.com/u/1/c/NTM3ODgzMTk5NTUy?hl=pt-BR).
+As listas serão feita com [notebooks Pluto](https://github.com/fonsp/Pluto.jl). Você deve completar o que for pedido e submeter o notebook no [Google Sala de Aula](https://classroom.google.com/u/1/c/NTM3ODgzMTk5NTUy?hl=pt-BR).
 
 As listas serão tipicamente disponibilizadas nas quintas e devem ser entregues na quinta seguinte até as 11:59 da noite.
 
-O objetivo da L0 é você configurar o seu sistema corretamente e testar a entrega. **Vocẽ deve entregá-la mas ela não vai contar para a sua nota**.
+O objetivo da L0 é você configurar o seu sistema corretamente e testar a entrega. **Você deve entregá-la mas ela não vai contar para a sua nota**.
 """
 
 # ╔═╡ f9d7250a-706f-11eb-104d-3f07c59f7174
@@ -76,7 +76,7 @@ Isso é tudo. Se quiser pode também tentar fazer os outros exercícios. Eles s�
 # ╔═╡ 430a260e-6cbb-11eb-34af-31366543c9dc
 md"""# Instalação
 
-Para conseguir executar esse notebook a contento você terá que instalar a linguagem Julia e o Pluto, siga as istruções dadas na primeira. Em particular, lembrem do [Gihub da Matéria](https://github.com/pjssilva/LabCompSci). Lá há muitas dicas. Executáveis da Julia podem ser obtidos no [site da linguagem](https://www.julialang.org). Quem usas Windows pode baixar direto da loja do sistema.
+Para conseguir executar esse notebook a contento você terá que instalar a linguagem Julia e o Pluto, siga as instruções dadas na primeira. Em particular, lembrem do [Gihub da Matéria](https://github.com/pjssilva/LabCompSci). Lá há muitas dicas. Executáveis da Julia podem ser obtidos no [site da linguagem](https://www.julialang.org). Quem usas Windows pode baixar direto da loja do sistema.
 
 Depois disso entre no interpretador Julia e para instalar
 
@@ -97,7 +97,7 @@ Use o browser para carregar o arquivo do notebook e siga as instruções para re
 # ╔═╡ a05d2bc8-7024-11eb-08cb-196543bbb8fd
 md"## (Requerido) Exercício 0 - _Escrevendo sua primeira função básica_
 
-Calcule o quadrado de um número, isso é fácil basta mutiplicá-lo por si mesmo. 
+Calcule o quadrado de um número, isso é fácil basta multiplicá-lo por si mesmo. 
 ##### Algoritmo:
 
 Dado: $x$
@@ -133,7 +133,7 @@ let
 end
 
 # ╔═╡ 348cea34-7025-11eb-3def-41bbc16c7512
-md"Isso é tudo que deve ser feito nessa lista. Agora submita o notebook no Classroom. Nosso objetivo é saber se você tem um sistema que está funcionando.
+md"Isso é tudo que deve ser feito nessa lista. Agora, submeta o notebook no Classroom. Nosso objetivo é saber se você tem um sistema que está funcionando.
 
 Se quiser continuar e trabalhar um pouco mais, colocamos mais alguns exercícios abaixo."
 
@@ -150,7 +150,7 @@ md"## (Opcional) Exercício 1 - _Raiz quadrada usando o método de Newton_
 
 Calcular a raiz quadrada é fácil -- usando o que você aprendeu em Cálculo Numérico. 
 
-Como isso é posível?
+Como isso é possível?
 
 ##### Algoritmo:
 
@@ -161,7 +161,7 @@ Saída: $\sqrt{x}$
 1. Comece com um valor `a` > 0
 1. Divida `x` por `a`
 1. Faça a = média `x/a` e `a`. (A raiz de `x` deve estar entre esses dois números. Porque?)
-1. Continue até que `x/a` é aproximadamente igual a `a`. Devolta `a` como a raiz quadrada.
+1. Continue até que `x/a` é aproximadamente igual a `a`. Devolva `a` como a raiz quadrada.
 
 Pode ocorrer de você nunca obter `x/a` _exatamente igual_ a `a`, lembre de novo de cálculo numérico. Então se o seu código tentar continuar até que `x/a == a`, ele pode não parar nunca.
 
@@ -171,7 +171,7 @@ Então o seu algoritmo deve possuir um parâmetro `error_margin`, que será usad
 # ╔═╡ 56866718-e6ce-11ea-0804-d108af4e5653
 md"### Exercício 1.1
 
-O passo 3 do algoritimo define a próxima aproximação como a média entre o novo valor `x/a` e o anterior `a`.
+O passo 3 do algoritmo define a próxima aproximação como a média entre o novo valor `x/a` e o anterior `a`.
 
 Isso faz sentido porque a raiz desejada está entre esses dois números `x/a` e `a`. Porque?
 "
@@ -189,7 +189,7 @@ end
 # ╔═╡ d62f223c-e754-11ea-2470-e72a605a9d7e
 md"### Exercício 1.2
 
-Escreava uma fnção `newton_sqrt` que implementa o algorimo descrito."
+Escreva uma função `newton_sqrt` que implementa o algoritmo descrito."
 
 # ╔═╡ 4896bf0c-e754-11ea-19dc-1380bb356ab6
 function newton_sqrt(x, error_margin = 0.01, a = x / 2) 
@@ -232,7 +232,7 @@ md"## (Opcional) Exercício 2 - _triângulo de Sierpinksi_
 
 O triângulo de Sierpinski é definido _recursivamente_:
 
-- Um triângulo Sierpinski de complexidade N é uma figura na forma de um triângulo que é formada por 3 figuras triângulares que são por sua vez triângulos de Sierpinski de complexidade N - 1.
+- Um triângulo Sierpinski de complexidade N é uma figura na forma de um triângulo que é formada por 3 figuras triangulares que são por sua vez triângulos de Sierpinski de complexidade N - 1.
 
 - Um triângulo Sierpinski de complexidade 0 é um triângulo sólido simples e equilátero.
 "
@@ -240,7 +240,7 @@ O triângulo de Sierpinski é definido _recursivamente_:
 # ╔═╡ 6b8883f6-e7b3-11ea-155e-6f62117e123b
 md"Para desenhar um triângulo de Sierpinski, nós vamos usar um pacote externo, [_Compose.jl_](https://giovineitalia.github.io/Compose.jl/latest/tutorial). Vamos configurar o ambiente e instalar o pacote.
 
-Um pacote é um software que possui um grupo de funcionalidades correlacionadas que podem ser usadas na forma de uma _caixa preta_ de acordo com sua especificação. Há [vários pacores Julia](https://juliahub.com/ui/Home).
+Um pacote é um software que possui um grupo de funcionalidades correlacionadas que podem ser usadas na forma de uma _caixa preta_ de acordo com sua especificação. Há [vários pacotes Julia](https://juliahub.com/ui/Home).
 "
 
 # ╔═╡ dbc4da6a-e7b4-11ea-3b70-6f2abfcab992
@@ -252,7 +252,7 @@ complexity = 3
 # ╔═╡ 1eb79812-e7b5-11ea-1c10-63b24803dd8a
 if complexity == 3
     md"""
-   Tente alterar valor de **`complexity` para `5`** na célular acima. 
+   Tente alterar valor de **`complexity` para `5`** na célula acima. 
 
    Aperte `Shift+Enter` para a mudança fazer efeito.
    	"""
@@ -343,7 +343,7 @@ function sierpinski(n)
     if n == 0
         triangle()
     else
-        t = sierpinski(n - 1) # constroi recursivamente um triângulo menor
+        t = sierpinski(n - 1) # constrói recursivamente um triângulo menor
         place_in_3_corners(t) # Coloca os três triângulos menores nos cantos 
                               # para formar o triângulo maior.
     end

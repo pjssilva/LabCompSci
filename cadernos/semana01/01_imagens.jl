@@ -114,7 +114,7 @@ html"""
 md"""
 Ao abrir uma imagem no computador e ampliar, iremos ver que elas são armazenadas como uma matriz de pequenos quadrados chamados de **pixels** (que vem do inglês "picture elements"). Cada pixel é preenchido com uma cor única. Eles são então organizados em uma grade retangular bidimensional.
 
-Como tudo no computador, essas cores são representadas por números. Nesse caso, usamos o formato RGB (níveis de cor em três canais, representáveis numericamente, de cores de tom vermelho (Red), verde (Green) e azul (Blue)). Essas cores vem do fato que o olho humano possui três [cones fotoreceptores](https://en.wikipedia.org/wiki/Cone_cell): tecidos especiais que funcionam como receptor de luz e que são sensíveis, vagamente a essas três frequências. 
+Como tudo no computador, essas cores são representadas por números. Nesse caso, usamos o formato RGB (níveis de cor em três canais, representáveis numericamente, de cores de tom vermelho (Red), verde (Green) e azul (Blue)). Essas cores vem do fato que o olho humano possui três [cones fotorreceptores](https://en.wikipedia.org/wiki/Cone_cell): tecidos especiais que funcionam como receptor de luz e que são sensíveis, vagamente a essas três frequências. 
 
 Lembrem-se que muitas imagens são apenas representações **aproximadas** da realidade. Elas são discretas e bidimensionais e tentam capturar uma realidade tridimensional.
 """
@@ -169,7 +169,7 @@ md"_Oi, Apolo!_ 🤩️"
 
 # ╔═╡ c99d2aa8-601e-11eb-3469-497a246db17c
 md"""
-O caderno Pluto reconheceu e apresentou o objeto que representa a imagem do Apolo, um cão SRD que vive comigo. Ele será usado com exemplo nesse curso algumas vezes, substituindo o corgi do professor Eldelman, um dos autores originais deste caderno.
+O caderno Pluto reconheceu e apresentou o objeto que representa a imagem do Apolo, um cão SRD que vive comigo. Ele será usado com exemplo nesse curso algumas vezes, substituindo o corgi do professor Edelman, um dos autores originais deste caderno.
 
 Pobre Apolo, ele vai ter que passar por várias "transformações" ao longo de nosso curso!
 """
