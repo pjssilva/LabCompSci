@@ -37,7 +37,7 @@ md"""
 
 Este caderno contem _verificações ativas das respostas_! Em alguns exercícios você verá uma caixa colorida que roda alguns casos simples de teste e provê retorno imediato para a sua solução. Edite sua solução, execute a célula e verifique se passou na verificação. Note que a verificação feita é apenas superficial. Para a correção serão verificados mais casos e você tem a obrigação de escrever código que funcione adequadamente.
 
-Pergunte o quanto quiser (uso o Discord)!
+Pergunte o quanto quiser (use o Discord)!
 """
 
 # ╔═╡ 911ccbce-ed68-11ea-3606-0384e7580d7c
