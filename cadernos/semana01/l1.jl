@@ -114,7 +114,10 @@ end
 mean([1, 2, 3])
 
 # ╔═╡ 1f229ca4-edee-11ea-2c56-bb00cc6ea53c
-md"👉 Defina `m` como a média de `random_vect`."
+md"👉 Defina `a_rand` como um vetor aleatório usando `random_vect` e `m` como sua média."
+
+# ╔═╡ 2a117896-6abe-4d7b-be5b-f43cecae86e4
+a_rand = missing # Substitua com seu código!
 
 # ╔═╡ 2a391708-edee-11ea-124e-d14698171b68
 m = missing # substitua `missing` com seu código!
@@ -866,7 +869,7 @@ elseif ismissing(m)
     still_missing()
 elseif !(m isa Number)
     keep_working(md"`m` deveria ser um número.")
-elseif m != mean(random_vect)
+elseif m != mean(a_rand)
     keep_working()
 else
     correct()
@@ -2068,8 +2071,9 @@ uuid = "3f19e933-33d8-53b3-aaab-bd5110c3b7a0"
 # ╠═1f104ce4-ee0e-11ea-2029-1d9c817175af
 # ╟─38dc80a0-edef-11ea-10e9-615255a4588c
 # ╟─1f229ca4-edee-11ea-2c56-bb00cc6ea53c
+# ╠═2a117896-6abe-4d7b-be5b-f43cecae86e4
 # ╠═2a391708-edee-11ea-124e-d14698171b68
-# ╟─2b1ccaca-edee-11ea-34b0-c51659f844d0
+# ╠═2b1ccaca-edee-11ea-34b0-c51659f844d0
 # ╟─e2863d4c-edef-11ea-1d67-332ddca03cc4
 # ╟─ea8d92f8-159c-4161-8c54-bab7bc00f290
 # ╠═ec5efe8c-edef-11ea-2c6f-afaaeb5bc50c
