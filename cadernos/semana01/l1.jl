@@ -68,7 +68,7 @@ example_vector = [0.5, 0.4, 0.3, 0.2, 0.1, 0.0, 0.7, 0.0, 0.7, 0.9]
 
 # ╔═╡ ad6a33b0-eded-11ea-324c-cfabfd658b56
 md"""
-#### Exericício 1.1
+#### Exercício 1.1
 👉 Escreva uma função que cria um vetor de `Float64` chamado `random_vect` de comprimento 10 usando a função `rand`. Você pode olhar a definição dessa função usando o sistema de ajuda do Pluto.
 """
 
@@ -157,7 +157,7 @@ test_vect = let
 
 
     ####
-    # Esta célula é meio estranho mas está aqui para evitar o problema comum
+    # Esta célula é meio estranha mas está aqui para evitar um problema comum.
     # Ela gera novamente o mesmo vetor se você criou uma função que o altera
 
     # Ignore isso e continue com o seu exercício!
