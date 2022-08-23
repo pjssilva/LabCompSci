@@ -7,7 +7,11 @@ using InteractiveUtils
 # This Pluto notebook uses @bind for interactivity. When running this notebook outside of Pluto, the following 'mock version' of @bind gives bound variables a default value (instead of an error).
 macro bind(def, element)
     quote
-        local iv = try Base.loaded_modules[Base.PkgId(Base.UUID("6e696c72-6542-2067-7265-42206c756150"), "AbstractPlutoDingetjes")].Bonds.initial_value catch; b -> missing; end
+        local iv = try
+            Base.loaded_modules[Base.PkgId(Base.UUID("6e696c72-6542-2067-7265-42206c756150"), "AbstractPlutoDingetjes")].Bonds.initial_value
+        catch
+            b -> missing
+        end
         local el = $(esc(element))
         global $(esc(def)) = Core.applicable(Base.get, el) ? Base.get(el) : iv(el)
         el
@@ -27,7 +31,7 @@ end
 md"Tradução livre de [`images.jl`](https://github.com/mitmath/18S191/blob/Spring21/notebooks/week1/images.jl)"
 
 # ╔═╡ d07fcdb0-7afc-4a25-b68a-49fd1e3405e7
-PlutoUI.TableOfContents(title = "Índice", aside = true)
+PlutoUI.TableOfContents(title="Índice", aside=true)
 
 # ╔═╡ 9b49500c-0164-4556-a17b-7595e35c5ede
 md"""
@@ -247,10 +251,10 @@ md"""
 """
 
 # ╔═╡ 08d61afb-c641-4aa9-b995-2552af89f3b8
-@bind row_i Slider(1:apolo_height, show_value = true)
+@bind row_i Slider(1:apolo_height, show_value=true)
 
 # ╔═╡ 6511a498-7ac9-445b-9c15-ec02d09783fe
-@bind col_i Slider(1:apolo_width, show_value = true)
+@bind col_i Slider(1:apolo_width, show_value=true)
 
 # ╔═╡ 94b77934-713e-11eb-18cf-c5dc5e7afc5b
 row_i, col_i
@@ -585,8 +589,8 @@ Para concatenar matrizes podemos usar a justaposição usando uma sintaxe semelh
 
 # ╔═╡ 8433b862-60ee-11eb-0cfc-add2b72997dc
 [
-    apolo_head reverse(apolo_head, dims = 2)
-    reverse(apolo_head, dims = 1) rot180(apolo_head)
+    apolo_head reverse(apolo_head, dims=2)
+    reverse(apolo_head, dims=1) rot180(apolo_head)
 ]
 
 # ╔═╡ 5e52d12e-64d7-11eb-0905-c9038a404e24
@@ -611,7 +615,7 @@ Nós definimos o slider através de
 """
 
 # ╔═╡ b37c9868-64d7-11eb-3033-a7b5d3065f7f
-@bind number_reds Slider(1:100, show_value = true)
+@bind number_reds Slider(1:100, show_value=true)
 
 # ╔═╡ b1dfe122-64dc-11eb-1104-1b8852b2c4c5
 md"""
@@ -686,11 +690,11 @@ hint(text) = Markdown.MD(Markdown.Admonition("dica", "Dica", [text]))
 almost(text) = Markdown.MD(Markdown.Admonition("aviso", "Quase lá!", [text]))
 
 # ╔═╡ e083bef6-601b-11eb-2134-e3063d5c4253
-still_missing(text = md"Substitua `missing` com sua resposta.") =
+still_missing(text=md"Substitua `missing` com sua resposta.") =
     Markdown.MD(Markdown.Admonition("aviso", "Vamos lá!", [text]))
 
 # ╔═╡ e08ecb84-601b-11eb-0e25-152ed3a262f7
-keep_working(text = md"The answer is not quite right.") =
+keep_working(text=md"The answer is not quite right.") =
     Markdown.MD(Markdown.Admonition("danger", "Keep working on it!", [text]))
 
 # ╔═╡ e09036a4-601b-11eb-1a8b-ef70105ab91c
@@ -707,7 +711,7 @@ yays = [
 ]
 
 # ╔═╡ e09af1a2-601b-11eb-14c8-57a46546f6ce
-correct(text = rand(yays)) =
+correct(text=rand(yays)) =
     Markdown.MD(Markdown.Admonition("correto", "Você entendeu!", [text]))
 
 # ╔═╡ e0a4fc10-601b-11eb-211d-03570aca2726
@@ -745,7 +749,7 @@ end
 bigbreak = html"<br><br><br><br><br>";
 
 # ╔═╡ e0b15582-601b-11eb-26d6-bbf708933bc8
-function camera_input(; max_size = 150, default_url = "https://i.imgur.com/SUmi94P.png")
+function camera_input(; max_size=150, default_url="https://i.imgur.com/SUmi94P.png")
     """
     <span class="pl-image waiting-for-permission">
     <style>
@@ -1043,13 +1047,13 @@ ct-answer {
 """
 
 # ╔═╡ 61b29e7d-5aba-4bc8-870b-c1c43919c236
-exercise(x, number = "") = @htl("""
-                            <ct-exercise class="exercise">
-                            <h4>Exercise <span>$(number)</span></h4>
-                            <section>$(x)
-                            </section>
-                            </ct-exercise>
-                            """)
+exercise(x, number="") = @htl("""
+                          <ct-exercise class="exercise">
+                          <h4>Exercise <span>$(number)</span></h4>
+                          <section>$(x)
+                          </section>
+                          </ct-exercise>
+                          """)
 
 # ╔═╡ a9fef6c9-e911-4d8c-b141-a4832b40a260
 quick_question(x, number, options, correct) =
