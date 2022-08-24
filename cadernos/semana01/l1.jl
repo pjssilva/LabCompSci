@@ -170,7 +170,7 @@ test_vect = let
 end
 
 # ╔═╡ 29e10640-edf0-11ea-0398-17dbf4242de3
-md"Para verificar  a sua função, vamos veriricar se a média do vetor após `demean(test_vect)` é 0 : (_Devido a erros de arredondamento de ponto flutuante o valor pode *não* ser *exatamente* 0._)"
+md"Para verificar a sua função, vamos verificar se a média do vetor após `demean(test_vect)` é 0 : (_Devido a erros de arredondamento de ponto flutuante o valor pode *não* ser *exatamente* 0._)"
 
 # ╔═╡ 38155b5a-edf0-11ea-3e3f-7163da7433fb
 demeaned_test_vect = demean(test_vect)
