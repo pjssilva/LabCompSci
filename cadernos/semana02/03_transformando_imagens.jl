@@ -41,7 +41,7 @@ PlutoUI.TableOfContents(aside=true)
 
 # ╔═╡ 9f1a72da-7532-11eb-079c-b7baccc6614a
 md"""
-#### Intializing packages
+#### Iniciando os pacotes
 
 _Ao executar esse notebook a primeira ele pode levar até 15 min, tenha paciência!_
 """
@@ -62,7 +62,7 @@ md"""
 
 Passar do tempo é um dos piores erros que um palestrante pode fazer. Vamos aqui seguir a sugestão do von Neumann e tentar limitar nossas aulas a um microséculo.  Depois disso, ele dizia que a atenção da audiência se perdia mesmo se ele estivesse apresentando uma demonstração da hipótese de Riemann. Um minuto de estouro já pode arruinar uma ótima apresentação (de "Indiscrete Thoughts" by Rota, Chpt 18, 10 Lessons I Wish I Had Been Taught).
 
-Tá, mas porque estou falando isso? É só para mostrar mais um pacote de Julia.  Uma boa linguagem deve ter ao seu redor um rico ecosistema que extende as suas capacidades para problemas além da biblioteca padrão. Isso é verdade mesmo para Python, que tenta seguir o mandra de vir "com baterias inclusas". Outra característa interessante da linguagem é disponibilizar ferramentas para "estender sintaxe" criando formas naturais de escrever código que expresse as novas construções.
+Tá, mas porque estou falando isso? É só para mostrar mais um pacote de Julia.  Uma boa linguagem deve ter ao seu redor um rico ecossistema que estende as suas capacidades para problemas além da biblioteca padrão. Isso é verdade mesmo para Python, que tenta seguir o mandra de vir "com baterias inclusas". Outra característica interessante da linguagem é disponibilizar ferramentas para "estender sintaxe" criando formas naturais de escrever código que expresse as novas construções.
 
 O pacote `Unitful.jl` é um pacote para dar suporte a unidades de medida (físicas) permitindo manter unidades associadas a valores de forma eficiente, permitindo análise dimensional e outras funcionalidades. Vejamos ele em ação.
 """
@@ -94,7 +94,7 @@ uconvert(u"J", PotentialEnergy)
 
 # ╔═╡ fc70c4d2-74f8-11eb-33f5-539c278ed6b6
 md"""
-Adicionar a informação de unidades ao números *funciona naturalmente* em Julia. Isso é feito com cuidado para não penalizar o tempo de execução. Já o uso de strings especiais definidas pelo usuário, que são marcadas por um código antes do abre aspas como no caso de Markdown (md), LaTeX (L) e agora unidades de medida (u), ajudarm a deixar o código legível. Essa é uma das muitas características que fazem de Julia uma ótima linguagem para programar. Por exemplo, com as unidades bem definidas, se no final de uma conta que deveria calcular energia obtemos algo em m/s sabemos que há um erro em algum lugar e temos até uma dica que qual tipo de erro para procurar. O sistema também ajuda a pegar situações onde você mistura unidades incompatiíveis.
+Adicionar a informação de unidades ao números *funciona naturalmente* em Julia. Isso é feito com cuidado para não penalizar o tempo de execução. Já o uso de strings especiais definidas pelo usuário, que são marcadas por um código antes do abre aspas como no caso de Markdown (md), LaTeX (L) e agora unidades de medida (u), ajudaram a deixar o código legível. Essa é uma das muitas características que fazem de Julia uma ótima linguagem para programar. Por exemplo, com as unidades bem definidas, se no final de uma conta que deveria calcular energia obtemos algo em m/s sabemos que há um erro em algum lugar e temos até uma dica que qual tipo de erro para procurar. O sistema também ajuda a pegar situações onde você mistura unidades incompatíveis.
 """
 
 # ╔═╡ c9ce62a6-f368-49f9-b473-fa88224e07e3
@@ -113,7 +113,7 @@ md"Durante esse curso veremos outras funcionalidades da linguagem que ajudam a e
 md"""
 #### Lembrete
 
-**Você pode trocar as figuras abaixos pelas suas próprias figuras**
+**Você pode trocar as figuras abaixo pelas suas próprias figuras**
 
 Simplesmente troque a URL ou a localização do arquivo.
 """
@@ -130,7 +130,7 @@ md"""
 
 # ╔═╡ 39552b7a-74fb-11eb-04e0-3981ada52c92
 md"""
-Como pixelar um cachorro? A figura abaixo está online, mas vamos pixelar um
+Como "pixelar" um cachorro? A figura abaixo está online, mas vamos pixelar um
 cachorro real.
 """
 
@@ -168,7 +168,7 @@ md"""
 
 # ╔═╡ 8711c698-7500-11eb-2505-d35a4de169b4
 md"""
-Uma das ideias fundamentais de Matemática são as _combinações linares_ tópico essencial do curso de Álgebra Linar. Lembrando, uma combinação linear é composta de operações do tipo:
+Uma das ideias fundamentais de Matemática são as _combinações lineares_ tópico essencial do curso de Álgebra Linear. Lembrando, uma combinação linear é composta de operações do tipo:
 
 - escalamento: multiplicar um objeto por um escalar de maneira a ampliá-lo, encolhê-lo e/ou invertê-lo.
 
@@ -249,12 +249,12 @@ Vamos escrever abaixo uma versão interativa do código acima que nos permite ob
 
 # ╔═╡ 30b1c1f0-7504-11eb-1be7-a9463caea809
 md"""
-Algo intenressante que o prof. Edelman, autor desse caderno, notou e que também ocorre comigo é que olhando para essa imagem o meu cérebro parece preferir ver o Apolo "de pé" no lugar do Apolo "de cabeça-para-baixo". Mas a imavem é criada com a média aritmética dos dois, não há motivo "matemático" para isso ocorrer. Aqui é um dos momentos que o nosso cérebro tenta ser esperto e acaba "escolhendo" o que é mais natural para ele. Para mim eu preciso pegar numa combinação do tipo α = 0.4 (o peso da imagem em pé), para achar que as duas versões estão "equilibradas".
+Algo interessante que o prof. Edelman, autor desse caderno, notou e que também ocorre comigo é que olhando para essa imagem o meu cérebro parece preferir ver o Apolo "de pé" no lugar do Apolo "de cabeça-para-baixo". Mas a imagem é criada com a média aritmética dos dois, não há motivo "matemático" para isso ocorrer. Aqui é um dos momentos que o nosso cérebro tenta ser esperto e acaba "escolhendo" o que é mais natural para ele. Para mim eu preciso pegar numa combinação do tipo α = 0.4 (o peso da imagem em pé), para achar que as duas versões estão "equilibradas".
 """
 
 # ╔═╡ 1fe70e38-751b-11eb-25b8-c741e1726613
 md"""
-Há uma área do conhecimento que tenta lidar com isso, chamada psicometria. Ela tenta analisar como nosso cérebro usa as medidas para construir um modelo do mundo em torno de nós. Esse tipo de informação pode ser útil e é explorado em soluções tecnológicas. Por exemplo modelos [psicoacústicos](https://pt.wikipedia.org/wiki/Psicoac%C3%BAstica) são usados no desenvolveminto de codecs de audio como o MP3, Vorbis ou Celph.
+Há uma área do conhecimento que tenta lidar com isso, chamada psicometria. Ela tenta analisar como nosso cérebro usa as medidas para construir um modelo do mundo em torno de nós. Esse tipo de informação pode ser útil e é explorado em soluções tecnológicas. Por exemplo modelos [psicoacústicos](https://pt.wikipedia.org/wiki/Psicoac%C3%BAstica) são usados no desenvolvimento de codecs de audio como o MP3, Vorbis ou Celph.
 
 Sobre esse fenômeno específico de imagens de rostos é certamente estudado. Ele é conhecido como [efeito de inversão de faces](https://en.wikipedia.org/wiki/Face_inversion_effect#:~:text=The%20face%20inversion%20effect%20is,same%20for%20non%2Dfacial%20objects.&text=The%20most%20supported%20explanation%20for,is%20the%20configural%20information%20hypothesis)
 e está relacionado ao [efeito Thatcher](https://en.wikipedia.org/wiki/Thatcher_effect#:~:text=The%20Thatcher%20effect%20or%20Thatcher,obvious%20in%20an%20upright%20face).
@@ -282,7 +282,7 @@ Se usamos um programa de processamento de imagens, como o Gimp ou Photoshop, vem
 1. Pixelar (Pixelate)
 3. Distorções
 
-Algumas dessas transformações, como desfocar, aumentar nitiditez ou encontrar bordas, são exemplos de covoluções que podem ser implementadas de forma muito eficiente e aparecem naturalmente em aplicações de aprendizado de máquina, em particular em reconhecimento de imagens.
+Algumas dessas transformações, como desfocar, aumentar nitidez ou encontrar bordas, são exemplos de convoluções que podem ser implementadas de forma muito eficiente e aparecem naturalmente em aplicações de aprendizado de máquina, em particular em reconhecimento de imagens.
 """
 
 # ╔═╡ 7489a570-74a3-11eb-1d0b-09d41604ffe1
@@ -292,7 +292,7 @@ md"""
 
 # ╔═╡ 8a8e3f5e-74b2-11eb-3eed-e5468e573e45
 md"""
-Vamos começar vendo uma rápida introdução a filtros de covolução feitas pelo 3Blue1Brown (Grant Sanderson) em uma das versões originais desse curso. Vamos usar apenas uns trechos curtos e depois discutí-los com vocês. Mas é claro que podem assistir a versão completa do vídeo depois se quiserem.
+Vamos começar vendo uma rápida introdução a filtros de covolução feitas pelo 3Blue1Brown (Grant Sanderson) em uma das versões originais desse curso. Vamos usar apenas uns trechos curtos e depois discuti-los com vocês. Mas é claro que podem assistir a versão completa do vídeo depois se quiserem.
 """
 
 # ╔═╡ 5864294a-74a5-11eb-23ef-f38a582f2c2d
@@ -307,10 +307,10 @@ md"""
 
 # ╔═╡ 4fab4616-74b0-11eb-0088-6b50237d7d54
 md"""
-O que são esses filtros de convoluções? Bom você pode ler a página da Wikepedia sobre [Kernels]
+O que são esses filtros de convoluções? Bom você pode ler a página da Wikipedia sobre [Kernels]
 (https://en.wikipedia.org/wiki/Kernel_(image_processing)). Mas vou tentar fazer uma rápida explicação própria.
 
-Um filtro de covolução é baseado na ideia de contruir uma nova imagem cujos pixels são obtidos por uma "conta simples" feita entre pixels vizinhos. Isso pode ser feito imaginando, como no vídeo, que colocamos uma matriz centrada no pixel que queremos calcular. Essa matriz seleciona o pixel central e seus vizinhos e multiplica todos os pixels pelos valores de suas entradas calculando e soma os resultados obtendo o valor final. Obtemos então um efeito diferente dependendo da estrutura (dimensões) da matriz e dos valores usados no produto. No exemplo do vídeom, a matriz modelava a ideia de se calcular a média entre todos os vizinhos e isso gerava um efeito de desfocagem.
+Um filtro de convolução é baseado na ideia de construir uma nova imagem cujos pixels são obtidos por uma "conta simples" feita entre pixels vizinhos. Isso pode ser feito imaginando, como no vídeo, que colocamos uma matriz centrada no pixel que queremos calcular. Essa matriz seleciona o pixel central e seus vizinhos e multiplica todos os pixels pelos valores de suas entradas calculando e soma os resultados obtendo o valor final. Obtemos então um efeito diferente dependendo da estrutura (dimensões) da matriz e dos valores usados no produto. No exemplo do vídeo, a matriz modelava a ideia de se calcular a média entre todos os vizinhos e isso gerava um efeito de desfocagem.
 
 Outros efeitos são possíveis de acordo com a matriz escolhida. Vamos ver alguns exemplos abaixo e pensar porque o efeito obtido ocorre.
 """
@@ -369,7 +369,7 @@ end
 md"""
 ### Análise Complexidade (tempo de execução)
 
-De uma forma geral o tempo de execução é dominando por acessar a imagem e fazer as operações necessárias (mulplicações e somas). Ele será proporcional então ao
+De uma forma geral o tempo de execução é dominando por acessar a imagem e fazer as operações necessárias (multiplicações e somas). Ele será proporcional então ao
 
 **Número de pixels na imagem × Número de células no núcleo**
 
@@ -380,9 +380,9 @@ Nesse sentido, os núcleos menores resultam em menor tempo de execução. Porém
 md"""
 ### Arquitetura de hardware: GPUs (Unidades de processamento gráfico)
 
-O uso de kernels de convolução em imagens é um exemplo típico de operações usadas em seu processamento. Elas normalmente resultam um um grupo de operações simples e bem estruturadas que devem ser realizadas em enorme quantidade e com pouca interdependência entre si. Para isso, com o tempo, os fabricantes de placas gráficas começaram a criar hardware específico que é capaz de realizar essas operações de forma muito rápida explorando o seu paralelismo intríncisco. Com isso nasceram as placas de aceleração para gráficos, as GPUs. Elas são compostas de uma grande quantidade de processadores que conseguem realizar esse tipo de operações de forma paralela e muito eficiente.
+O uso de kernels de convolução em imagens é um exemplo típico de operações usadas em seu processamento. Elas normalmente resultam um um grupo de operações simples e bem estruturadas que devem ser realizadas em enorme quantidade e com pouca interdependência entre si. Para isso, com o tempo, os fabricantes de placas gráficas começaram a criar hardware específico que é capaz de realizar essas operações de forma muito rápida explorando o seu paralelismo intrínseco. Com isso nasceram as placas de aceleração para gráficos, as GPUs. Elas são compostas de uma grande quantidade de processadores que conseguem realizar esse tipo de operações de forma paralela e muito eficiente.
 
-É interessante que com o tempo começou-se a usar as placas acelaradoras gráficas para realizar outras operações matemáticas que não estavam relacionadas diretamente ao processamento de imagens. Isso porque em outros domínios também há algoritmos que necessitam dessas de operações repetitivas, estruturadas e facilmente paralelizáveis. Assim, hoje em dia muitos dos supercomputadores são compostos por uma mistura de CPUs e GPUs que se adequam ao tipo de processamento que se pretende fazer. As CPUs funcionam melhor para lidar com operações de fluxo mais complexo, já as GPUs brilham com operações altamente estruturadas e repetitivas.
+É interessante que com o tempo começou-se a usar as placas aceleradoras gráficas para realizar outras operações matemáticas que não estavam relacionadas diretamente ao processamento de imagens. Isso porque em outros domínios também há algoritmos que necessitam dessas de operações repetitivas, estruturadas e facilmente paralelizáveis. Assim, hoje em dia muitos dos supercomputadores são compostos por uma mistura de CPUs e GPUs que se adéquam ao tipo de processamento que se pretende fazer. As CPUs funcionam melhor para lidar com operações de fluxo mais complexo, já as GPUs brilham com operações altamente estruturadas e repetitivas.
 """
 
 # ╔═╡ 844ed844-74b3-11eb-2ee1-2de664b26bc6
@@ -392,7 +392,7 @@ md"""
 
 # ╔═╡ 4ffe927c-74b4-11eb-23a7-a18d7e51c75b
 md"""
-Uma variação dos filtros de desfocagem que é muito útil são os filtros gaussianos. Neles dá-se maior peso ao centro do núcleo (onde está o pixel resultante) e eles decaem continuamente para as extremidades diminuido o peso a medida que se afastam do centro. Vamos mais uma vez pedir ajuda ao nosso amigo Grant Sanderson (atenção ao trecho 4:35-7:00, com ênfase no instante 5:23):
+Uma variação dos filtros de desfocagem que é muito útil são os filtros gaussianos. Neles dá-se maior peso ao centro do núcleo (onde está o pixel resultante) e eles decaem continuamente para as extremidades diminuído o peso a medida que se afastam do centro. Vamos mais uma vez pedir ajuda ao nosso amigo Grant Sanderson (atenção ao trecho 4:35-7:00, com ênfase no instante 5:23):
 """
 
 # ╔═╡ 91109e5c-74b3-11eb-1f31-c50e436bc6e0
@@ -480,7 +480,7 @@ md"""
 
 # ╔═╡ df060a88-7507-11eb-034b-5346d67a0e0d
 md"""
-Para entender isso basata pensar na relação entre derivadas e integrais. Se substituirmos f(x) por g(x) = ∫ f(t) dt for x-r ≤ t ≤ x+r, vamos suavizar (ou desfocar, misturar) o comportamento de f. Já quando calculamos a derivadas, estamos olhando para as mudanças (as variações), assim vamos detectar momentos de rápidas mudanças e com isso "detectar as bordas".
+Para entender isso, basta pensar na relação entre derivadas e integrais. Se substituirmos f(x) por g(x) = ∫ f(t) dt for x-r ≤ t ≤ x+r, vamos suavizar (ou desfocar, misturar) o comportamento de f. Já quando calculamos a derivadas, estamos olhando para as mudanças (as variações), assim vamos detectar momentos de rápidas mudanças e com isso "detectar as bordas".
 """
 
 # ╔═╡ 60c8db60-7506-11eb-1468-c989809c933a
@@ -1829,7 +1829,7 @@ version = "1.4.1+0"
 # ╟─1fe70e38-751b-11eb-25b8-c741e1726613
 # ╟─215291ec-74a2-11eb-3476-0dab43fd5a5e
 # ╟─61db42c6-7505-11eb-1ddf-05e906234572
-# ╠═cdd4cffc-74b1-11eb-1aa4-e333cb8601d1
+# ╟─cdd4cffc-74b1-11eb-1aa4-e333cb8601d1
 # ╟─7489a570-74a3-11eb-1d0b-09d41604ffe1
 # ╟─8a8e3f5e-74b2-11eb-3eed-e5468e573e45
 # ╟─5864294a-74a5-11eb-23ef-f38a582f2c2d
@@ -1842,7 +1842,7 @@ version = "1.4.1+0"
 # ╟─275bf7ac-74b3-11eb-32c3-cda1e4f1f8c2
 # ╟─c6e340ee-751e-11eb-3ca7-69595b3693b7
 # ╟─844ed844-74b3-11eb-2ee1-2de664b26bc6
-# ╠═4ffe927c-74b4-11eb-23a7-a18d7e51c75b
+# ╟─4ffe927c-74b4-11eb-23a7-a18d7e51c75b
 # ╟─91109e5c-74b3-11eb-1f31-c50e436bc6e0
 # ╠═34109062-7525-11eb-10b3-d59d3a6dfda6
 # ╟─9ab89a3a-7525-11eb-186d-29e4b61deb7f
