@@ -39,7 +39,7 @@ end
 md"Tradução livre de [`transformations_and_autodiff.jl`](https://github.com/mitmath/18S191/blob/Spring21/notebooks/week2/transformations_and_autodiff.jl)"
 
 # ╔═╡ b7895bd2-7634-11eb-211e-ef876d23bd88
-PlutoUI.TableOfContents(aside = true)
+PlutoUI.TableOfContents(aside=true)
 
 # ╔═╡ e6a09409-f262-453b-a434-bfd935306719
 md"""
@@ -95,7 +95,7 @@ x -> sin(x)
 
 # ╔═╡ c6c860a6-76ab-11eb-1dec-1b2f179a0fa9
 # Long version
-function f₃(x, α = 3) # Valor default
+function f₃(x, α=3) # Valor default
     return x^α      # O "return" é opcional
 end
 
@@ -114,7 +114,7 @@ Argumentos com nomes (keywords)
 f₄(x; α) = x^α
 
 # ╔═╡ 87b99c8a-76ac-11eb-1c94-8f1ffe3be593
-f₄(2, α = 5)
+f₄(2, α=5)
 
 # ╔═╡ 504076fc-76ac-11eb-30c3-bfa75c991cb2
 md"""
@@ -523,12 +523,9 @@ md"""
 
 # ╔═╡ 40655bcc-6d1e-4d1e-9726-41eab98d8472
 img_sources = [
-    "https://www.ime.unicamp.br/~pjssilva/images/ensino/labcompsci/carmel-arquelau-bV3RXy9Upqg-unsplash.png" =>
-        "Tucano",
-    "https://www.ime.unicamp.br/~pjssilva/images/ensino/labcompsci/matt-paul-catalano-MUwfuO5RXEo-unsplash.png" =>
-        "Onda",
-    "https://user-images.githubusercontent.com/6933510/108883855-39690f80-7606-11eb-8eb1-e595c6c8d829.png" =>
-        "Setas",
+    "https://www.ime.unicamp.br/~pjssilva/images/ensino/labcompsci/carmel-arquelau-bV3RXy9Upqg-unsplash.png" => "Tucano",
+    "https://www.ime.unicamp.br/~pjssilva/images/ensino/labcompsci/matt-paul-catalano-MUwfuO5RXEo-unsplash.png" => "Onda",
+    "https://user-images.githubusercontent.com/6933510/108883855-39690f80-7606-11eb-8eb1-e595c6c8d829.png" => "Setas",
 ]
 
 # ╔═╡ c0c90fec-0e55-4be3-8ea2-88b8705ee258
@@ -589,7 +586,7 @@ function transform_image(T, img::AbstractMatrix)
 end
 
 # ╔═╡ 83d45d42-7406-11eb-2a9c-e75efe62b12c
-function with_gridlines(img::Matrix; n = 10)
+function with_gridlines(img::Matrix; n=10)
     rows, cols = size(img)
     result = copy(img)
 
