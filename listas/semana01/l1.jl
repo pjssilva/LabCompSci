@@ -7,7 +7,11 @@ using InteractiveUtils
 # This Pluto notebook uses @bind for interactivity. When running this notebook outside of Pluto, the following 'mock version' of @bind gives bound variables a default value (instead of an error).
 macro bind(def, element)
     quote
-        local iv = try Base.loaded_modules[Base.PkgId(Base.UUID("6e696c72-6542-2067-7265-42206c756150"), "AbstractPlutoDingetjes")].Bonds.initial_value catch; b -> missing; end
+        local iv = try
+            Base.loaded_modules[Base.PkgId(Base.UUID("6e696c72-6542-2067-7265-42206c756150"), "AbstractPlutoDingetjes")].Bonds.initial_value
+        catch
+            b -> missing
+        end
         local el = $(esc(element))
         global $(esc(def)) = Core.applicable(Base.get, el) ? Base.get(el) : iv(el)
         el
@@ -1283,11 +1287,11 @@ end
 
 # ╔═╡ 86b9f767-71f2-49a8-ad2d-2489293d4127
 function process_raw_camera_data(raw_camera_data::Missing)
-	# Avoid error when running without webcam by returning a simple white image.
-	reds = [1.0 1.0; 1.0 1.0]
-	greens = [1.0 1.0; 1.0 1.0]
-	blues = [1.0 1.0; 1.0 1.0]
-	RGB.(reds, greens, blues)
+    # Avoid error when running without webcam by returning a simple white image.
+    reds = [1.0 1.0; 1.0 1.0]
+    greens = [1.0 1.0; 1.0 1.0]
+    blues = [1.0 1.0; 1.0 1.0]
+    RGB.(reds, greens, blues)
 end
 
 # ╔═╡ ed9fb2ac-2680-42b7-9b00-591e45a5e105
@@ -2193,9 +2197,9 @@ uuid = "3f19e933-33d8-53b3-aaab-bd5110c3b7a0"
 
 # ╔═╡ Cell order:
 # ╟─8ef13896-ed68-11ea-160b-3550eeabbd7d
-# ╟─ac8ff080-ed61-11ea-3650-d9df06123e1f
+# ╠═ac8ff080-ed61-11ea-3650-d9df06123e1f
 # ╠═911ccbce-ed68-11ea-3606-0384e7580d7c
-# ╟─5f95e01a-ee0a-11ea-030c-9dba276aba92
+# ╠═5f95e01a-ee0a-11ea-030c-9dba276aba92
 # ╠═65780f00-ed6b-11ea-1ecf-8b35523a7ac0
 # ╟─29dfe3d6-c353-4081-8192-b12f374bf702
 # ╟─540ccfcc-ee0a-11ea-15dc-4f8120063397
