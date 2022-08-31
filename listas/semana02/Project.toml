@@ -1,0 +1,11 @@
+[deps]
+HypertextLiteral = "ac1192a8-f4b3-4bfe-ba22-af5b92cd3ab2"
+Images = "916415d5-f1e6-5110-898d-aaa5f9f070e0"
+OffsetArrays = "6fe1bfb0-de20-5000-8ca7-80f57d26f881"
+PlutoUI = "7f904dfe-b85e-4ff6-b463-dae2292396a8"
+
+[compat]
+HypertextLiteral = "~0.9.4"
+Images = "~0.25.2"
+OffsetArrays = "~1.12.7"
+PlutoUI = "~0.7.39"
