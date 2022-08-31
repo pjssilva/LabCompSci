@@ -157,7 +157,7 @@ upsample_apolo = kron(downsample_apolo, ones(r, r))
 
 # ╔═╡ 486d3022-74ff-11eb-1865-e15436bd9aad
 md"""
-Vejam que para "ampliar" a mensagem usamos o [produto de Kronecker](https://en.wikipedia.org/wiki/Kronecker_product), implementado pela função `kron` e uma matriz de uns obtida com `ones`.
+Vejam que para "ampliar" a imagem usamos o [produto de Kronecker](https://en.wikipedia.org/wiki/Kronecker_product), implementado pela função `kron` e uma matriz de uns obtida com `ones`.
 """
 
 # ╔═╡ b9da7332-74ff-11eb-241b-fb87e77d646a
