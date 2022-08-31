@@ -285,7 +285,7 @@ md"""
 Ótimo! Observe que ao extrair o o valor de um único canal fomos de uma matriz de cores (RGB) para uma matriz de números.
 
 #### Exercício 2.3
-Vamos tentar visualizar essa matriz. Por enquanto, ela é apenas uma matriz de números e portanto é visualizada de forma textual. Note que o sistema usa elipses para não mostra a matriz inteira, afinal de contas ela seria enorme. 
+Vamos tentar visualizar essa matriz. Por enquanto, ela é apenas uma matriz de números e portanto é visualizada de forma textual. Note que o sistema usa elipses para não mostrar a matriz inteira, afinal de contas ela seria enorme. 
 
 Mas, será que conseguimos **visualizar a matriz como uma imagem**?
 
@@ -378,7 +378,7 @@ _Ao final desse caderno você poderá ver os seus filtros aplicados a imagem qeu
 # ╔═╡ f68d4a36-ee07-11ea-0832-0360530f102e
 md"""
 #### Exercício 3.2
-👉 Dê uma olhada na documentação da função `floor`. Use-a para escrever uma função`quantize(x::Number)` que recebe um valor $x$ (que você pode considerar que está entre 0 e 1) and "quantiza" esse valor para pacotes de largura 0.1. Por exemplo, verifique 0.267 é mapeado a 0.2 e 0.91 para 0.9.
+👉 Dê uma olhada na documentação da função `floor`. Use-a para escrever uma função`quantize(x::Number)` que recebe um valor $x$ (que você pode considerar que está entre 0 e 1) e "quantiza" esse valor para pacotes de largura 0.1. Por exemplo, verifique que 0.267 é mapeado para 0.2 e 0.91 para 0.9.
 """
 
 # ╔═╡ fbd1638d-8d7a-4d12-aff9-9c160cc3fd74
@@ -425,7 +425,7 @@ double([1, 2, 37])
 
 # ╔═╡ a8a597e0-a01c-40cd-9902-d56430afd938
 md"""
-Isso é chamado de **despacho múltiplo** e e uma das características principais de Julia. Nesse curso veremos vários exemplos dessa ideia em ação como forma de criar abstrações flexíveis e fáceis de entender.
+Isso é chamado de **despacho múltiplo** e é uma das características principais de Julia. Nesse curso veremos vários exemplos dessa ideia em ação como forma de criar abstrações flexíveis e fáceis de entender.
 """
 
 # ╔═╡ f6b218c0-ee07-11ea-2adb-1968c4fd473a
@@ -468,7 +468,7 @@ quantize(apolo)
 # ╔═╡ f6d6c71a-ee07-11ea-2b63-d759af80707b
 md"""
 #### Exercício 3.5
-👉 Escreva uma função `noisify(x::Number, s)` que adiciona uma intensidade aleatória $s$ ao valor $x$, i.e. ela adiciona um valor aletório entre $-s$ e $+s$ a $x$. Se, após a soma, o valor cair fora do intervalo $[0, 1]$ você deve truncar a resposta para caber nessa faixa. (Julia tem uma função já pronta chamada `clamp` que vai lhe ajudar nisso, ou você pode escrever a sua função do zero.)
+👉 Escreva uma função `noisify(x::Number, s)` que adiciona uma intensidade aleatória $s$ ao valor $x$, i.e. ela adiciona um valor aleatório entre $-s$ e $+s$ a $x$. Se, após a soma, o valor cair fora do intervalo $[0, 1]$ você deve truncar a resposta para caber nessa faixa. (Julia tem uma função já pronta chamada `clamp` que vai lhe ajudar nisso, ou você pode escrever a sua função do zero.)
 """
 
 # ╔═╡ f38b198d-39cf-456f-a841-1ba08f206010
@@ -2258,7 +2258,7 @@ uuid = "3f19e933-33d8-53b3-aaab-bd5110c3b7a0"
 # ╠═c427554a-6f6a-43f1-b03b-f83239887cee
 # ╟─63ac142e-6d9d-4109-9286-030a02c900b4
 # ╟─50e2b0fb-b06d-4ac1-bdfb-eab833466736
-# ╟─4fd07e01-2f8b-4ec9-9f4f-8a9e5ff56fb6
+# ╠═4fd07e01-2f8b-4ec9-9f4f-8a9e5ff56fb6
 # ╠═97c15896-6d99-4292-b7d7-4fcd2353656f
 # ╠═cbb9bf41-4c21-42c7-b0e0-fc1ce29e0eb1
 # ╟─3f1a670b-44c2-4cab-909c-65f4ae9ed14b
@@ -2281,7 +2281,7 @@ uuid = "3f19e933-33d8-53b3-aaab-bd5110c3b7a0"
 # ╟─846b1330-ee0b-11ea-3579-7d90fafd7290
 # ╠═943103e2-ee0b-11ea-33aa-75a8a1529931
 # ╟─55b138b7-19fb-4da1-9eb1-1e8304528251
-# ╟─f68d4a36-ee07-11ea-0832-0360530f102e
+# ╠═f68d4a36-ee07-11ea-0832-0360530f102e
 # ╠═fbd1638d-8d7a-4d12-aff9-9c160cc3fd74
 # ╠═f6a655f8-ee07-11ea-13b6-43ca404ddfc7
 # ╟─c905b73e-ee1a-11ea-2e36-23b8e73bfdb6
@@ -2291,7 +2291,7 @@ uuid = "3f19e933-33d8-53b3-aaab-bd5110c3b7a0"
 # ╟─23fcd65f-0182-41f3-80ec-d85b05136c47
 # ╠═5055b74c-b98d-41fa-a0d8-cb36200d82cc
 # ╠═8db17b2b-0cf9-40ba-8f6f-2e53be7b6355
-# ╟─a8a597e0-a01c-40cd-9902-d56430afd938
+# ╠═a8a597e0-a01c-40cd-9902-d56430afd938
 # ╟─f6b218c0-ee07-11ea-2adb-1968c4fd473a
 # ╠═04e6b486-ceb7-45fe-a6ca-733703f16357
 # ╟─a6d9635b-85ed-4590-ad09-ca2903ea8f1d
@@ -2299,7 +2299,7 @@ uuid = "3f19e933-33d8-53b3-aaab-bd5110c3b7a0"
 # ╠═13e9ec8d-f615-4833-b1cf-0153010ccb65
 # ╟─25dad7ce-ee0b-11ea-3e20-5f3019dd7fa3
 # ╠═9751586e-ee0c-11ea-0cbb-b7eda92977c9
-# ╟─f6d6c71a-ee07-11ea-2b63-d759af80707b
+# ╠═f6d6c71a-ee07-11ea-2b63-d759af80707b
 # ╠═f38b198d-39cf-456f-a841-1ba08f206010
 # ╠═8464d42a-6a01-443e-82f4-0ebf9efcc54c
 # ╟─31ef3710-e4c9-4aa7-bd8f-c69cc9a977ee
