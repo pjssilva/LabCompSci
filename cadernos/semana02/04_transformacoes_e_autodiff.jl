@@ -370,7 +370,7 @@ end
 
 # ╔═╡ bf28c388-76bd-11eb-08a7-af2671218017
 md"""
-Em uma primeira leitura, a função "warp" parece meio sofisticada, mas ela nada mais uma do que uma rotação cujo ângulo de rotação aumenta a medida que nos afastamos da origem.
+Em uma primeira leitura, a função "warp" parece meio sofisticada, mas ela nada mais é do que uma rotação cujo ângulo de rotação aumenta a medida que nos afastamos da origem.
 
 Já rθ, nada mais é do que a mudança para coordenadas polares e a xy sua inversa.
 """
