@@ -7,11 +7,7 @@ using InteractiveUtils
 # This Pluto notebook uses @bind for interactivity. When running this notebook outside of Pluto, the following 'mock version' of @bind gives bound variables a default value (instead of an error).
 macro bind(def, element)
     quote
-        local iv = try
-            Base.loaded_modules[Base.PkgId(Base.UUID("6e696c72-6542-2067-7265-42206c756150"), "AbstractPlutoDingetjes")].Bonds.initial_value
-        catch
-            b -> missing
-        end
+        local iv = try Base.loaded_modules[Base.PkgId(Base.UUID("6e696c72-6542-2067-7265-42206c756150"), "AbstractPlutoDingetjes")].Bonds.initial_value catch; b -> missing; end
         local el = $(esc(element))
         global $(esc(def)) = Core.applicable(Base.get, el) ? Base.get(el) : iv(el)
         el
@@ -45,7 +41,7 @@ PlutoUI.TableOfContents(aside=true)
 md"""
 #### Inicializando pacotes
 
-_Ao executar esse notebook a primeira ele pode levar até 15 min, tenha paciência_
+_Ao executar esse notebook a primeira vez ele pode levar até 15 min, tenha paciência_
 """
 
 # ╔═╡ 58a520ca-763b-11eb-21f4-3f27aafbc498
@@ -651,6 +647,7 @@ PlutoUI = "~0.7.9"
 PLUTO_MANIFEST_TOML_CONTENTS = """
 # This file is machine-generated - editing it directly is not advised
 
+julia_version = "1.7.3"
 manifest_format = "2.0"
 
 [[deps.AbstractFFTs]]
@@ -1110,7 +1107,7 @@ uuid = "3f19e933-33d8-53b3-aaab-bd5110c3b7a0"
 # ╟─b7895bd2-7634-11eb-211e-ef876d23bd88
 # ╟─e6a09409-f262-453b-a434-bfd935306719
 # ╠═6b473b2d-4326-46b4-af38-07b61de287fc
-# ╠═d49682ff-d529-4283-871b-f8ee50a4e6ee
+# ╟─d49682ff-d529-4283-871b-f8ee50a4e6ee
 # ╟─58a520ca-763b-11eb-21f4-3f27aafbc498
 # ╟─2cca0638-7635-11eb-3b60-db3fabe6f536
 # ╟─c8a3b5b4-76ac-11eb-14f0-abb7a33b104d

@@ -20,10 +20,3 @@ function extract_project(filename)
 end
 
 extract_project(ARGS[1])
-
-
-
-
-
-
-
