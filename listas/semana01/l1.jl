@@ -285,7 +285,7 @@ md"""
 Ótimo! Observe que ao extrair o o valor de um único canal fomos de uma matriz de cores (RGB) para uma matriz de números.
 
 #### Exercício 2.3
-Vamos tentar visualizar essa matriz. Por enquanto, ela é apenas uma matriz de números e portanto é visualizada de forma textual. Note que o sistema usa elipses para não mostra a matriz inteira, afinal de contas ela seria enorme. 
+Vamos tentar visualizar essa matriz. Por enquanto, ela é apenas uma matriz de números e portanto é visualizada de forma textual. Note que o sistema usa elipses para não mostrar a matriz inteira, afinal de contas ela seria enorme. 
 
 Mas, será que conseguimos **visualizar a matriz como uma imagem**?
 
@@ -378,7 +378,7 @@ _Ao final desse caderno você poderá ver os seus filtros aplicados a imagem qeu
 # ╔═╡ f68d4a36-ee07-11ea-0832-0360530f102e
 md"""
 #### Exercício 3.2
-👉 Dê uma olhada na documentação da função `floor`. Use-a para escrever uma função`quantize(x::Number)` que recebe um valor $x$ (que você pode considerar que está entre 0 e 1) and "quantiza" esse valor para pacotes de largura 0.1. Por exemplo, verifique 0.267 é mapeado a 0.2 e 0.91 para 0.9.
+👉 Dê uma olhada na documentação da função `floor`. Use-a para escrever uma função`quantize(x::Number)` que recebe um valor $x$ (que você pode considerar que está entre 0 e 1) e "quantiza" esse valor para pacotes de largura 0.1. Por exemplo, verifique 0.267 é mapeado a 0.2 e 0.91 para 0.9.
 """
 
 # ╔═╡ fbd1638d-8d7a-4d12-aff9-9c160cc3fd74
@@ -425,7 +425,7 @@ double([1, 2, 37])
 
 # ╔═╡ a8a597e0-a01c-40cd-9902-d56430afd938
 md"""
-Isso é chamado de **despacho múltiplo** e e uma das características principais de Julia. Nesse curso veremos vários exemplos dessa ideia em ação como forma de criar abstrações flexíveis e fáceis de entender.
+Isso é chamado de **despacho múltiplo** e é uma das características principais de Julia. Nesse curso veremos vários exemplos dessa ideia em ação como forma de criar abstrações flexíveis e fáceis de entender.
 """
 
 # ╔═╡ f6b218c0-ee07-11ea-2adb-1968c4fd473a
