@@ -207,7 +207,7 @@ md"""
 
 A desfocagem de caixa é um exemplo simples de **convolução** que são funções lineares de uma janela em torno de um ponto definida, no caso 1D,  por 
 
-$$v'_{i} = \sum_{m}  \, v_{i - m} \, k_{m},$$
+$$v'_{i} = \sum_{m = -l}^l  \, v_{i + m} \, k_{m},$$
 
 em que $k$ é um vetor conhecido como um **núcleo**.
 
@@ -309,7 +309,7 @@ md"""
 
 Agora vamos trabalhar com imagens 2D. Nesse caso a convolução será representada por um **núcleo matricial** $K$:
     
-$$M'_{i, j} = \sum_{k, l}  \, M_{i- k, j - l} \, K_{k, l},$$
+$$M'_{i, j} = \sum_{k, l}  \, M_{i + k, j + l} \, K_{k, l},$$
     
 em que a soma tem os índices $k$ e $l$ variando em uma janela. De novo, vamos considerar que a janela está _centralizada_ em $(i, j)$.
 
@@ -526,7 +526,9 @@ md"""
 #### Exercício 2.4
 👉 Crie um **filtro de detecção de bordas de Sobel**.
 
-Para isso precisamos criar dois filtros que separadamente detectam bordas na vertical e na horizontal definidos pelos núcleos:
+Vamos detectar bordas. Para isso é melhor transformar a imagem para uma matriz de números (quando maior o número, mais branco seria a imagem naquela posição). Uma forma simples de fazer isso é usar a função norma, `norm`, aplicando-a pixel-a-pixel. Ela vai calcular um número que é a norma dos valores guardados nos três canais de cores e resulta uma versão razoável da imagem em tons de cinza. Teste! Vamos chamar a imagem depois dessa operação de `PB`.
+
+De posse da imagem em tons de cinza, vamos passá-la por dois filtros que separadamente detectam bordas na vertical e na horizontal definidos pelos núcleos:
 
 ```math
 G_x = \begin{bmatrix}
@@ -542,15 +544,15 @@ G_y = \begin{bmatrix}
 \end{bmatrix} 
 ```
 
-Como vimos antes esses filtros podem ser interpretados como implementações discretas de operações semelhantes a derivadas direcionais.
+Inicialmente devemos calcular a convolução de `PB` com esses dois núcleos obtendo `PBX` e `PBY`. Essas matrizes tem informação de borda na horizontal e na vertical, repectivamente. Ou em outras palavras, elas aproximam as derivadas direcionais de PB ma horizontal e vertical.
 
-Agora podemos combinar esses dois filtros calculando a magnitude do **gradiente** (o vetor composto pelas derivadas direcionais). Isso pode ser feito definindo
+Agora podemos combinar essas duas imagems calculando magnitude do **gradiente** (o vetor composto pelas derivadas direcionais). Isso pode ser feito definindo
 
-$$G_\text{total} = \sqrt{G_x^2 + G_y^2},$$
+$$PB_\text{total} = \sqrt{PBX^2 + PBY^2},$$
 
-Observe que essas operações devem ser realizada **elemento-por-elemento** nas matrizes.
+Observe que essas operações devem ser realizada **elemento-por-elemento** nas matrizes. Essa é matriz final que deve ser calculada pela função `with_sobel_edge_detect` abaixo.
 
-Use as funções anteriores na sua implementações e adicione células intermediárias se necessário.
+Use as funções anteriores na sua implementação, em particular use `convolve`, e adicione células intermediárias se necessário.
 """
 
 # ╔═╡ 9eeb876c-ee15-11ea-1794-d3ea79f47b75
