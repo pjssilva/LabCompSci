@@ -7,7 +7,11 @@ using InteractiveUtils
 # This Pluto notebook uses @bind for interactivity. When running this notebook outside of Pluto, the following 'mock version' of @bind gives bound variables a default value (instead of an error).
 macro bind(def, element)
     quote
-        local iv = try Base.loaded_modules[Base.PkgId(Base.UUID("6e696c72-6542-2067-7265-42206c756150"), "AbstractPlutoDingetjes")].Bonds.initial_value catch; b -> missing; end
+        local iv = try
+            Base.loaded_modules[Base.PkgId(Base.UUID("6e696c72-6542-2067-7265-42206c756150"), "AbstractPlutoDingetjes")].Bonds.initial_value
+        catch
+            b -> missing
+        end
         local el = $(esc(element))
         global $(esc(def)) = Core.applicable(Base.get, el) ? Base.get(el) : iv(el)
         el
@@ -40,7 +44,7 @@ begin
 end
 
 # ╔═╡ b7895bd2-7634-11eb-211e-ef876d23bd88
-PlutoUI.TableOfContents(aside = true)
+PlutoUI.TableOfContents(aside=true)
 
 # ╔═╡ 230b0118-30b7-4035-ad31-520165a76fcc
 md"""
@@ -51,14 +55,10 @@ _Quando você executar esse caderno pela primeira vez ele irá instalar pacotes.
 
 # ╔═╡ 890d30b9-2cd0-4d3a-99f6-f7d3d7858fda
 img_sources = [
-    "https://www.ime.unicamp.br/~pjssilva/images/ensino/labcompsci/carmel-arquelau-bV3RXy9Upqg-unsplash.png" =>
-        "Tucano",
-    "https://www.ime.unicamp.br/~pjssilva/images/ensino/labcompsci/matt-paul-catalano-MUwfuO5RXEo-unsplash.png" =>
-        "Onda",
-    "https://www.ime.unicamp.br/~pjssilva/images/ensino/labcompsci/matt-paul-catalano-MUwfuO5RXEo-unsplash_square.png" =>
-        "Onda quadrada",
-    "https://user-images.githubusercontent.com/6933510/108883855-39690f80-7606-11eb-8eb1-e595c6c8d829.png" =>
-        "Setas",
+    "https://www.ime.unicamp.br/~pjssilva/images/ensino/labcompsci/carmel-arquelau-bV3RXy9Upqg-unsplash.png" => "Tucano",
+    "https://www.ime.unicamp.br/~pjssilva/images/ensino/labcompsci/matt-paul-catalano-MUwfuO5RXEo-unsplash.png" => "Onda",
+    "https://www.ime.unicamp.br/~pjssilva/images/ensino/labcompsci/matt-paul-catalano-MUwfuO5RXEo-unsplash_square.png" => "Onda quadrada",
+    "https://user-images.githubusercontent.com/6933510/108883855-39690f80-7606-11eb-8eb1-e595c6c8d829.png" => "Setas",
 ]
 
 # ╔═╡ 85fba8fb-a9ea-444d-831b-ec6489b58b4f
@@ -154,7 +154,7 @@ h= $(@bind h Slider(.1:.1:10, show_value=true, default = 5))
 """
 
 # ╔═╡ f2c1671b-3f72-47e9-8eef-d6f1b33f05fa
-custom = ((x, y),) -> [x, α*y^2]
+custom = ((x, y),) -> [x, α * y^2]
 # custom = ((x, y),) -> [sin(α * x), y]
 # custom = ((x, y),)-> [x + α*y^2, y + α*x^2] # may be non-invertible
 # custom  = flipy ∘ ((x, y),) ->  [(β*x - α*y)/(β - y), -h*y/(β - y)]
@@ -802,7 +802,7 @@ begin
         ij_to_xy([i, j])
     end
 
-    function getpixel(img, i::Int, j::Int; circular::Bool = false, r::Real = 200)
+    function getpixel(img, i::Int, j::Int; circular::Bool=false, r::Real=200)
         #  grab image color or place default
         rows, cols = size(img)
         m = max(cols, rows)
@@ -826,7 +826,7 @@ end
 transform_ij_to_xy(1, 1, 400)
 
 # ╔═╡ 83d45d42-7406-11eb-2a9c-e75efe62b12c
-function with_gridlines(img::Matrix; n = 10)
+function with_gridlines(img::Matrix; n=10)
     rows, cols = size(img)
     result = copy(img)
 
@@ -852,7 +852,7 @@ end
 
 # ╔═╡ 55898e88-36a0-4f49-897f-e0850bd2b0df
 img = if show_grid
-    with_gridlines(img_original; n = ngrid)
+    with_gridlines(img_original; n=ngrid)
 else
     img_original
 end;
@@ -863,7 +863,7 @@ end;
         x, y = transform_ij_to_xy(i, j, pixels)
         X, Y = (T⁻¹ ∘ scale(1 / z) ∘ translate(-panx, -pany))([x, y])
         i, j = transform_xy_to_ij(img, X, Y)
-        getpixel(img, i, j; circular = circular, r = r)
+        getpixel(img, i, j; circular=circular, r=r)
     end for i = 1:pixels, j = 1:pixels
 ]
 
