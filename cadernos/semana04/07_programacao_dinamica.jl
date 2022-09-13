@@ -7,7 +7,11 @@ using InteractiveUtils
 # This Pluto notebook uses @bind for interactivity. When running this notebook outside of Pluto, the following 'mock version' of @bind gives bound variables a default value (instead of an error).
 macro bind(def, element)
     quote
-        local iv = try Base.loaded_modules[Base.PkgId(Base.UUID("6e696c72-6542-2067-7265-42206c756150"), "AbstractPlutoDingetjes")].Bonds.initial_value catch; b -> missing; end
+        local iv = try
+            Base.loaded_modules[Base.PkgId(Base.UUID("6e696c72-6542-2067-7265-42206c756150"), "AbstractPlutoDingetjes")].Bonds.initial_value
+        catch
+            b -> missing
+        end
         local el = $(esc(element))
         global $(esc(def)) = Core.applicable(Base.get, el) ? Base.get(el) : iv(el)
         el
@@ -18,9 +22,9 @@ end
 begin
     import ImageMagick
     using Plots
-	using PlutoUI
-	using Colors
-	using Images
+    using PlutoUI
+    using Colors
+    using Images
     using BenchmarkTools
 end
 
@@ -119,10 +123,10 @@ function compute_dyn_path(M)
     m, n = size(M)
 
     # We start with the original matrix values
-    dyn_M = [(best_cost = M[i, j], next = -1) for i = 1:m, j = 1:n]
+    dyn_M = [(best_cost=M[i, j], next=-1) for i = 1:m, j = 1:n]
 
     # Start from the before last line up
-    for i = m - 1:-1:1
+    for i = m-1:-1:1
         for j = 1:n
             # Look at the nodes attainable from (i, j) and find the one
             # with the best cost
@@ -134,7 +138,7 @@ function compute_dyn_path(M)
                 end
             end
             # Update the cost of (i, j)
-            dyn_M[i, j] = (best_cost = best_value + dyn_M[i, j].best_cost, next = best_node)
+            dyn_M[i, j] = (best_cost=best_value + dyn_M[i, j].best_cost, next=best_node)
         end
     end
 
@@ -215,7 +219,7 @@ begin
         # Start from the end and find the first element that can be
         # adding 1. This is similar to adding one in a number
         # Examples for number of columns = 6
-        # [2, 3, 4, 5] -> [2, 3, 5, 4]
+        # [3, 4, 4, 5] -> [3, 4, 5, 4]
         # [2, 3, 6, 6] -> [3, 2, 1, 1]
         while k ≥ 2 && (path[k] == n || path[k] + 1 > path[k-1] + 1)
             k -= 1
@@ -289,7 +293,7 @@ let
 
     # Plot the ratangles to represent the matrix
     for i = 1:n, j = 1:m
-        plot!(rectangle(1, 1, i, j), opacity = 0.2, color = [:red, :white][1+rem(i + j, 2)])
+        plot!(rectangle(1, 1, i, j), opacity=0.2, color=[:red, :white][1+rem(i + j, 2)])
     end
 
     # Add the values in each retangle
@@ -302,8 +306,8 @@ let
         plot!(
             [winner[i+1] + 0.5, winner[i] + 0.5],
             [m - i + 0.5, m - i + 1.5],
-            color = RGB(1, 0.6, 0.6),
-            linewidth = 4,
+            color=RGB(1, 0.6, 0.6),
+            linewidth=4,
         )
     end
 
@@ -312,33 +316,33 @@ let
         plot!(
             [path[i+1] + 0.5, path[i] + 0.5],
             [m - i + 0.5, m - i + 1.5],
-            color = :black,
-            linewidth = 4,
+            color=:black,
+            linewidth=4,
         )
     end
 
     # Add minimal value
-    plot!(xlabel = "winner total = $winnertotal", xguidefontcolor = RGB(1, 0.5, 0.5))
+    plot!(xlabel="winner total = $winnertotal", xguidefontcolor=RGB(1, 0.5, 0.5))
 
     # Add background for values (annotation)
     for i = 1:n, j = 1:m
         plot!(
             rectangle(0.4, 0.4, i + 0.3, j + 0.3),
-            opacity = 1,
-            color = RGB(0, 1, 0),
-            linewidth = 0,
-            fillcolor = [RGBA(1, 0.85, 0.85, 0.2), :white][1+rem(i + j, 2)],
+            opacity=1,
+            color=RGB(0, 1, 0),
+            linewidth=0,
+            fillcolor=[RGBA(1, 0.85, 0.85, 0.2), :white][1+rem(i + j, 2)],
         )
     end
 
     # Add title and set limits and aspect
-    plot!(title = thetitle)
+    plot!(title=thetitle)
     plot!(
-        legend = false,
-        aspectratio = 1,
-        xlims = (1, n + 1),
-        ylims = (1, m + 1),
-        axis = nothing,
+        legend=false,
+        aspectratio=1,
+        xlims=(1, n + 1),
+        ylims=(1, m + 1),
+        axis=nothing,
     )
 end
 
@@ -369,7 +373,7 @@ let
 
     # Plot the ratangles to represent the matrix
     for i = 1:n, j = 1:m
-        plot!(rectangle(1, 1, i, j), opacity = 0.2, color = [:red, :white][1+rem(i + j, 2)])
+        plot!(rectangle(1, 1, i, j), opacity=0.2, color=[:red, :white][1+rem(i + j, 2)])
     end
 
     # Add the values in each retangle
@@ -384,8 +388,8 @@ let
         plot!(
             [path[i+1] + 0.5, path[i] + 0.5],
             [m - i + 0.5, m - i + 1.5],
-            color = c,
-            linewidth = 4,
+            color=c,
+            linewidth=4,
         )
     end
 
@@ -393,21 +397,21 @@ let
     for i = 1:n, j = 1:m
         plot!(
             rectangle(0.4, 0.4, i + 0.3, j + 0.3),
-            opacity = 1,
-            color = RGB(0, 1, 0),
-            linewidth = 0,
-            fillcolor = [RGBA(1, 0.85, 0.85, 0.2), :white][1+rem(i + j, 2)],
+            opacity=1,
+            color=RGB(0, 1, 0),
+            linewidth=0,
+            fillcolor=[RGBA(1, 0.85, 0.85, 0.2), :white][1+rem(i + j, 2)],
         )
     end
 
     # Add title and set limits and aspect
-    plot!(title = thetitle)
+    plot!(title=thetitle)
     plot!(
-        legend = false,
-        aspectratio = 1,
-        xlims = (1, n + 1),
-        ylims = (1, m + 1),
-        axis = nothing,
+        legend=false,
+        aspectratio=1,
+        xlims=(1, n + 1),
+        ylims=(1, m + 1),
+        axis=nothing,
     )
 end
 
@@ -420,7 +424,7 @@ md"""
 @benchmark compute_dyn_path($M)
 
 # ╔═╡ e384c4b9-2451-483a-abcb-5991c3cbca28
-@benchmark allpaths(m, n)
+@benchmark allpaths($m, $n)
 
 # ╔═╡ effbece1-3648-40eb-8e44-10c332f53494
 md"## Apêndice"
@@ -456,6 +460,7 @@ PlutoUI = "~0.7.9"
 PLUTO_MANIFEST_TOML_CONTENTS = """
 # This file is machine-generated - editing it directly is not advised
 
+julia_version = "1.7.3"
 manifest_format = "2.0"
 
 [[deps.AbstractFFTs]]
@@ -1699,7 +1704,7 @@ version = "0.9.1+5"
 # ╟─938107f0-80ee-11eb-18cf-775802c43c2f
 # ╟─eb043a90-8102-11eb-3b78-d590a23c83f4
 # ╟─5994117c-8102-11eb-1b05-671b7cf87a7e
-# ╟─b4558306-804a-11eb-2719-5fd37c6fa281
+# ╠═b4558306-804a-11eb-2719-5fd37c6fa281
 # ╟─bc631086-804a-11eb-216e-c955e2115f55
 # ╠═d1c851ee-80d5-11eb-1ce4-357dfb1e638e
 # ╠═8cac71d5-8d6c-4aa8-8160-25836295e686

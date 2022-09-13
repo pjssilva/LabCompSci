@@ -1,5 +1,5 @@
 ### A Pluto.jl notebook ###
-# v0.16.0
+# v0.19.11
 
 using Markdown
 using InteractiveUtils
@@ -7,8 +7,9 @@ using InteractiveUtils
 # This Pluto notebook uses @bind for interactivity. When running this notebook outside of Pluto, the following 'mock version' of @bind gives bound variables a default value (instead of an error).
 macro bind(def, element)
     quote
+        local iv = try Base.loaded_modules[Base.PkgId(Base.UUID("6e696c72-6542-2067-7265-42206c756150"), "AbstractPlutoDingetjes")].Bonds.initial_value catch; b -> missing; end
         local el = $(esc(element))
-        global $(esc(def)) = Core.applicable(Base.get, el) ? Base.get(el) : missing
+        global $(esc(def)) = Core.applicable(Base.get, el) ? Base.get(el) : iv(el)
         el
     end
 end
@@ -24,17 +25,14 @@ end
 
 # ╔═╡ 85cfbd10-f384-11ea-31dc-b5693630a4c5
 md"""
-
 # **Lista 3**: _Estrutura e linguagem_
-`MS905`, 2º sem 2021
+`MS905`, 2º sem. 2022
 
-`Data de entrega`: 09 de setembro às 23:59.
+`Data de entrega`: **15/09, 2022**
 
-Este caderno contém verificações _simples_ para ajudar você a saber se o que fez faz sentido. Essas verificações são incompletas e não corrigem completamente os exercícios. Mas, se elas disserem que algo não está bom, você sabe que tem que tentar de novo.
+Este caderno contém _verificações ativas das respostas_! Em alguns exercícios você verá uma caixa colorida que roda alguns casos simples de teste e provê retorno imediato para a sua solução. Edite sua solução, execute a célula e verifique se passou na verificação. Note que a verificação feita é apenas superficial. Para a correção serão verificados mais casos e você tem a obrigação de escrever código que funcione adequadamente.
 
-_Para os alunos regulares:_ as listas serão corrigidas com exemplos mais sofisticados e gerais do que aqueles das verificações incluídas. 
-
-Sintam-se livres de fazer perguntas no fórum.
+Pergunte o quanto quiser (use o Discord)!
 """
 
 # ╔═╡ 33e43c7c-f381-11ea-3abc-c942327456b1
@@ -66,9 +64,9 @@ md"""
 
 # ╔═╡ c9a8b35d-2183-4da1-ae35-d2552020e8a8
 md"""
-Até agora no curso nós lidamos sobretudo com dados em formatos de imagens. Mas sabemos que existem muitas outras formas de dados e esse notebook vai introduzir outra forma, o **texto**. Nesse sentido essa lista vai também avaliar a sua capacidade de aprender a medida que resolve os exercícios usando o que já aprendeu e o que irá aprender com a leitura.
+Até agora no curso nós lidamos principalmente com dados em formatos de imagens. Mas existem muitas outras formas de dados e esse notebook vai introduzir outro formato, o **texto**. Nesse sentido, essa lista vai também avaliar a sua capacidade de aprender à medida que resolve os exercícios usando o que já aprendeu e o que irá aprender com a leitura.
 
-Haverá um certo enfoque em texto escrito em _liguagem natural_ (para constratar com a linguagem típicas de computadores.
+Haverá um certo enfoque em texto escrito em _liguagem natural_ (para constratar com a linguagens típicas de computadores).
 
 Vamos tentar analisar e gerar texto em linguagem natural, por vezes em português e em inglês. De fato o processamento e geração de linguagem natural é uma área muito ativa de Inteligência Artificial, como é o caso de modelos de redes neurais profundas como o [GPT-3](https://en.wikipedia.org/wiki/GPT-3).
 """
@@ -77,9 +75,9 @@ Vamos tentar analisar e gerar texto em linguagem natural, por vezes em portuguê
 md"""
 ## **Exercício 1:** _Detecção de idioma_
 
-Nesse primeiro exercício vamos criar uma _inteligência artificial_ bastante simples. A linguagem natural pode serbem complicada, mas há uma estrutura sujacente que podemos explorar. 
+Nesse primeiro exercício vamos criar uma _inteligência artificial_ bastante simples. A linguagem natural é bastante complexa, mas há uma estrutura subjacente que podemos explorar. 
 
-Como começar com uma estrutura muito simples de textos em português ou inglês (e outras línguas ocidentais): o conjunto de caracteres usando na escrita. Se gerarmos texto aleatório gerando carcteres `Char` quaisquer, quase com certeza não iteremos obter algo reconhecíuvel:
+Vamos começar com uma estrutura muito simples de textos em português ou inglês (e outras línguas ocidentais): o conjunto de caracteres usando na escrita. Se gerarmos texto aleatório gerando carcteres `Char` quaisquer, quase com certeza não iteremos obter algo reconhecível:
 """
 
 # ╔═╡ 3206c771-495a-43a9-b707-eaeb828a8545
@@ -91,12 +89,12 @@ String(rand(Char, 40))   # Une 40 caracteres aleatórios em uma
 
 # ╔═╡ 59f2c600-2b64-4562-9426-2cfed9a864e4
 md"""
-(`Char` em Julia é o typo para um caracter [Unicode](https://en.wikipedia.org/wiki/Unicode). Unicode contém muitos conjuntos diferentes de catacteres, que cobrem a maoria das línguas do planeta (como caracteres latinos, gregos, cirílico, chinês) e de fora do planeta (tem kligon, pelo menos) e até emojis. Daí, os caracteres latinos são minoria e por isso aparecem raramente em amostras aleatórias.)
+(`Char` em Julia é o tipo para um caracter [Unicode](https://en.wikipedia.org/wiki/Unicode). Unicode contém muitos conjuntos diferentes de catacteres, que cobrem a maoria das línguas do planeta (como caracteres latinos, gregos, cirílico, chinês) e de fora do planeta (tem klingon, pelo menos) e até emojis. Daí, os caracteres latinos são minoria e por isso aparecem raramente em amostras aleatórias.)
 """
 
 # ╔═╡ f457ad44-f990-11ea-0e2d-2bb7627716a8
 md"""
-No lutar disso, vamos definir um vetor de caracteres, que vamos chamar de `alphabet` que irá conter apenas as letras usuais. Para deixar as coisas bem simples, vamos considerar apenas caracteres minúsculos e o espaço em branco, sem acentos, sem pontuação. Vamos então usar apenas 27 caracteres. Observer que usamos uma notação de concatenação de vetores abaixo.
+Para contornar isso, vamos definir um vetor de caracteres, que vamos chamar de `alphabet` que irá conter apenas as letras usuais. Para deixar as coisas bem simples, vamos considerar apenas caracteres minúsculos e o espaço em branco, sem acentos, sem pontuação. Vamos então usar apenas 27 caracteres. Observer que usamos notação de concatenação de vetores abaixo.
 """
 
 # ╔═╡ 4efc051e-f92e-11ea-080e-bde6b8f9295a
@@ -116,11 +114,11 @@ Já parece melhor, mas ainda está bem longe de um texto natural em português o
 
 ## Tabelas de frequência
 
-Paralavras em uma língua não são obtidas escolhendo-se os caracteres de forma aleatória. Em porticular, podemos partir da observação que *algumas letras são mais comuns que outras*. Podemos operacionalizar isso obtendo uma tabela de frequencia dos caracteres a partir de uma amostra de texto que seja representativa da linguagem.
+Palavras em uma língua não são obtidas escolhendo-se os caracteres de forma aleatória. Em particular, podemos partir da observação que *algumas letras são mais comuns que outras*. Podemos operacionalizar isso obtendo uma tabela de frequencia dos caracteres a partir de uma amostra de texto que seja representativa da linguagem.
 
 As amostras a seguir foram obtidas da Wikipedia. Sinta-se à vontade de testar com sua própria amostra. 
 
-Lembrese que o símbolo $(html"<img src='https://cdn.jsdelivr.net/gh/ionic-team/ionicons@5.0.0/src/svg/eye-outline.svg' style='width: 1em; height: 1em; margin-bottom: -.2em;'>") do lado direito de cada célula é usado para esconder o mostrar o código que gerou o resultado. Note o uso da função `unaccent` que tira os acentos da mostra em português. Você poderá ver a implementação dela mais abaixo.
+Lembrese que o símbolo $(html"<img src='https://cdn.jsdelivr.net/gh/ionic-team/ionicons@5.0.0/src/svg/eye-outline.svg' style='width: 1em; height: 1em; margin-bottom: -.2em;'>") do lado direito de cada célula é usado para esconder ou mostrar o código que gerou o resultado. Note o uso da função `unaccent` que tira os acentos da amostra em português. Você poderá ver a implementação dela mais abaixo.
 
 Nós também incluímos uma amostra de inglẽs, que será usada depois.
 """
@@ -157,7 +155,7 @@ filter(isodd, [6, 7, 8, 9, -5])
 md"""
 `filter` recebe dois argumentos. uma **função** e uma **coleção**. A função é então aplicada em cada elemento da coleção. Ela deve retornar `true` ou `false` para cada elemento. (Esse tipo de função pode ser chamada de um **predicado**). Ao final ela devolve uma coleção com os elementos para o qual o resultado da função foi `true`.
 
-Uma coisa interessante de observar é que em Julia funções são _objetos_ como outros quaisquer. Eles podem ser atribuídos à variáveis ou passados a outras funções sem precisar de nenhuma sintaxe especial.
+Uma coisa interessante de observar é que em Julia funções são _objetos_ como outros quaisquer. Eles podem ser atribuídos à variáveis ou passados a outras funções sem necessitar de nenhuma sintaxe especial.
 
 
 $(html"<br>")
@@ -174,7 +172,7 @@ end
 isinalphabet('a'), isinalphabet('+')
 
 # ╔═╡ 129fbcfe-f998-11ea-1c96-0fd3ccd2dcf8
-md"👉 Use `filter` para extrair de um testo apenas os caracteres que estão no `alphabet` da frase `messy_sentence_1`:"
+md"👉 Use `filter` para extrair apenas os caracteres que estão no `alphabet` da frase `messy_sentence_1`:"
 
 # ╔═╡ 3a5ee698-f998-11ea-0452-19b70ed11a1d
 messy_sentence_1 = "#wow 2020 ¥500 (blingbling!)"
@@ -184,12 +182,11 @@ cleaned_sentence_1 = missing
 
 # ╔═╡ 05f0182c-f999-11ea-0a52-3d46c65a049e
 md"""
-Nós também não estamos interessados em diferenciar letras maiúsculas de minúsculas. Então queremos *mapear* letras maiúsculas na respectiva letra minúscula antes de aplicar o filtro. Se não o fizermos as letras maúsculas serão apagadas.
+Nós também não estamos interessados em diferenciar letras maiúsculas de minúsculas. Então queremos *mapear* letras maiúsculas na respectiva letra minúscula antes de aplicar o filtro. Se não o fizermos, as letras maúsculas serão apagadas.
 
-Julia possui uma função `map` que faz exatamente isso. Ela é parecida com `filter` ao receber uma função como primeiro argument e uma coleção como segundo. Mas agora o que ela faz é construir uma nova coleção com os valores da função dada no primeiro argumento aplicada sobre os elementos da coleção passado no segundo argumento.
+Julia possui uma função `map` que faz exatamente isso. Ela é parecida com `filter` ao receber uma função como primeiro argument e uma coleção como segundo. Mas agora o que ela faz é construir uma nova coleção com os valores da função dada no primeiro argumento aplicada sobre os elementos da coleção.
 
-Julia possui uma função já pronta para isso, chamada `lowercase`. Ela pega um caracter e mapeia esse caracter na respectiva letra só que em minúscula. Mas nossa vida está mais fácil ainda. Ela também pode receber uma `String` de entrada e converter cada caracter, assim como faríamos com `map`. Então, abaixo, você nem precisa usar `map`. Mas não podia deixar de comentar sobre sua existência já nessa primeira oportunidade.  
-
+Agora para esse caso particular, converter letras para minúsculas, Julia possui uma função pronta chamada `lowercase`. Ela também pode receber uma `String` de entrada e converter cada caracter, assim como faríamos com `map`. Então, abaixo, você nem precisa usar `map`. Mas eu não podia deixar de comentar sobre a existência de `map` já nessa primeira oportunidade.  
 """
 
 # ╔═╡ 98266882-f998-11ea-3270-4339fb502bc7
@@ -203,7 +200,7 @@ cleaned_sentence_2 = missing
 
 # ╔═╡ aad659b8-f998-11ea-153e-3dae9514bfeb
 md"""
-Por fim, preciamos lidar com **acentos**: simplesmente apagar caracteres acentuados dos textos vai acabar alterando as frequências demais, particularmente em português. Uma opção seria adicionar caracteres acentuados a nosso alfabeto, mas vamos fazer algo ainda mais simples: vamos substituir os caracteres acentuados por sua versão sem acentos. Juia já tem uma rotina que bascimante faz isso que usamos com base da função `unaccent` abaixo.
+Por fim, preciamos lidar com **acentos**: simplesmente apagar caracteres acentuados dos textos vai acabar alterando as frequências demais, particularmente em português. Uma opção seria adicionar caracteres acentuados a nosso alfabeto, mas vamos fazer algo ainda mais simples: vamos substituir os caracteres acentuados por sua versão sem acentos. Juia já tem uma rotina que faz quase isso e vamos usá-la para como base da função `unaccent` abaixo.
 """
 
 # ╔═╡ 734851c6-f92d-11ea-130d-bf2a69e89255
@@ -1302,235 +1299,252 @@ PlutoUI = "~0.7.9"
 PLUTO_MANIFEST_TOML_CONTENTS = """
 # This file is machine-generated - editing it directly is not advised
 
-[[ArgTools]]
+manifest_format = "2.0"
+
+[[deps.ArgTools]]
 uuid = "0dad84c5-d112-42e6-8d28-ef12dabb789f"
 
-[[Artifacts]]
+[[deps.Artifacts]]
 uuid = "56f22d72-fd6d-98f1-02f0-08ddc0907c33"
 
-[[Base64]]
+[[deps.Base64]]
 uuid = "2a0f44e3-6c83-55bd-87e4-b1978d98bd5f"
 
-[[ColorTypes]]
+[[deps.ColorTypes]]
 deps = ["FixedPointNumbers", "Random"]
 git-tree-sha1 = "024fe24d83e4a5bf5fc80501a314ce0d1aa35597"
 uuid = "3da002f7-5984-5a60-b8a6-cbb66c0b333f"
 version = "0.11.0"
 
-[[Colors]]
+[[deps.Colors]]
 deps = ["ColorTypes", "FixedPointNumbers", "Reexport"]
 git-tree-sha1 = "417b0ed7b8b838aa6ca0a87aadf1bb9eb111ce40"
 uuid = "5ae59095-9a9b-59fe-a467-6f913c188581"
 version = "0.12.8"
 
-[[Compat]]
+[[deps.Compat]]
 deps = ["Base64", "Dates", "DelimitedFiles", "Distributed", "InteractiveUtils", "LibGit2", "Libdl", "LinearAlgebra", "Markdown", "Mmap", "Pkg", "Printf", "REPL", "Random", "SHA", "Serialization", "SharedArrays", "Sockets", "SparseArrays", "Statistics", "Test", "UUIDs", "Unicode"]
 git-tree-sha1 = "727e463cfebd0c7b999bbf3e9e7e16f254b94193"
 uuid = "34da2185-b29b-5c13-b0c7-acf172513d20"
 version = "3.34.0"
 
-[[Compose]]
+[[deps.CompilerSupportLibraries_jll]]
+deps = ["Artifacts", "Libdl"]
+uuid = "e66e0078-7015-5450-92f7-15fbd957f2ae"
+
+[[deps.Compose]]
 deps = ["Base64", "Colors", "DataStructures", "Dates", "IterTools", "JSON", "LinearAlgebra", "Measures", "Printf", "Random", "Requires", "Statistics", "UUIDs"]
 git-tree-sha1 = "c6461fc7c35a4bb8d00905df7adafcff1fe3a6bc"
 uuid = "a81c6b42-2e10-5240-aca2-a61377ecd94b"
 version = "0.9.2"
 
-[[DataStructures]]
+[[deps.DataStructures]]
 deps = ["Compat", "InteractiveUtils", "OrderedCollections"]
 git-tree-sha1 = "7d9d316f04214f7efdbb6398d545446e246eff02"
 uuid = "864edb3b-99cc-5e75-8d2d-829cb0a9cfe8"
 version = "0.18.10"
 
-[[Dates]]
+[[deps.Dates]]
 deps = ["Printf"]
 uuid = "ade2ca70-3891-5945-98fb-dc099432e06a"
 
-[[DelimitedFiles]]
+[[deps.DelimitedFiles]]
 deps = ["Mmap"]
 uuid = "8bb1440f-4735-579b-a4ab-409b98df4dab"
 
-[[Distributed]]
+[[deps.Distributed]]
 deps = ["Random", "Serialization", "Sockets"]
 uuid = "8ba89e20-285c-5b6f-9357-94700520ee1b"
 
-[[Downloads]]
-deps = ["ArgTools", "LibCURL", "NetworkOptions"]
+[[deps.Downloads]]
+deps = ["ArgTools", "FileWatching", "LibCURL", "NetworkOptions"]
 uuid = "f43a241f-c20a-4ad4-852c-f6b1247861c6"
 
-[[FixedPointNumbers]]
+[[deps.FileWatching]]
+uuid = "7b1f6079-737a-58dc-b8bc-7a2ca5c1b5ee"
+
+[[deps.FixedPointNumbers]]
 deps = ["Statistics"]
 git-tree-sha1 = "335bfdceacc84c5cdf16aadc768aa5ddfc5383cc"
 uuid = "53c48c17-4a7d-5ca2-90c5-79b7896eea93"
 version = "0.8.4"
 
-[[InteractiveUtils]]
+[[deps.InteractiveUtils]]
 deps = ["Markdown"]
 uuid = "b77e0a4c-d291-57a0-90e8-8db25a27a240"
 
-[[IterTools]]
+[[deps.IterTools]]
 git-tree-sha1 = "05110a2ab1fc5f932622ffea2a003221f4782c18"
 uuid = "c8e1da08-722c-5040-9ed9-7db0dc04731e"
 version = "1.3.0"
 
-[[JSON]]
+[[deps.JSON]]
 deps = ["Dates", "Mmap", "Parsers", "Unicode"]
 git-tree-sha1 = "8076680b162ada2a031f707ac7b4953e30667a37"
 uuid = "682c06a0-de6a-54ab-a142-c8b1cf79cde6"
 version = "0.21.2"
 
-[[LibCURL]]
+[[deps.LibCURL]]
 deps = ["LibCURL_jll", "MozillaCACerts_jll"]
 uuid = "b27032c2-a3e7-50c8-80cd-2d36dbcbfd21"
 
-[[LibCURL_jll]]
+[[deps.LibCURL_jll]]
 deps = ["Artifacts", "LibSSH2_jll", "Libdl", "MbedTLS_jll", "Zlib_jll", "nghttp2_jll"]
 uuid = "deac9b47-8bc7-5906-a0fe-35ac56dc84c0"
 
-[[LibGit2]]
+[[deps.LibGit2]]
 deps = ["Base64", "NetworkOptions", "Printf", "SHA"]
 uuid = "76f85450-5226-5b5a-8eaa-529ad045b433"
 
-[[LibSSH2_jll]]
+[[deps.LibSSH2_jll]]
 deps = ["Artifacts", "Libdl", "MbedTLS_jll"]
 uuid = "29816b5a-b9ab-546f-933c-edad1886dfa8"
 
-[[Libdl]]
+[[deps.Libdl]]
 uuid = "8f399da3-3557-5675-b5ff-fb832c97cbdb"
 
-[[LinearAlgebra]]
-deps = ["Libdl"]
+[[deps.LinearAlgebra]]
+deps = ["Libdl", "libblastrampoline_jll"]
 uuid = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
 
-[[Logging]]
+[[deps.Logging]]
 uuid = "56ddb016-857b-54e1-b83d-db4d58db5568"
 
-[[Markdown]]
+[[deps.Markdown]]
 deps = ["Base64"]
 uuid = "d6f4376e-aef5-505a-96c1-9c027394607a"
 
-[[MbedTLS_jll]]
+[[deps.MbedTLS_jll]]
 deps = ["Artifacts", "Libdl"]
 uuid = "c8ffd9c3-330d-5841-b78e-0817d7145fa1"
 
-[[Measures]]
+[[deps.Measures]]
 git-tree-sha1 = "e498ddeee6f9fdb4551ce855a46f54dbd900245f"
 uuid = "442fdcdd-2543-5da2-b0f3-8c86c306513e"
 version = "0.3.1"
 
-[[Mmap]]
+[[deps.Mmap]]
 uuid = "a63ad114-7e13-5084-954f-fe012c677804"
 
-[[MozillaCACerts_jll]]
+[[deps.MozillaCACerts_jll]]
 uuid = "14a3606d-f60d-562e-9121-12d972cd8159"
 
-[[NetworkOptions]]
+[[deps.NetworkOptions]]
 uuid = "ca575930-c2e3-43a9-ace4-1e988b2c1908"
 
-[[OrderedCollections]]
+[[deps.OpenBLAS_jll]]
+deps = ["Artifacts", "CompilerSupportLibraries_jll", "Libdl"]
+uuid = "4536629a-c528-5b80-bd46-f80d51c5b363"
+
+[[deps.OrderedCollections]]
 git-tree-sha1 = "85f8e6578bf1f9ee0d11e7bb1b1456435479d47c"
 uuid = "bac558e1-5e72-5ebc-8fee-abe8a469f55d"
 version = "1.4.1"
 
-[[Parsers]]
+[[deps.Parsers]]
 deps = ["Dates"]
 git-tree-sha1 = "438d35d2d95ae2c5e8780b330592b6de8494e779"
 uuid = "69de0a69-1ddd-5017-9359-2bf0b02dc9f0"
 version = "2.0.3"
 
-[[Pkg]]
+[[deps.Pkg]]
 deps = ["Artifacts", "Dates", "Downloads", "LibGit2", "Libdl", "Logging", "Markdown", "Printf", "REPL", "Random", "SHA", "Serialization", "TOML", "Tar", "UUIDs", "p7zip_jll"]
 uuid = "44cfe95a-1eb2-52ea-b672-e2afdf69b78f"
 
-[[PlutoUI]]
+[[deps.PlutoUI]]
 deps = ["Base64", "Dates", "InteractiveUtils", "JSON", "Logging", "Markdown", "Random", "Reexport", "Suppressor"]
 git-tree-sha1 = "44e225d5837e2a2345e69a1d1e01ac2443ff9fcb"
 uuid = "7f904dfe-b85e-4ff6-b463-dae2292396a8"
 version = "0.7.9"
 
-[[Printf]]
+[[deps.Printf]]
 deps = ["Unicode"]
 uuid = "de0858da-6303-5e67-8744-51eddeeeb8d7"
 
-[[REPL]]
+[[deps.REPL]]
 deps = ["InteractiveUtils", "Markdown", "Sockets", "Unicode"]
 uuid = "3fa0cd96-eef1-5676-8a61-b3b8758bbffb"
 
-[[Random]]
-deps = ["Serialization"]
+[[deps.Random]]
+deps = ["SHA", "Serialization"]
 uuid = "9a3f8284-a2c9-5f02-9a11-845980a1fd5c"
 
-[[Reexport]]
+[[deps.Reexport]]
 git-tree-sha1 = "45e428421666073eab6f2da5c9d310d99bb12f9b"
 uuid = "189a3867-3050-52da-a836-e630ba90ab69"
 version = "1.2.2"
 
-[[Requires]]
+[[deps.Requires]]
 deps = ["UUIDs"]
 git-tree-sha1 = "4036a3bd08ac7e968e27c203d45f5fff15020621"
 uuid = "ae029012-a4dd-5104-9daa-d747884805df"
 version = "1.1.3"
 
-[[SHA]]
+[[deps.SHA]]
 uuid = "ea8e919c-243c-51af-8825-aaa63cd721ce"
 
-[[Serialization]]
+[[deps.Serialization]]
 uuid = "9e88b42a-f829-5b0c-bbe9-9e923198166b"
 
-[[SharedArrays]]
+[[deps.SharedArrays]]
 deps = ["Distributed", "Mmap", "Random", "Serialization"]
 uuid = "1a1011a3-84de-559e-8e89-a11a2f7dc383"
 
-[[Sockets]]
+[[deps.Sockets]]
 uuid = "6462fe0b-24de-5631-8697-dd941f90decc"
 
-[[SparseArrays]]
+[[deps.SparseArrays]]
 deps = ["LinearAlgebra", "Random"]
 uuid = "2f01184e-e22b-5df5-ae63-d93ebab69eaf"
 
-[[Statistics]]
+[[deps.Statistics]]
 deps = ["LinearAlgebra", "SparseArrays"]
 uuid = "10745b16-79ce-11e8-11f9-7d13ad32a3b2"
 
-[[Suppressor]]
+[[deps.Suppressor]]
 git-tree-sha1 = "a819d77f31f83e5792a76081eee1ea6342ab8787"
 uuid = "fd094767-a336-5f1f-9728-57cf17d0bbfb"
 version = "0.2.0"
 
-[[TOML]]
+[[deps.TOML]]
 deps = ["Dates"]
 uuid = "fa267f1f-6049-4f14-aa54-33bafae1ed76"
 
-[[Tar]]
+[[deps.Tar]]
 deps = ["ArgTools", "SHA"]
 uuid = "a4e569a6-e804-4fa4-b0f3-eef7a1d5b13e"
 
-[[Test]]
+[[deps.Test]]
 deps = ["InteractiveUtils", "Logging", "Random", "Serialization"]
 uuid = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
 
-[[UUIDs]]
+[[deps.UUIDs]]
 deps = ["Random", "SHA"]
 uuid = "cf7118a7-6976-5b1a-9a39-7adc72f591a4"
 
-[[Unicode]]
+[[deps.Unicode]]
 uuid = "4ec0a83e-493e-50e2-b9ac-8f72acf5a8f5"
 
-[[Zlib_jll]]
+[[deps.Zlib_jll]]
 deps = ["Libdl"]
 uuid = "83775a58-1f1d-513f-b197-d71354ab007a"
 
-[[nghttp2_jll]]
+[[deps.libblastrampoline_jll]]
+deps = ["Artifacts", "Libdl", "OpenBLAS_jll"]
+uuid = "8e850b90-86db-534c-a0d3-1478176c7d93"
+
+[[deps.nghttp2_jll]]
 deps = ["Artifacts", "Libdl"]
 uuid = "8e850ede-7688-5339-a07c-302acd2aaf8d"
 
-[[p7zip_jll]]
+[[deps.p7zip_jll]]
 deps = ["Artifacts", "Libdl"]
 uuid = "3f19e933-33d8-53b3-aaab-bd5110c3b7a0"
 """
 
 # ╔═╡ Cell order:
-# ╠═ec66314e-f37f-11ea-0af4-31da0584e881
-# ╠═85cfbd10-f384-11ea-31dc-b5693630a4c5
+# ╟─ec66314e-f37f-11ea-0af4-31da0584e881
+# ╟─85cfbd10-f384-11ea-31dc-b5693630a4c5
 # ╠═33e43c7c-f381-11ea-3abc-c942327456b1
 # ╟─938185ec-f384-11ea-21dc-b56b7469f798
 # ╠═a4937996-f314-11ea-2ff9-615c888afaa8
@@ -1550,13 +1564,13 @@ uuid = "3f19e933-33d8-53b3-aaab-bd5110c3b7a0"
 # ╟─a094e2ac-f92d-11ea-141a-3566552dd839
 # ╠═27c9a7f4-f996-11ea-1e46-19e3fc840ad9
 # ╟─f2a4edfa-f996-11ea-1a24-1ba78fd92233
-# ╟─5c74a052-f92e-11ea-2c5b-0f1a3a14e313
+# ╠═5c74a052-f92e-11ea-2c5b-0f1a3a14e313
 # ╠═dcc4156c-f997-11ea-3e6f-057cd080d9db
 # ╠═129fbcfe-f998-11ea-1c96-0fd3ccd2dcf8
 # ╠═3a5ee698-f998-11ea-0452-19b70ed11a1d
 # ╠═75694166-f998-11ea-0428-c96e1113e2a0
 # ╟─6fe693c8-f9a1-11ea-1983-f159131880e9
-# ╟─05f0182c-f999-11ea-0a52-3d46c65a049e
+# ╠═05f0182c-f999-11ea-0a52-3d46c65a049e
 # ╠═98266882-f998-11ea-3270-4339fb502bc7
 # ╠═d3c98450-f998-11ea-3caf-895183af926b
 # ╠═d3a4820e-f998-11ea-2a5c-1f37e2a6dd0a
@@ -1609,7 +1623,7 @@ uuid = "3f19e933-33d8-53b3-aaab-bd5110c3b7a0"
 # ╟─7711ecc5-9132-4223-8ed4-4d0417b5d5c1
 # ╟─4582ebf4-f930-11ea-03b2-bf4da1a8f8df
 # ╠═7898b76a-f930-11ea-2b7e-8126ec2b8ffd
-# ╟─a5fbba46-f931-11ea-33e1-054be53d986c
+# ╠═a5fbba46-f931-11ea-33e1-054be53d986c
 # ╠═458cd100-f930-11ea-24b8-41a49f6596a0
 # ╠═bc401bee-f931-11ea-09cc-c5efe2f11194
 # ╠═ba695f6a-f931-11ea-0fbb-c3ef1374270e
@@ -1663,7 +1677,7 @@ uuid = "3f19e933-33d8-53b3-aaab-bd5110c3b7a0"
 # ╟─52970ac4-fb82-11ea-3040-8bd0590348d2
 # ╠═8ce3b312-fb82-11ea-200c-8d5b12f03eea
 # ╠═a2214e50-fb83-11ea-3580-210f12d44182
-# ╠═a9ffff9a-fb83-11ea-1efd-2fc15538e52f
+# ╟─a9ffff9a-fb83-11ea-1efd-2fc15538e52f
 # ╟─808abf6e-fb84-11ea-0785-2fc3f1c4a09f
 # ╠═953363dc-fb84-11ea-1128-ebdfaf5160ee
 # ╟─b8af4d06-b38a-4675-9399-81fb5977f077

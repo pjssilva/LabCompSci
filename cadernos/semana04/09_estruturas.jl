@@ -28,7 +28,7 @@ end
 md"Tradução livre de [structure.jl](https://github.com/mitmath/18S191/blob/Spring21/notebooks/week4/structure.jl)."
 
 # ╔═╡ ca1a1072-81b6-11eb-1fee-e7df687cc314
-PlutoUI.TableOfContents(aside = true)
+PlutoUI.TableOfContents(aside=true)
 
 # ╔═╡ b0ba5b8c-f5d1-11ea-1304-3f0e47f935fe
 md"# Exemplos de estrututura"
@@ -337,7 +337,7 @@ outer(1:10, 1:10)
 md"Fala a verdade: você ainda lembra de ficar decorando isso?"
 
 # ╔═╡ 8c84edd0-f6de-11ea-2180-61c6b81aac3b
-@bind k Slider(1:14, show_value = true)
+@bind k Slider(1:14, show_value=true)
 
 # ╔═╡ 22b73baa-f6df-11ea-197f-bbb4bd1a7ef5
 outer(1:k, 1:k)
@@ -466,7 +466,7 @@ picture = Float64.(channelview(image));
 size(picture)
 
 # ╔═╡ 6156fd1e-f5f9-11ea-06a9-211c7ab813a4
-pr, pg, pb = eachslice(picture, dims = 1)
+pr, pg, pb = eachslice(picture, dims=1)
 
 # ╔═╡ a9766e68-f5f9-11ea-0019-6f9d02050521
 [RGB.(pr, 0, 0) RGB.(0, pg, 0) RGB.(0, 0, pb)]
@@ -479,7 +479,7 @@ begin
 end;
 
 # ╔═╡ b95ce51a-f632-11ea-3a64-f7c218b9b3c9
-@bind n Slider(1:200, show_value = true)
+@bind n Slider(1:200, show_value=true)
 
 # ╔═╡ 7ba6e6a6-f5fa-11ea-2bcd-616d5a3c898b
 RGB.(
