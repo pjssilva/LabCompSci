@@ -392,7 +392,7 @@ most_likely_to_precede_w = 'x' # replace with your answer
 
 # ╔═╡ 45c20988-f930-11ea-1d12-b782d2c01c11
 md"""
-👉 Qual a soma de cada linha? E qual a soma de cada coluna? Qual a soma de todos os elementos da matrix? Como podemos interpretar esses valores"
+👉 Qual a soma de cada linha? E qual a soma de cada coluna? Qual a soma de todos os elementos da matriz? Como podemos interpretar esses valores"
 """
 
 # ╔═╡ 58428158-84ac-44e4-9b38-b991728cd98a
