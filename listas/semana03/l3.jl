@@ -54,7 +54,7 @@ Submetido por: **_$(student.name)_** ($(student.email_dac)@unicamp.br)
 # ╔═╡ 938185ec-f384-11ea-21dc-b56b7469f798
 md"""
 #### Iniciando pacote
-_Quando executado a primeira vez pode demorar por instalar paoctes._
+_Quando executado a primeira vez pode demorar por instalar pacotes._
 """
 
 # ╔═╡ c75856a8-1f36-4659-afb2-7edb14894ea1
@@ -66,7 +66,7 @@ md"""
 md"""
 Até agora no curso nós lidamos principalmente com dados em formatos de imagens. Mas existem muitas outras formas de dados e esse notebook vai introduzir outro formato, o **texto**. Nesse sentido, essa lista vai também avaliar a sua capacidade de aprender à medida que resolve os exercícios usando o que já aprendeu e o que irá aprender com a leitura.
 
-Haverá um certo enfoque em texto escrito em _liguagem natural_ (para constratar com a linguagens típicas de computadores).
+Haverá um certo enfoque em texto escrito em _linguagem natural_ (para contrastar com a linguagens típicas de computadores).
 
 Vamos tentar analisar e gerar texto em linguagem natural, por vezes em português e em inglês. De fato o processamento e geração de linguagem natural é uma área muito ativa de Inteligência Artificial, como é o caso de modelos de redes neurais profundas como o [GPT-3](https://en.wikipedia.org/wiki/GPT-3).
 """
@@ -77,7 +77,7 @@ md"""
 
 Nesse primeiro exercício vamos criar uma _inteligência artificial_ bastante simples. A linguagem natural é bastante complexa, mas há uma estrutura subjacente que podemos explorar. 
 
-Vamos começar com uma estrutura muito simples de textos em português ou inglês (e outras línguas ocidentais): o conjunto de caracteres usando na escrita. Se gerarmos texto aleatório gerando carcteres `Char` quaisquer, quase com certeza não iteremos obter algo reconhecível:
+Vamos começar com uma estrutura muito simples de textos em português ou inglês (e outras línguas ocidentais): o conjunto de caracteres usando na escrita. Se gerarmos texto aleatório gerando caracteres `Char` quaisquer, quase com certeza não iremos obter algo reconhecível:
 """
 
 # ╔═╡ 3206c771-495a-43a9-b707-eaeb828a8545
@@ -89,12 +89,12 @@ String(rand(Char, 40))   # Une 40 caracteres aleatórios em uma
 
 # ╔═╡ 59f2c600-2b64-4562-9426-2cfed9a864e4
 md"""
-(`Char` em Julia é o tipo para um caracter [Unicode](https://en.wikipedia.org/wiki/Unicode). Unicode contém muitos conjuntos diferentes de catacteres, que cobrem a maoria das línguas do planeta (como caracteres latinos, gregos, cirílico, chinês) e de fora do planeta (tem klingon, pelo menos) e até emojis. Daí, os caracteres latinos são minoria e por isso aparecem raramente em amostras aleatórias.)
+(`Char` em Julia é o tipo para um caracter [Unicode](https://en.wikipedia.org/wiki/Unicode). Unicode contém muitos conjuntos diferentes de caracteres, que cobrem a maioria das línguas do planeta (como caracteres latinos, gregos, cirílico, chinês) e de fora do planeta (tem Klingon, pelo menos) e até emojis. Daí, os caracteres latinos são minoria e por isso aparecem raramente em amostras aleatórias.)
 """
 
 # ╔═╡ f457ad44-f990-11ea-0e2d-2bb7627716a8
 md"""
-Para contornar isso, vamos definir um vetor de caracteres, que vamos chamar de `alphabet` que irá conter apenas as letras usuais. Para deixar as coisas bem simples, vamos considerar apenas caracteres minúsculos e o espaço em branco, sem acentos, sem pontuação. Vamos então usar apenas 27 caracteres. Observer que usamos notação de concatenação de vetores abaixo.
+Para contornar isso, vamos definir um vetor de caracteres, que vamos chamar de `alphabet`. Ele irá conter apenas as letras usuais. Para deixar as coisas bem simples, vamos considerar apenas caracteres minúsculos e o espaço em branco, sem acentos, sem pontuação. Vamos então usar apenas 27 caracteres. Observer que usamos notação de concatenação de vetores abaixo.
 """
 
 # ╔═╡ 4efc051e-f92e-11ea-080e-bde6b8f9295a
@@ -114,13 +114,13 @@ Já parece melhor, mas ainda está bem longe de um texto natural em português o
 
 ## Tabelas de frequência
 
-Palavras em uma língua não são obtidas escolhendo-se os caracteres de forma aleatória. Em particular, podemos partir da observação que *algumas letras são mais comuns que outras*. Podemos operacionalizar isso obtendo uma tabela de frequencia dos caracteres a partir de uma amostra de texto que seja representativa da linguagem.
+Palavras em uma língua não são obtidas escolhendo-se os caracteres de forma aleatória. Em particular, podemos partir da observação que *algumas letras são mais comuns que outras*. Podemos operacionalizar isso obtendo uma tabela de frequência dos caracteres a partir de uma amostra de texto que seja representativa da linguagem.
 
 As amostras a seguir foram obtidas da Wikipedia. Sinta-se à vontade de testar com sua própria amostra. 
 
-Lembrese que o símbolo $(html"<img src='https://cdn.jsdelivr.net/gh/ionic-team/ionicons@5.0.0/src/svg/eye-outline.svg' style='width: 1em; height: 1em; margin-bottom: -.2em;'>") do lado direito de cada célula é usado para esconder ou mostrar o código que gerou o resultado. Note o uso da função `unaccent` que tira os acentos da amostra em português. Você poderá ver a implementação dela mais abaixo.
+Lembre-se que o símbolo $(html"<img src='https://cdn.jsdelivr.net/gh/ionic-team/ionicons@5.0.0/src/svg/eye-outline.svg' style='width: 1em; height: 1em; margin-bottom: -.2em;'>") do lado direito de cada célula é usado para esconder ou mostrar o código que gerou o resultado. Note o uso da função `unaccent` que tira os acentos da amostra em português. Você poderá ver a implementação dela mais abaixo.
 
-Nós também incluímos uma amostra de inglẽs, que será usada depois.
+Nós também incluímos uma amostra de inglês, que será usada depois.
 """
 
 # ╔═╡ d67034d0-f92d-11ea-31c2-f7a38ebb412f
@@ -143,7 +143,7 @@ samples = (
 md"""
 #### Exercise 1.1 - _Limpeza de dados_
 
-Olhando a amostra, podemos ver que mesmo após de limparmos o acentos ela ainda tem muitos outros caracteres que não estão considerados em `alphabet` (letras sem acentos em minúsculas e espaço em branco): sinais de pontuação, colchetes, alguns números, etc. 
+Olhando a amostra, podemos ver que mesmo após a retirada dos acentos ela ainda possui muitos outros caracteres que não estão considerados em `alphabet` (letras sem acentos em minúsculas e espaço em branco): sinais de pontuação, colchetes, alguns números, etc. 
 
 Vamos limpar os dados usando a função `filter` do Julia.
 """
@@ -155,12 +155,12 @@ filter(isodd, [6, 7, 8, 9, -5])
 md"""
 `filter` recebe dois argumentos. uma **função** e uma **coleção**. A função é então aplicada em cada elemento da coleção. Ela deve retornar `true` ou `false` para cada elemento. (Esse tipo de função pode ser chamada de um **predicado**). Ao final ela devolve uma coleção com os elementos para o qual o resultado da função foi `true`.
 
-Uma coisa interessante de observar é que em Julia funções são _objetos_ como outros quaisquer. Eles podem ser atribuídos à variáveis ou passados a outras funções sem necessitar de nenhuma sintaxe especial.
+Uma coisa interessante é lembrar que em Julia funções são _objetos_ como outros quaisquer. Eles podem ser atribuídos à variáveis ou passados a outras funções sem necessitar de nenhuma sintaxe especial.
 
 
 $(html"<br>")
 
-Nós já escrevemos uma função `isinalphabet`, que recebe um caracter e decide se ele está no nosso alfabeto ou não:
+Abaixo apresentamos a função `isinalphabet`, que recebe um caracter e decide se ele está no nosso alfabeto ou não:
 """
 
 # ╔═╡ 5c74a052-f92e-11ea-2c5b-0f1a3a14e313
@@ -182,15 +182,15 @@ cleaned_sentence_1 = missing
 
 # ╔═╡ 05f0182c-f999-11ea-0a52-3d46c65a049e
 md"""
-Nós também não estamos interessados em diferenciar letras maiúsculas de minúsculas. Então queremos *mapear* letras maiúsculas na respectiva letra minúscula antes de aplicar o filtro. Se não o fizermos, as letras maúsculas serão apagadas.
+Nós também não estamos interessados em diferenciar letras maiúsculas de minúsculas. Então, queremos *mapear* letras maiúsculas na respectiva letra minúscula antes de aplicar o filtro. Se não o fizermos, as letras maiúsculas serão apagadas.
 
-Julia possui uma função `map` que faz exatamente isso. Ela é parecida com `filter` ao receber uma função como primeiro argument e uma coleção como segundo. Mas agora o que ela faz é construir uma nova coleção com os valores da função dada no primeiro argumento aplicada sobre os elementos da coleção.
+Julia possui uma função `map` que faz exatamente isso. Ela é parecida com `filter` ao receber uma função como primeiro argumento e uma coleção como segundo. Mas agora o que ela faz é construir uma nova coleção com os valores da função dada no primeiro argumento aplicada sobre os elementos da coleção.
 
-Agora para esse caso particular, converter letras para minúsculas, Julia possui uma função pronta chamada `lowercase`. Ela também pode receber uma `String` de entrada e converter cada caracter, assim como faríamos com `map`. Então, abaixo, você nem precisa usar `map`. Mas eu não podia deixar de comentar sobre a existência de `map` já nessa primeira oportunidade.  
+Já para o caso particular, converter letras para minúsculas, Julia possui uma função pronta chamada `lowercase`. Ela também pode receber uma `String` de entrada e converter cada caracter, assim como faríamos com `map`. Então, abaixo, você nem precisa usar `map`. Mas eu não podia deixar de comentar sobre a existência de `map` já nessa primeira oportunidade.  
 """
 
 # ╔═╡ 98266882-f998-11ea-3270-4339fb502bc7
-md"👉 Use a função `lowercase` para converter `messy_sentence_2` em minúculas e depois use `filter` para extrair apenas os caracteres do nosso alfabeto."
+md"👉 Use a função `lowercase` para converter `messy_sentence_2` em minúsculas e depois use `filter` para extrair apenas os caracteres do nosso alfabeto."
 
 # ╔═╡ d3c98450-f998-11ea-3caf-895183af926b
 messy_sentence_2 = "Awesome! 😍"
@@ -200,7 +200,7 @@ cleaned_sentence_2 = missing
 
 # ╔═╡ aad659b8-f998-11ea-153e-3dae9514bfeb
 md"""
-Por fim, preciamos lidar com **acentos**: simplesmente apagar caracteres acentuados dos textos vai acabar alterando as frequências demais, particularmente em português. Uma opção seria adicionar caracteres acentuados a nosso alfabeto, mas vamos fazer algo ainda mais simples: vamos substituir os caracteres acentuados por sua versão sem acentos. Juia já tem uma rotina que faz quase isso e vamos usá-la para como base da função `unaccent` abaixo.
+Por fim, precisamos lidar com **acentos**: simplesmente apagar caracteres acentuados dos textos vai acabar alterando as frequências demais, particularmente em português. Uma opção seria adicionar caracteres acentuados a nosso alfabeto, mas vamos fazer algo ainda mais simples: vamos substituir os caracteres acentuados por sua versão sem acentos. Julia já tem uma rotina que faz quase isso e vamos usá-la para como base da função `unaccent` abaixo.
 """
 
 # ╔═╡ 734851c6-f92d-11ea-130d-bf2a69e89255
@@ -218,15 +218,15 @@ unaccent(french_word)
 # ╔═╡ 8d3bc9ea-f9a1-11ea-1508-8da4b7674629
 md"""
 👉 Agora vamos colocar tudo junto. Escreva uma função chamada `clean` que recebe uma cadeia de caracteres e retorna sua versão "limpa" onde:
-- caracteres acentuados são substituidos por sua versão sem acentos;
-- letras maíusculas são convertidas para minúsculas;
-- elimina (filtra) catacteres que não estão contidos em `alphabet`.
+- caracteres acentuados são substituídos por sua versão sem acentos;
+- letras maiúsculas são convertidas para minúsculas;
+- elimina (filtra) caracteres que não estão contidos em `alphabet`.
 """
 
 # ╔═╡ 4affa858-f92e-11ea-3ece-258897c37e51
 function clean(text)
 
-    return missing
+    return "missing" * join('a':'z')  # Change with your solution
 end
 
 # ╔═╡ e00d521a-f992-11ea-11e0-e9da8255b23b
@@ -257,12 +257,12 @@ sample_freqs = letter_frequencies(first_sample)
 
 # ╔═╡ 603741c2-f9a4-11ea-37ce-1b36ecc83f45
 md"""
-O resultado é um vetor de 27 elementos com valores entre 0.1 e 1.0. Esses valores correspondem à frequência de cada letra. 
+O resultado é um vetor de 27 elementos com valores entre 0.0 e 1.0. Esses valores correspondem à frequência de cada letra. 
 
 `sample_freqs[i] == 0.0` indica que a $i$-ésima letra não apareceu na amostra, e
 `sample_freqs[i] == 0.1` indica que 10% das letras na amostra correspondiam a $i$-ésima letra.
 
-Para facilitar a conversão entre um caracter do alfabeto e um índice, nos temos a rotina abaixo:
+Para facilitar a conversão entre um caracter do alfabeto e um índice, nós temos a rotina abaixo:
 """
 
 # ╔═╡ b3de6260-f9a4-11ea-1bae-9153a92c3fe5
@@ -285,17 +285,17 @@ unused_letters = ['a', 'b', 'c'] # Substitua com sua solução
 md"""
 Agora que conhecemos as frequências das letras em português, podemos gerar textos aleatórios que se parecem um pouco mais com nossa língua. Compare.
 
-**Letras aleatórios no em `alphabet`:**
+**Letras aleatórios em `alphabet`:**
 """
 
 # ╔═╡ 01215e9a-f9a9-11ea-363b-67392741c8d4
 md"""
-**Letras aleatórias com as frequencias corretas:**
+**Letras aleatórias com as frequências corretas:**
 """
 
 # ╔═╡ 8ae13cf0-f9a8-11ea-3919-a735c4ed9e7f
 md"""
-Simplemente considerando _frequências_ corretas, já conseguimos ver o nosso modelo dando respostas mais razoáveis.
+Simplesmente considerando _frequências_ corretas, já conseguimos ver o nosso modelo dando respostas mais razoáveis.
 
 Nossa próxima observação é que algumas **combinações de letras são mais comuns que outras**. O nosso modelo considera ainda que "sapato" é tão comum quando "aaotps". Na próxima seção vamos considerar também essas _frequências de transição_ e usá-las para melhorar o modelo.
 """
@@ -307,9 +307,9 @@ Nossa próxima observação é que algumas **combinações de letras são mais c
 md"""
 #### Exercício 1.3 - _Frequências de transição_
 
-Nos exercícios anteriores nós calculamos a frequência de cada letra na amostra _contando_ suas ocorrências e depois deividindo pelo o número total de letras.
+Nos exercícios anteriores nós calculamos a frequência de cada letra na amostra _contando_ suas ocorrências e depois dividindo pelo o número total de letras.
 
-Neste exercícios nós vamos contar o _as transições entre letras_, como `aa`, `as`, `rt`, `rr`. Duas letras isoladas podem ser comuns, como `a`  e `e`, mas a sua combinção `ae`  bem mais rara.
+Neste exercícios nós vamos contar o _as transições entre letras_, como `aa`, `as`, `rt`, `rr`. Duas letras isoladas podem ser comuns, como `a`  e `e`, mas a sua combinação `ae`  bem mais rara.
 
 Para quantificar essa observação vamos fazer o mesmo que no último exercício: vamos contar as ocorrências em uma _amostra de texto_ e criar uma **matriz de frequências de transição**.
 """
@@ -333,7 +333,7 @@ md"O que obtemos é uma **matriz 27 × 27**. Cada entrada corresponde a um par d
 
 # ╔═╡ aa2a73f6-0c1d-4be1-a414-05a6f8ce04bd
 md"""
-O brilho no fundo de cada par de letras indica o quão frequente o par é. O espaço é rpresentado por `_`.
+O brilho no fundo de cada par de letras indica o quão frequente o par é. O espaço é representado por `_`. Note que as duas matrizes acima só ficam interessantes quando você implementar a função `clean` do exercício 1.1. Caso contrário o texto processador é simplesmente `missing` que quase não tem informação interessante.
 """
 
 # ╔═╡ 0b67789c-f931-11ea-113c-35e5edafcbbf
@@ -366,7 +366,7 @@ hl_frequency = missing
 
 # ╔═╡ 1dd1e2f4-f930-11ea-312c-5ff9e109c7f6
 md"""
-👉 Escreva código que letras aparecem repetidas (padrões como `rr`) na amostra.
+👉 Escreva código que devolve um vetor com letras aparecem repetidas (por exemplo o `r` que está associado ao padrão repetido `rr`) na amostra.
 """
 
 # ╔═╡ 65c92cac-f930-11ea-20b1-6b8f45b3f262
@@ -392,7 +392,7 @@ most_likely_to_precede_w = 'x' # replace with your answer
 
 # ╔═╡ 45c20988-f930-11ea-1d12-b782d2c01c11
 md"""
-👉 Qual a soma de cada linha? E qual a soma de cada coluna? Qual a soma de todos os lementos da matrix? Como podemos interpretar esses valores"
+👉 Qual a soma de cada linha? E qual a soma de cada coluna? Qual a soma de todos os elementos da matrix? Como podemos interpretar esses valores"
 """
 
 # ╔═╡ 58428158-84ac-44e4-9b38-b991728cd98a
@@ -411,7 +411,7 @@ Blablabla
 md"""
 Nós podemos então usar as frequências de transição para gerar texto aleatoriamente de forma que obedeça as essas frequências. Note, que o texto fica muito parecido com linguagem natural! Aos poucos vamos melhorando o nosso modelo.
 
-Já deve até dar par usar o nosso modelo para gerar senhas aleatórias prounciáveis!
+Já deve até ser possível usar nosso modelo para gerar senhas aleatórias pronunciáveis!
 """
 
 # ╔═╡ b7446f34-f9b1-11ea-0f39-a3c17ba740e5
@@ -431,7 +431,7 @@ md"""
 
 # ╔═╡ d83f8bbc-f9af-11ea-2392-c90e28e96c65
 md"""
-**Letras aleatórias obedecendo as frequências de transião corretas:**
+**Letras aleatórias obedecendo as frequências de transição corretas:**
 """
 
 # ╔═╡ b5b8dd18-f938-11ea-157b-53b145357fd1
@@ -449,10 +449,16 @@ end
 function sample_text(A, n)
 
     first_index = rand_sample(vec(sum(A, dims = 1)))
-
+	
     indices = reduce(1:n; init = [first_index]) do word, _
         prev = last(word)
-        freq = normalize_array(A[prev, :])
+		col = A[prev, :]
+		if sum(col) > 0.0
+        	freq = normalize_array(col)
+		else
+			col_len = length(col)
+			freq = ones(col_len) / col_len
+		end
         next = rand_sample(freq)
         [word..., next]
     end
@@ -467,11 +473,11 @@ md"""
 
 # ╔═╡ 141af892-f933-11ea-1e5f-154167642809
 md"""
-Parece que temos agora um modelo de lígua descente, no sentido que ele pelo menos entende quais são as _frequências de transição_ presentes. Na demostração acima tente alternar entre  $(join(string.(fieldnames(typeof(samples))), " e ")) -- o texto claramente vai se parecer mais com a lígua escolhida do que com a(s) outra(s), demosntrado que o modelo captura diferenças importantes entre as duas línguas. Isso apesar do nossos "dados de treinamento" terem sido extratos bem pequenos de texto.
+Parece que temos agora um modelo de língua descente, no sentido que ele pelo menos entende quais são as _frequências de transição_ presentes. No exemplo acima tente alternar entre $(join(string.(fieldnames(typeof(samples))), " e ")) -- o texto claramente vai se parecer mais com a língua escolhida do que com a(s) outra(s), demonstrando que o modelo captura diferenças importantes entre as duas línguas. Isso apesar do nossos "dados de treinamento" terem sido extratos bem pequenos de texto.
 
-Nesse exercício, vamos usar o nosso modelo para gerar um **classificador**: programa que decide automatimante se um novo texto está em  $(join(string.(fieldnames(typeof(samples))), " ou ")). 
+Nesse exercício, vamos usar o nosso modelo para gerar um **classificador**: programa que decide automaticamente se um novo texto está em  $(join(string.(fieldnames(typeof(samples))), " ou ")). 
 
-Essa não é uma tarefa difícil -- você sempre pode usar dicionários das duas líguas e verificar onde há mais ocorrências -- mas vamos fazer algo mais interessante e mais próximos de técnicas modernas de IA. Vamos treinar o nosso programa e baseado no _modelo de linguagem_ que desenvolvemos vamos obter o classificador.
+Essa não é uma tarefa difícil -- você sempre pode usar dicionários das duas línguas e verificar onde há mais ocorrências -- mas vamos fazer algo mais interessante e mais próximo de técnicas modernas de IA. Vamos treinar o nosso programa e, baseado no _modelo de linguagem_ que desenvolvemos, obter o classificador.
 """
 
 # ╔═╡ 7eed9dde-f931-11ea-38b0-db6bfcc1b558
@@ -491,7 +497,7 @@ mystery_sample
 
 # ╔═╡ 292e0384-fb57-11ea-0238-0fbe416fc976
 md"""
-Vamos calcular as frequências de transição na amostra mistoriosa! Digite alguma coisa na caixa de texto acima e observer que a matriz de frequência atualiza automaticamente.
+Vamos calcular as frequências de transição na amostra misteriosa! Digite alguma coisa na caixa de texto acima e observe que a matriz de frequência atualiza automaticamente.
 """
 
 # ╔═╡ 7dabee08-f931-11ea-0cb2-c7d5afd21551
@@ -499,14 +505,14 @@ transition_frequencies(mystery_sample)
 
 # ╔═╡ 3736a094-fb57-11ea-1d39-e551aae62b1d
 md"""
-Nosso modelo irá **comparar as frequências de transião da amostra misteriosa** com as frequência que já temos das duas linguagens. Aquele que for a mais próxima será escolhida como provável linguagem do novo texto.
+Nosso modelo irá **comparar as frequências de transição da amostra misteriosa** com as frequência que já temos das duas linguagens. Aquela que for a mais próxima será escolhida como provável linguagem do novo texto.
 
 Mas como comparar duas matrizes? Queremos usar uma _distância_ de matrizes, uma medida de proximidade entre os seus elementos.
 
-👉 Escreva uma função chamada `matrix_distance` que recebe duas matrizes de mesma dimensão e calcula a ditância entre eles através de:
+👉 Escreva uma função chamada `matrix_distance` que recebe duas matrizes de mesma dimensão e calcula a distância entre eles através de:
 
 1. Subtrai elementos correspondentes;
-2. Obtem o módulo de cada diferença;
+2. Obtém o módulo de cada diferença;
 3. Soma esses módulos.
 """
 
@@ -530,26 +536,26 @@ end
 
 # ╔═╡ 8c7606f0-fb93-11ea-0c9c-45364892cbb8
 md"""
-Acima escrevemos código que calcula a distância com respeito as amostras originais. Se deu tudo certo o valor menor estará relacionado com a língua correta. Dê uma olhada no código. Se não conhece ainda o comando `do` de Julia, [veja o manual](https://docs.julialang.org/en/v1/base/base/#do).
+Acima escrevemos código que calcula a distância com respeito às amostras originais. Se deu tudo certo o valor menor estará relacionado com a língua correta. Dê uma olhada no código. Se não conhece ainda o comando `do` de Julia, [veja o manual](https://docs.julialang.org/en/v1/base/base/#do).
 
 #### Se quiser ler mais
-Um fenômeno interessante é ver que a decompisição SVD da matriz de transição é capaz de agrupar o alfabeto em consoantes e vogais, sem precisar de mais informação sobre a língua. Veja esse [paper](http://languagelog.ldc.upenn.edu/myl/Moler1983.pdf) se quiser tentar sozinho! Como dica sugerimos tirar o espaço em branco `alphabet` (como é feito no paper) para obter resultados melhores.
+Um fenômeno interessante é ver que a decomposição SVD da matriz de transição é capaz de agrupar o alfabeto em consoantes e vogais, sem precisar de mais informação sobre a língua. Veja esse [paper](http://languagelog.ldc.upenn.edu/myl/Moler1983.pdf) se quiser tentar sozinho! Como dica sugerimos tirar o espaço em branco `alphabet` (como é feito no paper) para obter resultados melhores.
 """
 
 # ╔═╡ 82e0df62-fb54-11ea-3fff-b16c87a7d45b
 md"""
 ## **Exercício 2** - _Geração de Línguas_
 
-O modelo do exercício 1 tem a propriedade que ele pode ser usado para _gerar_ texto. Se por um lado isso é interessante para mostrar que ele captura alguma estrutura da língua original, o texto produzido é totalmente sem sentido: ainda não consiguimos acertar as palavras e muito menos a estrutura de frases.
+O modelo do exercício 1 tem a propriedade que ele pode ser usado para _gerar_ texto. Se por um lado isso é interessante para mostrar que ele captura alguma estrutura da língua original, o texto produzido é totalmente sem sentido: ainda não conseguimos acertar as palavras e muito menos a estrutura de frases.
 
-Para ir um pouco além com nosso modelo, nós vamos _generalizar_ o que já fizemos. Ao invés de trabalhar com _pares de letras_, vamos trabalhar com _combinações de palavras_. E ao invés de analisarmos frequẽncias em bigramas, vamos trabalhar com [_$n$-gramas_ ](https://pt.wikipedia.org/wiki/N-grama).
+Para ir um pouco além com nosso modelo, nós vamos _generalizar_ o que já fizemos. Ao invés de trabalhar com _pares de letras_, vamos trabalhar com _combinações de palavras_. E ao invés de analisarmos frequências em bigramas, vamos trabalhar com [_$n$-gramas_ ](https://pt.wikipedia.org/wiki/N-grama).
 
 
 #### Conjunto de dados
 
 Isso também quer dizer que vamos precisar de um conjunto de dados maior para treinar o modelo: o número de palavras (e suas combinações) é muito maior do que o número de letras. 
 
-Para isso nós vamos treinhar o nosso modelo no livro "Dom Casmurro" de Machado de Assis que será baixado do [Projeto Gutemberg](https://www.gutenberg.org/ebooks/55752). Esse texto clássico está em domínio público então não há problemas de fazer issso. Abaixo nós pegamos o livro diretamente da Internet, limpamos os trechos iniciais e finais e dividimos o texto em palavras e sinais de pontuação.
+Para isso nós vamos treinar o nosso modelo no livro "Dom Casmurro" de Machado de Assis que será baixado do [Projeto Gutemberg](https://www.gutenberg.org/ebooks/55752). Esse texto clássico está em domínio público então não há problemas de fazer isso. Abaixo, nós pegamos o livro diretamente da Internet, limpamos os trechos iniciais e finais e dividimos o texto em palavras e sinais de pontuação.
 """
 
 # ╔═╡ b7601048-fb57-11ea-0754-97dc4e0623a1
@@ -586,7 +592,7 @@ sample_words = splitwords(samples.Portuguese)
 md"""
 #### Exercício 2.1 - _Digramas revisitados_
 
-O objetigo dos próximos exercícios é **generalizar** o que fizemos no exercício 1. Para manter as coisas simples, vamos _dividi o nosso problema_ em problemas menores (como deve ser feito para resolver qualquer problema computacional não trivial). 
+O objetivo dos próximos exercícios é **generalizar** o que fizemos no exercício 1. Para manter as coisas simples, vamos _dividir o nosso problema_ em problemas menores (como deve ser feito para resolver qualquer problema computacional não trivial). 
 
 Inicialmente, aqui está uma função que pega um vetor e devolve um vetor composto de todos os **pares de vizinhos** presentes no array original. Por exemplo
 
@@ -636,7 +642,7 @@ ngrams([1, 2, 3, 42], 2) == bigrams([1, 2, 3, 42])
 # ╔═╡ 7be98e04-fb6b-11ea-111d-51c48f39a4e9
 function ngrams(words, n)
 
-    return missing
+    return bigrams(words) # Substitute with a solution that uses n
 end
 
 # ╔═╡ 052f822c-fb7b-11ea-382f-af4d6c2b4fdb
@@ -647,8 +653,6 @@ ngrams(sample_words, 4)
 
 # ╔═╡ 7b10f074-fb7c-11ea-20f0-034ddff41bc3
 md"""
-Se fosse ficou "empacado", apenas escreva `ngrams(words, n) = bigrams(words)` (ignorando o valor real do $n$), e vá para os próximos exercícios.
-
 #### Exercício 2.2 - _Revisitando a matriz de frequências_
 No exercício 1 usamos um array 2D para guardar as frequências dos bigramas, onde cada linha e coluna correspondia a um caracter do alfabeto. para usar trigramas, podemos então usar arrays 3D e assim por diante.
 
@@ -657,7 +661,7 @@ Porém, ao contar palavras no lugar de letras temos um problema: Um array 3D com
 
 # ╔═╡ 24ae5da0-fb7e-11ea-3480-8bb7b649abd5
 md"""
-_Dom Casmurro_ consists of $(
+_Dom Casmurro_ possui $(
 	length(Set(dc_words))
 ) palavras únicas. Isso significa que existem $(
 	Int(floor(length(Set(dc_words))^3 / 10^9))
@@ -668,7 +672,7 @@ _Dom Casmurro_ consists of $(
 md"""
 $(html"<br>")
 
-Mas pensando bem, esse array enorme deria a grande *maioria das entradas iguais a zero*. Por exemplo, _"Capitú"_ é uma palavra comum no livro, mas _"Capitú Capitú Capitú"_ não ocorre no livro. Podemos usar esse fato para armazenar os dados em uma estrutura especial que não guarda os zeros, em um tipo de _matriz esparsa_.
+Mas pensando bem, esse array enorme teria a grande *maioria das entradas iguais a zero*. Por exemplo, _"Capitú"_ é uma palavra comum no livro, mas _"Capitú Capitú Capitú"_ não ocorre no livro. Podemos usar esse fato para armazenar os dados em uma estrutura especial que não guarda os zeros, em um tipo de _matriz esparsa_.
 
 Julia possui o pacote [`SparseArrays.jl`](https://docs.julialang.org/en/v1/stdlib/SparseArrays/index.html) que parece uma boa ideia nesse caso. Mas ele apenas lida com arrays 1D e 2D. Além disse vamos querer indexar os arrays diretamente com strings e não índices inteiros. Para isso vamos usar os **dicionários** da linguagem ou `Dict`.
 
@@ -683,11 +687,11 @@ healthy["fruits"]
 
 # ╔═╡ 52970ac4-fb82-11ea-3040-8bd0590348d2
 md"""
-(Você notou uma coisa: os dicionários não têm ordem garantida, assim ao imprimeir o dicionário os dados usados em sua criação apareceram em ordem trocada.)
+(Você notou uma coisa: os dicionários não têm ordem garantida. Assim ao imprimir o dicionário os dados usados em sua criação apareceram em ordem trocada.)
 
 Você pode adicionar ou modificar os dados de um `Dict` a qualquer momento simplesmente associando um (possivelmente novo) valor a `my_dict[key]`. Você pode verificar se um valor existe usando `haskey(my_dict, key)`.
 
-👉 Use essas duas técnicas para escrever uma rotina chamada `word_counts` que pega um array de palavras e retorna um `Dict` com as eintradas `palavra => número_de_ocorrências`.
+👉 Use essas duas técnicas para escrever uma rotina chamada `word_counts` que pega um array de palavras e retorna um `Dict` com as entradas `palavra => número_de_ocorrências`.
 
 Por exemplo,
 ```julia
@@ -726,7 +730,7 @@ capitu_count = missing
 
 # ╔═╡ 294b6f50-fb84-11ea-1382-03e9ab029a2d
 md"""
-Ótimo! Agora podemos voltar aos n-gramas. Com o objtivo de gerar texto, vamos armazenar uma _memória de completamento_. Este é um discionário onde cada chave é um $(n - 1)$-grama, e o valor corresponde é um vetor com todas as palavras que podem completá-lo a um $n$-grama válido. Vejamos um exemplo:
+Ótimo! Agora podemos voltar aos n-gramas. Com o objetivo de gerar texto, vamos armazenar uma _memória de completamento_. Este é um dicionário onde cada chave é um $(n - 1)$-grama, e o valor corresponde é um vetor com todas as palavras que podem completá-lo a um $n$-grama válido. Vejamos um exemplo:
 
 ```julia
 let
@@ -744,21 +748,17 @@ end
 Assim, para trigramas, as chaves são as primeiras duas palavras de um trigrama, e os 
 valores são vetores contendo as terceiras palavras que aparecem nesses trigramas.
 
-Se um trigrama aparece múltiplas vezes, como por exemplo
+Se um trigrama aparece múltiplas vezes, como por exemplo "Capitu falou sorrindo", então a última palavra ("sorrindo") deve ser armazenada múltiplas vezes. Isso vai nos permitir gerar trigramas com as mesmas frequências que o texto original.
 
-
-If the same n-gram occurs multiple times (e.g. "said Emma laughing"), then the last word ("laughing") should also be stored multiple times. This will allow us to generate trigrams with the same frequencies as the original text.
-
-👉 Write the function `completion_cache`, which takes an array of ngrams (i.e. an array of arrays of words, like the result of your `ngram` function), and returns a dictionary like described above.
+👉 Escreva a função `completion_cache`, que recebe um array de n-gramas (um array de arrays de palavras como o resultado da função `ngram`), e retorna um dicionário de completamento, como descrito acima.
 """
 
 # ╔═╡ b726f824-fb5e-11ea-328e-03a30544037f
 function completion_cache(grams)
     cache = Dict()
 
-    # your code here
-
-    cache
+    # Add correct code below 
+    cache = Dict(g[1:end - 1] => [g[end]] for g in grams)
 end
 
 # ╔═╡ 18355314-fb86-11ea-0738-3544e2e3e816
@@ -776,7 +776,7 @@ Qual informação está nessa cache? No exemplo, as palavras "to be" podem ser s
 md"""
 #### Exercício 2.4 - _Escreva um romance_
 
-Nós temos tudo o que precisamos para gerar nosso próprio romance. O passo final é selecionar n-gramas aleaoriamente de modo que o próximo n-grama tem uma intersecção com o anterior. Nós fizemos isso na função  `generate_from_ngrams` abaixo. Dê uma olhada no código ou escreva a sua própria versão.
+Nós temos tudo o que precisamos para gerar nosso próprio romance. O passo final é selecionar n-gramas aleatoriamente de modo que o próximo n-grama tem uma intersecção com o anterior. Nós fizemos isso na função  `generate_from_ngrams` abaixo. Dê uma olhada no código ou escreva a sua própria versão.
 """
 
 # ╔═╡ a72fcf5a-fb62-11ea-1dcc-11451d23c085
@@ -854,10 +854,13 @@ Entre com o seu próprio texto na caixa abaixo e use-o como dado de treinamento 
 @bind generate_demo_sample TextField((50, 5), default = samples.Portuguese)
 
 # ╔═╡ 70169682-fb8c-11ea-27c0-2dad2ff3080f
-md"""Using $(@bind generate_sample_n_letters NumberField(1:5))grams for characters"""
+md"""Using $(@bind generate_sample_n_letters NumberField(1:5, default = 2))grams for characters"""
+
+# ╔═╡ 6a7c5425-c86c-4f22-982a-345234df15cb
+NumberField
 
 # ╔═╡ 402562b0-fb63-11ea-0769-375572cc47a8
-md"""Using $(@bind generate_sample_n_words NumberField(1:5))grams for words"""
+md"""Using $(@bind generate_sample_n_words NumberField(1:5, default = 2))grams for words"""
 
 # ╔═╡ 2521bac8-fb8f-11ea-04a4-0b077d77529e
 md"""
@@ -963,7 +966,7 @@ hint(md"Dê uma olhada na imagem de frequências de pares")
 
 # ╔═╡ e467c1c6-fbf2-11ea-0d20-f5798237c0a6
 hint(
-    md"Comece com o código de `bigrams` e use a documentação de Julia para entender como ele funcina. Sabendo disso, pense em como generalizar `bigram` para obter a função `ngram`. Pode facilitar começar numa folha de papel primeiro.",
+    md"Comece com o código de `bigrams` e use a documentação de Julia para entender como ele funciona. Sabendo disso, pense em como generalizar `bigram` para obter a função `ngram`. Pode facilitar começar numa folha de papel primeiro.",
 )
 
 # ╔═╡ ffc40ab2-f380-11ea-2136-63542ff0f386
@@ -1111,7 +1114,7 @@ else
         output = clean(input)
 
 
-        if output isa Missing
+        if output isa Missing || startswith(output, "missing")
             still_missing()
         elseif output isa Vector{Char}
             keep_working(
@@ -1299,6 +1302,7 @@ PlutoUI = "~0.7.9"
 PLUTO_MANIFEST_TOML_CONTENTS = """
 # This file is machine-generated - editing it directly is not advised
 
+julia_version = "1.7.3"
 manifest_format = "2.0"
 
 [[deps.ArgTools]]
@@ -1566,11 +1570,11 @@ uuid = "3f19e933-33d8-53b3-aaab-bd5110c3b7a0"
 # ╟─f2a4edfa-f996-11ea-1a24-1ba78fd92233
 # ╠═5c74a052-f92e-11ea-2c5b-0f1a3a14e313
 # ╠═dcc4156c-f997-11ea-3e6f-057cd080d9db
-# ╠═129fbcfe-f998-11ea-1c96-0fd3ccd2dcf8
+# ╟─129fbcfe-f998-11ea-1c96-0fd3ccd2dcf8
 # ╠═3a5ee698-f998-11ea-0452-19b70ed11a1d
 # ╠═75694166-f998-11ea-0428-c96e1113e2a0
 # ╟─6fe693c8-f9a1-11ea-1983-f159131880e9
-# ╠═05f0182c-f999-11ea-0a52-3d46c65a049e
+# ╟─05f0182c-f999-11ea-0a52-3d46c65a049e
 # ╠═98266882-f998-11ea-3270-4339fb502bc7
 # ╠═d3c98450-f998-11ea-3caf-895183af926b
 # ╠═d3a4820e-f998-11ea-2a5c-1f37e2a6dd0a
@@ -1589,10 +1593,10 @@ uuid = "3f19e933-33d8-53b3-aaab-bd5110c3b7a0"
 # ╟─11e9a0e2-bc3d-4130-9a73-7c2003595caa
 # ╠═6a64ab12-f960-11ea-0d92-5b88943cdb1a
 # ╟─603741c2-f9a4-11ea-37ce-1b36ecc83f45
-# ╟─b3de6260-f9a4-11ea-1bae-9153a92c3fe5
+# ╠═b3de6260-f9a4-11ea-1bae-9153a92c3fe5
 # ╠═a6c36bd6-f9a4-11ea-1aba-f75cecc90320
 # ╟─6d3f9dae-f9a5-11ea-3228-d147435e266d
-# ╟─92bf9fd2-f9a5-11ea-25c7-5966e44db6c6
+# ╠═92bf9fd2-f9a5-11ea-25c7-5966e44db6c6
 # ╟─95b81778-f9a5-11ea-3f51-019430bc8fa8
 # ╟─7df7ab82-f9ad-11ea-2243-21685d660d71
 # ╟─dcffd7d2-f9a6-11ea-2230-b1afaecfdd54
@@ -1619,14 +1623,14 @@ uuid = "3f19e933-33d8-53b3-aaab-bd5110c3b7a0"
 # ╟─489fe282-f931-11ea-3dcb-35d4f2ac8b40
 # ╟─1dd1e2f4-f930-11ea-312c-5ff9e109c7f6
 # ╠═65c92cac-f930-11ea-20b1-6b8f45b3f262
-# ╠═671525cc-f930-11ea-0e71-df9d4aae1c05
+# ╟─671525cc-f930-11ea-0e71-df9d4aae1c05
 # ╟─7711ecc5-9132-4223-8ed4-4d0417b5d5c1
 # ╟─4582ebf4-f930-11ea-03b2-bf4da1a8f8df
 # ╠═7898b76a-f930-11ea-2b7e-8126ec2b8ffd
-# ╠═a5fbba46-f931-11ea-33e1-054be53d986c
-# ╠═458cd100-f930-11ea-24b8-41a49f6596a0
+# ╟─a5fbba46-f931-11ea-33e1-054be53d986c
+# ╟─458cd100-f930-11ea-24b8-41a49f6596a0
 # ╠═bc401bee-f931-11ea-09cc-c5efe2f11194
-# ╠═ba695f6a-f931-11ea-0fbb-c3ef1374270e
+# ╟─ba695f6a-f931-11ea-0fbb-c3ef1374270e
 # ╟─45c20988-f930-11ea-1d12-b782d2c01c11
 # ╠═58428158-84ac-44e4-9b38-b991728cd98a
 # ╠═4a0314a6-7dc0-4ee9-842b-3f9bd4d61fb1
@@ -1638,7 +1642,7 @@ uuid = "3f19e933-33d8-53b3-aaab-bd5110c3b7a0"
 # ╟─4e8d327e-f9b0-11ea-3f16-c178d96d07d9
 # ╟─489b03d4-f9b0-11ea-1de0-11d4fe4e7c69
 # ╟─d83f8bbc-f9af-11ea-2392-c90e28e96c65
-# ╟─0e872a6c-f937-11ea-125e-37958713a495
+# ╠═0e872a6c-f937-11ea-125e-37958713a495
 # ╠═fd202410-f936-11ea-1ad6-b3629556b3e0
 # ╟─b5b8dd18-f938-11ea-157b-53b145357fd1
 # ╟─0e465160-f937-11ea-0ebb-b7e02d71e8a8
@@ -1668,7 +1672,7 @@ uuid = "3f19e933-33d8-53b3-aaab-bd5110c3b7a0"
 # ╠═052f822c-fb7b-11ea-382f-af4d6c2b4fdb
 # ╠═067f33fc-fb7b-11ea-352e-956c8727c79f
 # ╟─954fc466-fb7b-11ea-2724-1f938c6b93c6
-# ╠═e467c1c6-fbf2-11ea-0d20-f5798237c0a6
+# ╟─e467c1c6-fbf2-11ea-0d20-f5798237c0a6
 # ╟─7b10f074-fb7c-11ea-20f0-034ddff41bc3
 # ╟─24ae5da0-fb7e-11ea-3480-8bb7b649abd5
 # ╟─47836744-fb7e-11ea-2305-3fa5819dc154
@@ -1694,6 +1698,7 @@ uuid = "3f19e933-33d8-53b3-aaab-bd5110c3b7a0"
 # ╟─1939dbea-fb63-11ea-0bc2-2d06b2d4b26c
 # ╟─70169682-fb8c-11ea-27c0-2dad2ff3080f
 # ╟─b5dff8b8-fb6c-11ea-10fc-37d2a9adae8c
+# ╠═6a7c5425-c86c-4f22-982a-345234df15cb
 # ╟─402562b0-fb63-11ea-0769-375572cc47a8
 # ╟─ee8c5808-fb5f-11ea-19a1-3d58217f34dc
 # ╟─2521bac8-fb8f-11ea-04a4-0b077d77529e
