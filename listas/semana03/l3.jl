@@ -774,7 +774,7 @@ Qual informação está nessa cache? No exemplo, as palavras "to be" podem ser s
 
 # ╔═╡ 3d105742-fb8d-11ea-09b0-cd2e77efd15c
 md"""
-#### Exercício 2.4 - _Escreva um romance_
+#### Exercício 2.3 - _Escreva um romance_
 
 Nós temos tudo o que precisamos para gerar nosso próprio romance. O passo final é selecionar n-gramas aleatoriamente de modo que o próximo n-grama tem uma intersecção com o anterior. Nós fizemos isso na função  `generate_from_ngrams` abaixo. Dê uma olhada no código ou escreva a sua própria versão.
 """
