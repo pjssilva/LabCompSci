@@ -1,5 +1,5 @@
 ### A Pluto.jl notebook ###
-# v0.16.0
+# v0.19.11
 
 using Markdown
 using InteractiveUtils
@@ -7,8 +7,9 @@ using InteractiveUtils
 # This Pluto notebook uses @bind for interactivity. When running this notebook outside of Pluto, the following 'mock version' of @bind gives bound variables a default value (instead of an error).
 macro bind(def, element)
     quote
+        local iv = try Base.loaded_modules[Base.PkgId(Base.UUID("6e696c72-6542-2067-7265-42206c756150"), "AbstractPlutoDingetjes")].Bonds.initial_value catch; b -> missing; end
         local el = $(esc(element))
-        global $(esc(def)) = Core.applicable(Base.get, el) ? Base.get(el) : missing
+        global $(esc(def)) = Core.applicable(Base.get, el) ? Base.get(el) : iv(el)
         el
     end
 end
@@ -24,11 +25,30 @@ begin
     using LinearAlgebra, SparseArrays, Statistics
 end
 
-# ╔═╡ bd88de2a-60c8-4df8-91aa-960efb470f0e
-md"Tradução livre de [structure.jl](https://github.com/mitmath/18S191/blob/Spring21/notebooks/week4/structure.jl)."
-
 # ╔═╡ ca1a1072-81b6-11eb-1fee-e7df687cc314
 PlutoUI.TableOfContents(aside=true)
+
+# ╔═╡ fe2028ba-f6dc-11ea-0228-938a81a91ace
+aonehotvector = [0, 1, 0, 0, 0, 0]
+
+# ╔═╡ 0a902426-f6dd-11ea-0ae4-fb0c47863fe7
+# also one "cold"
+1 .- aonehotvector
+
+# ╔═╡ 4624cd26-f5d3-11ea-1cf8-7d6555eae5fa
+struct OneHot <: AbstractVector{Int}
+    n::Int
+    k::Int
+end
+
+# ╔═╡ 397ac764-f5fe-11ea-20cc-8d7cab19d410
+Base.size(x::OneHot) = (x.n,)
+
+# ╔═╡ 82c7046c-f5d3-11ea-04e2-ef7c0f4db5da
+Base.getindex(x::OneHot, i::Int) = Int(x.k == i)
+
+# ╔═╡ bd88de2a-60c8-4df8-91aa-960efb470f0e
+md"Tradução livre de [structure.jl](https://github.com/mitmath/18S191/blob/Spring21/notebooks/week4/structure.jl)."
 
 # ╔═╡ b0ba5b8c-f5d1-11ea-1304-3f0e47f935fe
 md"# Exemplos de estrututura"
@@ -47,9 +67,6 @@ O pessoal de aprendizagem de máquina adora dar nomes para objetos que já conhe
 Por exemplo:
 """
 
-# ╔═╡ fe2028ba-f6dc-11ea-0228-938a81a91ace
-myonehatvector = [0, 1, 0, 0, 0, 0]
-
 # ╔═╡ 8d2c6910-f5d4-11ea-1928-1baf09815687
 md"""Quanta "informação" você precisa para rpresentar vetores _1-hot_? Seriam n valores ou apenas dois?
 """
@@ -58,10 +75,6 @@ md"""Quanta "informação" você precisa para rpresentar vetores _1-hot_? Seriam
 md"""
 Obs: também podemos falar de votores "1-cold": 
 """
-
-# ╔═╡ 0a902426-f6dd-11ea-0ae4-fb0c47863fe7
-# also one "cold"
-1 .- myonehatvector
 
 # ╔═╡ 4794e860-81b7-11eb-2c91-8561c20f308a
 md"""
@@ -73,29 +86,17 @@ md"""
 Julia permite a criação de novos tipos. Como exemplo, vamos criar um tipo para representar vetores _1-hot_. Ele será um subtipo de `AbstractVector`. Isso significa que ele deve se *comportar como* um vetor.
 """
 
-# ╔═╡ 4624cd26-f5d3-11ea-1cf8-7d6555eae5fa
-struct OneHot <: AbstractVector{Int}
-    n::Int
-    k::Int
-end
-
 # ╔═╡ 9bdabef8-81cc-11eb-14a1-67a9a7d968c0
 md"""
-Pronto, decicimos por manter uma implementação que economiza memória (o que é meio que óbvio nesse caso). Agora a nossa tarefa é implementar os métodos que lidam com vetores. Dessa maneira eles poderão ser usados como vetores. O segredo aqui é usar o despacho múltiplo, especializando funções em métodos específicos para o nosso novo tipo. Isso é similar ao que foi feito na aula sobre otimização diâmica, quando criamos nosso próprio iterador que gerava todos os possíveis caminhos descendentes.
+Pronto, decicimos por manter uma implementação que economiza memória (o que é meio que óbvio nesse caso). Agora a nossa tarefa é implementar os métodos que descrevem o comportamento de vetores. Dessa maneira, eles poderão ser usados como vetores. O segredo é usar o despacho múltiplo, especializando funções em métodos específicos para o nosso novo tipo. Isso é similar ao que foi feito na aula sobre otimização dinâmica, quando criamos nosso próprio iterador que gerava todos os possíveis caminhos descendentes.
 
-Inicialmente vamos definir a função que diz qual o comprimento do vetor:
+Inicialmente vamos definir a função que retorna o comprimento do vetor:
 """
-
-# ╔═╡ 397ac764-f5fe-11ea-20cc-8d7cab19d410
-Base.size(x::OneHot) = (x.n,)
 
 # ╔═╡ a22dcd2c-81cc-11eb-1252-13ace134192d
 md"""
 Agora, a função que extrai o i-ésimo componente. Essa é a função que é chamada quando indexamos um vetor usando colchetes:
 """
-
-# ╔═╡ 82c7046c-f5d3-11ea-04e2-ef7c0f4db5da
-Base.getindex(x::OneHot, i::Int) = Int(x.k == i)
 
 # ╔═╡ b024c318-81cc-11eb-018c-e1f7830ff51b
 md"""
@@ -113,7 +114,7 @@ myonehotvector[2]
 
 # ╔═╡ c5ed7d3e-81cc-11eb-3386-15b72db8155d
 md"""
-Uma variável desse tipo se comporta como se fosse um vetor, mas estamos apenas armazenando dois inteiros ao invés de n deles. Esse é um exemplo interessante de quando é melhor criar e usar sua própria estrutura.
+Uma variável desse tipo se comporta como se fosse um vetor, mas ela armazena apenas dois inteiros e não n deles. Esse é um exemplo interessante de quando é melhor criar e usar sua própria estrutura.
 """
 
 # ╔═╡ e2e354a8-81b7-11eb-311a-35151063c2a7
@@ -127,14 +128,20 @@ Julia possui a função `dump` que apresenta os dados que estão armazenados no 
 """
 
 # ╔═╡ af0d3c22-f756-11ea-37d6-11b630d2314a
-with_terminal() do
-    dump(myonehotvector)
-end
+dump(myonehotvector)
 
 # ╔═╡ 06e3a842-26b8-4417-9cf5-8a083ccdb264
 md"""
-Porém, `dump` consegue apenas escrever em um terminal e por isso não podemos usá-la diretamente dentro do Pluto. Por isso passamos o código que queremos rodar para a função `with_terminal` (definida em `PlutoUI`) que captura a saída e apresenta em uma pequena janela de terminal. `PlutoUI` tem também a função `Dump` que captura a saída de dump e devolve num formato que Pluto entende:
+Porém, `dump` consegue apenas escrever em um terminal e por isso sua saída não é apresentada naturalmente dentro do Pluto. Como vemos, Pluto cria uma saída em formato especial, lembrando um terminal antigo com aquilo que é impresso por `dump` ou por `println`, por exemplo. Outra opção é passar o código que queremos rodar para a função `with_terminal` (definida em `PlutoUI`) que captura a saída e apresenta em uma pequena janela de terminal.
 """
+
+# ╔═╡ ef624190-8c33-46ee-9642-56bcc9e296ff
+with_terminal() do
+	dump(myonehotvector)
+end
+
+# ╔═╡ 81402cbf-0440-4b35-b0ec-db4a2afe68c9
+md"Além disso, `PlutoUI` tem também a função `Dump` que captura a saída de dump e devolve num formato que Pluto entende:"
 
 # ╔═╡ 91172a3e-81b7-11eb-0953-9f5e0207f863
 Dump(myonehotvector)
@@ -164,7 +171,7 @@ x = OneHot(nn, kk)
 md"# Matrizes diagonais"
 
 # ╔═╡ 2cfda0dc-f5d5-11ea-16c4-b5a33b90e37f
-md"Outro exemplo é o de matrizes diagonais. Uma primeiar forma inocente de represetá-las é usar matrizes usuais, colocando zero fora da diagonal:"
+md"Outro exemplo são as matrizes diagonais. Uma primeira forma inocente de represetá-las é usar matrizes usuais, colocando zero fora da diagonal:"
 
 # ╔═╡ 150432d4-f5d5-11ea-32b2-19a2a91d9637
 denseD = [
@@ -225,7 +232,7 @@ M = sparse(denseM)
 
 # ╔═╡ 1f3ba55a-81b9-11eb-001f-593b9d8639ca
 md"""
-Há várias formas de se armazenar matrizes esparsas. A mais natural seria guardar triplas `(linhas, coluna, valor)`. Mas o pacote `SparseArrays.jl` de Julia usa um outro formato que é mais compacto, chamado de _colunas esparsas comprimidas` (_compressed sparse column_). Esse formato é mais favorável para operações matriciais tpipicas como produtos matriz vetor ou para obter rapidamente colunas da matriz. Nesse formato armazena-se:
+Há várias formas de se armazenar matrizes esparsas. A mais natural seria guardar triplas `(linhas, coluna, valor)`. Mas o pacote `SparseArrays.jl` de Julia usa um outro formato que é mais compacto, chamado de _coluna esparsa comprimida_ (_compressed sparse column_). Esse formato é mais favorável para operações matriciais tpipicas como produtos matriz vetor ou para obter rapidamente colunas da matriz. Nesse formato armazena-se:
 
 * `nzval` contém o número de elementos não nulos da matriz
 * `rowval` representa o índice `i` ou a linha de cada um dos `nzval` valores armazendados. Em particular:
@@ -633,7 +640,7 @@ uuid = "ffbed154-4ef7-542d-bbb7-c09d3a79fcae"
 version = "0.8.5"
 
 [[Downloads]]
-deps = ["ArgTools", "LibCURL", "NetworkOptions"]
+deps = ["ArgTools", "FileWatching", "LibCURL", "NetworkOptions"]
 uuid = "f43a241f-c20a-4ad4-852c-f6b1247861c6"
 
 [[FileIO]]
@@ -641,6 +648,9 @@ deps = ["Pkg", "Requires", "UUIDs"]
 git-tree-sha1 = "937c29268e405b6808d958a9ac41bfe1a31b08e7"
 uuid = "5789e2e9-d7fb-5bc7-8068-2c6fae9b9549"
 version = "1.11.0"
+
+[[FileWatching]]
+uuid = "7b1f6079-737a-58dc-b8bc-7a2ca5c1b5ee"
 
 [[FixedPointNumbers]]
 deps = ["Statistics"]
@@ -735,7 +745,7 @@ uuid = "29816b5a-b9ab-546f-933c-edad1886dfa8"
 uuid = "8f399da3-3557-5675-b5ff-fb832c97cbdb"
 
 [[LinearAlgebra]]
-deps = ["Libdl"]
+deps = ["Libdl", "libblastrampoline_jll"]
 uuid = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
 
 [[LogExpFunctions]]
@@ -791,6 +801,10 @@ deps = ["Adapt"]
 git-tree-sha1 = "c870a0d713b51e4b49be6432eff0e26a4325afee"
 uuid = "6fe1bfb0-de20-5000-8ca7-80f57d26f881"
 version = "1.10.6"
+
+[[OpenBLAS_jll]]
+deps = ["Artifacts", "CompilerSupportLibraries_jll", "Libdl"]
+uuid = "4536629a-c528-5b80-bd46-f80d51c5b363"
 
 [[OpenEXR]]
 deps = ["Colors", "FileIO", "OpenEXR_jll"]
@@ -870,7 +884,7 @@ deps = ["InteractiveUtils", "Markdown", "Sockets", "Unicode"]
 uuid = "3fa0cd96-eef1-5676-8a61-b3b8758bbffb"
 
 [[Random]]
-deps = ["Serialization"]
+deps = ["SHA", "Serialization"]
 uuid = "9a3f8284-a2c9-5f02-9a11-845980a1fd5c"
 
 [[Reexport]]
@@ -957,6 +971,10 @@ uuid = "4ec0a83e-493e-50e2-b9ac-8f72acf5a8f5"
 deps = ["Libdl"]
 uuid = "83775a58-1f1d-513f-b197-d71354ab007a"
 
+[[libblastrampoline_jll]]
+deps = ["Artifacts", "Libdl", "OpenBLAS_jll"]
+uuid = "8e850b90-86db-534c-a0d3-1478176c7d93"
+
 [[libpng_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg", "Zlib_jll"]
 git-tree-sha1 = "94d180a6d2b5e55e447e2d27a29ed04fe79eb30c"
@@ -999,21 +1017,23 @@ uuid = "3f19e933-33d8-53b3-aaab-bd5110c3b7a0"
 # ╟─dc5a96ba-81cc-11eb-3189-25920df48afa
 # ╠═af0d3c22-f756-11ea-37d6-11b630d2314a
 # ╟─06e3a842-26b8-4417-9cf5-8a083ccdb264
+# ╠═ef624190-8c33-46ee-9642-56bcc9e296ff
+# ╟─81402cbf-0440-4b35-b0ec-db4a2afe68c9
 # ╠═91172a3e-81b7-11eb-0953-9f5e0207f863
 # ╠═4bbf3f58-f788-11ea-0d24-6b0fb070829e
-# ╠═fe70d104-81b7-11eb-14d0-eb5237d8ea6c
+# ╟─fe70d104-81b7-11eb-14d0-eb5237d8ea6c
 # ╟─ef8f44b2-f5fc-11ea-1e4d-bd873cd39d6c
 # ╟─fd9211c0-f5fc-11ea-1745-7f2dae88af9e
 # ╠═f1154df8-f693-11ea-3b16-f32835fcc470
 # ╠═982590d4-f5ff-11ea-3802-73292c75ad6c
-# ╠═81c35324-f5d4-11ea-2338-9f982d38732c
+# ╟─81c35324-f5d4-11ea-2338-9f982d38732c
 # ╟─2cfda0dc-f5d5-11ea-16c4-b5a33b90e37f
 # ╠═150432d4-f5d5-11ea-32b2-19a2a91d9637
-# ╠═44215aa4-f695-11ea-260e-b564c6fbcd4a
+# ╟─44215aa4-f695-11ea-260e-b564c6fbcd4a
 # ╠═21328d1c-f5d5-11ea-288e-4171ad35326d
 # ╟─75761cc0-81cd-11eb-1186-7d47debd68ca
 # ╠═6bd8a886-f758-11ea-2587-870a3fa9d710
-# ╠═4c533ac6-f695-11ea-3724-b955eaaeee49
+# ╟─4c533ac6-f695-11ea-3724-b955eaaeee49
 # ╠═466901ea-f5d5-11ea-1db5-abf82c96eabf
 # ╠═b38c4aae-f5d5-11ea-39b6-7b0c7d529019
 # ╟─93e04ed8-81cd-11eb-214a-a761ef8c406f
@@ -1023,7 +1043,7 @@ uuid = "3f19e933-33d8-53b3-aaab-bd5110c3b7a0"
 # ╠═79c94d2a-f75a-11ea-031d-09d70d229e15
 # ╟─10bc5d50-81b9-11eb-2ac7-354a6c6c826b
 # ╠═77d6a952-81ba-11eb-24e3-cb6510a59455
-# ╟─1f3ba55a-81b9-11eb-001f-593b9d8639ca
+# ╠═1f3ba55a-81b9-11eb-001f-593b9d8639ca
 # ╠═3d4a702e-f75a-11ea-031c-333d591fc442
 # ╟─80ff4010-81bb-11eb-374e-215a57defb0b
 # ╠═5de72b7c-f5d6-11ea-1b6f-35b830b5fb34
