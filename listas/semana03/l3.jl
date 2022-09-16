@@ -374,7 +374,7 @@ double_letters = ['a', 'b', 'c'] # replace with your answer
 
 # ╔═╡ 4582ebf4-f930-11ea-03b2-bf4da1a8f8df
 md"""
-👉 Qual letra tem mais chance de seguir um **B**?
+👉 Qual a primeira letra de `alphabet` com chance máxima de seguir um **B**?
 
 _Faça isso à mão ou com código, o que for mais fácil para você!_
 """
@@ -384,7 +384,7 @@ most_likely_to_follow_w = 'x' # replace with your answer
 
 # ╔═╡ 458cd100-f930-11ea-24b8-41a49f6596a0
 md"""
-👉 Qual letra tem mais chance de preceder um **B**?
+👉 Qual a primeira letra de `alphabet` com chance máxima de preceder um **B**?
 """
 
 # ╔═╡ bc401bee-f931-11ea-09cc-c5efe2f11194
