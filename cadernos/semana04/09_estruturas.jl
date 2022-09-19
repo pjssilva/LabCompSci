@@ -51,13 +51,13 @@ Base.getindex(x::OneHot, i::Int) = Int(x.k == i)
 md"Tradução livre de [structure.jl](https://github.com/mitmath/18S191/blob/Spring21/notebooks/week4/structure.jl)."
 
 # ╔═╡ b0ba5b8c-f5d1-11ea-1304-3f0e47f935fe
-md"# Exemplos de estrututura"
+md"# Exemplos de estrutura"
 
 # ╔═╡ 261c4df2-f5d2-11ea-2c72-7d4b09c46098
 md"""
 # Vetores _One-hot_
 
-Esse é um exemplo de aprendizatem de máquina.
+Esse é um exemplo de aprendizagem de máquina.
 """
 
 # ╔═╡ 3cada3a0-81cc-11eb-04c8-bde26d36a84e
@@ -68,12 +68,12 @@ Por exemplo:
 """
 
 # ╔═╡ 8d2c6910-f5d4-11ea-1928-1baf09815687
-md"""Quanta "informação" você precisa para rpresentar vetores _1-hot_? Seriam n valores ou apenas dois?
+md"""Quanta "informação" você precisa para representar vetores _1-hot_? Seriam n valores ou apenas dois?
 """
 
 # ╔═╡ 54649792-81cc-11eb-1038-9161a4037acf
 md"""
-Obs: também podemos falar de votores "1-cold": 
+Obs: também podemos falar de vetores "1-cold": 
 """
 
 # ╔═╡ 4794e860-81b7-11eb-2c91-8561c20f308a
@@ -88,7 +88,7 @@ Julia permite a criação de novos tipos. Como exemplo, vamos criar um tipo para
 
 # ╔═╡ 9bdabef8-81cc-11eb-14a1-67a9a7d968c0
 md"""
-Pronto, decicimos por manter uma implementação que economiza memória (o que é meio que óbvio nesse caso). Agora a nossa tarefa é implementar os métodos que descrevem o comportamento de vetores. Dessa maneira, eles poderão ser usados como vetores. O segredo é usar o despacho múltiplo, especializando funções em métodos específicos para o nosso novo tipo. Isso é similar ao que foi feito na aula sobre otimização dinâmica, quando criamos nosso próprio iterador que gerava todos os possíveis caminhos descendentes.
+Pronto, decidimos por manter uma implementação que economiza memória (o que é meio que óbvio nesse caso). Agora a nossa tarefa é implementar os métodos que descrevem o comportamento de vetores. Dessa maneira, eles poderão ser usados como vetores. O segredo é usar o despacho múltiplo, especializando funções em métodos específicos para o nosso novo tipo. Isso é similar ao que foi feito na aula sobre otimização dinâmica, quando criamos nosso próprio iterador que gerava todos os possíveis caminhos descendentes.
 
 Inicialmente vamos definir a função que retorna o comprimento do vetor:
 """
@@ -100,7 +100,7 @@ Agora, a função que extrai o i-ésimo componente. Essa é a função que é ch
 
 # ╔═╡ b024c318-81cc-11eb-018c-e1f7830ff51b
 md"""
-Obs: `x.k == i` devolve um valor booleando: `true` ou `false`. Mas o vetor _1-hot_ é um vetor de inteiros, então convertemos esse valor para inteiro passando o resultado para `Int`.
+Obs: `x.k == i` devolve um valor booleano: `true` ou `false`. Mas o vetor _1-hot_ é um vetor de inteiros, então convertemos esse valor para inteiro passando o resultado para `Int`.
 """
 
 # ╔═╡ 93bfe3ac-f756-11ea-20fb-8f7d586b42f3
@@ -171,7 +171,7 @@ x = OneHot(nn, kk)
 md"# Matrizes diagonais"
 
 # ╔═╡ 2cfda0dc-f5d5-11ea-16c4-b5a33b90e37f
-md"Outro exemplo são as matrizes diagonais. Uma primeira forma inocente de represetá-las é usar matrizes usuais, colocando zero fora da diagonal:"
+md"Outro exemplo são as matrizes diagonais. Uma primeira forma inocente de representá-las é usar matrizes usuais, colocando zero fora da diagonal:"
 
 # ╔═╡ 150432d4-f5d5-11ea-32b2-19a2a91d9637
 denseD = [
@@ -232,10 +232,10 @@ M = sparse(denseM)
 
 # ╔═╡ 1f3ba55a-81b9-11eb-001f-593b9d8639ca
 md"""
-Há várias formas de se armazenar matrizes esparsas. A mais natural seria guardar triplas `(linhas, coluna, valor)`. Mas o pacote `SparseArrays.jl` de Julia usa um outro formato que é mais compacto, chamado de _coluna esparsa comprimida_ (_compressed sparse column_). Esse formato é mais favorável para operações matriciais tpipicas como produtos matriz vetor ou para obter rapidamente colunas da matriz. Nesse formato armazena-se:
+Há várias formas de se armazenar matrizes esparsas. A mais natural seria guardar triplas `(linhas, coluna, valor)`. Mas o pacote `SparseArrays.jl` de Julia usa um outro formato que é mais compacto, chamado de _coluna esparsa comprimida_ (_compressed sparse column_). Esse formato é mais favorável para operações matriciais tipicas como produtos matriz vetor ou para obter rapidamente colunas da matriz. Nesse formato armazena-se:
 
 * `nzval` contém o número de elementos não nulos da matriz
-* `rowval` representa o índice `i` ou a linha de cada um dos `nzval` valores armazendados. Em particular:
+* `rowval` representa o índice `i` ou a linha de cada um dos `nzval` valores armazenados. Em particular:
   * `length(rowval) == length(nzval)`
 * `colptr[j]` diz onde está o primeiro valor de cada coluna `j` ou da primeira coluna não nula posterior.
 * A última entrada de `colptr` aponta para além de `nzval` para indicar que as colunas acabaram.
@@ -286,10 +286,9 @@ md"Quanta estrutura há em um vetor _aleatório_?"
 v = rand(1:9, 1_000_000)
 
 # ╔═╡ 765c6552-f5d9-11ea-29d3-bfe7b4b04612
-md"""Num primeiro momento, podemos pensar que não há "nenhuma estrutura". Por outro lado a aleatoridade em si é um tipo de estrutura. Isso porque essa aleatoridade obedece a uma lei de formação bem estabelicida (os números são obtidos de uma distribuição uniforme).
+md"""Num primeiro momento, podemos pensar que não há "nenhuma estrutura". Por outro lado a aleatoridade em si é um tipo de estrutura. Isso porque essa aleatoridade obedece a uma lei de formação bem estabelecida. Nesse caso, os números são obtidos de uma distribuição uniforme no conjunto {1, 2, 3, 4, 5, 6, 7, 8, 9}.
 
-Por exemplo, alguns podem dizer que estrura da sequência aleatória é capturada pela média e o desvio padrão.
-
+Por exemplo, alguns podem dizer que estrutura da sequência aleatória é capturada pela média e o desvio padrão. De fato essas duas informações definem completamente uma distribuição uniforme.
 """
 
 # ╔═╡ 126fb3ea-f5da-11ea-2f7d-0b3259a296ce
@@ -314,7 +313,7 @@ E, como esperado, os dígitos ocorrem, grosseiramente, o mesmo número de vezes.
 """
 
 # ╔═╡ 9b9e2c2a-f5da-11ea-369b-b513b196515b
-md"Em suma, em alguns casos, estatíticos podem considerar que toda a informação necessária está resumida na mede e na variância. O resto poderia ser jogado fora."
+
 
 # ╔═╡ e68b98ea-f5da-11ea-1a9d-db45e4f80241
 m = sum(v) / length(v)  # mean
@@ -358,7 +357,7 @@ Uma tabela de multiplicação é claramente um tipo especial de estrutura, mas e
 """
 
 # ╔═╡ fd8dd108-f6df-11ea-2f7c-3d99d054ac15
-md"No cado das tabelas simples 1:k times 1:k, toda informação é dada pelo número k."
+md"No caso das tabelas simples 1:k times 1:k, toda informação é dada pelo número k."
 
 # ╔═╡ 165788b2-f601-11ea-3e69-cdbbb6558e54
 md"""Mas em casos mais gerais, que envolvem dois vetores "genéricos", a situação não é tão clara se olhamos os números."""
@@ -457,7 +456,7 @@ md"e ela consegue aproximar também!"
 
 # ╔═╡ ebd72fb8-f5e0-11ea-0630-573337dff753
 md"""
-# Singular Value Decomposition (SVD): A tool to find structure
+# Decomposição por valores singulares (SVD): uma ferramenta para encontrar estrutura
 """
 
 # ╔═╡ b6478e1a-f5f6-11ea-3b92-6d4f067285f4
@@ -509,7 +508,7 @@ O que aprendemos:
 * `dump` e `Dump`: são usados para ver o que está armazenada numa estrutura.
 * `Diagonal`, `sparse`
 * `error` (lança uma exceção)
-* `svd` (Decomposição por valores singulare)
+* `svd` (Decomposição por valores singulares)
 """
 
 # ╔═╡ 5813e1b2-f5ff-11ea-2849-a1def74fc065
@@ -1062,25 +1061,25 @@ uuid = "3f19e933-33d8-53b3-aaab-bd5110c3b7a0"
 # ╟─24ce92fa-81cf-11eb-30f0-b1e357d79d53
 # ╠═2d4500e0-81cf-11eb-1699-d310074fddf5
 # ╟─3546ff30-81cf-11eb-3afc-05c5db61366f
-# ╠═9b9e2c2a-f5da-11ea-369b-b513b196515b
+# ╟─9b9e2c2a-f5da-11ea-369b-b513b196515b
 # ╠═e68b98ea-f5da-11ea-1a9d-db45e4f80241
 # ╠═f20ccac4-f5da-11ea-0e69-413b5e49f423
 # ╠═12a2e96c-f5db-11ea-1c3e-494ae7446886
 # ╠═22487ce2-f5db-11ea-32e9-6f70ab2c0353
 # ╟─389ae62e-f5db-11ea-1557-c3adbbee0e5c
-# ╠═0c2b6408-f5d9-11ea-2b7f-7fece2eecc1f
+# ╟─0c2b6408-f5d9-11ea-2b7f-7fece2eecc1f
 # ╠═5d767290-f5dd-11ea-2189-81198fd216ce
 # ╠═587790ce-f6de-11ea-12d9-fde2a17ae314
 # ╟─a39e8256-f6de-11ea-3170-c923b56609da
 # ╠═8c84edd0-f6de-11ea-2180-61c6b81aac3b
 # ╠═22b73baa-f6df-11ea-197f-bbb4bd1a7ef5
 # ╠═b2332814-f6e6-11ea-1c7d-556c7d4687f1
-# ╟─9ab7a72e-81cf-11eb-2b78-073ff51cae58
+# ╠═9ab7a72e-81cf-11eb-2b78-073ff51cae58
 # ╟─fd8dd108-f6df-11ea-2f7c-3d99d054ac15
-# ╠═165788b2-f601-11ea-3e69-cdbbb6558e54
+# ╟─165788b2-f601-11ea-3e69-cdbbb6558e54
 # ╠═22941bb8-f601-11ea-1d6e-0d955297bc2e
 # ╟─c33bf00e-81cf-11eb-1e1a-e5a879a45093
-# ╠═2f75df7e-f601-11ea-2fc2-aff4f335af33
+# ╟─2f75df7e-f601-11ea-2fc2-aff4f335af33
 # ╟─7ff664f0-f74b-11ea-0d2d-b53f19e4f4bf
 # ╟─a0611eaa-81bc-11eb-1d23-c12ab14138b1
 # ╠═a4728944-f74b-11ea-03c3-9123908c1f8e
@@ -1094,7 +1093,7 @@ uuid = "3f19e933-33d8-53b3-aaab-bd5110c3b7a0"
 # ╟─5adb98c2-f6e0-11ea-1fde-53b0fd6639c3
 # ╟─487d6f9c-81d0-11eb-3bb0-336a4beb9b38
 # ╠═5a493052-f601-11ea-2f5f-f940412905f2
-# ╠═55b76aee-81d0-11eb-0bcc-413f5bd14360
+# ╟─55b76aee-81d0-11eb-0bcc-413f5bd14360
 # ╠═709bf30a-f755-11ea-2e82-bd511e598c77
 # ╠═782532b0-f755-11ea-1385-cd1a28c4b9d5
 # ╟─5bc4ab0a-f755-11ea-0fad-4987ad9fc02f
