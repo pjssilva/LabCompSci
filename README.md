@@ -44,7 +44,7 @@ disso, temos o servidor Discord da disciplina onde podemos interagir em fóruns.
 Será feita através de trabalhos computacionais durante o semestre e duas provas
 presenciais no laboratório.
 
-No segundo semestre de 2022 as datas das provas são **29/09 e 01/12**.
+No segundo semestre de 2022 as datas das provas são **05/10 e 01/12**.
 
 Médias: Definimos `ME` = "média aritméticas das listas descartando as duas
 piores notas", e `MP` = "média aritmética das provas". A média ao final do
