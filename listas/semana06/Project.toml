@@ -1,0 +1,7 @@
+[deps]
+Plots = "91a5bcdd-55d7-5caf-9e0b-520d859cae80"
+PlutoUI = "7f904dfe-b85e-4ff6-b463-dae2292396a8"
+
+[compat]
+Plots = "~1.35.3"
+PlutoUI = "~0.7.12"
