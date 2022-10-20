@@ -1,5 +1,5 @@
 ### A Pluto.jl notebook ###
-# v0.19.14
+# v0.19.13
 
 using Markdown
 using InteractiveUtils
@@ -12,12 +12,6 @@ macro bind(def, element)
         global $(esc(def)) = Core.applicable(Base.get, el) ? Base.get(el) : iv(el)
         el
     end
-end
-
-# ╔═╡ f7f71d12-7079-437f-b1cf-4b7896328327
-begin
-	import Pkg
-	Pkg.upgrade_manifest()
 end
 
 # ╔═╡ 85b45a43-d7bf-4597-a1a6-329b41dce20d
@@ -339,7 +333,7 @@ O padrão que emerge é bem interessante e é parente próximo de uma outra figu
 
 # ╔═╡ d1c47afa-ab7f-4543-a161-e3ceb6f11eb4
 md"""
-Outro fato interessante emerge quando olhamos uma variação do triângulo de Pascal onde cada coluna fixa o número de elementos dos subconjuntos das combinações.
+Outro fato interessante emerge quando olhamos uma variação do triângulo de Pascal onde entrada (i, j) possui cada coluna fixa o número de elementos dos subconjuntos das combinações.
 """
 
 # ╔═╡ bf78e00f-05d9-4a05-8512-4924ef9e25f7
@@ -374,14 +368,11 @@ Notem que esse tipo de operação, somar elementos de uma matriz já existente p
 
 ```
 [
-0 0 0 0 0
-0 1 1 0 0
-0 0 0 0 0
-0 0 0 0 0
-0 0 0 0 0
+1 1 0 
+0 0 0 
+0 0 0 
 ]
 ```
-.
 """
 
 # ╔═╡ 61f9bbfc-09cc-4d0b-b79d-262235ff10a2
@@ -647,7 +638,7 @@ gr()
 begin
     plot(leg = false)
 
-    endtime = 15
+	endtime = 20
     for t = 1:endtime
         for i = 1:length(ps[t])
             # Draws a vertical line from 0 to the high of the probaility 
@@ -673,7 +664,6 @@ BenchmarkTools = "6e4b80f9-dd63-53aa-95a3-0cdb28fa8baf"
 FLoops = "cc61a311-1640-44b5-9fba-1b764f453329"
 Folds = "41a02a25-b8f0-4f67-bc48-60067656b558"
 LinearAlgebra = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
-Pkg = "44cfe95a-1eb2-52ea-b672-e2afdf69b78f"
 PlotThemes = "ccf2f8ad-2431-5c83-bf29-c5338b663b6a"
 Plots = "91a5bcdd-55d7-5caf-9e0b-520d859cae80"
 PlutoUI = "7f904dfe-b85e-4ff6-b463-dae2292396a8"
@@ -693,6 +683,7 @@ PlutoUI = "~0.7.14"
 PLUTO_MANIFEST_TOML_CONTENTS = """
 # This file is machine-generated - editing it directly is not advised
 
+julia_version = "1.7.3"
 manifest_format = "2.0"
 
 [[deps.Accessors]]
@@ -1697,7 +1688,6 @@ version = "0.9.1+5"
 # ╔═╡ Cell order:
 # ╟─e46441c4-97bd-11eb-330c-97bd5ac41f9e
 # ╠═85b45a43-d7bf-4597-a1a6-329b41dce20d
-# ╠═f7f71d12-7079-437f-b1cf-4b7896328327
 # ╠═85c26eb4-c258-4a8b-9415-7b5f7ddff02a
 # ╟─2d48bfc6-9617-11eb-3a85-279bebd21332
 # ╟─abbc1d4f-a6d5-444c-a3b0-148979e42ba9
@@ -1716,16 +1706,16 @@ version = "0.9.1+5"
 # ╠═4523623e-39ad-44f3-96af-1dfc32d69517
 # ╠═0c9d5a88-fc7a-4c26-a899-5a9a94f5c940
 # ╠═345c8f7d-649d-4e56-8bc5-c0cab17827ab
-# ╠═d595c3de-851e-4acd-8d74-89d9d5dbcc50
+# ╟─d595c3de-851e-4acd-8d74-89d9d5dbcc50
 # ╠═4ce4f93b-86d4-45ed-92a7-59eac9f79c47
 # ╠═8480cc51-83a0-4875-ae0f-4a417a70d0f7
 # ╠═67b16340-f0f1-40e4-a0ec-16fd45ca97a4
-# ╠═53c31918-b9a5-4caf-95f7-5ea07f05a91b
+# ╟─53c31918-b9a5-4caf-95f7-5ea07f05a91b
 # ╠═ee27d51a-f277-4d06-b5a6-f473866c9053
 # ╟─33f4bbfe-62b3-4182-b1a3-3fdb5fedbaad
 # ╠═419f6a67-69f8-49fa-9092-8d9f4568d507
 # ╠═287300d0-8cbe-48d3-bf26-f0625f3f3874
-# ╠═6e29c993-6ca7-4224-b069-4691a2d48284
+# ╟─6e29c993-6ca7-4224-b069-4691a2d48284
 # ╠═9aeabeaf-ad07-47f7-ae75-dd86b6bc4e39
 # ╠═70fc0697-2c7c-4298-b54e-a91d85d5fcd8
 # ╠═3cb8181c-3c0f-4618-8152-d59ad4445f9d
@@ -1737,7 +1727,7 @@ version = "0.9.1+5"
 # ╠═254f7a34-10a6-4ae7-96b5-a1f0740493c2
 # ╠═25071ece-1484-4df5-b9ca-8f03c9b8d05e
 # ╠═a408a0ee-57f4-43c7-ad8a-7cab680f64c2
-# ╠═8db311f4-92e7-44b1-b0b0-de5fd0f9cd21
+# ╟─8db311f4-92e7-44b1-b0b0-de5fd0f9cd21
 # ╠═7eb279e3-10b6-4db6-95c9-b8fa08ea29f8
 # ╠═9a3007ea-3bc8-4ad6-b8f0-dcd09dccd832
 # ╠═c70122e3-b1be-4a10-8b3a-80d12982d76b
@@ -1756,7 +1746,7 @@ version = "0.9.1+5"
 # ╠═1ca8aa3b-b05d-40f6-a925-2f0248b79ca2
 # ╟─38d88b7c-3b4f-430b-8d3c-f672ab0c7a49
 # ╟─f4c9b02b-738b-4de1-9e9d-05b1616bee0b
-# ╟─d1c47afa-ab7f-4543-a161-e3ceb6f11eb4
+# ╠═d1c47afa-ab7f-4543-a161-e3ceb6f11eb4
 # ╠═bf78e00f-05d9-4a05-8512-4924ef9e25f7
 # ╟─b948830f-ead1-4f36-a237-c998f2f7deb8
 # ╠═15223c51-8d31-4a50-a8ff-1cb7d35de454
