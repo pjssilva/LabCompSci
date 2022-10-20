@@ -53,13 +53,13 @@ Nesse cadernos vamos ver uma introdução rápida à computação paralela usand
 
 A ideia básica desse pacote é encapsular alguns padrões típicos de paralelismo e disponibilizá-los com uma sintaxe simples e familiar na linguagem. Mas antes disso, vamos ver os três tipos principais de paralelismo:
 
-1. Memória compartilhada: o programa roda em paralelo em múltiplos núcleos (que nada mais são que processadores independentes em uma CPU) que compartilham um mesmo espaço de memória. Isso simplifica muito o processo porque esses processos indenpendentes podem se comunicar simples alterado o valor de variáveis comuns.
+1. Memória compartilhada: o programa roda em paralelo em múltiplos núcleos (que nada mais são que processadores independentes em uma CPU) que compartilham um mesmo espaço de memória. Isso simplifica muito o processo porque esses processos independentes podem se comunicar simples alterado o valor de variáveis comuns.
 
-2. Memória distribuida: o programa roda em paralelo em nós computacionais distintos, cada um com sua memória. Aqui já é necessário ter ferramentas explícitas para que os vários processos se comuniquem entre si enviando "mensagens" uns para os outros.
+2. Memória distribuída: o programa roda em paralelo em nós computacionais distintos, cada um com sua memória. Aqui já é necessário ter ferramentas explícitas para que os vários processos se comuniquem entre si enviando "mensagens" uns para os outros.
 
 3. GPU: o programa roda em um co-processador vetorial que é muito rápido, tem um número enorme de cores, mas não consegue executar instruções complexas, com desvios condicionais, naturalmente. Esse tipo de paralelismo também é conhecido como _vetorial_, já que uma mesma operação é aplicada a um vetor (conjunto grande) de dados ao mesmo tempo (de forma síncrona).
 
-Nessa primeira introdução, vamos focar em operações que são naturalmente parelelas. Isso ocorre quando você tem que fazer várias operações que são indepententes entre si o que possuem uma dependência "fraca", que pode ser explorada. A ideia do pocote `Folds.jl` é justamente essa: apresentar ferramentas que permitam explorar situações de paralelismo típica de maneira transparente.
+Nessa primeira introdução, vamos focar em operações que são naturalmente paralelas. Isso ocorre quando você tem que fazer várias operações que são independentes entre si o que possuem uma dependência "fraca", que pode ser explorada. A ideia do pacote `Folds.jl` é justamente essa: apresentar ferramentas que permitam explorar situações de paralelismo típica de maneira transparente.
 
 Para isso vamos retomar a ideia de passeios aleatórios da última aula.
 """
@@ -194,9 +194,9 @@ Uma outra operação que é "fácil" de paralelizar usando `Folds.jl` é a opera
 \sum_{i = 1}^6 i = (((((1 + 2) + 3) + 4) + 5) + 6).
 ```
 
-Você ve, primeiro combinamos o 1 e 2 com o operador `+` (que nada mais é que uma função binária), a resposta com 3, com 4 e por fim com 5.
+Veja, primeiro combinamos o 1 e 2 com o operador `+` (que nada mais é que uma função binária), a resposta com 3, com 4 e por fim com 5.
 
-Quando essa operação de redução pode atuar em partes da sequencia e depois se novamente combinada (ou seja, vale assoativa), abre-se espaço para paralelismo mais uma vez. Por exemplo,
+Quando essa operação de redução pode atuar em partes da sequencia e depois se novamente combinada (ou seja, vale associativa), abre-se espaço para paralelismo mais uma vez. Por exemplo,
 ```math
 \sum_{i = 1}^6 i = (1 + 2 + 3) + (4 + 5 + 6).
 ```
@@ -288,7 +288,7 @@ As entradas não nulas da matriz são **coeficientes binomiais**: a k-ésima ent
 
 # ╔═╡ 2868dd57-7164-4162-8c5d-30628dedeb7a
 md"""
-Observe que há apenas zeros acima da diagonal principal, ou seja a matriz é **triangular inferior**. Esse tipo de matriz, com estrutura especial, é razoavelmente comum em álgebra linear computacinal. Julia possui tipos específicos que representam visões de matrizes densas com informações sobre a estrutura especial de algumas matrizes que ocorrem naturalmente em álgebra linear computacional. Ao deixarmos isso claro para o sistema estamos liberando-o para usar rotinas mais especializadas que aproveitem a estrutura. Pense na solução de um sistema linear a partir de uma matriz triangular, por exemplo.
+Observe que há apenas zeros acima da diagonal principal, ou seja a matriz é **triangular inferior**. Esse tipo de matriz, com estrutura especial, é razoavelmente comum em álgebra linear computacional. Julia possui tipos específicos que representam visões de matrizes densas com informações sobre a estrutura especial de algumas matrizes que ocorrem naturalmente em álgebra linear computacional. Ao deixarmos isso claro para o sistema estamos liberando-o para usar rotinas mais especializadas que aproveitem a estrutura. Pense na solução de um sistema linear a partir de uma matriz triangular, por exemplo.
 
 Esse tipos especiais estão definidos no pacote (padrão) `LinearAlgebra`.
 """
@@ -310,9 +310,9 @@ sparse(pascal(10))
 
 # ╔═╡ 35f14826-f1e4-4977-a31a-0f6148fe25ad
 md"""
-Mas de fato, o tipo `LowerTriangular` é mais adequado nesse caso. Ele pega exatamente a estrutura da matriz. De novo, pense no caso da resolução de sistemas lineares. Se queremos resolver um sistema linear com um matriz triangular, não há necessidade de fatorações. Basta usar um algoritmo de subtituição. Julia, ao tentar resolver um sistema com uma matriz `LowerTriangular` vai saber isso e usar a estratégia adequada. Já se a matriz fosse "apenas" esparsa, a linguagem iria ainda tentar calcular uma fatoração (esparsa) para resolver sistemas.
+Mas de fato, o tipo `LowerTriangular` é mais adequado nesse caso. Ele pega exatamente a estrutura da matriz. De novo, pense no caso da resolução de sistemas lineares. Se queremos resolver um sistema linear com um matriz triangular, não há necessidade de fatorações. Basta usar um algoritmo de substituição. Julia, ao tentar resolver um sistema com uma matriz `LowerTriangular` vai saber isso e usar a estratégia adequada. Já se a matriz fosse "apenas" esparsa, a linguagem iria ainda tentar calcular uma fatoração (esparsa) para resolver sistemas.
 
-Um fato interessante sobre o triângulo de Pascal fica evidente quando destamos as suas entrada ímpares. Vamos fazer isso e ainda um _Slider_.
+Um fato interessante sobre o triângulo de Pascal fica evidente quando destacamos as suas entrada ímpares. Vamos fazer isso e ainda um _Slider_.
 """
 
 # ╔═╡ 7468fc5d-7f35-45e2-b5fc-7e63b562bc8f
@@ -323,7 +323,7 @@ sparse(isodd.(pascal(n_pascal)))
 
 # ╔═╡ 38d88b7c-3b4f-430b-8d3c-f672ab0c7a49
 md"""
-Note que para matrizes esparsas a represetação visual inicia com números, mas depois de um tempo ela passa a enfatizar apenas a estrutura de esparsidade, destacando as entradas não nulas. Isso revela a **estrutura de esparsidade** da matriz: as posições onde encontramos números não nulos. Essas posições são apresentadas com pontos (e os zeros ficam como espaços em branco).
+Note que para matrizes esparsas a representação visual inicia com números, mas depois de um tempo ela passa a enfatizar apenas a estrutura de esparsidade, destacando as entradas não nulas. Isso revela a **estrutura de esparsidade** da matriz: as posições onde encontramos números não nulos. Essas posições são apresentadas com pontos (e os zeros ficam como espaços em branco).
 """
 
 # ╔═╡ f4c9b02b-738b-4de1-9e9d-05b1616bee0b
@@ -333,7 +333,7 @@ O padrão que emerge é bem interessante e é parente próximo de uma outra figu
 
 # ╔═╡ d1c47afa-ab7f-4543-a161-e3ceb6f11eb4
 md"""
-Outro fato interessante emerge quando olhamos uma variação do triângulo de Pascal onde cada coluna fixa o número de elementos dos subcojuntos das combinações. 
+Outro fato interessante emerge quando olhamos uma variação do triângulo de Pascal onde cada coluna fixa o número de elementos dos subconjuntos das combinações.
 """
 
 # ╔═╡ bf78e00f-05d9-4a05-8512-4924ef9e25f7
@@ -357,7 +357,7 @@ pascal(6)
 
 # ╔═╡ 6509e69a-6e50-4816-a98f-67ba437383fb
 md"""
-Esse triângulo ainda guarda várias propriedades, e por isso mesmo é tão estudado e interessante. 
+Esse triângulo ainda guarda várias propriedades, e por isso mesmo é tão estudado e interessante.
 
 Por exemplo, no ensino médio aprendemos que podemos calcular novos valores somando dois **elementos adjacentes nas linhas**. O seu resultado é o elemento abaixo do último elemento somado.
 """
@@ -452,11 +452,11 @@ A discussão acima sob o triângulo de Pascal e convoluções vai, surpreendente
 
 Lembre-se que, num passeio aleatório um passo, ou salto, é escolhido a cada instante do tempo. Digamos para direita ou para esquerda.
 
-Como cada passo é aleatório, eles podem ser modelados usando uma *variável aleatória* que possui uma certa distribuição de probabilidade. Por exemplo, podemos usar uma variável aleatória com valores possíveis $+1$, com probabiliade $\frac{1}{2}$, e $-1$ com mesma chance.
+Como cada passo é aleatório, eles podem ser modelados usando uma *variável aleatória* que possui uma certa distribuição de probabilidade. Por exemplo, podemos usar uma variável aleatória com valores possíveis $+1$, com probabilidade $\frac{1}{2}$, e $-1$ com mesma chance.
 
 Tipicamente, estudamos passeios aleatórios que possuem todos os passos "iguais". Mas o que quer dizer "igual" nesse contexto? É claro que não pode ser que todos os passos são os mesmos, afinal de contas eles são aleatórios. O igual aqui está relacionado a distribuição dos possíveis valores dos saltos. Ou sejam, todos os passos são *realizações de uma variável aleatória com a mesma distribuição*.
 
-Também consideramos que os passos são *independentes* uns dos outros. Ou seja, que a escolha de uma direação em um passo anterior não influecia a escolha em um passo subsequente. Portanto o passeio é descrito por uma **coleção de variáveis aleatórias independentes e identicamente distribuídas (IID)**.
+Também consideramos que os passos são *independentes* uns dos outros. Ou seja, que a escolha de uma direção em um passo anterior não influência a escolha em um passo subsequente. Portanto o passeio é descrito por uma **coleção de variáveis aleatórias independentes e identicamente distribuídas (IID)**.
 """
 
 # ╔═╡ 396d2490-3cb9-4f68-8fdf-9209d2010e02
@@ -470,13 +470,13 @@ Como vimos na última aula, os passeios aleatórios podem então ser visto como 
 
 $$S_t = X_1 + \cdots + X_n = \sum_{t^\prime=1}^t X_{t^\prime}.$$
 
-Ainda, como fizemos antes, podemos nos perguntar qual a distribuição de probabilidade da posição $S_t$ para um certo intante $t$ fixo. Podemos também estar interessados em como essas distribuições evoluem no tempo.
+Ainda, como fizemos antes, podemos nos perguntar qual a distribuição de probabilidade da posição $S_t$ para um certo instante $t$ fixo. Podemos também estar interessados em como essas distribuições evoluem no tempo.
 
-A chave para isso é escrever a fórmula recusiva de como os vetores de que descrevem a probabilidade da particular estar na posição $i$ no instante $t$, $p^t_i$. Vimos que isso pode ser capturado por _equações mestre_ como
+A chave para isso é escrever a fórmula recursiva de como os vetores de que descrevem a probabilidade da particular estar na posição $i$ no instante $t$, $p^t_i$. Vimos que isso pode ser capturado por _equações mestre_ como
 
 $$p_i^{t+1} = \textstyle \frac{1}{2} (p_{i-1}^{t} + p_{i+1}^{t}).$$
 
-Ainda na última aula apresentamos uma implementação para calcular como essas probabilidades evoluem e fizemos duas visualiações.
+Ainda na última aula apresentamos uma implementação para calcular como essas probabilidades evoluem e fizemos duas visualizações.
 
 Como discutimos antes, esse processo pode também ser visto como uma aplicação sucessiva de convoluções, assim como o triângulo de Pascal. É muito interessante ver como o mesmo conceito aparece em diferentes lugares.
 """
@@ -521,7 +521,7 @@ end
 
 # ╔═╡ 53a36c1a-0b8c-4099-8854-08d73c9f118e
 md"""
-Let's visualise this:
+Vamos visualizar isso:
 """
 
 # ╔═╡ 6b298184-32c6-412d-a900-b113d6bd3d53
@@ -550,7 +550,7 @@ md"# Múltiplas visualizações da mesma informação
 
 Uma das tarefas mais importantes em computação científica é a visualização dos dados e resultados de simulações. Boas visualizações muitas vezes são a diferença entre se entender um fenômeno ou comunicar bem os seus resultados.
 
-Na última aula, apresentamos duas visualizações da evolução das probabiidades. A primeira, apresentada acima e outra onde víamos uma matriz com todas as probabilidades ao longo do tempo. 
+Na última aula, apresentamos duas visualizações da evolução das probabilidades. A primeira, apresentada acima e outra onde víamos uma matriz com todas as probabilidades ao longo do tempo.
 
 Vamos agora explorar outras possibilidades de visualização e ensinar mais alguns truques de Julia e Plots.
 
@@ -631,7 +631,7 @@ surface(M)
 
 # ╔═╡ 7e817bad-dc51-4c29-a4fc-f7a8bb3663ca
 md"""
-Mas ainda não ficou bom. Que tal tentarmos gerar uma sequência de histogramas evoluindo ao longo do tempo? Vamos voltar para o engenho `gr` (que gera figuras mais agrdáveis, mais isso é ao gosto do freguês) e tentar fazer isso.
+Mas ainda não ficou bom. Que tal tentarmos gerar uma sequência de histogramas evoluindo ao longo do tempo? Vamos voltar para o engenho `gr` (que gera figuras mais agradáveis, mais isso é ao gosto do freguês) e tentar fazer isso.
 """
 
 # ╔═╡ 403d607b-6171-431b-a058-0aad0909846f
