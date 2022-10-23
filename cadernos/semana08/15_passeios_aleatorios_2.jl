@@ -1,5 +1,5 @@
 ### A Pluto.jl notebook ###
-# v0.19.13
+# v0.19.14
 
 using Markdown
 using InteractiveUtils
@@ -7,7 +7,11 @@ using InteractiveUtils
 # This Pluto notebook uses @bind for interactivity. When running this notebook outside of Pluto, the following 'mock version' of @bind gives bound variables a default value (instead of an error).
 macro bind(def, element)
     quote
-        local iv = try Base.loaded_modules[Base.PkgId(Base.UUID("6e696c72-6542-2067-7265-42206c756150"), "AbstractPlutoDingetjes")].Bonds.initial_value catch; b -> missing; end
+        local iv = try
+            Base.loaded_modules[Base.PkgId(Base.UUID("6e696c72-6542-2067-7265-42206c756150"), "AbstractPlutoDingetjes")].Bonds.initial_value
+        catch
+            b -> missing
+        end
         local el = $(esc(element))
         global $(esc(def)) = Core.applicable(Base.get, el) ? Base.get(el) : iv(el)
         el
@@ -23,15 +27,15 @@ begin
     using Plots
     using PlotThemes
     using BenchmarkTools
-	using Folds
-	using FLoops
+    using Folds
+    using FLoops
 end
 
 # ╔═╡ e46441c4-97bd-11eb-330c-97bd5ac41f9e
 md"Tradução livre de [random\_walks\_ii.jl](https://github.com/mitmath/18S191/blob/Spring21/notebooks/week8/random_walks_II.jl) + a parte de computação paralela."
 
 # ╔═╡ 85c26eb4-c258-4a8b-9415-7b5f7ddff02a
-TableOfContents(aside = true)
+TableOfContents(aside=true)
 
 # ╔═╡ 2d48bfc6-9617-11eb-3a85-279bebd21332
 md"""
@@ -71,7 +75,7 @@ abstract type Walker end
 # ╔═╡ 8e4294f0-a6a9-467b-b9d6-e3facf1d03bd
 # A type to represent a walker (a particule) on the line.
 struct Walker1D <: Walker
-	pos::Int
+    pos::Int
 end
 
 # ╔═╡ 4e0b3cf4-f9a8-4f77-92bd-cd5f1a39e92a
@@ -81,36 +85,36 @@ position(w::Walker) = w.pos
 # ╔═╡ 8f4b6cee-b2ec-4c96-9992-0057d35be32a
 # Model a jump, a step, in the random process. Note that we use the
 # fastest option from our micro-benchmark.
-step(w::Walker1D) = rand( (-1, +1) )
+step(w::Walker1D) = rand((-1, +1))
 
 # ╔═╡ f0d716f0-2724-4e9c-8868-cdec3dba5b02
 # Update the Walker position, since Walker is immutable, we opt to create a new Walker representing it in the new position
-update(w::W, step) where{W <: Walker} = W(position(w) .+ step)  # W is a type parameter, explain
+update(w::W, step) where {W<:Walker} = W(position(w) .+ step)  # W is a type parameter, explain
 
 # ╔═╡ 689959aa-6548-453f-a631-6abe76d26b40
 begin
-	struct Walker2D <: Walker
-		pos::Tuple{Int64, Int64}
-	end
-	
-	Walker2D(x, y) = Walker2D( (x, y) )
+    struct Walker2D <: Walker
+        pos::Tuple{Int64,Int64}
+    end
+
+    Walker2D(x, y) = Walker2D((x, y))
 end
 
 # ╔═╡ 42accec8-4db0-4bf1-a1da-9ec07dbee499
-step(w::Walker2D) = rand( ( (1, 0), (0, 1), (-1, 0), (0, -1) ) )
+step(w::Walker2D) = rand(((1, 0), (0, 1), (-1, 0), (0, -1)))
 
 # ╔═╡ c361320c-c5a3-44ff-9933-44bb1d82fc62
 # Run a simulation with N time steps. Note that the code is fully generic using
 # only methods associate with Walker types
 function trajectory(w::Walker, N)
-	ws = [position(w)]
+    ws = [position(w)]
 
-	for i in 1:N
-		w = update(w, step(w))
-		push!(ws, position(w))
-	end
-	
-	return ws
+    for i in 1:N
+        w = update(w, step(w))
+        push!(ws, position(w))
+    end
+
+    return ws
 end
 
 # ╔═╡ c2c27c13-4621-469d-8f42-340d665de687
@@ -158,7 +162,7 @@ Vamos reescrever o código acima usando essa variação e medir o tempo.
 """
 
 # ╔═╡ 4ce4f93b-86d4-45ed-92a7-59eac9f79c47
-a_trajectory(T) =  trajectory(Walker2D(0, 0), T)
+a_trajectory(T) = trajectory(Walker2D(0, 0), T)
 
 # ╔═╡ 8480cc51-83a0-4875-ae0f-4a417a70d0f7
 times = fill(T, N)
@@ -218,7 +222,7 @@ reduce(.+, traj) ./ T2
 @btime reduce(.+, traj) ./ T2
 
 # ╔═╡ fb3d6afa-2f82-4e2c-b334-bc7967ff2766
-@btime Folds.reduce(.+, traj, init = (0, 0)) ./ T2
+@btime Folds.reduce(.+, traj, init=(0, 0)) ./ T2
 
 # ╔═╡ db9cffca-33ff-4820-b41a-ab0b631c7f35
 md"""Agora, almo está estranho, não? E esperaria que a posição média em uma trajetória longa fosse o ponto de partida e não foi isso que vimos. Vamos então calcular a média das posições médias.
@@ -231,8 +235,8 @@ T3, N3 = 1_000_000, 1000
 
 # ╔═╡ 6e15051c-52f5-44a7-835f-85471cb5f577
 function mean_trajectory(T3)
-	traj = trajectory(Walker2D(0, 0), T3)
-	return reduce(.+, traj) ./ T3
+    traj = trajectory(Walker2D(0, 0), T3)
+    return reduce(.+, traj) ./ T3
 end
 
 # ╔═╡ 254f7a34-10a6-4ae7-96b5-a1f0740493c2
@@ -242,7 +246,7 @@ mapreduce(mean_trajectory, .+, fill(T3, N3)) ./ N3
 @btime mapreduce(mean_trajectory, .+, fill(T3, N3)) ./ N3
 
 # ╔═╡ a408a0ee-57f4-43c7-ad8a-7cab680f64c2
-@btime Folds.mapreduce(mean_trajectory, .+, fill(T3, N3), init = (0, 0)) ./ N3
+@btime Folds.mapreduce(mean_trajectory, .+, fill(T3, N3), init=(0, 0)) ./ N3
 
 # ╔═╡ 8db311f4-92e7-44b1-b0b0-de5fd0f9cd21
 md"""
@@ -251,11 +255,11 @@ Por fim é possível escrever versões mais sofisticadas e eficientes usando la�
 
 # ╔═╡ 7eb279e3-10b6-4db6-95c9-b8fa08ea29f8
 function parallelmean(T, N)
-	@floop for i in 1:N
-		mt = mean_trajectory(T)
-		@reduce s .+= mt
-	end
-	return s ./ N
+    @floop for i in 1:N
+        mt = mean_trajectory(T)
+        @reduce s .+= mt
+    end
+    return s ./ N
 end
 
 # ╔═╡ 9a3007ea-3bc8-4ad6-b8f0-dcd09dccd832
@@ -316,7 +320,7 @@ Um fato interessante sobre o triângulo de Pascal fica evidente quando destacamo
 """
 
 # ╔═╡ 7468fc5d-7f35-45e2-b5fc-7e63b562bc8f
-@bind n_pascal Slider(1:63, show_value = true, default = 1)
+@bind n_pascal Slider(1:63, show_value=true, default=1)
 
 # ╔═╡ 1ca8aa3b-b05d-40f6-a925-2f0248b79ca2
 sparse(isodd.(pascal(n_pascal)))
@@ -391,9 +395,9 @@ begin
     symA = Symmetric(A + A')
     dpA = Symmetric(A * A')
     spA = sprand(dim, dim, 0.005)
-	while rank(spA) < dim
-		spA = sprand(dim, dim, 0.005)
-	end
+    while rank(spA) < dim
+        spA = sprand(dim, dim, 0.005)
+    end
     densespA = Matrix(spA)
     b = rand(dim)
 end
@@ -429,7 +433,7 @@ end
 
 # ╔═╡ c4b1a791-e318-47e5-80ed-7476f658f647
 begin
-	print("Sparse matrix times vector: ")
+    print("Sparse matrix times vector: ")
     @btime y = $spA * b
     print("Dense matrix times vector:  ")
     @btime y = $A * b
@@ -537,7 +541,7 @@ t = $(@bind tt Slider(1:length(ps), show_value=true, default=1))
 """
 
 # ╔═╡ d0f89707-eccf-4155-82d5-780643e1b447
-plot(ps[tt], ylim = (0, 1), xlim = (1, 100), leg = false, size = (500, 300))
+plot(ps[tt], ylim=(0, 1), xlim=(1, 100), leg=false, size=(500, 300))
 
 # ╔═╡ 049feaa2-050a-45eb-85a1-75c758c08e87
 sum(ps[tt])
@@ -556,7 +560,7 @@ Uma primeira alteração, é o formato da figura acima com os picos cuneiformes.
 
 
 # ╔═╡ aeaef573-1e90-45f3-a7fe-31ec5e2808c4
-bar(ps[tt], ylim = (0, 1), leg = false, size = (500, 300), alpha = 0.5)
+bar(ps[tt], ylim=(0, 1), leg=false, size=(500, 300), alpha=0.5)
 
 # ╔═╡ 610b2349-9ae6-4967-8b50-9b30b34d18d8
 md"""
@@ -568,10 +572,10 @@ Outra característica é que a visualização acima só consegue capturar a evol
 # ╔═╡ 602fb644-bd1d-4f9d-979f-0b190931d649
 begin
     anim = @animate for ttt = 1:max_time
-        bar(ps[ttt], ylim = (0, 1), leg = false, alpha = 0.5, dpi = 200)
+        bar(ps[ttt], ylim=(0, 1), leg=false, alpha=0.5, dpi=200)
         title!("Time = $ttt")
     end
-    gif(anim, fps = 10)
+    gif(anim, fps=10)
 end
 
 # ╔═╡ 1baafa2c-73c6-4e6f-832c-8b5c330b55d7
@@ -596,7 +600,7 @@ E podemos reproduzir a visualização da última aula baseada em **mapas de calo
 """
 
 # ╔═╡ e74e18e3-ad08-4a53-a803-cd53564dca65
-heatmap(M, yflip = true)
+heatmap(M, yflip=true)
 
 # ╔═╡ 4d88a51b-ca51-4f37-90cf-b42fe14f081b
 md"""
@@ -612,7 +616,7 @@ begin
     #theme(:lime)
     #theme(:wong)
     #theme(:vibrant)
-    heatmap(M, yflip = true)
+    heatmap(M, yflip=true)
 end
 
 # ╔═╡ ed02f00f-1bcd-43fa-a56c-7be9968614cc
@@ -636,9 +640,9 @@ gr()
 
 # ╔═╡ c8c16c14-26b0-4f83-8135-4f862ed90686
 begin
-    plot(leg = false)
+    plot(leg=false)
 
-	endtime = 20
+    endtime = 20
     for t = 1:endtime
         for i = 1:length(ps[t])
             # Draws a vertical line from 0 to the high of the probaility 
@@ -646,15 +650,15 @@ begin
                 [t, t],
                 [-grid_size ÷ 2 + i, -grid_size ÷ 2 + i],
                 [0, ps[t][i]],
-                c = t,
-                alpha = 0.8,
-                lw = 2,
+                c=t,
+                alpha=0.8,
+                lw=2,
             )
         end
     end
 
     xlims!(1, endtime - 1)
-    plot!(xaxis = "Time", yaxis = "Space", zaxis = "Probability")
+    plot!(xaxis="Time", yaxis="Space", zaxis="Probability")
 end
 
 # ╔═╡ 00000000-0000-0000-0000-000000000001

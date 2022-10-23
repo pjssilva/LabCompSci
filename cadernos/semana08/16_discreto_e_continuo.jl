@@ -1,5 +1,5 @@
 ### A Pluto.jl notebook ###
-# v0.16.1
+# v0.19.14
 
 using Markdown
 using InteractiveUtils
@@ -7,8 +7,13 @@ using InteractiveUtils
 # This Pluto notebook uses @bind for interactivity. When running this notebook outside of Pluto, the following 'mock version' of @bind gives bound variables a default value (instead of an error).
 macro bind(def, element)
     quote
+        local iv = try
+            Base.loaded_modules[Base.PkgId(Base.UUID("6e696c72-6542-2067-7265-42206c756150"), "AbstractPlutoDingetjes")].Bonds.initial_value
+        catch
+            b -> missing
+        end
         local el = $(esc(element))
-        global $(esc(def)) = Core.applicable(Base.get, el) ? Base.get(el) : missing
+        global $(esc(def)) = Core.applicable(Base.get, el) ? Base.get(el) : iv(el)
         el
     end
 end
@@ -27,10 +32,10 @@ begin
 end
 
 # ╔═╡ bad1ae0f-0b0b-4cdd-94ff-e9a55fad6dfe
-md"Traduação livre de [discrete\_and\_continuos.jl](https://github.com/mitmath/18S191/blob/Spring21/notebooks/week8/discrete_and_continuous.jl)"
+md"Tradução livre de [discrete\_and\_continuos.jl](https://github.com/mitmath/18S191/blob/Spring21/notebooks/week8/discrete_and_continuous.jl)"
 
 # ╔═╡ 01506de2-918a-11eb-2a4d-c554a6e54631
-TableOfContents(title = "📚 Table of Contents", aside = true)
+TableOfContents(title="📚 Assuntos", aside=true)
 
 # ╔═╡ ee349b52-9189-11eb-2b86-b5dc15ebe432
 md"""
@@ -39,15 +44,12 @@ md"""
 
 # ╔═╡ 877deb2c-702b-457b-a54b-f27c277928d4
 md"""
-
-
-
-A aula de hoje tem um tom um pouco "filosófico". O espírito é motrar como, em muitos casos, o mundo da matemática discreta e contínua se encontram e iteragem e como os objetos contínuos muitas vezes são limites de objetos discretos capturando suas propriedades mais importates e eliminando a complexidate inerente a objetos discretos complexos.
+A aula de hoje tem um tom um pouco "filosófico". O espírito é mostrar como, em muitos casos, o mundo da matemática discreta e contínua se encontram e interagem e como os objetos contínuos muitas vezes são limites de objetos discretos capturando suas propriedades mais importantes e eliminando a complexidade inerente ao caso discreto.
 """
 
 # ╔═╡ 43e39a6c-918a-11eb-2408-93563b4fb8c1
 md"""
-Uma definição exata do que são os objetos discretos e contínuos não é simples. De qualquer forma, a definição intuitiva é que a metemática discreda lida com conjunto com um número finito de objetos. Ou conjuntos infinitos de objetos isolados. Nesse sentido um conjunto como $\{1, 2, 3, \ldots, n \}$ e o $\mathbb{Z}$ são objetos discretos.
+Uma definição exata do que são os objetos discretos e contínuos não é simples. De qualquer forma, a definição intuitiva é que a Matemática discreta lida com conjunto com um número finito de objetos ou conjuntos infinitos de objetos isolados. Nesse sentido um conjunto como $\{1, 2, 3, \ldots, n \}$ e o $\mathbb{Z}$ são objetos discretos.
 """
 
 # ╔═╡ 719a4c8c-9615-11eb-3dd7-7fb786f7fa17
@@ -66,9 +68,9 @@ gplot(barabasi_albert(150, 2))
 
 # ╔═╡ 61ffe0f2-9615-11eb-37d5-f9e30a31c111
 md"""
-Por outro lado, intervalos ou toda a reta real estão associados a objetos contínuos. 
+Por outro lado, intervalos ou reta real completa estão associados a objetos contínuos. 
 
-De fato, matemáticos trabalham exaustivamente com esses conceitos, criando áreas como topologia geral para, entre outras coisas, reconhecer objetos discretos. Já análise é área da matemática lida com o contínuo.
+De fato, matemáticos trabalham exaustivamente com esses conceitos, criando áreas como topologia geral para, entre outras coisas, reconhecer objetos discretos. Já análise é área da matemática que lida com o contínuo.
 """
 
 # ╔═╡ 627f6db6-9617-11eb-0453-a1f9e341ecfe
@@ -85,13 +87,13 @@ md"""
 
 # ╔═╡ 173b44ea-918c-11eb-116b-0bbaeffc3fe2
 md"""
-É comum que alunos (e professores) tomem um lado e gravitem em torno de uma das duas linhas. Por outro lado, é importante reconhecer que as duas áreas, apesar de parecerem completamente separadas, se encontram em muitos momentos. Nesse sentido é importante conhecer um pouco de cada e se sentir conformtável com as duas. 
+É comum que alunos (e professores) tomem um lado e gravitem em torno de uma das duas linhas. Por outro lado, é importante reconhecer que as duas áreas, apesar de parecerem completamente separadas, se encontram em muitos momentos. Nesse sentido é importante conhecer um pouco de cada e se sentir confortável com as duas. 
 
-Um exemplo interessante é a própria Ciência da Computação. Até recentemente ela estava se tornado cada vez mais discreta, a ponto de ter ouvido de um _big shot_ da IEEE que ponto flutuante estava morrendo (no final da minha graduação, em 1994). O domínio do ponto flutuante continuava apenas em domínios específicos, do que chamamos de comptuação científica associados ao estudos de sistemas físicos em engenharia e física. 
+Um exemplo interessante é a própria Ciência da Computação. Até recentemente ela estava se tornado cada vez mais discreta, a ponto de eu ter ouvido de um _big shot_ da IEEE que ponto flutuante estava morrendo (no final da minha graduação, em 1994). O domínio do ponto flutuante se limitaria a situações específicas, no que chamamos de computação científica, associadas ao estudos de sistemas físicos em engenharia e física. 
 
-Mas a popularidade de áreas novas como apredizagem de máquina tem diminuido essa fronteira. Ideias contínuas, como otimização baseada em descida por gradientes voltam a ter cada vez mais importância em Ciência da Computação reacendendo a necessidade de se dominar bem ideias contínuas. Outros exemplos de áreas que estão cada vez mais misturando o discreto e o contínuo são a ciência de dados e a estatísticas.
+Mas a popularidade de áreas novas, como Aprendizado de Máquina, têm contrariando essa afirmação. Ideias contínuas, como métodos de otimização baseados em descida por gradientes, voltam a ter cada vez mais importância em Ciência da Computação, reacendendo a necessidade de se dominar bem ideias contínuas. Outros exemplos de áreas que estão cada vez mais misturando o discreto e o contínuo são a Ciência de Dados e a Estatística.
 
-E notem que o computador é máquina ideal para isso. Nele é possível fazer cálculos com alta precisão de forma a aproximar bem objetos contínuos. Mas ele é, intrinsicamente, um equipamento essecialmente discreto. Fazer matemática contínua no computador é andar nesse fronteira.
+E notem que o computador é uma máquina ideal para isso. Nele é possível fazer cálculos com alta precisão que permitem aproximar bem objetos contínuos. Mas ele é, intrinsecamente, um equipamento discreto. Fazer Matemática contínua no computador é andar nesse fronteira.
 
 Alguns pontos para se guardar:
 
@@ -99,20 +101,20 @@ Alguns pontos para se guardar:
 
 * Em várias situações, a combinação do que é discreto e do que é contínuo é mais efetiva do que o uso de uma única abordagem.
 
-* São muitos os exemplos atuais onde matemática contínua é fundamental: aprendizagem de máquinas, sistemas dinâmicos como mecânica de fluidos, previsão do tempo e modelagem climática ou mesmo a compreensão da evolução de pandemias.
+* São muitos os exemplos atuais onde matemática contínua é fundamental: Aprendizado de Máquinas, Sistemas Dinâmicos, como em mecânica de fluidos, previsão do tempo e modelagem climática ou mesmo a compreensão da evolução de pandemias.
 """
 
 # ╔═╡ 5c536430-9188-11eb-229c-e7feba62d257
 md"""
-### Um primeiro exemplo de choque: indexação vs funções
+### Um primeiro exemplo inesperado: indexação vs funções
 
-Todos nós conhecemos o que são funções: objetos que processam entradas e devolvem valores. Tipicamente pensamos em fórmulas que dizem o que fazer com as entradas para calucular a saída.
+Todos nós conhecemos o que são funções: objetos que processam entradas e devolvem valores. Tipicamente pensamos em fórmulas que dizem o que fazer com as entradas para calcular a saída.
 
-Por outro lado conhecemos bem o que é a indexação de um vetor: acessar a informação previamente armazeda em uma certa posição do vetor. 
+Por outro lado, conhecemos bem o que é a indexação de um vetor: ela é usada acessar a informação previamente armazenada em uma certa posição. 
 
-Qual a relação entre os dois conceitos: indexação pode ser vista como uma função que dado índice devolve um valor. É uma função do conjunto de índices (que é discreto) no conjunto de valores armazenado no vetor!
+Qual a relação entre os dois conceitos? Indexação pode ser vista como uma função que dado índice devolve um valor. É uma função do conjunto de índices (que é discreto) no conjunto de valores armazenado no vetor!
 
-Nesse sentido objetos que representam faixas em Julia são implementados justamente com esse conceito de indexação como função. Quando você encontra um objeto como `2:2:20` você pode pensar que ele é simplesmente o vetor `[2, 4, 6, ..., 20]` mas não. Internamente a faixa guarda apenas os três números `incio:passo:fim` e avalia a função `i → inicio + (i - 1)*passo if <= fim`. 
+Nesse sentido objetos que representam faixas em Julia são implementados justamente com esse conceito de indexação como função. Quando você encontra um objeto como `2:2:20` você pode pensar que ele é simplesmente o vetor `[2, 4, 6, ..., 20]` mas não. Internamente a faixa guarda apenas os três números `incio:passo:fim` e avalia a função `i → inicio + (i - 1)*passo if i <= fim`. 
 Vamos ver isso em ação.
 """
 
@@ -143,7 +145,7 @@ md"""
 
 # ╔═╡ ed71b026-9565-11eb-1058-d77efe114562
 md"""
-Vamos agora nos voltar para ideia de objetos contínuos que são limites de objetos discretos. Um primeiro exemplo que vamos analisar são as áreas. Começando pela área do círcula. Uma forma tradicional de computar isso é somar a área de polígonos regulares:
+Vamos agora nos voltar para ideia de objetos contínuos que são limites de objetos discretos. Um primeiro exemplo que vamos analisar são as áreas. Começando pela área do círculo. Uma forma tradicional de computar isso é usar a área de polígonos regulares:
 """
 
 # ╔═╡ 68b60d09-acee-48d8-8bb1-7ab4faa6b785
@@ -163,25 +165,25 @@ begin
     plot(
         cos.(θ),
         sin.(θ),
-        ratio = 1,
-        axis = false,
-        legend = false,
-        ticks = false,
-        lw = 4,
-        color = :black,
-        fill = false,
+        ratio=1,
+        axis=false,
+        legend=false,
+        ticks=false,
+        lw=4,
+        color=:black,
+        fill=false,
     )
     plot!(
         cos.(θ),
         sin.(θ),
-        ratio = 1,
-        axis = false,
-        legend = false,
-        ticks = false,
-        lw = 4,
-        color = :white,
-        fill = true,
-        alpha = 0.6,
+        ratio=1,
+        axis=false,
+        legend=false,
+        ticks=false,
+        lw=4,
+        color=:white,
+        fill=true,
+        alpha=0.6,
     )
 
 
@@ -189,8 +191,8 @@ begin
     for i = 1:sides
         plot!(
             Shape([0, cos(ϕ[i]), cos(ϕ[i+1])], [0, sin(ϕ[i]), sin(ϕ[i+1])]),
-            fill = true,
-            lw = 0,
+            fill=true,
+            lw=0,
         )
     end
     title!("Area = ($sides/2)sin(2π/$sides) ≈  $(area(sides)/π )  π")
@@ -252,7 +254,7 @@ Obtemos
 
 E podemos continuar o jogo achando novas convoluções que eliminem os termos dominantes.
 
-Nesse exemplo já atingimos o número total de dígitos significativos em um número de ponto flutante de precisão dupla. Vamos aproveitar que Julia possui números de precisão arbitrária e ir um pouco mais longe.
+Nesse exemplo já atingimos o número total de dígitos significativos em um número de ponto flutuante de precisão dupla. Vamos aproveitar que Julia possui números de precisão arbitrária e ir um pouco mais longe.
 """
 
 # ╔═╡ d4f83a20-62cf-47f1-a622-d5c4c34e4813
@@ -265,29 +267,29 @@ big(π)
 md"""
 ## Areas de novo: múltiplas possibilidades de definição
 
-Há, de fato várias formas de se tentar estender a noção de área para figuras além de polígonos simples. Por exemplo podemos usar quadrados inscritos.
+Há várias formas de se tentar estender a noção de área para figuras além de polígonos simples. Por exemplo podemos usar quadrados inscritos.
 """
 
 # ╔═╡ de9066e2-d5eb-49e3-be71-edda8e8e31dd
-@bind s Slider(2:40, show_value = true)
+@bind s Slider(2:40, show_value=true)
 
 # ╔═╡ 4d4705d0-9568-11eb-085c-0fc556c4cfe7
 let
 
     plot()
     for i = -s:s
-        plot!([i / s, i / s], [-1, 1], color = RGB(0, 1, 0), lw = 1)
-        plot!([-1, 1], [i / s, i / s], color = RGB(0, 1, 0), lw = 1)
+        plot!([i / s, i / s], [-1, 1], color=RGB(0, 1, 0), lw=1)
+        plot!([-1, 1], [i / s, i / s], color=RGB(0, 1, 0), lw=1)
     end
     P = plot!(
         cos.(θ),
         sin.(θ),
-        ratio = 1,
-        axis = false,
-        legend = false,
-        ticks = false,
-        lw = 3,
-        color = :black,
+        ratio=1,
+        axis=false,
+        legend=false,
+        ticks=false,
+        lw=3,
+        color=:black,
     )
     plot!(P)
 
@@ -298,7 +300,7 @@ let
     xx = floor(√2 / 2h)
     x = xx * h
     y = x
-    plot!(Shape([-x, -x, x, x], [-y, y, y, -y]), color = RGB(1, 0, 0), alpha = 0.7)
+    plot!(Shape([-x, -x, x, x], [-y, y, y, -y]), color=RGB(1, 0, 0), alpha=0.7)
 
     a = a + Int(2 * xx)^2
 
@@ -310,14 +312,14 @@ let
            ((x + h)^2 + (y + h)^2 ≤ 1) &
            (x^2 + (y + h)^2 ≤ 1) &
            ((x + h)^2 + y^2 ≤ 1)
-            plot!(Shape([x, x, x + h, x + h], [y, y + h, y + h, y]), color = :blue)
-            plot!(Shape([-x - h, -x - h, -x, -x], [y, y + h, y + h, y]), color = :blue)
-            plot!(Shape([x, x, x + h, x + h], [-y - h, -y, -y, -y - h]), color = :blue)
-            plot!(Shape([-x - h, -x - h, -x, -x], [-y - h, -y, -y, -y - h]), color = :blue)
-            plot!(Shape([y, y + h, y + h, y], [x, x, x + h, x + h]), color = :blue)
-            plot!(Shape([-y - h, -y, -y, -y - h], [x, x, x + h, x + h]), color = :blue)
-            plot!(Shape([y, y + h, y + h, y], [-x - h, -x - h, -x, -x]), color = :blue)
-            plot!(Shape([-y - h, -y, -y, -y - h], [-x - h, -x - h, -x, -x]), color = :blue)
+            plot!(Shape([x, x, x + h, x + h], [y, y + h, y + h, y]), color=:blue)
+            plot!(Shape([-x - h, -x - h, -x, -x], [y, y + h, y + h, y]), color=:blue)
+            plot!(Shape([x, x, x + h, x + h], [-y - h, -y, -y, -y - h]), color=:blue)
+            plot!(Shape([-x - h, -x - h, -x, -x], [-y - h, -y, -y, -y - h]), color=:blue)
+            plot!(Shape([y, y + h, y + h, y], [x, x, x + h, x + h]), color=:blue)
+            plot!(Shape([-y - h, -y, -y, -y - h], [x, x, x + h, x + h]), color=:blue)
+            plot!(Shape([y, y + h, y + h, y], [-x - h, -x - h, -x, -x]), color=:blue)
+            plot!(Shape([-y - h, -y, -y, -y - h], [-x - h, -x - h, -x, -x]), color=:blue)
             a += 8
         end
     end
@@ -333,7 +335,7 @@ end
 
 # ╔═╡ e6884c6c-9712-11eb-288b-f1a439b0aba3
 md"""
-De fato a medida que o número a dimensão dos quadrados diminui a sequência das áreas dos quadrados inscritos converge a π que é a área do círculo de raio unitário. Mas seria diferente se usássemos outra figura? Triângulos? Hexágonos? E se ao invés de olharmos os incritos, olhássemos os que tem altuma intersecção com o círculo?
+De fato, à medida que a dimensão dos quadrados diminui, a sequência das áreas dos quadrados inscritos converge a π que é a área do círculo de raio unitário. Mas seria diferente se usássemos outra figura? Triângulos? Hexágonos? E se ao invés de olharmos os inscritos, olhássemos os que tem alguma intersecção com o círculo?
 
 Essa pergunta já foi respondida pelos matemáticos: em todos os casos o valor limite é o mesmo. Esse valor especial, esse conceito particular, merece então um nome: **área**. Existem vários exemplos de processos assim na matemática. Objetos contínuos que são limites "estáveis" de diferentes aproximações discretas. Nessa caso fica claro como esse objeto captura um novo conceito bem definido e que ele merece, então, ser estudado. Vejamos um outro exemplo.
 
@@ -342,11 +344,11 @@ Essa pergunta já foi respondida pelos matemáticos: em todos os casos o valor l
 
 # ╔═╡ 1e18f95c-cd53-4ede-8d93-572c81f872da
 md"""
-Um passeio aletório é uma função aleatória discreta. Ela está definida sobre valores em um reticulado. Vamos agora pensar em um processo limite sobre passeios aleatórios com passos cada vez mais curtos. A ideia é o seguite:
+Um passeio aleatório é uma função aleatória discreta. Ela está definida sobre valores em um reticulado. Vamos agora pensar em um processo limite sobre passeios aleatórios com passos cada vez mais curtos. A ideia é o seguinte:
 
 1. Normalizamos o intervalo de tempo para o [0, 1].
 2. Esse intervalo então é dividido em N subintervalos de comprimento h = 1/N.
-3. Iniciando no tempo 0, definimos um passeio aleatório que a cada instante do tempo t escolhe a próxima posição a partir da posição atual mais um variável aleatória **com qualquer distribuição** de média 0 e variância h (o comprimento dos subitervalos).
+3. Iniciando no tempo 0, definimos um passeio aleatório que a cada instante do tempo t escolhe a próxima posição a partir da posição atual mais um variável aleatória **com qualquer distribuição** de média 0 e variância h (o comprimento dos subintervalos).
 4. Aumentamos N e vemos o que obtemos no limite.
 """
 
@@ -362,7 +364,7 @@ begin
 end
 
 # ╔═╡ 155241b0-9646-11eb-180e-89c8651536c6
-@bind j Slider(1:9, show_value = true, default = 6)
+@bind j Slider(1:9, show_value=true, default=6)
 
 # ╔═╡ 31d56008-9646-11eb-1985-2b68af354773
 begin
@@ -375,50 +377,53 @@ begin
     plot()
     w = [0; cumsum(v)]
     plot!((0:N) ./ N, w)
-    scatter!((0:J:N) ./ N, w[1:J:end], legend = false, m = :o, ms = 5, color = :red, lw = 5)
-    plot!(ylims = (-2, 2))
+    scatter!((0:J:N) ./ N, w[1:J:end], legend=false, m=:o, ms=5, color=:red, lw=5)
+    plot!(ylims=(-2, 2))
     xlabel!("time")
     ylabel!("position")
+    title!("Random walk with some points in evidence")
 end
 
 # ╔═╡ 48eed5ae-b3cf-4998-ba2f-ba50e120b557
 md"""
-Vamos ver como ficam a distribuições das posíveis possições em um tempo t′.
+Vamos ver como ficam a distribuições das possíveis posições em um tempo t′ fixo, considerando muitas simulações.
 """
 
 # ╔═╡ 59a8b92c-0454-4a9c-89d8-e4a044d156d3
 begin
-    t′ = 0.5
+    # All possible times
+    times = cumsum(h * ones(N))
 
-    time = cumsum(h * ones(N))
-    ind = argmin(abs.(t′ .- time))
+    # Makes 10_000 simulations and plot the position at time t′
+    t′ = 0.3
+    ind = argmin(abs.(t′ .- times))
     samples = Float64[]
-    for i = 1:10000
-        w = cumsum(dist(N))
+    for i = 1:10_000
+        local w = cumsum(dist(N))
         push!(samples, w[ind])
     end
-    histogram(samples, nbis = 20, normalize = true, legend = false)
+    histogram(samples, nbis=20, normalize=true, legend=false)
 
+    # Show a normal distribution with mean 0 and variance t′
     normalpdf(x, σ²) = exp(-x^2 / (2 * σ²)) / √(2π * σ²)
-    xs = range(-4.0, 4.0, length = 200)
-    plot!(xs, normalpdf.(xs, time[ind]), lw = 3)
+    xs = range(-4.0, 4.0, length=200)
+    plot!(xs, normalpdf.(xs, times[ind]), lw=3)
     title!("Positions at time $t′")
-
 end
 
 
 # ╔═╡ 2c0c01fe-9f54-4d5b-9f7f-b7ef0d3a8474
 md"""
-É uma normal com média 0 e variância t′, com prometido. Esse processo limite convege então para um passeio aleatório em tempo contínuo em que a cada instante t′ a distribuição das possíveis posições é essa normal. Esse processo aleatório é chamado de **movimento browniano**.
+É uma normal com média 0 e variância t′! O que estamos vendo é que esse processo limite converge então para um passeio aleatório em tempo contínuo em que a cada instante t′ a distribuição das possíveis posições é essa normal. Esse processo aleatório é chamado de **movimento browniano**.
 """
 
 # ╔═╡ 9c519eca-9710-11eb-20dc-3f76801545d1
-@bind t Slider(0.01:0.01:8, show_value = true)
+@bind t Slider(0.01:0.01:8, show_value=true)
 
 # ╔═╡ 7c4b82c8-9710-11eb-101e-53616e278289
 begin
     x = -3:0.01:3
-    plot(x, normalpdf.(x, t), ylims = (0, 1), legend = false)
+    plot(x, normalpdf.(x, t), ylims=(0, 1), legend=false)
 end
 
 # ╔═╡ 236347f9-71c3-4299-9537-14d89eac2b93
@@ -426,9 +431,9 @@ plotly()
 
 # ╔═╡ 021d7e9a-9711-11eb-063b-11441afa2e69
 begin
-    surface(-2:0.05:2, 0.2:0.01:1, normalpdf, alpha = 0.4, c = :Reds, legend = false)
+    surface(-2:0.05:2, 0.2:0.01:1, normalpdf, alpha=0.4, c=:Reds, legend=false)
     for t = 0.2:0.1:1
-        plot!(-2:0.05:2, fill(t, length(-2:0.05:2)), normalpdf.(-2:0.05:2, t), c = :black)
+        plot!(-2:0.05:2, fill(t, length(-2:0.05:2)), normalpdf.(-2:0.05:2, t), c=:black)
     end
     xlabel!("x")
     ylabel!("time")
@@ -436,7 +441,7 @@ begin
 end
 
 # ╔═╡ f16cb73d-4289-4ba2-93de-7acd0c51bb57
-md"## Outros exemplos que já vimos:"
+md"## Outros exemplos (muitos já vimos):"
 
 # ╔═╡ bb8dc4fe-918d-11eb-2bde-bb00c47a1c27
 md"""
@@ -460,7 +465,7 @@ md"""
 
 # ╔═╡ a7c5ef96-918d-11eb-0632-f94386eb64f2
 md"""
-### Passeios aleatórios discretos e movimento browniano
+#### Passeios aleatórios discretos e movimento browniano
 """
 
 # ╔═╡ 75672be6-918d-11eb-1e10-07fbcc72abbd
@@ -568,9 +573,9 @@ begin
 end
 
 # ╔═╡ c03d45f8-9188-11eb-2e11-0fafa39f253d
-function pyramid(rows::Vector{<:Vector}; horizontal = false, padding_x = 8, padding_y = 2)
+function pyramid(rows::Vector{<:Vector}; horizontal=false, padding_x=8, padding_y=2)
 
-    style = (; padding = "$(padding_y)px $(padding_x)px")
+    style = (; padding="$(padding_y)px $(padding_x)px")
     render_row(xs) = @htl(
         """<div><padder></padder>$([@htl("<span style=$(style)>$(x)</span>") for x in xs])<padder></padder></div>"""
     )
@@ -614,13 +619,13 @@ function pyramid(rows::Vector{<:Vector}; horizontal = false, padding_x = 8, padd
 end
 
 # ╔═╡ d2d1366b-9b6d-4e54-a0c4-7087f5f063c4
-pyramid(([pp.(area0), pp.(area1)]), horizontal = true)
+pyramid(([pp.(area0), pp.(area1)]), horizontal=true)
 
 # ╔═╡ 6577e546-8f0b-413a-a8bb-b9c12803199d
-pyramid([pp.(area0), pp.(area1), pp.(area2)], horizontal = true)
+pyramid([pp.(area0), pp.(area1), pp.(area2)], horizontal=true)
 
 # ╔═╡ 893a56b0-f5d0-4f8d-ba15-1048180a7e53
-pyramid([pp.(area0), pp.(area1), pp.(area2), pp.(area3), pp.(area4)], horizontal = true)
+pyramid([pp.(area0), pp.(area1), pp.(area2), pp.(area3), pp.(area4)], horizontal=true)
 
 # ╔═╡ 00000000-0000-0000-0000-000000000001
 PLUTO_PROJECT_TOML_CONTENTS = """
@@ -678,9 +683,9 @@ version = "1.0.8+0"
 
 [[Cairo_jll]]
 deps = ["Artifacts", "Bzip2_jll", "Fontconfig_jll", "FreeType2_jll", "Glib_jll", "JLLWrappers", "LZO_jll", "Libdl", "Pixman_jll", "Pkg", "Xorg_libXext_jll", "Xorg_libXrender_jll", "Zlib_jll", "libpng_jll"]
-git-tree-sha1 = "f2202b55d816427cd385a9a4f3ffb226bee80f99"
+git-tree-sha1 = "4b859a208b2397a7a623a03449e4636bdb17bcf2"
 uuid = "83423d85-b0ee-5818-9007-b63ccbeb887a"
-version = "1.16.1+0"
+version = "1.16.1+1"
 
 [[ChainRulesCore]]
 deps = ["Compat", "LinearAlgebra", "SparseArrays"]
@@ -769,7 +774,7 @@ uuid = "ffbed154-4ef7-542d-bbb7-c09d3a79fcae"
 version = "0.8.5"
 
 [[Downloads]]
-deps = ["ArgTools", "LibCURL", "NetworkOptions"]
+deps = ["ArgTools", "FileWatching", "LibCURL", "NetworkOptions"]
 uuid = "f43a241f-c20a-4ad4-852c-f6b1247861c6"
 
 [[EarCut_jll]]
@@ -795,6 +800,9 @@ deps = ["Artifacts", "Bzip2_jll", "FreeType2_jll", "FriBidi_jll", "JLLWrappers",
 git-tree-sha1 = "d8a578692e3077ac998b50c0217dfd67f21d1e5f"
 uuid = "b22a6f82-2f65-5046-a5b2-351ab43fb4e5"
 version = "4.4.0+0"
+
+[[FileWatching]]
+uuid = "7b1f6079-737a-58dc-b8bc-7a2ca5c1b5ee"
 
 [[FillArrays]]
 deps = ["LinearAlgebra", "Random", "SparseArrays", "Statistics"]
@@ -834,9 +842,9 @@ version = "1.0.10+0"
 
 [[GLFW_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Libglvnd_jll", "Pkg", "Xorg_libXcursor_jll", "Xorg_libXi_jll", "Xorg_libXinerama_jll", "Xorg_libXrandr_jll"]
-git-tree-sha1 = "dba1e8614e98949abfa60480b13653813d8f0157"
+git-tree-sha1 = "0c603255764a1fa0b61752d2bec14cfbd18f7fe8"
 uuid = "0656b61e-2033-5cc2-a64a-77c0f6c09b89"
-version = "3.3.5+0"
+version = "3.3.5+1"
 
 [[GR]]
 deps = ["Base64", "DelimitedFiles", "GR_jll", "HTTP", "JSON", "Libdl", "LinearAlgebra", "Pkg", "Printf", "Random", "Serialization", "Sockets", "Test", "UUIDs"]
@@ -864,9 +872,9 @@ version = "0.21.0+0"
 
 [[Glib_jll]]
 deps = ["Artifacts", "Gettext_jll", "JLLWrappers", "Libdl", "Libffi_jll", "Libiconv_jll", "Libmount_jll", "PCRE_jll", "Pkg", "Zlib_jll"]
-git-tree-sha1 = "7bf67e9a481712b3dbe9cb3dac852dc4b1162e02"
+git-tree-sha1 = "a32d672ac2c967f3deb8a81d828afc739c838a06"
 uuid = "7746bdde-850d-59dc-9ae8-88ece973131d"
-version = "2.68.3+0"
+version = "2.68.3+2"
 
 [[GraphPlot]]
 deps = ["ArnoldiMethod", "ColorTypes", "Colors", "Compose", "DelimitedFiles", "LightGraphs", "LinearAlgebra", "Random", "SparseArrays"]
@@ -893,9 +901,9 @@ version = "0.9.16"
 
 [[HarfBuzz_jll]]
 deps = ["Artifacts", "Cairo_jll", "Fontconfig_jll", "FreeType2_jll", "Glib_jll", "Graphite2_jll", "JLLWrappers", "Libdl", "Libffi_jll", "Pkg"]
-git-tree-sha1 = "8a954fed8ac097d5be04921d595f741115c1b2ad"
+git-tree-sha1 = "129acf094d168394e80ee1dc4bc06ec835e510a3"
 uuid = "2e76f6c2-a576-52d4-95c1-20adfe4de566"
-version = "2.8.1+0"
+version = "2.8.1+1"
 
 [[HypertextLiteral]]
 git-tree-sha1 = "72053798e1be56026b81d4e2682dbe58922e5ec9"
@@ -962,6 +970,12 @@ git-tree-sha1 = "f6250b16881adf048549549fba48b1161acdac8c"
 uuid = "c1c5ebd0-6772-5130-a774-d5fcae4a789d"
 version = "3.100.1+0"
 
+[[LERC_jll]]
+deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg"]
+git-tree-sha1 = "bf36f528eec6634efc60d7ec062008f171071434"
+uuid = "88015f11-f218-50d7-93a8-a6af411a945d"
+version = "3.0.0+1"
+
 [[LZO_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg"]
 git-tree-sha1 = "e5b909bcf985c5e2605737d2ce278ed791b89be6"
@@ -1000,9 +1014,9 @@ uuid = "8f399da3-3557-5675-b5ff-fb832c97cbdb"
 
 [[Libffi_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg"]
-git-tree-sha1 = "761a393aeccd6aa92ec3515e428c26bf99575b3b"
+git-tree-sha1 = "0b4a5d71f3e5200a7dff793393e09dfc2d874290"
 uuid = "e9f186c6-92d2-5b65-8a66-fee21dc1b490"
-version = "3.2.2+0"
+version = "3.2.2+1"
 
 [[Libgcrypt_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Libgpg_error_jll", "Pkg"]
@@ -1035,10 +1049,10 @@ uuid = "4b2f31a3-9ecc-558c-b454-b3730dcb73e9"
 version = "2.35.0+0"
 
 [[Libtiff_jll]]
-deps = ["Artifacts", "JLLWrappers", "JpegTurbo_jll", "Libdl", "Pkg", "Zlib_jll", "Zstd_jll"]
-git-tree-sha1 = "340e257aada13f95f98ee352d316c3bed37c8ab9"
+deps = ["Artifacts", "JLLWrappers", "JpegTurbo_jll", "LERC_jll", "Libdl", "Pkg", "Zlib_jll", "Zstd_jll"]
+git-tree-sha1 = "c9551dd26e31ab17b86cbd00c2ede019c08758eb"
 uuid = "89763e89-9b03-5906-acba-b20f662cd828"
-version = "4.3.0+0"
+version = "4.3.0+1"
 
 [[Libuuid_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg"]
@@ -1053,7 +1067,7 @@ uuid = "093fc24a-ae57-5d10-9952-331d41423f4d"
 version = "1.3.5"
 
 [[LinearAlgebra]]
-deps = ["Libdl"]
+deps = ["Libdl", "libblastrampoline_jll"]
 uuid = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
 
 [[LogExpFunctions]]
@@ -1112,9 +1126,13 @@ uuid = "ca575930-c2e3-43a9-ace4-1e988b2c1908"
 
 [[Ogg_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg"]
-git-tree-sha1 = "7937eda4681660b4d6aeeecc2f7e1c81c8ee4e2f"
+git-tree-sha1 = "887579a3eb005446d514ab7aeac5d1d027658b8f"
 uuid = "e7412a2a-1a6e-54c0-be00-318e2571c051"
-version = "1.3.5+0"
+version = "1.3.5+1"
+
+[[OpenBLAS_jll]]
+deps = ["Artifacts", "CompilerSupportLibraries_jll", "Libdl"]
+uuid = "4536629a-c528-5b80-bd46-f80d51c5b363"
 
 [[OpenLibm_jll]]
 deps = ["Artifacts", "Libdl"]
@@ -1207,9 +1225,9 @@ uuid = "de0858da-6303-5e67-8744-51eddeeeb8d7"
 
 [[Qt5Base_jll]]
 deps = ["Artifacts", "CompilerSupportLibraries_jll", "Fontconfig_jll", "Glib_jll", "JLLWrappers", "Libdl", "Libglvnd_jll", "OpenSSL_jll", "Pkg", "Xorg_libXext_jll", "Xorg_libxcb_jll", "Xorg_xcb_util_image_jll", "Xorg_xcb_util_keysyms_jll", "Xorg_xcb_util_renderutil_jll", "Xorg_xcb_util_wm_jll", "Zlib_jll", "xkbcommon_jll"]
-git-tree-sha1 = "ad368663a5e20dbb8d6dc2fddeefe4dae0781ae8"
+git-tree-sha1 = "c6c0f690d0cc7caddb74cef7aa847b824a16b256"
 uuid = "ea2cea3b-5b76-57ae-a6ef-0a8af62496e1"
-version = "5.15.3+0"
+version = "5.15.3+1"
 
 [[QuadGK]]
 deps = ["DataStructures", "LinearAlgebra"]
@@ -1222,7 +1240,7 @@ deps = ["InteractiveUtils", "Markdown", "Sockets", "Unicode"]
 uuid = "3fa0cd96-eef1-5676-8a61-b3b8758bbffb"
 
 [[Random]]
-deps = ["Serialization"]
+deps = ["SHA", "Serialization"]
 uuid = "9a3f8284-a2c9-5f02-9a11-845980a1fd5c"
 
 [[RecipesBase]]
@@ -1545,6 +1563,10 @@ git-tree-sha1 = "5982a94fcba20f02f42ace44b9894ee2b140fe47"
 uuid = "0ac62f75-1d6f-5e53-bd7c-93b484bb37c0"
 version = "0.15.1+0"
 
+[[libblastrampoline_jll]]
+deps = ["Artifacts", "Libdl", "OpenBLAS_jll"]
+uuid = "8e850b90-86db-534c-a0d3-1478176c7d93"
+
 [[libfdk_aac_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg"]
 git-tree-sha1 = "daacc84a041563f965be61859a36e17c4e4fcd55"
@@ -1559,9 +1581,9 @@ version = "1.6.38+0"
 
 [[libvorbis_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Ogg_jll", "Pkg"]
-git-tree-sha1 = "c45f4e40e7aafe9d086379e5578947ec8b95a8fb"
+git-tree-sha1 = "b910cb81ef3fe6e78bf6acee440bda86fd6ae00c"
 uuid = "f27f6e37-5d2b-51aa-960f-b287f2bc3b7a"
-version = "1.3.7+0"
+version = "1.3.7+1"
 
 [[nghttp2_jll]]
 deps = ["Artifacts", "Libdl"]
@@ -1593,12 +1615,12 @@ version = "0.9.1+5"
 # ╔═╡ Cell order:
 # ╟─bad1ae0f-0b0b-4cdd-94ff-e9a55fad6dfe
 # ╠═d155ea12-9628-11eb-347f-7754a33fd403
-# ╠═01506de2-918a-11eb-2a4d-c554a6e54631
+# ╟─01506de2-918a-11eb-2a4d-c554a6e54631
 # ╟─ee349b52-9189-11eb-2b86-b5dc15ebe432
 # ╟─877deb2c-702b-457b-a54b-f27c277928d4
 # ╟─43e39a6c-918a-11eb-2408-93563b4fb8c1
 # ╟─719a4c8c-9615-11eb-3dd7-7fb786f7fa17
-# ╠═45ecee7e-970e-11eb-22fd-01f56876684e
+# ╟─45ecee7e-970e-11eb-22fd-01f56876684e
 # ╟─61ffe0f2-9615-11eb-37d5-f9e30a31c111
 # ╟─627f6db6-9617-11eb-0453-a1f9e341ecfe
 # ╟─091a8a44-918c-11eb-2ee3-9be84a311afd
@@ -1623,7 +1645,7 @@ version = "0.9.1+5"
 # ╠═43d20d56-d56a-47a8-893e-f726c1a99651
 # ╠═d2d1366b-9b6d-4e54-a0c4-7087f5f063c4
 # ╠═a76ac67b-27b9-4e2b-9fca-61480dca5264
-# ╠═c742742a-765b-4eb5-bd65-dc0cd6328255
+# ╟─c742742a-765b-4eb5-bd65-dc0cd6328255
 # ╠═6577e546-8f0b-413a-a8bb-b9c12803199d
 # ╠═4dd03325-2498-4fe7-9212-f964081a0300
 # ╠═626242ea-544c-49fc-9884-c70dd6800902
@@ -1650,9 +1672,9 @@ version = "0.9.1+5"
 # ╟─e6884c6c-9712-11eb-288b-f1a439b0aba3
 # ╟─1e18f95c-cd53-4ede-8d93-572c81f872da
 # ╠═4f845436-9646-11eb-2445-c12746a9e556
-# ╟─155241b0-9646-11eb-180e-89c8651536c6
+# ╠═155241b0-9646-11eb-180e-89c8651536c6
 # ╟─31d56008-9646-11eb-1985-2b68af354773
-# ╟─1761187e-9645-11eb-3778-b132f856696d
+# ╠═1761187e-9645-11eb-3778-b132f856696d
 # ╟─48eed5ae-b3cf-4998-ba2f-ba50e120b557
 # ╠═59a8b92c-0454-4a9c-89d8-e4a044d156d3
 # ╟─2c0c01fe-9f54-4d5b-9f7f-b7ef0d3a8474
@@ -1660,7 +1682,7 @@ version = "0.9.1+5"
 # ╠═7c4b82c8-9710-11eb-101e-53616e278289
 # ╠═236347f9-71c3-4299-9537-14d89eac2b93
 # ╠═021d7e9a-9711-11eb-063b-11441afa2e69
-# ╠═f16cb73d-4289-4ba2-93de-7acd0c51bb57
+# ╟─f16cb73d-4289-4ba2-93de-7acd0c51bb57
 # ╟─bb8dc4fe-918d-11eb-2bde-bb00c47a1c27
 # ╟─c4a3bf6c-918d-11eb-1d50-911f83b6df81
 # ╟─d99dc494-918d-11eb-2733-29ce93ba584e
