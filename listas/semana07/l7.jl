@@ -1,5 +1,5 @@
 ### A Pluto.jl notebook ###
-# v0.16.1
+# v0.19.13
 
 using Markdown
 using InteractiveUtils
@@ -7,8 +7,9 @@ using InteractiveUtils
 # This Pluto notebook uses @bind for interactivity. When running this notebook outside of Pluto, the following 'mock version' of @bind gives bound variables a default value (instead of an error).
 macro bind(def, element)
     quote
+        local iv = try Base.loaded_modules[Base.PkgId(Base.UUID("6e696c72-6542-2067-7265-42206c756150"), "AbstractPlutoDingetjes")].Bonds.initial_value catch; b -> missing; end
         local el = $(esc(element))
-        global $(esc(def)) = Core.applicable(Base.get, el) ? Base.get(el) : missing
+        global $(esc(def)) = Core.applicable(Base.get, el) ? Base.get(el) : iv(el)
         el
     end
 end
@@ -21,20 +22,6 @@ end
 
 # ╔═╡ 01341648-0403-11eb-2212-db450c299f35
 md"Tradução livre de [hw7.jl](https://github.com/mitmath/18S191/blob/Spring21/notebooks/week7/hw7.jl)"
-
-# ╔═╡ 06f30b2a-0403-11eb-0f05-8badebe1011d
-md"""
-
-# **Lista 7**: _Modelagem de epidemias_
-
-`Data de entrega`: vejam no Moodle da disciplina.
-
-Este caderno contém verificações _simples_ para ajudar você a saber se o que fez faz sentido. Essas verificações são incompletas e não corrigem completamente os exercícios. Mas, se elas disserem que algo não está bom, você sabe que tem que tentar de novo.
-
-_Para os alunos regulares:_ as listas serão corrigidas com exemplos mais sofisticados e gerais do que aqueles das verificações incluídas. 
-
-Sintam-se livres de fazer perguntas no fórum.
-"""
 
 # ╔═╡ 095cbf46-0403-11eb-0c37-35de9562cebc
 # edite o código abaixo com seu nome e email da dac (sem o @dac.unicamp.br)
@@ -52,8 +39,22 @@ md"""
 Submetido por: **_$(student.name)_** ($(student.email_dac)@unicamp.br)
 """
 
+# ╔═╡ 06f30b2a-0403-11eb-0f05-8badebe1011d
+md"""
+
+# **Lista 7**: _Modelagem de epidemias_
+
+`Data de entrega`: 01/11/2022.
+
+Este caderno contém verificações _simples_ para ajudar você a saber se o que fez faz sentido. Essas verificações são incompletas e não corrigem completamente os exercícios. Mas, se elas disserem que algo não está bom, você sabe que tem que tentar de novo.
+
+_Lembrem as listas serão corrigidas com exemplos mais sofisticados e gerais do que aqueles das verificações incluídas_. 
+
+Sintam-se livres de fazer perguntas no Discord.
+"""
+
 # ╔═╡ 107e65a4-0403-11eb-0c14-37d8d828b469
-md"_Vamos importar alguns pacotes que serão úteis_"
+md"Vamos importar alguns pacotes que serão úteis e definir uma função que pode lhe ajudar."
 
 # ╔═╡ d8797684-0414-11eb-1869-5b1e2c469011
 # Might come handy below
@@ -63,17 +64,15 @@ end
 
 # ╔═╡ 61789646-0403-11eb-0042-f3b8308f11ba
 md"""
-## **Exercício 1:** _Modelo baseado em agentes de um surto epidẽmico -- tipos_
-
-
+## **Exercício 1:** _Modelo baseado em agentes para um surto epidêmico -- tipos_
 
 Nesta lista vamos desenvolver um modelo estocástico simples da infecção e recuperação em uma população que está passando por um **surto epidêmico** (ou seja, um rápido crescimento no número de pessoas infectadas). Uma das hipóteses fundamentais que vamos fazer é que a população está _bem misturada_, ou seja, todos estão em contato com todos. Um exemplo seria uma pequena escola ou universidade em que as pessoas estão constantemente se movendo e interagindo umas com as outras. 
 
-O modelo é **baseado em indivíduos**, ou **baseado em agentes**: vamos manter informação explícita sobre cada indivíduo, ou **agente**, da população e sua situação de saúde. Nesse modelo não vamos simular a sua posição no espaço. Vamos apenas considerar que existe alguma forma de interação entre os indivíduos que não está sendo modelada. 
+O modelo é **baseado em indivíduos**, ou *agentes**. Vamos manter informação explícita sobre cada indivíduo, ou agente, da população e sua situação de saúde. Nesse modelo não vamos simular a sua posição no espaço. Vamos apenas considerar que existe alguma forma de interação entre os indivíduos que não está sendo detalhada. 
 
 #### Exercício 1.1
 
-Cada agente terá o seu próprio **estado interno**, modelado seu estado com respeito à doença, podendo ser "suscetível", "infectado" ou "recuperado". Vamos codificar esses estados com os valores `S`, `I` ou `R`. Uma forma de fazer isso é usando um [**tipo enumerado**](https://en.wikipedia.org/wiki/Enumerated_type) ou **enum**. Variáveis desse tipo podem apenas assumir um entre um subconjunto predefinido de valores. A sintaxe para isso em Julia é:
+Cada agente terá o seu próprio **estado interno**, que modela o seu estágio com relação à doença, podendo ser "suscetível", "infectado" ou "recuperado". Vamos codificar esses estados com os valores `S`, `I` ou `R`. Uma forma de fazer isso é usando um [**tipo enumerado**](https://en.wikipedia.org/wiki/Enumerated_type) ou **enum**. Variáveis desse tipo podem apenas assumir um entre um subconjunto predefinido de valores. A sintaxe para isso em Julia é:
 """
 
 # ╔═╡ 26f84600-041d-11eb-1856-b12a3e5c1dc7
@@ -81,9 +80,9 @@ Cada agente terá o seu próprio **estado interno**, modelado seu estado com res
 
 # ╔═╡ 271ec5f0-041d-11eb-041b-db46ec1465e0
 md"""
-Acabmod de definir um novo tipo `InfectionStatus`, assim como os nomes `S`, `I` e `R` que são os únicos valores que variáveis desse tipo podem assumir.
+Acabamos de definir um novo tipo `InfectionStatus`, assim como os nomes `S`, `I` e `R` que são os únicos valores que variáveis desse tipo podem assumir.
 
-👉 Desfina a variável `test_status` cujo valor é `S` (Se tiver dúvidas de como fazer isso procure informação na Internet).
+👉 Defina a variável `test_status` cujo valor é `S` (Se tiver dúvidas de como fazer isso procure informação na Internet).
 """
 
 # ╔═╡ 7f4e121c-041d-11eb-0dff-cd0cbfdfd606
@@ -91,7 +90,7 @@ test_status = missing
 
 # ╔═╡ 7f744644-041d-11eb-08a0-3719cc0adeb7
 md"""
-👉 Use a função `typeof` para encontrar o tipo de de `test_status`.
+👉 Use a função `typeof` para encontrar o tipo de `test_status`.
 """
 
 # ╔═╡ 88c53208-041d-11eb-3b1e-31b57ba99f05
@@ -109,7 +108,7 @@ md"""
 md"""
 #### Exercício 1.2
 
-Para cada agente, vamos querer manter o seu estágio de doença e o número de **outros** agentes que ele infecta durante a simulação. Uma boa solução para esse é definir um **novo tipo** `Agent` que armazena a informação necessária, como fazemos a seguir:
+Para cada agente, vamos querer manter o seu estágio de doença e o número de **outros** agentes que ele infectou durante a simulação. Uma boa solução para esse é definir um **novo tipo** `Agent` que armazena a informação necessária, como fazemos a seguir:
 """
 
 # ╔═╡ ae4ac4b4-041f-11eb-14f5-1bcde35d18f2
@@ -120,9 +119,9 @@ end
 
 # ╔═╡ ae70625a-041f-11eb-3082-0753419d6d57
 md"""
-Quando você define um novo tipo, Julia automaticamente define um ou mais **cosntrutores**, que são métodos de uma função genérica com o **mesmo nome** que o tipo. Eles são usados para criar objetos desse novo tipo.
+Quando você define um novo tipo, Julia automaticamente define um ou mais **construtores**, que são métodos de uma função genérica com o **mesmo nome** que o tipo. Eles são usados para criar objetos desse novo tipo.
 
-👉 Use a função `methods` para desconbrir quantos construtores foram pré-definidos oara o tipo `Agent`.
+👉 Use a função `methods` para descobrir quantos construtores foram pré-definidos para o tipo `Agent`.
 """
 
 # ╔═╡ 60a8b708-04c8-11eb-37b1-3daec644ac90
@@ -138,7 +137,7 @@ test_agent = missing
 
 # ╔═╡ 190deebc-0424-11eb-19fe-615997093e14
 md"""
-👉 Por conveniência, defina um novo contrutor (ou seja, um novo método para a função com nome do tipo) que não recebe argumentos e cria um `Agent` com status `S` e número de infectados 0 ao chamar o construtor default que Julia cria. Esse método está sendo definido depois (fora) da definição do tipo e por isso é conhecido como **construtor externo**.
+👉 Por conveniência, defina um novo construtor (ou seja, um novo método para a função com nome do tipo) que não recebe argumentos e cria um `Agent` com status `S` e número de infectados 0. Essa função deve chamar o construtor default que Julia cria. Esse método está sendo definido depois (fora) da definição do tipo e por isso é conhecido como **construtor externo**.
 
 (No Pluto, a definição de uma estrutura (_struct_) e os respectivos construtores (externos) devem ser combinados em uma única célula usando um bloco `begin end`, então faça essa parte do exercício na célula acima)
 
@@ -152,8 +151,7 @@ Vamos verificar que os novo método funciona corretamente. Quantos métodos de c
 # ╔═╡ 8631a536-0403-11eb-0379-bb2e56927727
 md"""
 #### Exercício 1.3
-👉 Escreva funções `set_status!(a)` e `inc_num_infected!(a)` que modificam o campo `status` de  `Agent` pra `a` e adiciona um no campo `num_infected` respectivamte. Verifique que funcione. Note a conveção de usar o ponto de exclamação no final do nome das funções como forma de indicar que elas _alteram_ os seus argumentos.
-
+👉 Escreva funções `set_status!(a)` e `inc_num_infected!(a)` que modificam o campo `status` de  `Agent` para `a` e adiciona um no campo `num_infected` respectivamente. Verifique que funciona. Note a convenção de usar o ponto de exclamação no final do nome das funções como forma de indicar que elas _alteram_ os seus argumentos.
 """
 
 # ╔═╡ 98beb336-0425-11eb-3886-4f8cfd210288
@@ -165,7 +163,7 @@ end
 
 # ╔═╡ 866299e8-0403-11eb-085d-2b93459cc141
 md"""
-👉 Nós também vamos precisar das funções `is_susceptible` e `is_infected` que verificam se um dado agente está em um desses estados (repectivamente). Além disso, defina a função `get_num_infected` que simplesmente devolve o número de infectados pelo agente.
+👉 Nós também vamos precisar das funções `is_susceptible` e `is_infected` que verificam se um dado agente está em um desses estados (respectivamente). Além disso, defina a função `get_num_infected` que simplesmente devolve o número de infectados pelo agente.
 """
 
 # ╔═╡ 9a837b52-0425-11eb-231f-a74405ff6e23
@@ -206,7 +204,7 @@ generate_agents(3)
 md"""
 Vamos também precisar de novos tipos representando diferentes surtos infecciosos.
 
-Vamos definir uma `struct` (imutável) chamada `InfectionRecovery` com parâmetros `p_infection` e `p_recovery` representando as probabilidades de um encontro com um infeccioso gerar uma infeccção e a chance de um doente se recuperar, respectivamente. Ela será um subtipo de um tipo abstrato `AbstractInfection`. Depois iremos definir outras variações desse tipo.
+Definimos abaixo uma `struct` (imutável) chamada `InfectionRecovery` com parâmetros `p_infection` e `p_recovery` representando as probabilidades de um encontro com um infeccioso gerar uma infecção e a chance de um doente se recuperar, respectivamente. Ela será um subtipo de um tipo abstrato `AbstractInfection`. Depois iremos definir outras variações desse tipo.
 """
 
 # ╔═╡ 223933a4-042c-11eb-10d3-852229f25a35
@@ -227,7 +225,7 @@ md"""
 - Se `agent` já está infectado, então ele se recupera com a respectiva probabilidade definida no surto.
 - Caso contrário, nada ocorre.
 
-Obs: para decidir se um evento ocorre com uma dada probabilide você pode usar a função `bernoulli` definida no início deste caderno (ou escrever seu próprio código, é claro).
+Obs: para decidir se um evento ocorre com uma dada probabilidade você pode usar a função `bernoulli` definida no início deste caderno (ou escrever seu próprio código, é claro).
 
 $(html"<span id=interactfunction></span>")
 """
@@ -240,7 +238,7 @@ end
 
 # ╔═╡ b21475c6-04ac-11eb-1366-f3b5e967402d
 md"""
-Play around with the test case below to test your function! Try changing the definitions of `agent`, `source` and `infection`. Since we are working with randomness, you might want to run the cell multiple times.
+Brinque um pouco com o caso de teste abaixo para verificar o funcionamento de sua função. Tente trocar as definições de `agent`, `source` e `infection` para testar os diversos casos. Como estamos usando aleatoriedade, pode ser necessário rodar o código mais de uma vez para cada caso para ver o que ocorre.
 """
 
 # ╔═╡ 9c39974c-04a5-11eb-184d-317eb542452c
@@ -258,15 +256,15 @@ end
 md"""
 ## **Exercício 2:** _Modelo baseado em agentes de um surto epidêmico -- Simulação de Monte Carlo_
 
-Neste exercício vamos usar o que você fez no exercício 1 para escreva uma simulação de Monte Carlo de como uma infecção se propaga em uma população.
+Neste exercício vamos usar o que você fez no exercício 1 para escrever uma simulação de Monte Carlo de como uma infecção se propaga em uma população.
 
-Você deve re-utilizar as funções que já escreveu e, se achar necessário, crie funções auxiliares. Funções curtas são mais simples de entender e enfatizam a introdução de novas funcionalidades de paulatinamente.
+Você deve re-utilizar as funções que já escreveu e, se achar necessário, criar funções auxiliares. Funções curtas são mais simples de entender e enfatizam a introdução de novas funcionalidades paulatinamente.
 
-Você não deve usar nenhuma variável global dentro de suas funções. Cada função deve receber em seus argumentos toda informação que precisa para realizar a sua tarefa. Deste modo, você deve pensar cuidadosamente o que cada função precisa receber.
+Você não deve usar nenhuma variável global dentro de suas funções. Cada função deve receber em seus argumentos toda informação que precisa para realizar a sua tarefa. Deste modo, devemos pensar cuidadosamente o que cada função precisa receber.
 
 #### Exercício 2.1
 
-👉 Escreva uma funlção `step!` que recebe um vetor de agentes `agents` e uma descrição de surto `infection` do tipo `InfectionRecovery`. Ela deve implementar um único passo da dinâmica do surto seguindo as regras:
+👉 Escreva uma função `step!` que recebe um vetor de agentes `agents` e uma descrição de surto `infection` do tipo `InfectionRecovery`. Ela deve implementar um único passo da dinâmica do surto seguindo as regras:
 
 - Escolha dois agentes aleatoriamente: um fará o papel de `agent` e o outro de `source`.
 - Execute `interact!(agent, source, infection)`.
@@ -336,7 +334,7 @@ md"""
 #### Exercício 2.2
 Ótimo, você chegou até aqui! Toda vez que executamos a simulação conseguimos resultados diferentes, justamente porque ela é aleatória. Mas ao repetir a simulação várias vezes, começamos a ter uma ideia melhor de qual é o comportamento médio do modelo. Esta é a essência do método e Monte de Carlo. Você usa aleatoriedade gerada no computador para gerar as suas amostras.
 
-Ao invés de apertar o botão várias vezes, podemos fazer o computador repetir a simulação. Nas próximas células a simulação será executada  `num_simulations=20` vezes com $N = 100$, $p_\text{infection} = 0.02$, $p_\text{infection} = 0.002$ e $T = 1000$. 
+Ao invés de apertar o botão várias vezes, podemos fazer o computador repetir a simulação. Nas próximas células a simulação será executada  `num_simulations=20` vezes com $N = 100$, $p_\text{infection} = 0.02$, $p_\text{recovery} = 0.002$ e $T = 1000$. 
 
 Cada simulação retorna com a tupla nomeada com as contagens dos estados. Assim o resultado dessas múltiplas simulações serão um array desses resultados. Dê uma olhada "dentro" do resultado,  `simulations`, e assegure-se que você entendeu sua estrutura.
 """
@@ -372,7 +370,7 @@ end
 
 # ╔═╡ 95c598d4-0403-11eb-2328-0175ed564915
 md"""
-👉 Escreva uma função `sir_mean_plot` que retorna o gráfico as médias de $S$, $I$ e $R$ em função do tempo como um único gráfico.
+👉 Escreva uma função `sir_mean_plot` que retorna o gráfico das médias de $S$, $I$ e $R$ em função do tempo como uma única figura.
 """
 
 # ╔═╡ 843fd63c-04d0-11eb-0113-c58d346179d6
@@ -405,7 +403,7 @@ end
 
 # ╔═╡ dfb99ace-04cf-11eb-0739-7d694c837d59
 md"""
-👉 Brinque um pouco com os valores de $p_\text{infection}$ e $p_\text{recovery}$ na célula acima. Com um dos valores fixados qual encontre o outro valor para o qual o surto fica sob controle no sentido que a média de infectados não passa de 2. Para isso você vai ter que alterar o código acima para ver o número máximo de infectados.
+👉 Brinque um pouco com os valores de $p_\text{infection}$ e $p_\text{recovery}$ na célula acima. Com um dos valores fixados, encontre o outro valor para o qual o surto fica sob controle no sentido que a média de infectados não passa de 2. Para isso você vai ter que alterar o código acima para ver o número máximo de infectados.
 """
 
 # ╔═╡ 1c6aa208-04d1-11eb-0b87-cf429e6ff6d0
@@ -415,7 +413,7 @@ md"Escreva os valores que você encontrou acima."
 md"""
 👉 Escreva uma função `sir_mean_error_plot` que faz o mesmo que `sir_mean_plot`, mas também calcula **o desvio padrão** $\sigma$ de $S$, $I$, $R$ a cada passo. Adicione essa informação usado **barras de erro**, através da opção `yerr=σ` no comando `plot`; use transparência.
 
-Isso deve confirmar que a distribuição de $I$ a cada passo é bastante dispersa!
+Isso deve confirmar que as distribuição de $S, I$ e $R$ a cada passo são bastantes dispersas!
 """
 
 # ╔═╡ 287ee7aa-0435-11eb-0ca3-951dbbe69404
@@ -430,7 +428,7 @@ end
 md"""
 #### Exercício 2.3
 
-👉 Grafique a distribuição de probabilidde dos valores `num_infected`. Ela possui um formato reconhecível? (Se quiser aumente o número de agentes Feel free to increase the number of agents in order to get better statistics.)
+👉 Grafique a distribuição de probabilidade dos valores `num_infected`. Ela possui um formato reconhecível? Se quiser aumente o número de agentes para ter uma ideia melhor das estatísticas.
 
 """
 
@@ -454,25 +452,16 @@ begin
 	# add your code here
 end
 
-# ╔═╡ 9635c944-0403-11eb-3982-4df509f6a556
-md"""
-#### Exercse 2.4
-👉 What are three *simple* ways in which you could characterise the magnitude (size) of the epidemic outbreak? Find approximate values of these quantities for one of the runs of your simulation.
-"""
-
-# ╔═╡ 4ad11052-042c-11eb-3643-8b2b3e1269bc
-
-
 # ╔═╡ 61c00724-0403-11eb-228d-17c11670e5d1
 md"""
 ## **Exercício 3:** _Reinfecção_
 
-Este exercício fai *re-utilizar* a nossa infraestrutura de simulação para estadar uma dinâmica de um tipo diferente de infecção: não se atinge imunidade, ou seja ninguém se recupera de forma definitiva, as pessoas podem se **reinfectar**.
+Este exercício vai *re-utilizar* a nossa infraestrutura de simulação para estudar uma dinâmica de um tipo diferente de infecção. Nela não se atinge imunidade, ou seja ninguém se recupera de forma definitiva, as pessoas podem se **reinfectar**.
 
 #### Exercício 3.1
 👉 Crie um noto tipo `Reinfection` para representar esse novo tipo de surto. Ele deve ter os mesmos dois campos que  `InfectionRecovery` (`p_infection` e `p_recovery`). Entretanto, "recuperação" agora significa "tornar-se suscetível de novo", ao invés de se mover para a classe `R`. 
 
-Esse novo tipo `Reinfection` deve também ser **subtipo** de `AbstractInfection`. Isso nos perimite usar as funções anteriores que foram definidas para o tipo "pai", ou supertipo. Por isso que as assinaturas (parâmetros e seus tipos) das funções já foram fornecidas.
+Esse novo tipo `Reinfection` deve também ser **subtipo** de `AbstractInfection`. Isso nos permite usar as funções anteriores que foram definidas para o tipo "pai", ou super-tipo. Por isso que as assinaturas (parâmetros e seus tipos) das funções já foram fornecidas.
 """
 
 # ╔═╡ 8dd97820-04a5-11eb-36c0-8f92d4b859a8
@@ -480,7 +469,7 @@ Esse novo tipo `Reinfection` deve também ser **subtipo** de `AbstractInfection`
 
 # ╔═╡ 99ef7b2a-0403-11eb-08ef-e1023cd151ae
 md"""
-👉 Crie um novo **método** para a função `interact!` que aceita o novo tipo de surto reutilizando ao máximo a funcionalidade anterior, mas dando a nova interprestação da situação de recuperação: voltar ao estado suscetível (ninguém se reupera). 
+👉 Crie um novo **método** para a função `interact!` que aceita o novo tipo de surto reutilizando ao máximo a funcionalidade anterior, mas dando a nova interpretação da situação de recuperação: voltar ao estado suscetível (ninguém se recupera). 
 """
 
 # ╔═╡ bbb103d5-c8f9-485b-9337-40892bb60506
@@ -489,7 +478,7 @@ md"""
 # ╔═╡ 9a13b17c-0403-11eb-024f-9b37e95e211b
 md"""
 #### Exercício 3.2
-👉 Use o código abaixo para rodar a simulação 20 vezes. Note que ele chama a rotina `repeat_simulation` que, por sua vez, chama `sweep!` e `simulation`. Todas essas funções podem ser genéricas e funcionar com qualquer `AbstractInfection`. (Se elas não estavam assim, ajuste-as). A única rotina que realmente depende do tipo específico de surto é a `interact!` que você adaptou logo acima. Assim, o código abaixo deveria funcionar. Para testar isso comente a primeira linha, que está copiando o resultado das simulações anteiores, e descomente a linha seguinte para rodar o novo código. Ele deveria funcionar. Se não funcionar faça ajustes no seu código acima conforma necessário.
+👉 Use o código abaixo para rodar a simulação 20 vezes. Note que ele chama a rotina `repeat_simulation` que, por sua vez, chama `sweep!` e `simulation`. Todas essas funções podem ser genéricas e funcionar com qualquer `AbstractInfection`. (Se elas não estavam assim, ajuste-as). A única rotina que realmente depende do tipo específico de surto é a `interact!` que você adaptou logo acima. Assim, o código abaixo deveria funcionar. Para testar isso comente a primeira linha, que está copiando o resultado das simulações anteriores, e descomente a linha seguinte para rodar o novo código. Ele deveria funcionar. Se não funcionar faça ajustes no seu código acima conforme necessário.
 """
 
 # ╔═╡ 1ac4b33a-0435-11eb-36f8-8f3f81ae7844
@@ -499,7 +488,7 @@ simulations_reinf = copy(simulations)
 
 # ╔═╡ 9a377b32-0403-11eb-2799-e7e59caa6a45
 md"""
-👉 Depois de rodar a simulação acima, desenhe o $I$ (médio entre todas as rodadas) como uma função do tempo. O comportamente é o mesmo de antes. Descreva o que você vê.
+👉 Depois de rodar a simulação acima, desenhe o $I$ (médio entre todas as rodadas) como uma função do tempo. O comportamento é o mesmo de antes? Descreva o que você vê.
 """
 
 # ╔═╡ 21c50840-0435-11eb-1307-7138ecde0691
@@ -518,8 +507,8 @@ end
 # ╔═╡ cdd25106-e4b3-44d8-a4a0-d1e7dd1f6db9
 if student.name == "João Ninguém"
 	md"""
-	!!! danger "Before you submit"
-	    Remember to fill in your **name** and **DAC email** at the top of this notebook.
+	!!! danger "Antes de submeter"
+	    Lembre de preencher seu **nome** e **email DAC** no topo deste caderno.
 	"""
 end
 
@@ -733,9 +722,6 @@ end
 # ╔═╡ 39dffa3c-0414-11eb-0197-e72b299e9c63
 bigbreak = html"<br><br><br><br><br>";
 
-# ╔═╡ 2b26dc42-0403-11eb-205f-cd2c23d8cb03
-bigbreak
-
 # ╔═╡ 5689841e-0414-11eb-0492-63c77ddbd136
 bigbreak
 
@@ -778,9 +764,9 @@ version = "1.0.8+0"
 
 [[Cairo_jll]]
 deps = ["Artifacts", "Bzip2_jll", "Fontconfig_jll", "FreeType2_jll", "Glib_jll", "JLLWrappers", "LZO_jll", "Libdl", "Pixman_jll", "Pkg", "Xorg_libXext_jll", "Xorg_libXrender_jll", "Zlib_jll", "libpng_jll"]
-git-tree-sha1 = "f2202b55d816427cd385a9a4f3ffb226bee80f99"
+git-tree-sha1 = "4b859a208b2397a7a623a03449e4636bdb17bcf2"
 uuid = "83423d85-b0ee-5818-9007-b63ccbeb887a"
-version = "1.16.1+0"
+version = "1.16.1+1"
 
 [[ChainRulesCore]]
 deps = ["Compat", "LinearAlgebra", "SparseArrays"]
@@ -857,7 +843,7 @@ uuid = "ffbed154-4ef7-542d-bbb7-c09d3a79fcae"
 version = "0.8.5"
 
 [[Downloads]]
-deps = ["ArgTools", "LibCURL", "NetworkOptions"]
+deps = ["ArgTools", "FileWatching", "LibCURL", "NetworkOptions"]
 uuid = "f43a241f-c20a-4ad4-852c-f6b1247861c6"
 
 [[EarCut_jll]]
@@ -883,6 +869,9 @@ deps = ["Artifacts", "Bzip2_jll", "FreeType2_jll", "FriBidi_jll", "JLLWrappers",
 git-tree-sha1 = "d8a578692e3077ac998b50c0217dfd67f21d1e5f"
 uuid = "b22a6f82-2f65-5046-a5b2-351ab43fb4e5"
 version = "4.4.0+0"
+
+[[FileWatching]]
+uuid = "7b1f6079-737a-58dc-b8bc-7a2ca5c1b5ee"
 
 [[FixedPointNumbers]]
 deps = ["Statistics"]
@@ -916,9 +905,9 @@ version = "1.0.10+0"
 
 [[GLFW_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Libglvnd_jll", "Pkg", "Xorg_libXcursor_jll", "Xorg_libXi_jll", "Xorg_libXinerama_jll", "Xorg_libXrandr_jll"]
-git-tree-sha1 = "dba1e8614e98949abfa60480b13653813d8f0157"
+git-tree-sha1 = "0c603255764a1fa0b61752d2bec14cfbd18f7fe8"
 uuid = "0656b61e-2033-5cc2-a64a-77c0f6c09b89"
-version = "3.3.5+0"
+version = "3.3.5+1"
 
 [[GR]]
 deps = ["Base64", "DelimitedFiles", "GR_jll", "HTTP", "JSON", "Libdl", "LinearAlgebra", "Pkg", "Printf", "Random", "Serialization", "Sockets", "Test", "UUIDs"]
@@ -946,9 +935,9 @@ version = "0.21.0+0"
 
 [[Glib_jll]]
 deps = ["Artifacts", "Gettext_jll", "JLLWrappers", "Libdl", "Libffi_jll", "Libiconv_jll", "Libmount_jll", "PCRE_jll", "Pkg", "Zlib_jll"]
-git-tree-sha1 = "7bf67e9a481712b3dbe9cb3dac852dc4b1162e02"
+git-tree-sha1 = "a32d672ac2c967f3deb8a81d828afc739c838a06"
 uuid = "7746bdde-850d-59dc-9ae8-88ece973131d"
-version = "2.68.3+0"
+version = "2.68.3+2"
 
 [[Graphite2_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg"]
@@ -969,9 +958,9 @@ version = "0.9.16"
 
 [[HarfBuzz_jll]]
 deps = ["Artifacts", "Cairo_jll", "Fontconfig_jll", "FreeType2_jll", "Glib_jll", "Graphite2_jll", "JLLWrappers", "Libdl", "Libffi_jll", "Pkg"]
-git-tree-sha1 = "8a954fed8ac097d5be04921d595f741115c1b2ad"
+git-tree-sha1 = "129acf094d168394e80ee1dc4bc06ec835e510a3"
 uuid = "2e76f6c2-a576-52d4-95c1-20adfe4de566"
-version = "2.8.1+0"
+version = "2.8.1+1"
 
 [[Hyperscript]]
 deps = ["Test"]
@@ -1039,6 +1028,12 @@ git-tree-sha1 = "f6250b16881adf048549549fba48b1161acdac8c"
 uuid = "c1c5ebd0-6772-5130-a774-d5fcae4a789d"
 version = "3.100.1+0"
 
+[[LERC_jll]]
+deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg"]
+git-tree-sha1 = "bf36f528eec6634efc60d7ec062008f171071434"
+uuid = "88015f11-f218-50d7-93a8-a6af411a945d"
+version = "3.0.0+1"
+
 [[LZO_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg"]
 git-tree-sha1 = "e5b909bcf985c5e2605737d2ce278ed791b89be6"
@@ -1077,9 +1072,9 @@ uuid = "8f399da3-3557-5675-b5ff-fb832c97cbdb"
 
 [[Libffi_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg"]
-git-tree-sha1 = "761a393aeccd6aa92ec3515e428c26bf99575b3b"
+git-tree-sha1 = "0b4a5d71f3e5200a7dff793393e09dfc2d874290"
 uuid = "e9f186c6-92d2-5b65-8a66-fee21dc1b490"
-version = "3.2.2+0"
+version = "3.2.2+1"
 
 [[Libgcrypt_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Libgpg_error_jll", "Pkg"]
@@ -1112,10 +1107,10 @@ uuid = "4b2f31a3-9ecc-558c-b454-b3730dcb73e9"
 version = "2.35.0+0"
 
 [[Libtiff_jll]]
-deps = ["Artifacts", "JLLWrappers", "JpegTurbo_jll", "Libdl", "Pkg", "Zlib_jll", "Zstd_jll"]
-git-tree-sha1 = "340e257aada13f95f98ee352d316c3bed37c8ab9"
+deps = ["Artifacts", "JLLWrappers", "JpegTurbo_jll", "LERC_jll", "Libdl", "Pkg", "Zlib_jll", "Zstd_jll"]
+git-tree-sha1 = "c9551dd26e31ab17b86cbd00c2ede019c08758eb"
 uuid = "89763e89-9b03-5906-acba-b20f662cd828"
-version = "4.3.0+0"
+version = "4.3.0+1"
 
 [[Libuuid_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg"]
@@ -1124,7 +1119,7 @@ uuid = "38a345b3-de98-5d2b-a5d3-14cd9215e700"
 version = "2.36.0+0"
 
 [[LinearAlgebra]]
-deps = ["Libdl"]
+deps = ["Libdl", "libblastrampoline_jll"]
 uuid = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
 
 [[LogExpFunctions]]
@@ -1183,9 +1178,13 @@ uuid = "ca575930-c2e3-43a9-ace4-1e988b2c1908"
 
 [[Ogg_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg"]
-git-tree-sha1 = "7937eda4681660b4d6aeeecc2f7e1c81c8ee4e2f"
+git-tree-sha1 = "887579a3eb005446d514ab7aeac5d1d027658b8f"
 uuid = "e7412a2a-1a6e-54c0-be00-318e2571c051"
-version = "1.3.5+0"
+version = "1.3.5+1"
+
+[[OpenBLAS_jll]]
+deps = ["Artifacts", "CompilerSupportLibraries_jll", "Libdl"]
+uuid = "4536629a-c528-5b80-bd46-f80d51c5b363"
 
 [[OpenSSL_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg"]
@@ -1262,16 +1261,16 @@ uuid = "de0858da-6303-5e67-8744-51eddeeeb8d7"
 
 [[Qt5Base_jll]]
 deps = ["Artifacts", "CompilerSupportLibraries_jll", "Fontconfig_jll", "Glib_jll", "JLLWrappers", "Libdl", "Libglvnd_jll", "OpenSSL_jll", "Pkg", "Xorg_libXext_jll", "Xorg_libxcb_jll", "Xorg_xcb_util_image_jll", "Xorg_xcb_util_keysyms_jll", "Xorg_xcb_util_renderutil_jll", "Xorg_xcb_util_wm_jll", "Zlib_jll", "xkbcommon_jll"]
-git-tree-sha1 = "ad368663a5e20dbb8d6dc2fddeefe4dae0781ae8"
+git-tree-sha1 = "c6c0f690d0cc7caddb74cef7aa847b824a16b256"
 uuid = "ea2cea3b-5b76-57ae-a6ef-0a8af62496e1"
-version = "5.15.3+0"
+version = "5.15.3+1"
 
 [[REPL]]
 deps = ["InteractiveUtils", "Markdown", "Sockets", "Unicode"]
 uuid = "3fa0cd96-eef1-5676-8a61-b3b8758bbffb"
 
 [[Random]]
-deps = ["Serialization"]
+deps = ["SHA", "Serialization"]
 uuid = "9a3f8284-a2c9-5f02-9a11-845980a1fd5c"
 
 [[RecipesBase]]
@@ -1560,6 +1559,10 @@ git-tree-sha1 = "5982a94fcba20f02f42ace44b9894ee2b140fe47"
 uuid = "0ac62f75-1d6f-5e53-bd7c-93b484bb37c0"
 version = "0.15.1+0"
 
+[[libblastrampoline_jll]]
+deps = ["Artifacts", "Libdl", "OpenBLAS_jll"]
+uuid = "8e850b90-86db-534c-a0d3-1478176c7d93"
+
 [[libfdk_aac_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg"]
 git-tree-sha1 = "daacc84a041563f965be61859a36e17c4e4fcd55"
@@ -1574,9 +1577,9 @@ version = "1.6.38+0"
 
 [[libvorbis_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Ogg_jll", "Pkg"]
-git-tree-sha1 = "c45f4e40e7aafe9d086379e5578947ec8b95a8fb"
+git-tree-sha1 = "b910cb81ef3fe6e78bf6acee440bda86fd6ae00c"
 uuid = "f27f6e37-5d2b-51aa-960f-b287f2bc3b7a"
-version = "1.3.7+0"
+version = "1.3.7+1"
 
 [[nghttp2_jll]]
 deps = ["Artifacts", "Libdl"]
@@ -1608,11 +1611,10 @@ version = "0.9.1+5"
 # ╔═╡ Cell order:
 # ╟─01341648-0403-11eb-2212-db450c299f35
 # ╟─03a85970-0403-11eb-334a-812b59c0905b
-# ╟─06f30b2a-0403-11eb-0f05-8badebe1011d
 # ╠═095cbf46-0403-11eb-0c37-35de9562cebc
+# ╟─06f30b2a-0403-11eb-0f05-8badebe1011d
 # ╟─107e65a4-0403-11eb-0c14-37d8d828b469
 # ╠═15187690-0403-11eb-2dfd-fd924faa3513
-# ╟─2b26dc42-0403-11eb-205f-cd2c23d8cb03
 # ╠═d8797684-0414-11eb-1869-5b1e2c469011
 # ╟─61789646-0403-11eb-0042-f3b8308f11ba
 # ╠═26f84600-041d-11eb-1856-b12a3e5c1dc7
@@ -1660,8 +1662,8 @@ version = "0.9.1+5"
 # ╠═887d27fc-04bc-11eb-0ab9-eb95ef9607f8
 # ╠═b92f1cec-04ae-11eb-0072-3535d1118494
 # ╠═2c62b4ae-04b3-11eb-0080-a1035a7e31a2
-# ╠═c5156c72-04af-11eb-1106-b13969b036ca
 # ╟─28db9d98-04ca-11eb-3606-9fb89fa62f36
+# ╠═c5156c72-04af-11eb-1106-b13969b036ca
 # ╟─bf6fd176-04cc-11eb-008a-2fb6ff70a9cb
 # ╠═38b1aa5a-04cf-11eb-11a2-930741fc9076
 # ╠═80c2cd88-04b1-11eb-326e-0120a39405ea
@@ -1678,8 +1680,6 @@ version = "0.9.1+5"
 # ╠═287ee7aa-0435-11eb-0ca3-951dbbe69404
 # ╟─9611ca24-0403-11eb-3582-b7e3bb243e62
 # ╠═26e2978e-0435-11eb-0d61-25f552d2771e
-# ╟─9635c944-0403-11eb-3982-4df509f6a556
-# ╠═4ad11052-042c-11eb-3643-8b2b3e1269bc
 # ╟─61c00724-0403-11eb-228d-17c11670e5d1
 # ╠═8dd97820-04a5-11eb-36c0-8f92d4b859a8
 # ╟─99ef7b2a-0403-11eb-08ef-e1023cd151ae
