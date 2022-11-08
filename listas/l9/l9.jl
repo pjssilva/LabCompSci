@@ -1,5 +1,5 @@
 ### A Pluto.jl notebook ###
-# v0.19.11
+# v0.19.14
 
 using Markdown
 using InteractiveUtils
@@ -7,7 +7,11 @@ using InteractiveUtils
 # This Pluto notebook uses @bind for interactivity. When running this notebook outside of Pluto, the following 'mock version' of @bind gives bound variables a default value (instead of an error).
 macro bind(def, element)
     quote
-        local iv = try Base.loaded_modules[Base.PkgId(Base.UUID("6e696c72-6542-2067-7265-42206c756150"), "AbstractPlutoDingetjes")].Bonds.initial_value catch; b -> missing; end
+        local iv = try
+            Base.loaded_modules[Base.PkgId(Base.UUID("6e696c72-6542-2067-7265-42206c756150"), "AbstractPlutoDingetjes")].Bonds.initial_value
+        catch
+            b -> missing
+        end
         local el = $(esc(element))
         global $(esc(def)) = Core.applicable(Base.get, el) ? Base.get(el) : iv(el)
         el
@@ -15,10 +19,14 @@ macro bind(def, element)
 end
 
 # ╔═╡ 2dcb18d0-0970-11eb-048a-c1734c6db842
-using Plots, PlutoUI, LinearAlgebra
+begin
+    using Plots
+    using PlutoUI
+    using LinearAlgebra
+end
 
 # ╔═╡ 19fe1ee8-0970-11eb-2a0d-7d25e7d773c6
-md"_Lista 9, versão 1_"
+md"_Lista 9, versão 1.1_"
 
 # ╔═╡ 2848996c-0970-11eb-19eb-c719d797c322
 md"_Vamos importar alguns pacotes que serão úteis_"
@@ -30,19 +38,19 @@ md"_Vamos importar alguns pacotes que serão úteis_"
 md"""
 
 # **Lista 9**: _Mais modelagem de epidemias_
-`Data de entrega`: vejam no Moodle da disciplina.
+`Data de entrega`: 16/11/2022
 
 Este caderno contém verificações _simples_ para ajudar você a saber se o que fez faz sentido. Essas verificações são incompletas e não corrigem completamente os exercícios. Mas, se elas disserem que algo não está bom, você sabe que tem que tentar de novo.
 
 _Para os alunos regulares:_ as listas serão corrigidas com exemplos mais sofisticados e gerais do que aqueles das verificações incluídas. 
 
-Sintam-se livres de fazer perguntas no fórum.
+Sintam-se livres de fazer perguntas no Discord.
 """
 
 # ╔═╡ 1f299cc6-0970-11eb-195b-3f951f92ceeb
 # edite o código abaixo com seu nome e email da dac (sem o @dac.unicamp.br)
 
-student = (name = "João Ninguém", email_dac = "j000000")
+student = (name="João Ninguém", email_dac="j000000")
 
 # aperte o botão ▶ no canto inferior direito da célula para executar o que você
 # editou, ou use Shift+Enter
@@ -51,7 +59,6 @@ student = (name = "João Ninguém", email_dac = "j000000")
 
 # ╔═╡ 1bba5552-0970-11eb-1b9a-87eeee0ecc36
 md"""
-
 Submetido por: **_$(student.name)_** ($(student.email_dac)@unicamp.br)
 """
 
@@ -59,9 +66,9 @@ Submetido por: **_$(student.name)_** ($(student.email_dac)@unicamp.br)
 md"""
 # Simulações espaciais
 
-Neste conjunto de execícios, vamos trabalhar com um modelo epidemiológico **espacial** simples: agentes podem interagir com outros agentes apenas se eles estiverem próximos (na lista 7 um agente poderia iteragir com outro agente qualquer, o que não é relístico). 
+Neste conjunto de execícios, vamos trabalhar com um modelo epidemiológico **espacial** simples: agentes podem interagir com outros agentes apenas se eles estiverem próximos (na lista 7 um agente poderia interagir com outro agente qualquer, o que não é realístico). 
 
-Uma abordagem simples para esse problema uma um modelo epidemiológico baseado em agests com **espaço discreto**: cada agente "mora" em ums célula numa grade retangular. Por simplicidade não vamos permitir mais do que um agente por célula. Isso pede que tomemos cuidados ao desenhar as regras do modelo que respeitem essa limitação.
+Uma abordagem simples para esse problema é um modelo epidemiológico baseado em agentes com **espaço discreto**: cada agente "mora" em uma célula numa grade retangular. Por simplicidade não vamos permitir que os agentes saiam da grade. Isso pede que tomemos cuidados ao desenhar as regras do modelo que respeitem essa limitação.
 
 Vamos adaptar algumas funcionalidades da lista 7. Você deverá copiar e colar o seu código daquela lista nesse caderno.
 """
@@ -109,7 +116,7 @@ md"""
 md"""
 #### Exercício 1.2
 
-Em Julia, como em muitas outras linguagem, operações como  `+` e `*` são simplesmente funções e são tratadas como outras funções quaisquer da linguagem. A única propriedade especial dessas fuções é que podemos usar a notação _infixa_. Ou seja, podemos escrever
+Em Julia, como em muitas outras linguagem, operações como  `+` e `*` são simplesmente funções e são tratadas como outras funções quaisquer da linguagem. A única propriedade especial dessas funções é que podemos usar a notação _infixa_. Ou seja, podemos escrever
 ```julia
 1 + 2
 ```
@@ -117,9 +124,9 @@ no lugar de
 ```julia
 +(1, 2)
 ```
-_(Há vários [nomes de funções "infixas"](https://github.com/JuliaLang/julia/blob/master/src/julia-parser.scm#L23-L24) que você pode usar para as suas próprias funções!)_
+_(Há vários [nomes de funções "infixas"](https://github.com/JuliaLang/julia/blob/master/src/julia-parser.scm#L23-L24) que você pode usar para definir as suas próprias funções!)_
 
-QUando você usa um desses operadores com a notação prefixa, fica ainda mais claro que eles são "apenas outra função", com vários métodos predefinidos.
+Quando você usa um desses operadores com a notação mais usual - a prefixa- fica ainda mais claro que eles são "apenas outra função", com vários métodos predefinidos.
 """
 
 # ╔═╡ 96707ef0-0a29-11eb-1a3e-6bcdfb7897eb
@@ -130,8 +137,8 @@ QUando você usa um desses operadores com a notação prefixa, fica ainda mais c
 
 # ╔═╡ 9c9f53b2-09ea-11eb-0cda-639764250cee
 md"""
-> #### Extendendo + 
-> Como o operador de soma é apenas uma função, podemos adicionar nossos próprios métodos a ela. Essa funcionalidade é bastante útil em linguagens gerais como JUlia ou Python pois permite que você use uma sitaxe familiar (`a + b * c`) em objetos que não são, necessariamente, números!
+> #### Estendendo o operador + 
+> Como o operador de soma é apenas uma função, podemos adicionar nossos próprios métodos a ela. Essa funcionalidade é bastante útil em linguagens gerais como Julia ou Python pois permite que você use uma sintaxe familiar (`a + b * c`) em objetos que não são, necessariamente, números!
 > 
 > De fato, já vimos um exemplo disso com o tipo `RGB` usado nas primeira parte do curso. Podemos escrever algo como:
 > ```julia
@@ -149,7 +156,7 @@ md"""
 # Solução ex. 1.2 (não apague esse comentário)
 
 # function Base.:+(a::TYPE, b::TYPE)
-	
+
 # 	return missing
 # end
 
@@ -165,7 +172,7 @@ _Se o Pluto tiver algum problema aqui tente fechar o caderno e recarregá-lo nov
 md"""
 #### Exercício 1.3
 
-No nosso modelo os agentes poderão andar em 4 direções: up, down, left and right. Nos podemos definir essas direções como `Coordinate`s.
+No nosso modelo os agentes poderão andar em 4 direções: up, down, left and right. Nós podemos definir essas direções como `Coordinate`s.
 """
 
 # ╔═╡ 5278e232-0972-11eb-19ff-a1a195127297
@@ -180,7 +187,7 @@ No nosso modelo os agentes poderão andar em 4 direções: up, down, left and ri
 
 # ╔═╡ 71c9788c-0aeb-11eb-28d2-8dcc3f6abacd
 md"""
-👉 `rand(possible_moves)` devolve um movimento aleatório. Adicione esse valor a coordenada `Coordinate(4,5)` e veja que o resultado é um vizinh válido.
+👉 `rand(possible_moves)` devolve um movimento aleatório. Adicione esse valor a coordenada `Coordinate(4,5)` e veja que o resultado é um vizinho válido.
 """
 
 # ╔═╡ 69151ce6-0aeb-11eb-3a53-290ba46add96
@@ -190,11 +197,11 @@ md"""
 md"""
 Pronto, conseguimos fazer uma `Coordinate` realizar um passo aleatório adicionando um movimento a ela!
 
-👉 Escreva um função `trajectory` que calcula a trajetória de um `Coordinate` que representa um andarilho `w` (de wanderer que é o inglês para andarilho) ao realizar `n` passos aleatórios. Isto é, você deve devolver a sequência de posições que o andarilho pecorre.
+👉 Escreva um função `trajectory` que calcula a trajetória de um `Coordinate` que representa um andarilho `w` (de wanderer que é o inglês para andarilho) ao realizar `n` passos aleatórios. Isto é, você deve devolver a sequência de posições que o andarilho percorre.
 
 Possíveis passos:
 - Use `rand(possible_moves, n)` para gerar um vetor `n` movimentos aleatórios. Cada um deles será igualmente provável.
-- Para calular a trajetória você pode usar duas abordagens:
+- Para calcular a trajetória você pode usar duas abordagens:
   1. 🆒 Use a função `accumulate` (dê uma olhada na documentação usando o "Live docs" de `accumulate`). Use `+` como a função repassada para a `accumulate` e `w` como o valor original (argumento com nome `init`). 
   1. Use um laço `for` que chama `+` e guardas as posições intermediárias. 
 """
@@ -203,7 +210,7 @@ Possíveis passos:
 # Solução ex. 1.3 (não apague esse comentário)
 
 # function trajectory(w::Coordinate, n::Int)
-	
+
 # 	return missing
 # end
 
@@ -212,18 +219,18 @@ Possíveis passos:
 
 # ╔═╡ 478309f4-0a31-11eb-08ea-ade1755f53e0
 function plot_trajectory!(p::Plots.Plot, trajectory::Vector; kwargs...)
-	plot!(p, make_tuple.(trajectory); 
-		label=nothing, 
-		linewidth=2, 
-		linealpha=LinRange(1.0, 0.2, length(trajectory)),
-		kwargs...)
+    plot!(p, make_tuple.(trajectory);
+        label=nothing,
+        linewidth=2,
+        linealpha=LinRange(1.0, 0.2, length(trajectory)),
+        kwargs...)
 end
 
 # ╔═╡ 87ea0868-0a35-11eb-0ea8-63e27d8eda6e
 try
-	p = plot(ratio=1, size=(650,200))
-	plot_trajectory!(p, test_trajectory; color="black", showaxis=false, axis=nothing, linewidth=4)
-	p
+    p = plot(ratio=1, size=(650, 200))
+    plot_trajectory!(p, test_trajectory; color="black", showaxis=false, axis=nothing, linewidth=4)
+    p
 catch
 end
 
@@ -236,7 +243,7 @@ end
 # 		p
 # 	end
 
-# ^ uncomment to visualize a trajectory
+# ^ uncomment above to visualize a trajectory
 
 # ╔═╡ 3ebd436c-0954-11eb-170d-1d468e2c7a37
 md"""
@@ -267,22 +274,22 @@ end
 
 # ╔═╡ b4d5da4a-09a0-11eb-1949-a5807c11c76c
 md"""
-#### Exercicio 1.5
+#### Exercício 1.5
 
-Os agentes vivem em uma caixa de lado $2L$ centrada na origem. Nós precisamos decidir (ou seja modelar) o que ocorre o quando os agentes atingirem as paredes da caixa (suas frontieras0. Ou seja, precisamos definir as **condições de contorno (ou de fronteira)** que vamos usar.
+Os agentes vivem em uma caixa de lado $2L$ centrada na origem. Nós precisamos decidir (ou seja modelar) o que ocorre o quando os agentes atingirem as paredes da caixa (suas fronteiras). Ou seja, precisamos definir as **condições de contorno (ou de fronteira)** que vamos usar.
 
-Uma opção relativamente simples é a de **colisão**:lision boundary**:
+Uma opção relativamente simples é a de **colisão**:
 
-> Cada parede da caixa funciona exatamente isso uma parede que não pode ser ultrapassada. Se um andarilho tentar pular além da parede, ele termina na posição dentro dos limites que está mais próxima do seu objetivo.
+> Cada parede da caixa funciona exatamente isso: uma parede que não pode ser ultrapassada. Se um andarilho tentar pular além da parede, ele termina na posição dentro dos limites que está mais próxima do seu objetivo.
 
-👉 Escreva uma função `collide_boundary` que recebe uma coordenada `Coordinate` `c` e um comprimento $L$, e retorna uma nova coordenada que fica dentro da caixax (``[-L,L]\times [-L,L]``) e é o mais próximo possível de `c`. 
+👉 Escreva uma função `collide_boundary` que recebe uma coordenada `Coordinate` `c` e um comprimento $L$, e retorna uma nova coordenada que fica dentro da caixa (``[-L,L]\times [-L,L]``) e é o mais próximo possível de `c`. 
 """
 
 # ╔═╡ 0237ebac-0a69-11eb-2272-35ea4e845d84
 # Solução ex. 1.5 (não apague esse comentário)
 
 # function collide_boundary(c::Coordinate, L::Number)
-	
+
 # 	return missing
 # end
 
@@ -293,7 +300,7 @@ Uma opção relativamente simples é a de **colisão**:lision boundary**:
 md"""
 #### Exercício 1.6
 
-👉  Implemente um método com 3 argumentos da função `trajectory` em que o terceiro argumento representa um tamanho do ambiente (o `L` acima). A trajetória devolvida deve se manter dentro dos limites definido por esse tamanhoo (use `collide_boundary` acima). Você pode ainda usar a `accumulate` com um função anônima que pega o movimento e calcula a posição final resultante (lembrando da colisão) ou usar um laço `for`
+👉  Implemente um método com 3 argumentos da função `trajectory` em que o terceiro argumento representa um tamanho do ambiente (o `L` acima). A trajetória devolvida deve se manter dentro dos limites definido por esse tamanho (use `collide_boundary` acima). Você pode ainda usar a `accumulate` com um função anônima que pega o movimento e calcula a posição final resultante (lembrando da colisão) ou usar um laço `for`
 
 """
 
@@ -301,7 +308,7 @@ md"""
 # Solução ex. 1.6 (não apague esse comentário)
 
 # function trajectory(c::Coordinate, n::Int, L::Number)
-	
+
 # 	return missing
 # end
 
@@ -330,14 +337,14 @@ md"""
 
 👉 Escreva uma função `initialize` que recebe parâmetros $N$ e $L$. $N$ é o número de agentes e $2L$ representa o comprimento da caixa, centrada na origem, onde os agente "vivem".
 
-Ela deve retornar um `Vector` de `N` `Agent`s gerados aleatoriamente. As suas coordenadas devem ser amostradas aleatoriamente no retângulo ``[-L,L] \times [-L,L]``. Todos os agentes devem estar no estado de sucetíveis, menos um, selecionado aleatoriamente, que deve estar infeccioso.
+Ela deve retornar um `Vector` de `N` `Agent`s gerados aleatoriamente. As suas coordenadas devem ser amostradas aleatoriamente no retângulo ``[-L,L] \times [-L,L]``. Todos os agentes devem estar no estado de suscetíveis, menos um, selecionado aleatoriamente, que deve estar infeccioso.
 """
 
 # ╔═╡ 0cfae7ba-0a69-11eb-3690-d973d70e47f4
 # Solução ex. 2.1 (não apague esse comentário)
 
 # function initialize(N::Number, L::Number)
-	
+
 # 	return missing
 # end
 
@@ -346,18 +353,19 @@ Ela deve retornar um `Vector` de `N` `Agent`s gerados aleatoriamente. As suas co
 
 # ╔═╡ e0b0880c-0a47-11eb-0db2-f760bbbf9c11
 begin
-	# You got to explictly import a function defined in a package
-	# to extend it with new methods
-	import ColorTypes.color
+    # You got to explictly import a function defined in a package
+    # to extend it with new methods
+    import ColorTypes.color
 
-	# Color based on infection status
-	color(s::InfectionStatus) = if s == S
-		"blue"
-	elseif s == I
-		"red"
-	else
-		"green"
-	end
+    # Color based on infection status
+    color(s::InfectionStatus) =
+        if s == S
+            "blue"
+        elseif s == I
+            "red"
+        else
+            "green"
+        end
 end
 
 # ╔═╡ b5a88504-0a47-11eb-0eda-f125d419e909
@@ -370,7 +378,7 @@ end
 md"""
 #### Exercício 2.2
 
-👉 Escreva uma função `visualize` que recebe uma coleção de agentes e uma caixa de tamanho `L`. Ela deve desenhar um ponto para cada agente em sua localização usando a cor que representa o ses estado.
+👉 Escreva uma função `visualize` que recebe uma coleção de agentes e uma caixa de tamanho `L`. Ela deve desenhar um ponto para cada agente em sua localização usando a cor que representa o seu estado.
 
 Para isso você pode usar o argumento nomeado `c=color.(agents)` ao chamar a função que desenha os pontos para definir as cores corretas. Não se esqueça de usar a opção `ratio=1`.
 """
@@ -379,15 +387,15 @@ Para isso você pode usar o argumento nomeado `c=color.(agents)` ao chamar a fun
 # Solução ex. 2.2 (não apague esse comentário)
 
 # function visualize(agents::Vector, L)
-	
+
 # 	return missing
 # end
 
 # ╔═╡ 1f96c80a-0a46-11eb-0690-f51c60e57c3f
 let
-	N = 20
-	L = 10
-#	visualize(initialize(N, L), L) # uncomment this line!
+    N = 20
+    L = 10
+    #	visualize(initialize(N, L), L) # uncomment this line!
 end
 
 # ╔═╡ f953e06e-099f-11eb-3549-73f59fed8132
@@ -395,18 +403,21 @@ md"""
 
 ### Exercício 3: Modelo epidemiológico espacial - dinâmica
 
-Em uma lista anterior escrevemos a função `interact!` que pegava dois agentes, `agent` e `source`, e uma epidemia do tipo `InfectionRecovery`. Ela modelava a interação entre dois agentes e potencialmente podia modificar o estado do `agent`.
+Em uma lista anterior escrevemos a função `interact!` que pegava dois agentes, `agent` e `source`, e uma epidemia do tipo `InfectionRecovery`. Ela modelava a interação entre dois agentes e, potencialmente, podia modificar o estado do `agent`.
 
 Desta vez, vamos definir um novo tipo, `CollisionInfectionRecovery`, e um novo método para `ìnteract!` igual ao anterior, mas que **apenas permite que a infecção de `agent` ocorra se `agents.position == source.position`**.
-"""	
+"""
+
+# ╔═╡ 8d5f40e6-08b7-45d6-8676-80b2bea6afc0
+
 
 # ╔═╡ e6dd8258-0a4b-11eb-24cb-fd5b3554381b
 abstract type AbstractInfection end
 
 # ╔═╡ de88b530-0a4b-11eb-05f7-85171594a8e8
 struct CollisionInfectionRecovery <: AbstractInfection
-	p_infection::Float64
-	p_recovery::Float64
+    p_infection::Float64
+    p_recovery::Float64
 end
 
 # ╔═╡ 80f39140-0aef-11eb-21f7-b788c5eab5c9
@@ -422,14 +433,14 @@ Escreva uma função  `interact!` que recebe dois `Agent`s, uma `CollisionInfect
 # Solução ex. 3.0 (não apague esse comentário)
 
 #function interact!(agent::Agent, source::Agent, infection::CollisionInfectionRecovery)
-	#missing
+#missing
 #end
 
 # ╔═╡ 34778744-0a5f-11eb-22b6-abe8b8fc34fd
 md"""
 #### Exercício 3.1
 
-👉 Escreva uma função `step!` que receve um vetor de `Agent`s, uma caixa de largura `2L` e uma epidemia `infection`. Ela deve executar um passo da dinâmica no vetor de agentes. 
+👉 Escreva uma função `step!` que recebe um vetor de `Agent`s, uma caixa de largura `2L` e uma epidemia `infection`. Ela deve executar um passo da dinâmica no vetor de agentes. 
 
 - Escolha um Agent `source` aleatoriamente.
 
@@ -444,7 +455,7 @@ md"""
 # Solução ex. 3.1 (não apague esse comentário)
 
 # function step!(agents::Vector, L::Number, infection::AbstractInfection)
-	
+
 # 	return missing
 # end
 
@@ -452,14 +463,14 @@ md"""
 md"""
 #### Exercício 3.2
 
-Se chamarmos `step!` `N` vezes, então todo agente terá, em média, se movido uma vez. Vamos chamar isso de uma _rodada_ da simulação.
+Se chamarmos `step!` `N` vezes, então todo agente terá, em média, se movido uma vez. Vamos chamar isso de uma _rodada (sweep)_ da simulação.
 
 👉 Crie uma figura antes-e-depois de ``k_{sweeps}=1000`` rodadas. 
 
 - Inicialize um novo vetor de agentes (`N=50`, `L=40`, `infection` deve usar a `pandemic` definida abaixo). 
 - Desenhe o estado inicial usando `visualize`, e guarde a figura em uma variável chamada `plot_before`.
 - Execute `k_sweeps` rodadas.
-- Desenheo o estado final e armazene em uma variável chamada `plot_after`.
+- Desenhe o estado final e armazene em uma variável chamada `plot_after`.
 - Combine as duas figuras em uma única imagem usando
 ```julia
 plot(plot_before, plot_after)
@@ -470,7 +481,7 @@ plot(plot_before, plot_after)
 pandemic = CollisionInfectionRecovery(0.5, 0.00001)
 
 # ╔═╡ 4e7fd58a-0a62-11eb-1596-c717e0845bd5
-@bind k_sweeps Slider(1:10000, default=1000)
+md"`k_sweeps` = $(@bind k_sweeps Slider(1:10000, default=1000, show_value = true))."
 
 # ╔═╡ 778c2490-0a62-11eb-2a6c-e7fab01c6822
 # Solução ex. 3.2 (não apague esse comentário)
@@ -478,10 +489,10 @@ pandemic = CollisionInfectionRecovery(0.5, 0.00001)
 # let
 # 	N = 50
 # 	L = 40
-	
+
 # 	plot_before = plot(1:3) # replace with your code
 # 	plot_after = plot(1:3)
-	
+
 # 	plot(plot_before, plot_after)
 # end
 
@@ -501,11 +512,11 @@ k_sweep_max = 10000
 # Solução ex. 3.3 (não apague esse comentário)
 
 let
-	N = 50
-	L = 30
-	
-	# agents = initialize(N, L)
-	# compute k_sweep_max number of sweeps and plot the SIR
+    N = 50
+    L = 30
+
+    # agents = initialize(N, L)
+    # compute k_sweep_max number of sweeps and plot the SIR
 end
 
 # ╔═╡ 201a3810-0a45-11eb-0ac9-a90419d0b723
@@ -514,11 +525,11 @@ md"""
 
 Vamos dar vida aos nossos gráficos:
 
-👉1️⃣ Precompute uma simulação e salve os seus valores intermediários uando  `deepcopy`. Você pode escrever uma visualização iterativa que mostra o estado no instante $t$ (usando `visualize`) e a hitória de $S$, $I$ e $R$ do instante $0$ até $t$. $t$ seria controlado por um slider.
+👉1️⃣ Pré-compute uma simulação e salve os seus valores intermediários usando  `deepcopy`. Você pode escrever uma visualização iterativa que mostra o estado no instante $t$ (usando `visualize`) e a história de $S$, $I$ e $R$ do instante $0$ até $t$. $t$ seria controlado por um slider.
 
-👉2️⃣ Use `@gif` de Plots.jl para transformar uma sequenci de gráficos em uma animação. Tome o cuidado de pular cerca de 50 rodadas entre cada quadro de animação. Caso não faça isso o GIF será grande demais.
+👉2️⃣ Use `@gif` de Plots.jl para transformar uma sequencia de gráficos em uma animação. Tome o cuidado de pular cerca de 50 rodadas entre cada quadro de animação. Caso não faça isso o GIF será grande demais.
 
-Esse é um exercício opcional. Apresentto um esquema de solução para  2️⃣ abaixo.
+Esse é um exercício opcional. Apresento um esquema de solução para  2️⃣ abaixo.
 """
 
 # ╔═╡ e5040c9e-0a65-11eb-0f45-270ab8161871
@@ -527,7 +538,7 @@ Esse é um exercício opcional. Apresentto um esquema de solução para  2️⃣
 # let
 # 	N = 50
 # 	L = 30
-	
+
 # 	missing
 # end
 
@@ -554,7 +565,7 @@ does_not_cause_outbreak = CollisionInfectionRecovery(0.5, 0.001)
 # ╔═╡ 20477a78-0a45-11eb-39d7-93918212a8bc
 md"""
 #### Exercise 3.6
-👉 Com os parâmetros do exercício 3.2, execute 50 simulações. Faça os gráficos das várias curvas Plot $S$, $I$ and $R$ em função do tempo para cada simulação (usando transparência!). Essas figuras devem parecer similares às que você viu na lista anterior. Você precisou ajustar `p_infection` e `p_recovery` quando comparado aos valores da lista passada, porque?
+👉 Com os parâmetros do exercício 3.2, execute 50 simulações. Faça os gráficos das várias curvas Plot $S$, $I$ and $R$ em função do tempo para cada simulação (usando transparência!). Essas figuras devem parecer similares às que você viu na lista anterior. Você precisou ajustar `p_infection` e `p_recovery` quando comparado aos valores da lista passada, por quê?
 """
 
 # ╔═╡ 601f4f54-0a45-11eb-3d6c-6b9ec75c6d4a
@@ -566,7 +577,7 @@ md"""
 # Solução ex. 3.6.b (não apague esse comentário)
 
 need_different_parameters_because = md"""
-i say so
+My answer.
 """
 
 # ╔═╡ 05c80a0c-09a0-11eb-04dc-f97e306f1603
@@ -575,11 +586,11 @@ md"""
 
 Há muitas variações possíveis no modelo descrito, acrescentando novos nuances para o comportamento dos agentes. Duas possibilidades são:
 
-1. Ao invés de sortear agentes para iteragir fazer com que todos que se encontram em uma mesma célula iterajam. Isso inclusive me parece mais realista.
+1. Ao invés de sortear agentes para interagir fazer com que todos que se encontram em uma mesma célula interajam. Isso inclusive me parece mais realista.
 
-1. Nem sempre a iteração entre dois agentes na mesma célula é uma iteração perigosa, pode se que os dois agentes só se encontraram de passagem, por exemplo. Para modelar isso podemos adicionar um paâmetro $p_I$ que represente que a probabilidade de um encontro gere uma iteração que resultem chance efetiva de transmissão. Nesse caso a função iteract iria sortear um valor aleatório a mais para decidir se haveria ou não a chance de transmissão com a probabilidade original. É claro que é possível juntar esses dois valores aleatórios em um só, mas conceitualmente é interessante mantê-los separados.
+1. Nem sempre a iteração entre dois agentes na mesma célula é uma iteração perigosa. Por exemplo dois agentes podem só se encontrar de passagem, em movimento. Para modelar isso podemos adicionar um parâmetro $p_I$ que represente que a probabilidade de um encontro gere uma iteração que resultem chance efetiva de transmissão. Nesse caso a função `interact` iria sortear um valor aleatório a mais para decidir se haveria ou não a chance de transmissão com a probabilidade original. É claro que é possível juntar esses dois valores aleatórios em um só, mas conceitualmente é interessante mantê-los separados.
 
-1. Outro efeito interessante seria tentar modelar as exigências de distâciamento social ou _lock-downs_ com um parâmetro extra $p_M$ que representaria a probabilidade de um agente efetivametne se mover. Aqui mudaríamos a simulação para o agente, depois de decidir por uma nova posição ir para lá somente com probabilidade $p_M$. Variando $p_M$ podemos ter ideia de como a diminução dessa probabilidade de movitação inflenciaria na evolução do surto.
+1. Outro efeito interessante seria tentar modelar as exigências de distanciamento social ou _lock-downs_ com um parâmetro extra $p_M$ que representaria a probabilidade de um agente efetivamente se mover. Aqui mudaríamos a simulação para o agente, depois de decidir por uma nova posição, ir para lá somente com probabilidade $p_M$. Variando $p_M$ podemos ter ideia de como a diminuição dessa probabilidade de movimentação influenciaria na evolução do surto.
 
 Fique a vontade de fazer os seus próprios testes com essas ideias.
 """
@@ -587,10 +598,10 @@ Fique a vontade de fazer os seus próprios testes com essas ideias.
 
 # ╔═╡ 0e6b60f6-0970-11eb-0485-636624a0f9d7
 if student.name == "João Ninguém"
-	md"""
-	!!! danger "Before you submit"
-	    Remember to fill in your **name** and **DAC email** at the top of this notebook.
-	"""
+    md"""
+    !!! danger "Before you submit"
+        Remember to fill in your **name** and **DAC email** at the top of this notebook.
+    """
 end
 
 # ╔═╡ 0a82a274-0970-11eb-20a2-1f590be0e576
@@ -657,21 +668,21 @@ correct(text=rand(yays)) = Markdown.MD(Markdown.Admonition("correct", "Got it!",
 
 # ╔═╡ ec576da8-0a2c-11eb-1f7b-43dec5f6e4e7
 let
-	# we need to call Base.:+ instead of + to make Pluto understand what's going on
-	# oops
-	if @isdefined(Coordinate)
-		result = Base.:+(Coordinate(3,4), Coordinate(10,10))
+    # we need to call Base.:+ instead of + to make Pluto understand what's going on
+    # oops
+    if @isdefined(Coordinate)
+        result = Base.:+(Coordinate(3, 4), Coordinate(10, 10))
 
-		if result isa Missing
-			still_missing()
-		elseif !(result isa Coordinate)
-			keep_working(md"Make sure that your return a `Coordinate`. 🧭")
-		elseif result.x != 13 || result.y != 14
-			keep_working()
-		else
-			correct()
-		end
-	end
+        if result isa Missing
+            still_missing()
+        elseif !(result isa Coordinate)
+            keep_working(md"Make sure that your return a `Coordinate`. 🧭")
+        elseif result.x != 13 || result.y != 14
+            keep_working()
+        else
+            correct()
+        end
+    end
 end
 
 # ╔═╡ 0b901714-0970-11eb-0b6a-ebe739db8037
@@ -679,101 +690,101 @@ not_defined(variable_name) = Markdown.MD(Markdown.Admonition("danger", "Oopsie!"
 
 # ╔═╡ 66663fcc-0a58-11eb-3568-c1f990c75bf2
 if !@isdefined(origin)
-	not_defined(:origin)
+    not_defined(:origin)
 else
-	let
-		if origin isa Missing
-			still_missing()
-		elseif !(origin isa Coordinate)
-			keep_working(md"Make sure that `origin` is a `Coordinate`.")
-		else
-			if origin == Coordinate(0,0)
-				correct()
-			else
-				keep_working()
-			end
-		end
-	end
+    let
+        if origin isa Missing
+            still_missing()
+        elseif !(origin isa Coordinate)
+            keep_working(md"Make sure that `origin` is a `Coordinate`.")
+        else
+            if origin == Coordinate(0, 0)
+                correct()
+            else
+                keep_working()
+            end
+        end
+    end
 end
 
 # ╔═╡ ad1253f8-0a34-11eb-265e-fffda9b6473f
 if !@isdefined(make_tuple)
-	not_defined(:make_tuple)
+    not_defined(:make_tuple)
 else
-	let
-		result = make_tuple(Coordinate(2,1))
-		if result isa Missing
-			still_missing()
-		elseif !(result isa Tuple)
-			keep_working(md"Make sure that you return a `Tuple`, like so: `return (1, 2)`.")
-		else
-			if result == (2,1)
-				correct()
-			else
-				keep_working()
-			end
-		end
-	end
+    let
+        result = make_tuple(Coordinate(2, 1))
+        if result isa Missing
+            still_missing()
+        elseif !(result isa Tuple)
+            keep_working(md"Make sure that you return a `Tuple`, like so: `return (1, 2)`.")
+        else
+            if result == (2, 1)
+                correct()
+            else
+                keep_working()
+            end
+        end
+    end
 end
 
 # ╔═╡ 058e3f84-0a34-11eb-3f87-7118f14e107b
 if !@isdefined(trajectory)
-	not_defined(:trajectory)
+    not_defined(:trajectory)
 else
-	let
-		c = Coordinate(8,8)
-		t = trajectory(c, 100)
-		
-		if t isa Missing
-			still_missing()
-		elseif !(t isa Vector)
-			keep_working(md"Make sure that you return a `Vector`.")
-		elseif !(all(x -> isa(x, Coordinate), t))
-			keep_working(md"Make sure that you return a `Vector` of `Coordinate`s.")
-		else
-			if length(t) != 100
-				almost(md"Make sure that you return `n` elements.")
-			elseif 1 < length(Set(t)) < 90
-				correct()
-			else
-				keep_working(md"Are you sure that you chose each step randomly?")
-			end
-		end
-	end
+    let
+        c = Coordinate(8, 8)
+        t = trajectory(c, 100)
+
+        if t isa Missing
+            still_missing()
+        elseif !(t isa Vector)
+            keep_working(md"Make sure that you return a `Vector`.")
+        elseif !(all(x -> isa(x, Coordinate), t))
+            keep_working(md"Make sure that you return a `Vector` of `Coordinate`s.")
+        else
+            if length(t) != 100
+                almost(md"Make sure that you return `n` elements.")
+            elseif 1 < length(Set(t)) < 90
+                correct()
+            else
+                keep_working(md"Are you sure that you chose each step randomly?")
+            end
+        end
+    end
 end
 
 # ╔═╡ 4fac0f36-0a59-11eb-03d0-632dc9db063a
 if !@isdefined(initialize)
-	not_defined(:initialize)
+    not_defined(:initialize)
 else
-	let
-		N = 200
-		result = initialize(N, 1)
-		if !(result isa Missing)
-			n_S = sum(a -> a.status == S, result)
-			n_I = sum(a -> a.status == I, result)
-		else
-			n_S, n_I = 0, 0
-		end
-		
-		if result isa Missing
-			still_missing()
-		elseif !(result isa Vector) || length(result) != N
-			keep_working(md"Make sure that you return a `Vector` of length `N`.")
-		elseif any(e -> !(e isa Agent), result)
-			keep_working(md"Make sure that you return a `Vector` of `Agent`s.")
-		elseif length(Set(result)) != N
-			keep_working(md"Make sure that you create `N` **new** `Agent`s. Do not repeat the same agent multiple times.")
-		elseif  n_S == N-1 &&  n_I == 1
-			if 8 <= length(Set(a.position for a in result)) <= 9
-				correct()
-			else
-				keep_working(md"The coordinates are not correctly sampled within the box.")
-			end
-		else
-			keep_working(md"`N-1` agents should be Susceptible, 1 should be Infectious.")
-		end
-	end
+    let
+        N = 200
+        result = initialize(N, 1)
+        if !(result isa Missing)
+            n_S = sum(a -> a.status == S, result)
+            n_I = sum(a -> a.status == I, result)
+        else
+            n_S, n_I = 0, 0
+        end
+
+        if result isa Missing
+            still_missing()
+        elseif !(result isa Vector) || length(result) != N
+            keep_working(md"Make sure that you return a `Vector` of length `N`.")
+        elseif any(e -> !(e isa Agent), result)
+            keep_working(md"Make sure that you return a `Vector` of `Agent`s.")
+        elseif length(Set(result)) != N
+            keep_working(md"Make sure that you create `N` **new** `Agent`s. Do not repeat the same agent multiple times.")
+        elseif n_S == N - 1 && n_I == 1
+            if 8 <= length(Set(a.position for a in result)) <= 9
+                correct()
+            else
+                keep_working(md"The coordinates are not correctly sampled within the box.")
+            end
+        else
+            keep_working(md"`N-1` agents should be Susceptible, 1 should be Infectious.")
+        end
+    end
 end
 
 # ╔═╡ d5cb6b2c-0a66-11eb-1aff-41d0e502d5e5
@@ -803,9 +814,9 @@ Plots = "91a5bcdd-55d7-5caf-9e0b-520d859cae80"
 PlutoUI = "7f904dfe-b85e-4ff6-b463-dae2292396a8"
 
 [compat]
-ColorTypes = "~0.11.0"
-Plots = "~1.23.4"
-PlutoUI = "~0.7.18"
+ColorTypes = "~0.11.4"
+Plots = "~1.36.0"
+PlutoUI = "~0.7.48"
 """
 
 # ╔═╡ 00000000-0000-0000-0000-000000000002
@@ -814,24 +825,24 @@ PLUTO_MANIFEST_TOML_CONTENTS = """
 
 [[AbstractPlutoDingetjes]]
 deps = ["Pkg"]
-git-tree-sha1 = "0ec322186e078db08ea3e7da5b8b2885c099b393"
+git-tree-sha1 = "8eaf9f1b4921132a4cff3f36a1d9ba923b14a481"
 uuid = "6e696c72-6542-2067-7265-42206c756150"
-version = "1.1.0"
-
-[[Adapt]]
-deps = ["LinearAlgebra"]
-git-tree-sha1 = "84918055d15b3114ede17ac6a7182f68870c16f7"
-uuid = "79e6a3ab-5dfb-504d-930d-738a2a938a0e"
-version = "3.3.1"
+version = "1.1.4"
 
 [[ArgTools]]
 uuid = "0dad84c5-d112-42e6-8d28-ef12dabb789f"
+version = "1.1.1"
 
 [[Artifacts]]
 uuid = "56f22d72-fd6d-98f1-02f0-08ddc0907c33"
 
 [[Base64]]
 uuid = "2a0f44e3-6c83-55bd-87e4-b1978d98bd5f"
+
+[[BitFlags]]
+git-tree-sha1 = "84259bb6172806304b9101094a7cc4bc6f56dbc6"
+uuid = "d1d4a3ce-64b1-5f1a-9ba4-7e7e69966f35"
+version = "0.1.5"
 
 [[Bzip2_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg"]
@@ -847,21 +858,39 @@ version = "1.16.1+1"
 
 [[ChainRulesCore]]
 deps = ["Compat", "LinearAlgebra", "SparseArrays"]
-git-tree-sha1 = "f885e7e7c124f8c92650d61b9477b9ac2ee607dd"
+git-tree-sha1 = "e7ff6cadf743c098e08fca25c91103ee4303c9bb"
 uuid = "d360d2e6-b24c-11e9-a2a3-2a2ae2dbcce4"
-version = "1.11.1"
+version = "1.15.6"
+
+[[ChangesOfVariables]]
+deps = ["ChainRulesCore", "LinearAlgebra", "Test"]
+git-tree-sha1 = "38f7a08f19d8810338d4f5085211c7dfa5d5bdd8"
+uuid = "9e997f8a-9a97-42d5-a9f1-ce6bfc15e2c0"
+version = "0.1.4"
+
+[[CodecZlib]]
+deps = ["TranscodingStreams", "Zlib_jll"]
+git-tree-sha1 = "ded953804d019afa9a3f98981d99b33e3db7b6da"
+uuid = "944b1d66-785c-5afd-91f1-9de20f533193"
+version = "0.7.0"
 
 [[ColorSchemes]]
-deps = ["ColorTypes", "Colors", "FixedPointNumbers", "Random"]
-git-tree-sha1 = "a851fec56cb73cfdf43762999ec72eff5b86882a"
+deps = ["ColorTypes", "ColorVectorSpace", "Colors", "FixedPointNumbers", "Random"]
+git-tree-sha1 = "1fd869cc3875b57347f7027521f561cf46d1fcd8"
 uuid = "35d6a980-a343-548e-a6ea-1d62b119f2f4"
-version = "3.15.0"
+version = "3.19.0"
 
 [[ColorTypes]]
 deps = ["FixedPointNumbers", "Random"]
-git-tree-sha1 = "024fe24d83e4a5bf5fc80501a314ce0d1aa35597"
+git-tree-sha1 = "eb7f0f8307f71fac7c606984ea5fb2817275d6e4"
 uuid = "3da002f7-5984-5a60-b8a6-cbb66c0b333f"
-version = "0.11.0"
+version = "0.11.4"
+
+[[ColorVectorSpace]]
+deps = ["ColorTypes", "FixedPointNumbers", "LinearAlgebra", "SpecialFunctions", "Statistics", "TensorCore"]
+git-tree-sha1 = "d08c20eef1f2cbc6e60fd3612ac4340b89fea322"
+uuid = "c3611d14-8923-5661-9e6a-0046d554d3a4"
+version = "0.9.9"
 
 [[Colors]]
 deps = ["ColorTypes", "FixedPointNumbers", "Reexport"]
@@ -870,36 +899,31 @@ uuid = "5ae59095-9a9b-59fe-a467-6f913c188581"
 version = "0.12.8"
 
 [[Compat]]
-deps = ["Base64", "Dates", "DelimitedFiles", "Distributed", "InteractiveUtils", "LibGit2", "Libdl", "LinearAlgebra", "Markdown", "Mmap", "Pkg", "Printf", "REPL", "Random", "SHA", "Serialization", "SharedArrays", "Sockets", "SparseArrays", "Statistics", "Test", "UUIDs", "Unicode"]
-git-tree-sha1 = "dce3e3fea680869eaa0b774b2e8343e9ff442313"
+deps = ["Dates", "LinearAlgebra", "UUIDs"]
+git-tree-sha1 = "3ca828fe1b75fa84b021a7860bd039eaea84d2f2"
 uuid = "34da2185-b29b-5c13-b0c7-acf172513d20"
-version = "3.40.0"
+version = "4.3.0"
 
 [[CompilerSupportLibraries_jll]]
 deps = ["Artifacts", "Libdl"]
 uuid = "e66e0078-7015-5450-92f7-15fbd957f2ae"
+version = "0.5.2+0"
 
 [[Contour]]
-deps = ["StaticArrays"]
-git-tree-sha1 = "9f02045d934dc030edad45944ea80dbd1f0ebea7"
+git-tree-sha1 = "d05d9e7b7aedff4e5b51a029dced05cfb6125781"
 uuid = "d38c429a-6771-53c6-b99e-75d170b6e991"
-version = "0.5.7"
+version = "0.6.2"
 
 [[DataAPI]]
-git-tree-sha1 = "cc70b17275652eb47bc9e5f81635981f13cea5c8"
+git-tree-sha1 = "46d2680e618f8abd007bce0c3026cb0c4a8f2032"
 uuid = "9a962f9c-6df0-11e9-0e5d-c546b8b5ee8a"
-version = "1.9.0"
+version = "1.12.0"
 
 [[DataStructures]]
 deps = ["Compat", "InteractiveUtils", "OrderedCollections"]
-git-tree-sha1 = "7d9d316f04214f7efdbb6398d545446e246eff02"
+git-tree-sha1 = "d1fff3a548102f48987a52a2e0d114fa97d730f0"
 uuid = "864edb3b-99cc-5e75-8d2d-829cb0a9cfe8"
-version = "0.18.10"
-
-[[DataValueInterfaces]]
-git-tree-sha1 = "bfc1187b79289637fa0ef6d4436ebdfe6905cbd6"
-uuid = "e2d170a0-9d28-54be-80f0-106bbe20a464"
-version = "1.0.0"
+version = "0.18.13"
 
 [[Dates]]
 deps = ["Printf"]
@@ -909,31 +933,22 @@ uuid = "ade2ca70-3891-5945-98fb-dc099432e06a"
 deps = ["Mmap"]
 uuid = "8bb1440f-4735-579b-a4ab-409b98df4dab"
 
-[[Distributed]]
-deps = ["Random", "Serialization", "Sockets"]
-uuid = "8ba89e20-285c-5b6f-9357-94700520ee1b"
-
 [[DocStringExtensions]]
 deps = ["LibGit2"]
-git-tree-sha1 = "b19534d1895d702889b219c382a6e18010797f0b"
+git-tree-sha1 = "c36550cb29cbe373e95b3f40486b9a4148f89ffd"
 uuid = "ffbed154-4ef7-542d-bbb7-c09d3a79fcae"
-version = "0.8.6"
+version = "0.9.2"
 
 [[Downloads]]
 deps = ["ArgTools", "FileWatching", "LibCURL", "NetworkOptions"]
 uuid = "f43a241f-c20a-4ad4-852c-f6b1247861c6"
-
-[[EarCut_jll]]
-deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg"]
-git-tree-sha1 = "3f3a2501fa7236e9b911e0f7a588c657e822bb6d"
-uuid = "5ae413db-bbd1-5e63-b57d-d24a61df00f5"
-version = "2.2.3+0"
+version = "1.6.0"
 
 [[Expat_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg"]
-git-tree-sha1 = "b3bfd02e98aedfa5cf885665493c5598c350cd2f"
+git-tree-sha1 = "bad72f730e9e91c08d9427d5e8db95478a3c323d"
 uuid = "2e619515-83b5-522b-bb60-26c02a35a201"
-version = "2.2.10+0"
+version = "2.4.8+0"
 
 [[FFMPEG]]
 deps = ["FFMPEG_jll"]
@@ -942,10 +957,10 @@ uuid = "c87230d0-a227-11e9-1b43-d7ebe4e7570a"
 version = "0.4.1"
 
 [[FFMPEG_jll]]
-deps = ["Artifacts", "Bzip2_jll", "FreeType2_jll", "FriBidi_jll", "JLLWrappers", "LAME_jll", "Libdl", "Ogg_jll", "OpenSSL_jll", "Opus_jll", "Pkg", "Zlib_jll", "libass_jll", "libfdk_aac_jll", "libvorbis_jll", "x264_jll", "x265_jll"]
-git-tree-sha1 = "d8a578692e3077ac998b50c0217dfd67f21d1e5f"
+deps = ["Artifacts", "Bzip2_jll", "FreeType2_jll", "FriBidi_jll", "JLLWrappers", "LAME_jll", "Libdl", "Ogg_jll", "OpenSSL_jll", "Opus_jll", "PCRE2_jll", "Pkg", "Zlib_jll", "libaom_jll", "libass_jll", "libfdk_aac_jll", "libvorbis_jll", "x264_jll", "x265_jll"]
+git-tree-sha1 = "74faea50c1d007c85837327f6775bea60b5492dd"
 uuid = "b22a6f82-2f65-5046-a5b2-351ab43fb4e5"
-version = "4.4.0+0"
+version = "4.4.2+2"
 
 [[FileWatching]]
 uuid = "7b1f6079-737a-58dc-b8bc-7a2ca5c1b5ee"
@@ -982,27 +997,21 @@ version = "1.0.10+0"
 
 [[GLFW_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Libglvnd_jll", "Pkg", "Xorg_libXcursor_jll", "Xorg_libXi_jll", "Xorg_libXinerama_jll", "Xorg_libXrandr_jll"]
-git-tree-sha1 = "0c603255764a1fa0b61752d2bec14cfbd18f7fe8"
+git-tree-sha1 = "d972031d28c8c8d9d7b41a536ad7bb0c2579caca"
 uuid = "0656b61e-2033-5cc2-a64a-77c0f6c09b89"
-version = "3.3.5+1"
+version = "3.3.8+0"
 
 [[GR]]
-deps = ["Base64", "DelimitedFiles", "GR_jll", "HTTP", "JSON", "Libdl", "LinearAlgebra", "Pkg", "Printf", "Random", "Serialization", "Sockets", "Test", "UUIDs"]
-git-tree-sha1 = "df131b664b05cc9a996a71bc8e10be484faad5a2"
+deps = ["Base64", "DelimitedFiles", "GR_jll", "HTTP", "JSON", "Libdl", "LinearAlgebra", "Pkg", "Preferences", "Printf", "Random", "Serialization", "Sockets", "Test", "UUIDs"]
+git-tree-sha1 = "00a9d4abadc05b9476e937a5557fcce476b9e547"
 uuid = "28b8d3ca-fb5f-59d9-8090-bfdbd6d07a71"
-version = "0.62.0"
+version = "0.69.5"
 
 [[GR_jll]]
 deps = ["Artifacts", "Bzip2_jll", "Cairo_jll", "FFMPEG_jll", "Fontconfig_jll", "GLFW_jll", "JLLWrappers", "JpegTurbo_jll", "Libdl", "Libtiff_jll", "Pixman_jll", "Pkg", "Qt5Base_jll", "Zlib_jll", "libpng_jll"]
-git-tree-sha1 = "fd75fa3a2080109a2c0ec9864a6e14c60cca3866"
+git-tree-sha1 = "bc9f7725571ddb4ab2c4bc74fa397c1c5ad08943"
 uuid = "d2c73de3-f751-5644-a686-071e5b155ba9"
-version = "0.62.0+0"
-
-[[GeometryBasics]]
-deps = ["EarCut_jll", "IterTools", "LinearAlgebra", "StaticArrays", "StructArrays", "Tables"]
-git-tree-sha1 = "58bcdf5ebc057b085e58d95c138725628dd7453c"
-uuid = "5c1252a2-5f33-56bf-86c9-59e7332b4326"
-version = "0.4.1"
+version = "0.69.1+0"
 
 [[Gettext_jll]]
 deps = ["Artifacts", "CompilerSupportLibraries_jll", "JLLWrappers", "Libdl", "Libiconv_jll", "Pkg", "XML2_jll"]
@@ -1011,10 +1020,10 @@ uuid = "78b55507-aeef-58d4-861c-77aaff3498b1"
 version = "0.21.0+0"
 
 [[Glib_jll]]
-deps = ["Artifacts", "Gettext_jll", "JLLWrappers", "Libdl", "Libffi_jll", "Libiconv_jll", "Libmount_jll", "PCRE_jll", "Pkg", "Zlib_jll"]
-git-tree-sha1 = "a32d672ac2c967f3deb8a81d828afc739c838a06"
+deps = ["Artifacts", "Gettext_jll", "JLLWrappers", "Libdl", "Libffi_jll", "Libiconv_jll", "Libmount_jll", "PCRE2_jll", "Pkg", "Zlib_jll"]
+git-tree-sha1 = "fb83fbe02fe57f2c068013aa94bcdf6760d3a7a7"
 uuid = "7746bdde-850d-59dc-9ae8-88ece973131d"
-version = "2.68.3+2"
+version = "2.74.0+1"
 
 [[Graphite2_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg"]
@@ -1028,10 +1037,10 @@ uuid = "42e2da0e-8278-4e71-bc24-59509adca0fe"
 version = "1.0.2"
 
 [[HTTP]]
-deps = ["Base64", "Dates", "IniFile", "Logging", "MbedTLS", "NetworkOptions", "Sockets", "URIs"]
-git-tree-sha1 = "14eece7a3308b4d8be910e265c724a6ba51a9798"
+deps = ["Base64", "CodecZlib", "Dates", "IniFile", "Logging", "LoggingExtras", "MbedTLS", "NetworkOptions", "OpenSSL", "Random", "SimpleBufferStream", "Sockets", "URIs", "UUIDs"]
+git-tree-sha1 = "8556f4b387fcd1d9b3013d798eecbcfa0d985e66"
 uuid = "cd3eb016-35fb-5094-929b-558a96fad6f3"
-version = "0.9.16"
+version = "1.5.2"
 
 [[HarfBuzz_jll]]
 deps = ["Artifacts", "Cairo_jll", "Fontconfig_jll", "FreeType2_jll", "Glib_jll", "Graphite2_jll", "JLLWrappers", "Libdl", "Libffi_jll", "Pkg"]
@@ -1046,9 +1055,10 @@ uuid = "47d2ed2b-36de-50cf-bf87-49c2cf4b8b91"
 version = "0.0.4"
 
 [[HypertextLiteral]]
-git-tree-sha1 = "5efcf53d798efede8fee5b2c8b09284be359bf24"
+deps = ["Tricks"]
+git-tree-sha1 = "c47c5fa4c5308f27ccaac35504858d8914e102f9"
 uuid = "ac1192a8-f4b3-4bfe-ba22-af5b92cd3ab2"
-version = "0.9.2"
+version = "0.9.4"
 
 [[IOCapture]]
 deps = ["Logging", "Random"]
@@ -1057,10 +1067,9 @@ uuid = "b5f81e59-6552-4d32-b1f0-c071b021bf89"
 version = "0.2.2"
 
 [[IniFile]]
-deps = ["Test"]
-git-tree-sha1 = "098e4d2c533924c921f9f9847274f2ad89e018b8"
+git-tree-sha1 = "f550e6e32074c939295eb5ea6de31849ac2c9625"
 uuid = "83e8ac13-25f8-5344-8a64-a9f2b223428f"
-version = "0.5.0"
+version = "0.5.1"
 
 [[InteractiveUtils]]
 deps = ["Markdown"]
@@ -1068,42 +1077,38 @@ uuid = "b77e0a4c-d291-57a0-90e8-8db25a27a240"
 
 [[InverseFunctions]]
 deps = ["Test"]
-git-tree-sha1 = "f0c6489b12d28fb4c2103073ec7452f3423bd308"
+git-tree-sha1 = "49510dfcb407e572524ba94aeae2fced1f3feb0f"
 uuid = "3587e190-3f89-42d0-90ee-14403ec27112"
-version = "0.1.1"
+version = "0.1.8"
 
 [[IrrationalConstants]]
 git-tree-sha1 = "7fd44fd4ff43fc60815f8e764c0f352b83c49151"
 uuid = "92d709cd-6900-40b7-9082-c6be49f344b6"
 version = "0.1.1"
 
-[[IterTools]]
-git-tree-sha1 = "05110a2ab1fc5f932622ffea2a003221f4782c18"
-uuid = "c8e1da08-722c-5040-9ed9-7db0dc04731e"
-version = "1.3.0"
-
-[[IteratorInterfaceExtensions]]
-git-tree-sha1 = "a3f24677c21f5bbe9d2a714f95dcd58337fb2856"
-uuid = "82899510-4779-5014-852e-03e436cf321d"
-version = "1.0.0"
+[[JLFzf]]
+deps = ["Pipe", "REPL", "Random", "fzf_jll"]
+git-tree-sha1 = "f377670cda23b6b7c1c0b3893e37451c5c1a2185"
+uuid = "1019f520-868f-41f5-a6de-eb00f4b6a39c"
+version = "0.1.5"
 
 [[JLLWrappers]]
 deps = ["Preferences"]
-git-tree-sha1 = "642a199af8b68253517b80bd3bfd17eb4e84df6e"
+git-tree-sha1 = "abc9885a7ca2052a736a600f7fa66209f96506e1"
 uuid = "692b3bcd-3c85-4b1f-b108-f13ce0eb3210"
-version = "1.3.0"
+version = "1.4.1"
 
 [[JSON]]
 deps = ["Dates", "Mmap", "Parsers", "Unicode"]
-git-tree-sha1 = "8076680b162ada2a031f707ac7b4953e30667a37"
+git-tree-sha1 = "3c837543ddb02250ef42f4738347454f95079d4e"
 uuid = "682c06a0-de6a-54ab-a142-c8b1cf79cde6"
-version = "0.21.2"
+version = "0.21.3"
 
 [[JpegTurbo_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg"]
-git-tree-sha1 = "d735490ac75c5cb9f1b00d8b5509c11984dc6943"
+git-tree-sha1 = "b53380851c6e6664204efb2e62cd24fa5c47e4ba"
 uuid = "aacddb02-875f-59d6-b918-886e6ef4fbf8"
-version = "2.1.0+0"
+version = "2.1.2+0"
 
 [[LAME_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg"]
@@ -1124,23 +1129,25 @@ uuid = "dd4b983a-f0e5-5f8d-a1b7-129d4a5fb1ac"
 version = "2.10.1+0"
 
 [[LaTeXStrings]]
-git-tree-sha1 = "c7f1c695e06c01b95a67f0cd1d34994f3e7db104"
+git-tree-sha1 = "f2355693d6778a178ade15952b7ac47a4ff97996"
 uuid = "b964fa9f-0449-5b57-a5c2-d3ea65f4040f"
-version = "1.2.1"
+version = "1.3.0"
 
 [[Latexify]]
-deps = ["Formatting", "InteractiveUtils", "LaTeXStrings", "MacroTools", "Markdown", "Printf", "Requires"]
-git-tree-sha1 = "a8f4f279b6fa3c3c4f1adadd78a621b13a506bce"
+deps = ["Formatting", "InteractiveUtils", "LaTeXStrings", "MacroTools", "Markdown", "OrderedCollections", "Printf", "Requires"]
+git-tree-sha1 = "ab9aa169d2160129beb241cb2750ca499b4e90e9"
 uuid = "23fbe1c1-3f47-55db-b15f-69d7ec21a316"
-version = "0.15.9"
+version = "0.15.17"
 
 [[LibCURL]]
 deps = ["LibCURL_jll", "MozillaCACerts_jll"]
 uuid = "b27032c2-a3e7-50c8-80cd-2d36dbcbfd21"
+version = "0.6.3"
 
 [[LibCURL_jll]]
 deps = ["Artifacts", "LibSSH2_jll", "Libdl", "MbedTLS_jll", "Zlib_jll", "nghttp2_jll"]
 uuid = "deac9b47-8bc7-5906-a0fe-35ac56dc84c0"
+version = "7.84.0+0"
 
 [[LibGit2]]
 deps = ["Base64", "NetworkOptions", "Printf", "SHA"]
@@ -1149,6 +1156,7 @@ uuid = "76f85450-5226-5b5a-8eaa-529ad045b433"
 [[LibSSH2_jll]]
 deps = ["Artifacts", "Libdl", "MbedTLS_jll"]
 uuid = "29816b5a-b9ab-546f-933c-edad1886dfa8"
+version = "1.10.2+0"
 
 [[Libdl]]
 uuid = "8f399da3-3557-5675-b5ff-fb832c97cbdb"
@@ -1191,9 +1199,9 @@ version = "2.35.0+0"
 
 [[Libtiff_jll]]
 deps = ["Artifacts", "JLLWrappers", "JpegTurbo_jll", "LERC_jll", "Libdl", "Pkg", "Zlib_jll", "Zstd_jll"]
-git-tree-sha1 = "c9551dd26e31ab17b86cbd00c2ede019c08758eb"
+git-tree-sha1 = "3eb79b0ca5764d4799c06699573fd8f533259713"
 uuid = "89763e89-9b03-5906-acba-b20f662cd828"
-version = "4.3.0+1"
+version = "4.4.0+0"
 
 [[Libuuid_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg"]
@@ -1206,33 +1214,45 @@ deps = ["Libdl", "libblastrampoline_jll"]
 uuid = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
 
 [[LogExpFunctions]]
-deps = ["ChainRulesCore", "DocStringExtensions", "InverseFunctions", "IrrationalConstants", "LinearAlgebra"]
-git-tree-sha1 = "6193c3815f13ba1b78a51ce391db8be016ae9214"
+deps = ["ChainRulesCore", "ChangesOfVariables", "DocStringExtensions", "InverseFunctions", "IrrationalConstants", "LinearAlgebra"]
+git-tree-sha1 = "94d9c52ca447e23eac0c0f074effbcd38830deb5"
 uuid = "2ab3a3ac-af41-5b50-aa03-7779005ae688"
-version = "0.3.4"
+version = "0.3.18"
 
 [[Logging]]
 uuid = "56ddb016-857b-54e1-b83d-db4d58db5568"
 
+[[LoggingExtras]]
+deps = ["Dates", "Logging"]
+git-tree-sha1 = "5d4d2d9904227b8bd66386c1138cf4d5ffa826bf"
+uuid = "e6f89c97-d47a-5376-807f-9c37f3926c36"
+version = "0.4.9"
+
+[[MIMEs]]
+git-tree-sha1 = "65f28ad4b594aebe22157d6fac869786a255b7eb"
+uuid = "6c6e2e6c-3030-632d-7369-2d6c69616d65"
+version = "0.1.4"
+
 [[MacroTools]]
 deps = ["Markdown", "Random"]
-git-tree-sha1 = "3d3e902b31198a27340d0bf00d6ac452866021cf"
+git-tree-sha1 = "42324d08725e200c23d4dfb549e0d5d89dede2d2"
 uuid = "1914dd2f-81c6-5fcd-8719-6d5c9610ff09"
-version = "0.5.9"
+version = "0.5.10"
 
 [[Markdown]]
 deps = ["Base64"]
 uuid = "d6f4376e-aef5-505a-96c1-9c027394607a"
 
 [[MbedTLS]]
-deps = ["Dates", "MbedTLS_jll", "Random", "Sockets"]
-git-tree-sha1 = "1c38e51c3d08ef2278062ebceade0e46cefc96fe"
+deps = ["Dates", "MbedTLS_jll", "MozillaCACerts_jll", "Random", "Sockets"]
+git-tree-sha1 = "03a9b9718f5682ecb107ac9f7308991db4ce395b"
 uuid = "739be429-bea8-5141-9913-cc70e7f3736d"
-version = "1.0.3"
+version = "1.1.7"
 
 [[MbedTLS_jll]]
 deps = ["Artifacts", "Libdl"]
 uuid = "c8ffd9c3-330d-5841-b78e-0817d7145fa1"
+version = "2.28.0+0"
 
 [[Measures]]
 git-tree-sha1 = "e498ddeee6f9fdb4551ce855a46f54dbd900245f"
@@ -1250,14 +1270,17 @@ uuid = "a63ad114-7e13-5084-954f-fe012c677804"
 
 [[MozillaCACerts_jll]]
 uuid = "14a3606d-f60d-562e-9121-12d972cd8159"
+version = "2022.2.1"
 
 [[NaNMath]]
-git-tree-sha1 = "bfe47e760d60b82b66b61d2d44128b62e3a369fb"
+deps = ["OpenLibm_jll"]
+git-tree-sha1 = "a7c3d1da1189a1c2fe843a3bfa04d18d20eb3211"
 uuid = "77ba4419-2d1f-58cd-9bb1-8ffee604a2e3"
-version = "0.3.5"
+version = "1.0.1"
 
 [[NetworkOptions]]
 uuid = "ca575930-c2e3-43a9-ace4-1e988b2c1908"
+version = "1.2.0"
 
 [[Ogg_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg"]
@@ -1268,12 +1291,30 @@ version = "1.3.5+1"
 [[OpenBLAS_jll]]
 deps = ["Artifacts", "CompilerSupportLibraries_jll", "Libdl"]
 uuid = "4536629a-c528-5b80-bd46-f80d51c5b363"
+version = "0.3.20+0"
+
+[[OpenLibm_jll]]
+deps = ["Artifacts", "Libdl"]
+uuid = "05823500-19ac-5b8b-9628-191a04bc5112"
+version = "0.8.1+0"
+
+[[OpenSSL]]
+deps = ["BitFlags", "Dates", "MozillaCACerts_jll", "OpenSSL_jll", "Sockets"]
+git-tree-sha1 = "5628f092c6186a80484bfefdf89ff64efdaec552"
+uuid = "4d8831e6-92b7-49fb-bdf8-b643e874388c"
+version = "1.3.1"
 
 [[OpenSSL_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg"]
-git-tree-sha1 = "15003dcb7d8db3c6c857fda14891a539a8f2705a"
+git-tree-sha1 = "f6e9dba33f9f2c44e08a020b0caf6903be540004"
 uuid = "458c3c95-2e84-50aa-8efc-19380b2a3a95"
-version = "1.1.10+0"
+version = "1.1.19+0"
+
+[[OpenSpecFun_jll]]
+deps = ["Artifacts", "CompilerSupportLibraries_jll", "JLLWrappers", "Libdl", "Pkg"]
+git-tree-sha1 = "13652491f6856acfd2db29360e1bbcd4565d04f1"
+uuid = "efe28fd5-8261-553b-a9e1-b2916fc3738e"
+version = "0.5.5+0"
 
 [[Opus_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg"]
@@ -1286,17 +1327,21 @@ git-tree-sha1 = "85f8e6578bf1f9ee0d11e7bb1b1456435479d47c"
 uuid = "bac558e1-5e72-5ebc-8fee-abe8a469f55d"
 version = "1.4.1"
 
-[[PCRE_jll]]
-deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg"]
-git-tree-sha1 = "b2a7af664e098055a7529ad1a900ded962bca488"
-uuid = "2f80f16e-611a-54ab-bc61-aa92de5b98fc"
-version = "8.44.0+0"
+[[PCRE2_jll]]
+deps = ["Artifacts", "Libdl"]
+uuid = "efcefdf7-47ab-520b-bdef-62a2eaa19f15"
+version = "10.40.0+0"
 
 [[Parsers]]
-deps = ["Dates"]
-git-tree-sha1 = "ae4bbcadb2906ccc085cf52ac286dc1377dceccc"
+deps = ["Dates", "SnoopPrecompile"]
+git-tree-sha1 = "cceb0257b662528ecdf0b4b4302eb00e767b38e7"
 uuid = "69de0a69-1ddd-5017-9359-2bf0b02dc9f0"
-version = "2.1.2"
+version = "2.5.0"
+
+[[Pipe]]
+git-tree-sha1 = "6842804e7867b115ca9de748a0cf6b364523c16d"
+uuid = "b98c9c47-44ae-5843-9183-064241ee97a0"
+version = "1.3.0"
 
 [[Pixman_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg"]
@@ -1307,36 +1352,37 @@ version = "0.40.1+0"
 [[Pkg]]
 deps = ["Artifacts", "Dates", "Downloads", "LibGit2", "Libdl", "Logging", "Markdown", "Printf", "REPL", "Random", "SHA", "Serialization", "TOML", "Tar", "UUIDs", "p7zip_jll"]
 uuid = "44cfe95a-1eb2-52ea-b672-e2afdf69b78f"
+version = "1.8.0"
 
 [[PlotThemes]]
-deps = ["PlotUtils", "Requires", "Statistics"]
-git-tree-sha1 = "a3a964ce9dc7898193536002a6dd892b1b5a6f1d"
+deps = ["PlotUtils", "Statistics"]
+git-tree-sha1 = "1f03a2d339f42dca4a4da149c7e15e9b896ad899"
 uuid = "ccf2f8ad-2431-5c83-bf29-c5338b663b6a"
-version = "2.0.1"
+version = "3.1.0"
 
 [[PlotUtils]]
-deps = ["ColorSchemes", "Colors", "Dates", "Printf", "Random", "Reexport", "Statistics"]
-git-tree-sha1 = "b084324b4af5a438cd63619fd006614b3b20b87b"
+deps = ["ColorSchemes", "Colors", "Dates", "Printf", "Random", "Reexport", "SnoopPrecompile", "Statistics"]
+git-tree-sha1 = "21303256d239f6b484977314674aef4bb1fe4420"
 uuid = "995b91a9-d308-5afd-9ec6-746e21dbc043"
-version = "1.0.15"
+version = "1.3.1"
 
 [[Plots]]
-deps = ["Base64", "Contour", "Dates", "Downloads", "FFMPEG", "FixedPointNumbers", "GR", "GeometryBasics", "JSON", "Latexify", "LinearAlgebra", "Measures", "NaNMath", "PlotThemes", "PlotUtils", "Printf", "REPL", "Random", "RecipesBase", "RecipesPipeline", "Reexport", "Requires", "Scratch", "Showoff", "SparseArrays", "Statistics", "StatsBase", "UUIDs", "UnicodeFun"]
-git-tree-sha1 = "c1148c16a54e6861e379809130b78120c6184a27"
+deps = ["Base64", "Contour", "Dates", "Downloads", "FFMPEG", "FixedPointNumbers", "GR", "JLFzf", "JSON", "LaTeXStrings", "Latexify", "LinearAlgebra", "Measures", "NaNMath", "Pkg", "PlotThemes", "PlotUtils", "Printf", "REPL", "Random", "RecipesBase", "RecipesPipeline", "Reexport", "RelocatableFolders", "Requires", "Scratch", "Showoff", "SnoopPrecompile", "SparseArrays", "Statistics", "StatsBase", "UUIDs", "UnicodeFun", "Unzip"]
+git-tree-sha1 = "ec23efe47c86da2c00dc5496e59cb3d36bbfce6d"
 uuid = "91a5bcdd-55d7-5caf-9e0b-520d859cae80"
-version = "1.23.4"
+version = "1.36.0"
 
 [[PlutoUI]]
-deps = ["AbstractPlutoDingetjes", "Base64", "Dates", "Hyperscript", "HypertextLiteral", "IOCapture", "InteractiveUtils", "JSON", "Logging", "Markdown", "Random", "Reexport", "UUIDs"]
-git-tree-sha1 = "57312c7ecad39566319ccf5aa717a20788eb8c1f"
+deps = ["AbstractPlutoDingetjes", "Base64", "ColorTypes", "Dates", "FixedPointNumbers", "Hyperscript", "HypertextLiteral", "IOCapture", "InteractiveUtils", "JSON", "Logging", "MIMEs", "Markdown", "Random", "Reexport", "URIs", "UUIDs"]
+git-tree-sha1 = "efc140104e6d0ae3e7e30d56c98c4a927154d684"
 uuid = "7f904dfe-b85e-4ff6-b463-dae2292396a8"
-version = "0.7.18"
+version = "0.7.48"
 
 [[Preferences]]
 deps = ["TOML"]
-git-tree-sha1 = "00cfd92944ca9c760982747e9a1d0d5d86ab1e5a"
+git-tree-sha1 = "47e5f437cc0e7ef2ce8406ce1e7e24d44915f88d"
 uuid = "21216c6a-2e73-6563-6e65-726566657250"
-version = "1.2.2"
+version = "1.3.0"
 
 [[Printf]]
 deps = ["Unicode"]
@@ -1357,48 +1403,62 @@ deps = ["SHA", "Serialization"]
 uuid = "9a3f8284-a2c9-5f02-9a11-845980a1fd5c"
 
 [[RecipesBase]]
-git-tree-sha1 = "44a75aa7a527910ee3d1751d1f0e4148698add9e"
+deps = ["SnoopPrecompile"]
+git-tree-sha1 = "d12e612bba40d189cead6ff857ddb67bd2e6a387"
 uuid = "3cdcf5f2-1ef4-517c-9805-6587b60abb01"
-version = "1.1.2"
+version = "1.3.1"
 
 [[RecipesPipeline]]
-deps = ["Dates", "NaNMath", "PlotUtils", "RecipesBase"]
-git-tree-sha1 = "7ad0dfa8d03b7bcf8c597f59f5292801730c55b8"
+deps = ["Dates", "NaNMath", "PlotUtils", "RecipesBase", "SnoopPrecompile"]
+git-tree-sha1 = "a030182cccc5c461386c6f055c36ab8449ef1340"
 uuid = "01d81517-befc-4cb6-b9ec-a95719d0359c"
-version = "0.4.1"
+version = "0.6.10"
 
 [[Reexport]]
 git-tree-sha1 = "45e428421666073eab6f2da5c9d310d99bb12f9b"
 uuid = "189a3867-3050-52da-a836-e630ba90ab69"
 version = "1.2.2"
 
+[[RelocatableFolders]]
+deps = ["SHA", "Scratch"]
+git-tree-sha1 = "90bc7a7c96410424509e4263e277e43250c05691"
+uuid = "05181044-ff0b-4ac5-8273-598c1e38db00"
+version = "1.0.0"
+
 [[Requires]]
 deps = ["UUIDs"]
-git-tree-sha1 = "4036a3bd08ac7e968e27c203d45f5fff15020621"
+git-tree-sha1 = "838a3a4188e2ded87a4f9f184b4b0d78a1e91cb7"
 uuid = "ae029012-a4dd-5104-9daa-d747884805df"
-version = "1.1.3"
+version = "1.3.0"
 
 [[SHA]]
 uuid = "ea8e919c-243c-51af-8825-aaa63cd721ce"
+version = "0.7.0"
 
 [[Scratch]]
 deps = ["Dates"]
-git-tree-sha1 = "0b4b7f1393cff97c33891da2a0bf69c6ed241fda"
+git-tree-sha1 = "f94f779c94e58bf9ea243e77a37e16d9de9126bd"
 uuid = "6c6a2e73-6563-6170-7368-637461726353"
-version = "1.1.0"
+version = "1.1.1"
 
 [[Serialization]]
 uuid = "9e88b42a-f829-5b0c-bbe9-9e923198166b"
-
-[[SharedArrays]]
-deps = ["Distributed", "Mmap", "Random", "Serialization"]
-uuid = "1a1011a3-84de-559e-8e89-a11a2f7dc383"
 
 [[Showoff]]
 deps = ["Dates", "Grisu"]
 git-tree-sha1 = "91eddf657aca81df9ae6ceb20b959ae5653ad1de"
 uuid = "992d4aef-0814-514b-bc4d-f2e9a6c4116f"
 version = "1.0.3"
+
+[[SimpleBufferStream]]
+git-tree-sha1 = "874e8867b33a00e784c8a7e4b60afe9e037b74e1"
+uuid = "777ac1f9-54b0-4bf8-805c-2214025038e7"
+version = "1.1.0"
+
+[[SnoopPrecompile]]
+git-tree-sha1 = "f604441450a3c0569830946e5b33b78c928e1a85"
+uuid = "66db9d55-30c0-4569-8b51-7e840670fc0c"
+version = "1.0.1"
 
 [[Sockets]]
 uuid = "6462fe0b-24de-5631-8697-dd941f90decc"
@@ -1413,61 +1473,63 @@ version = "1.0.1"
 deps = ["LinearAlgebra", "Random"]
 uuid = "2f01184e-e22b-5df5-ae63-d93ebab69eaf"
 
-[[StaticArrays]]
-deps = ["LinearAlgebra", "Random", "Statistics"]
-git-tree-sha1 = "3c76dde64d03699e074ac02eb2e8ba8254d428da"
-uuid = "90137ffa-7385-5640-81b9-e52037218182"
-version = "1.2.13"
+[[SpecialFunctions]]
+deps = ["ChainRulesCore", "IrrationalConstants", "LogExpFunctions", "OpenLibm_jll", "OpenSpecFun_jll"]
+git-tree-sha1 = "d75bda01f8c31ebb72df80a46c88b25d1c79c56d"
+uuid = "276daf66-3868-5448-9aa4-cd146d93841b"
+version = "2.1.7"
 
 [[Statistics]]
 deps = ["LinearAlgebra", "SparseArrays"]
 uuid = "10745b16-79ce-11e8-11f9-7d13ad32a3b2"
 
 [[StatsAPI]]
-git-tree-sha1 = "1958272568dc176a1d881acb797beb909c785510"
+deps = ["LinearAlgebra"]
+git-tree-sha1 = "f9af7f195fb13589dd2e2d57fdb401717d2eb1f6"
 uuid = "82ae8749-77ed-4fe6-ae5f-f523153014b0"
-version = "1.0.0"
+version = "1.5.0"
 
 [[StatsBase]]
 deps = ["DataAPI", "DataStructures", "LinearAlgebra", "LogExpFunctions", "Missings", "Printf", "Random", "SortingAlgorithms", "SparseArrays", "Statistics", "StatsAPI"]
-git-tree-sha1 = "eb35dcc66558b2dda84079b9a1be17557d32091a"
+git-tree-sha1 = "d1bf48bfcc554a3761a133fe3a9bb01488e06916"
 uuid = "2913bbd2-ae8a-5f71-8c99-4fb6c76f3a91"
-version = "0.33.12"
-
-[[StructArrays]]
-deps = ["Adapt", "DataAPI", "StaticArrays", "Tables"]
-git-tree-sha1 = "2ce41e0d042c60ecd131e9fb7154a3bfadbf50d3"
-uuid = "09ab397b-f2b6-538f-b94a-2f83cf4a842a"
-version = "0.6.3"
+version = "0.33.21"
 
 [[TOML]]
 deps = ["Dates"]
 uuid = "fa267f1f-6049-4f14-aa54-33bafae1ed76"
-
-[[TableTraits]]
-deps = ["IteratorInterfaceExtensions"]
-git-tree-sha1 = "c06b2f539df1c6efa794486abfb6ed2022561a39"
-uuid = "3783bdb8-4a98-5b6b-af9a-565f29a5fe9c"
-version = "1.0.1"
-
-[[Tables]]
-deps = ["DataAPI", "DataValueInterfaces", "IteratorInterfaceExtensions", "LinearAlgebra", "TableTraits", "Test"]
-git-tree-sha1 = "fed34d0e71b91734bf0a7e10eb1bb05296ddbcd0"
-uuid = "bd369af6-aec1-5ad0-b16a-f7cc5008161c"
-version = "1.6.0"
+version = "1.0.0"
 
 [[Tar]]
 deps = ["ArgTools", "SHA"]
 uuid = "a4e569a6-e804-4fa4-b0f3-eef7a1d5b13e"
+version = "1.10.1"
+
+[[TensorCore]]
+deps = ["LinearAlgebra"]
+git-tree-sha1 = "1feb45f88d133a655e001435632f019a9a1bcdb6"
+uuid = "62fd8b95-f654-4bbd-a8a5-9c27f68ccd50"
+version = "0.1.1"
 
 [[Test]]
 deps = ["InteractiveUtils", "Logging", "Random", "Serialization"]
 uuid = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
 
+[[TranscodingStreams]]
+deps = ["Random", "Test"]
+git-tree-sha1 = "8a75929dcd3c38611db2f8d08546decb514fcadf"
+uuid = "3bb67fe8-82b1-5028-8e26-92a6c54297fa"
+version = "0.9.9"
+
+[[Tricks]]
+git-tree-sha1 = "6bac775f2d42a611cdfcd1fb217ee719630c4175"
+uuid = "410a4b4d-49e4-4fbc-ab6d-cb71b17b3775"
+version = "0.1.6"
+
 [[URIs]]
-git-tree-sha1 = "97bbe755a53fe859669cd907f2d96aee8d2c1355"
+git-tree-sha1 = "e59ecc5a41b000fa94423a578d29290c7266fc10"
 uuid = "5c2747f8-b7ea-4ff2-ba2e-563bfd36b1d4"
-version = "1.3.0"
+version = "1.4.0"
 
 [[UUIDs]]
 deps = ["Random", "SHA"]
@@ -1482,6 +1544,11 @@ git-tree-sha1 = "53915e50200959667e78a92a418594b428dffddf"
 uuid = "1cfade01-22cf-5700-b092-accc4b62d6e1"
 version = "0.4.1"
 
+[[Unzip]]
+git-tree-sha1 = "ca0969166a028236229f63514992fc073799bb78"
+uuid = "41fe7b60-77ed-43a1-b4f0-825fd5a5650d"
+version = "0.2.0"
+
 [[Wayland_jll]]
 deps = ["Artifacts", "Expat_jll", "JLLWrappers", "Libdl", "Libffi_jll", "Pkg", "XML2_jll"]
 git-tree-sha1 = "3e61f0b86f90dacb0bc0e73a0c5a83f6a8636e23"
@@ -1489,16 +1556,16 @@ uuid = "a2964d1f-97da-50d4-b82a-358c7fce9d89"
 version = "1.19.0+0"
 
 [[Wayland_protocols_jll]]
-deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg", "Wayland_jll"]
-git-tree-sha1 = "2839f1c1296940218e35df0bbb220f2a79686670"
+deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg"]
+git-tree-sha1 = "4528479aa01ee1b3b4cd0e6faef0e04cf16466da"
 uuid = "2381bf8a-dfd0-557d-9999-79630e7b1b91"
-version = "1.18.0+4"
+version = "1.25.0+0"
 
 [[XML2_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Libiconv_jll", "Pkg", "Zlib_jll"]
-git-tree-sha1 = "1acf5bdf07aa0907e0a37d3718bb88d4b687b74a"
+git-tree-sha1 = "58443b63fb7e465a8a7210828c91c08b92132dff"
 uuid = "02c8fc9c-b97f-50b9-bbe4-9be30ff0a78a"
-version = "2.9.12+0"
+version = "2.9.14+0"
 
 [[XSLT_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Libgcrypt_jll", "Libgpg_error_jll", "Libiconv_jll", "Pkg", "XML2_jll", "Zlib_jll"]
@@ -1635,12 +1702,25 @@ version = "1.4.0+3"
 [[Zlib_jll]]
 deps = ["Libdl"]
 uuid = "83775a58-1f1d-513f-b197-d71354ab007a"
+version = "1.2.12+3"
 
 [[Zstd_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg"]
-git-tree-sha1 = "cc4bf3fdde8b7e3e9fa0351bdeedba1cf3b7f6e6"
+git-tree-sha1 = "e45044cd873ded54b6a5bac0eb5c971392cf1927"
 uuid = "3161d3a3-bdf6-5164-811a-617609db77b4"
-version = "1.5.0+0"
+version = "1.5.2+0"
+
+[[fzf_jll]]
+deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg"]
+git-tree-sha1 = "868e669ccb12ba16eaf50cb2957ee2ff61261c56"
+uuid = "214eeab7-80f7-51ab-84ad-2988db7cef09"
+version = "0.29.0+0"
+
+[[libaom_jll]]
+deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg"]
+git-tree-sha1 = "3a2ea60308f0996d26f1e5354e10c24e9ef905d4"
+uuid = "a4ae2306-e953-59d6-aa16-d00cac43593b"
+version = "3.4.0+0"
 
 [[libass_jll]]
 deps = ["Artifacts", "Bzip2_jll", "FreeType2_jll", "FriBidi_jll", "HarfBuzz_jll", "JLLWrappers", "Libdl", "Pkg", "Zlib_jll"]
@@ -1651,6 +1731,7 @@ version = "0.15.1+0"
 [[libblastrampoline_jll]]
 deps = ["Artifacts", "Libdl", "OpenBLAS_jll"]
 uuid = "8e850b90-86db-534c-a0d3-1478176c7d93"
+version = "5.1.1+0"
 
 [[libfdk_aac_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg"]
@@ -1673,10 +1754,12 @@ version = "1.3.7+1"
 [[nghttp2_jll]]
 deps = ["Artifacts", "Libdl"]
 uuid = "8e850ede-7688-5339-a07c-302acd2aaf8d"
+version = "1.48.0+0"
 
 [[p7zip_jll]]
 deps = ["Artifacts", "Libdl"]
 uuid = "3f19e933-33d8-53b3-aaab-bd5110c3b7a0"
+version = "17.4.0+0"
 
 [[x264_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg"]
@@ -1692,15 +1775,15 @@ version = "3.5.0+0"
 
 [[xkbcommon_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg", "Wayland_jll", "Wayland_protocols_jll", "Xorg_libxcb_jll", "Xorg_xkeyboard_config_jll"]
-git-tree-sha1 = "ece2350174195bb31de1a63bea3a41ae1aa593b6"
+git-tree-sha1 = "9ebfc140cc56e8c2156a15ceac2f0302e327ac0a"
 uuid = "d8fb68d0-12a3-5cfd-a85a-d49703b185fd"
-version = "0.9.1+5"
+version = "1.4.1+0"
 """
 
 # ╔═╡ Cell order:
-# ╠═19fe1ee8-0970-11eb-2a0d-7d25e7d773c6
-# ╠═1bba5552-0970-11eb-1b9a-87eeee0ecc36
-# ╠═2848996c-0970-11eb-19eb-c719d797c322
+# ╟─19fe1ee8-0970-11eb-2a0d-7d25e7d773c6
+# ╟─1bba5552-0970-11eb-1b9a-87eeee0ecc36
+# ╟─2848996c-0970-11eb-19eb-c719d797c322
 # ╠═2dcb18d0-0970-11eb-048a-c1734c6db842
 # ╟─49567f8e-09a2-11eb-34c1-bb5c0b642fe8
 # ╟─181e156c-0970-11eb-0b77-49b143cc0fc0
@@ -1726,7 +1809,7 @@ version = "0.9.1+5"
 # ╟─ec576da8-0a2c-11eb-1f7b-43dec5f6e4e7
 # ╟─71c358d8-0a2f-11eb-29e1-57ff1915e84a
 # ╠═5278e232-0972-11eb-19ff-a1a195127297
-# ╠═71c9788c-0aeb-11eb-28d2-8dcc3f6abacd
+# ╟─71c9788c-0aeb-11eb-28d2-8dcc3f6abacd
 # ╠═69151ce6-0aeb-11eb-3a53-290ba46add96
 # ╟─3eb46664-0954-11eb-31d8-d9c0b74cf62b
 # ╠═edf86a0e-0a68-11eb-2ad3-dbf020037019
@@ -1758,15 +1841,16 @@ version = "0.9.1+5"
 # ╠═1f96c80a-0a46-11eb-0690-f51c60e57c3f
 # ╟─c2633a8b-374c-40a7-a827-b186d423fee5
 # ╟─f953e06e-099f-11eb-3549-73f59fed8132
+# ╠═8d5f40e6-08b7-45d6-8676-80b2bea6afc0
 # ╠═e6dd8258-0a4b-11eb-24cb-fd5b3554381b
 # ╠═de88b530-0a4b-11eb-05f7-85171594a8e8
-# ╠═80f39140-0aef-11eb-21f7-b788c5eab5c9
+# ╟─80f39140-0aef-11eb-21f7-b788c5eab5c9
 # ╠═d1bcd5c4-0a4b-11eb-1218-7531e367a7ff
 # ╟─34778744-0a5f-11eb-22b6-abe8b8fc34fd
 # ╠═24fe0f1a-0a69-11eb-29fe-5fb6cbf281b8
 # ╟─1fc3271e-0a45-11eb-0e8d-0fd355f5846b
 # ╠═18552c36-0a4d-11eb-19a0-d7d26897af36
-# ╠═4e7fd58a-0a62-11eb-1596-c717e0845bd5
+# ╟─4e7fd58a-0a62-11eb-1596-c717e0845bd5
 # ╠═778c2490-0a62-11eb-2a6c-e7fab01c6822
 # ╟─e964c7f0-0a61-11eb-1782-0b728fab1db0
 # ╠═4d83dbd0-0a63-11eb-0bdc-757f0e721221
