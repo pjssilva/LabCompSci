@@ -189,7 +189,7 @@ Se você fez mudanças úteis na sua ramificação você pode sugerir que suas m
 md"""
 > Agora vamos sair do caderno e fazer o _pull request_ ao vivo.
 
-> Dica (para mim - para usar outro usuário): `export GIT_SSH_COMMAND='ssh -i private_key_file -o IdentitiesOnly=yes'`
+> Dica (para mim - para usar outro usuário): `export GIT_SSH_COMMAND='ssh -i private_key_file -o PasswordAuthentication=no'`
 """
 
 # ╔═╡ bbb59b45-de20-41c1-b5dd-079fc51655f2
