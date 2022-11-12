@@ -171,7 +171,7 @@ bigbreak
 md"""
 # Uma primeira contribuição _documentação_
 
-Vamos tentar ver como é o fluxo de colaboração em projetos de código aberto. Uma das melhores maneiras de fazer isso inicialmente é tentar contribuir para melhorar a _documentação_ de um projeto. No nosso exemplo de hoje vamos usar o próprio repositório do curso e vamos corrigir **essssssse texxxxxtttoooo aqqqqqui**. Lembrem-se, o código dos cadernos e listas de nosso curso estão no [site da disciplina no Github](https://github.com/pjssilva/LabCompSci).
+Vamos tentar ver como é o fluxo de colaboração em projetos de código aberto. Uma das melhores maneiras de fazer isso inicialmente é tentar contribuir para melhorar a _documentação_ de um projeto. No nosso exemplo de hoje vamos usar o próprio repositório do curso e vamos corrigir esse texto aqui. Lembrem-se, o código dos cadernos e listas de nosso curso estão no [site da disciplina no Github](https://github.com/pjssilva/LabCompSci).
 
 O Github, além de fornecer o repositório para o código, também possui outras facilidades como um sistema para lidar com [requisições](https://github.com/pjssilva/LabCompSci/issues) — e para aceitar contribuições de terceiros - chamadas de [_Pull Request_](https://github.com/pjssilva/LabCompSci/pulls). Vamos fazer agora o nosso primeiro _Pull Request_!
 """
@@ -189,7 +189,7 @@ Se você fez mudanças úteis na sua ramificação você pode sugerir que suas m
 md"""
 > Agora vamos sair do caderno e fazer o _pull request_ ao vivo.
 
-> Dica (para mim - para usar outro usuário): `export GIT_SSH_COMMAND='ssh -i private_key_file -o IdentitiesOnly=yes'`
+> Dica (para mim - para usar outro usuário): `export GIT_SSH_COMMAND='ssh -i private_key_file -o PasswordAuthentication=no'`
 """
 
 # ╔═╡ bbb59b45-de20-41c1-b5dd-079fc51655f2
