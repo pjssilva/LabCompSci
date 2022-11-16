@@ -623,7 +623,7 @@ let
 	x = initialize(N, L)
 	
 	# initialize to empty arrays
-	Ss, Is, Rs = Int[], Int[], Int[]
+	Ss, Is, Rs = [N - 1], [1], [0]
 	
 	Tmax = 200
 	
@@ -637,9 +637,9 @@ let
 		left = visualize(x, L)
 	
 		right = plot(xlim=(1,Tmax), ylim=(1,N), size=(600,300))
-		plot!(right, 1:t, Ss, color=color(S), label="S")
-		plot!(right, 1:t, Is, color=color(I), label="I")
-		plot!(right, 1:t, Rs, color=color(R), label="R")
+		plot!(right, Ss, color=color(S), label="S")
+		plot!(right, Is, color=color(I), label="I")
+		plot!(right, Rs, color=color(R), label="R")
 	
 		plot(left, right)
 	end
