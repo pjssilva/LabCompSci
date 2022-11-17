@@ -7,11 +7,7 @@ using InteractiveUtils
 # This Pluto notebook uses @bind for interactivity. When running this notebook outside of Pluto, the following 'mock version' of @bind gives bound variables a default value (instead of an error).
 macro bind(def, element)
     quote
-        local iv = try
-            Base.loaded_modules[Base.PkgId(Base.UUID("6e696c72-6542-2067-7265-42206c756150"), "AbstractPlutoDingetjes")].Bonds.initial_value
-        catch
-            b -> missing
-        end
+        local iv = try Base.loaded_modules[Base.PkgId(Base.UUID("6e696c72-6542-2067-7265-42206c756150"), "AbstractPlutoDingetjes")].Bonds.initial_value catch; b -> missing; end
         local el = $(esc(element))
         global $(esc(def)) = Core.applicable(Base.get, el) ? Base.get(el) : iv(el)
         el
@@ -695,7 +691,6 @@ begin
         markersize=8,
         markerstrokecolor=:white,
         alpha=1.0,
-        markerstrokestyle=:dash,
     )
     p_equil
 end
@@ -939,13 +934,16 @@ end
 
 # ╔═╡ 80caaf52-062b-43c5-93c9-3bbdc2d61cec
 function plot_trajectory!(p, x, y; lw=8)
+	mask = isnan.(x) .== false
     n = size(x, 1)
+	alphas = collect(range(1/n, n, length=n))
+	widths = collect(range(0, lw, length=n))
     plot!(
-        x,
-        y,
+        x[mask],
+        y[mask],
         color="black",
-        alpha=collect(1/n:1/n:1.0),
-        linewidth=collect(0.0:lw/(n-1):lw),
+        alpha=alphas[mask],
+        linewidth=widths[mask],
         label=nothing,
     )
     plot!(
@@ -1164,7 +1162,7 @@ PLUTO_MANIFEST_TOML_CONTENTS = """
 
 julia_version = "1.8.2"
 manifest_format = "2.0"
-project_hash = "f9fe2c96471e00287603f44b6ffb8c861594ac14"
+project_hash = "154d0a44e0ac514fc493bb88d07862dcf1dcc131"
 
 [[deps.AbstractPlutoDingetjes]]
 deps = ["Pkg"]
