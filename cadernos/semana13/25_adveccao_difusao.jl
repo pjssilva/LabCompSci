@@ -50,7 +50,7 @@ Por enquanto, vamos nos restringir a uma dimensão espacial (1D). Então, vamos 
 
 Nós queremos calcular o valor da temperatura $T$ para cada possível par de valores $(t, x)$, ou seja para todo tempo ($> 0$) e todas as posições.
 
-A temperatura em cada ponto irá variar de acordo com dois processos físicos diferentes. Vamos modelar isso escrevendo equações que descrevem cada um desses processos físicos e como eles afetam a temparatura. Como há *duas* variáveis independentes, $t$ e $x$, podemos antever que vamos usar derivadas com relação *a esssas duas* variáveis. Desse modo, a taxa de variação da temperatura no tempo em um determinado ponto no espaço irá dependenter de gradientes da temperatura *no tempo e noespaço*. Isso vai levar a **equações diferenciais parciais** que criam relações entre as derivadas *parciais* de $T$.
+A temperatura em cada ponto irá variar de acordo com dois processos físicos diferentes. Vamos modelar isso escrevendo equações que descrevem cada um desses processos físicos e como eles afetam a temperatura. Como há *duas* variáveis independentes, $t$ e $x$, podemos antever que vamos usar derivadas com relação *a nessas duas* variáveis. Desse modo, a taxa de variação da temperatura no tempo em um determinado ponto no espaço irá depender ter de gradientes da temperatura *no tempo e no espaço*. Isso vai levar a **equações diferenciais parciais** que criam relações entre as derivadas *parciais* de $T$.
 
 No contexto de modelagem climática, podemos pensar no $x$ como sendo a **latitude**, imaginando que a temperatura é a igual em todos os pontos de mesma latitude. Nesse modelo, poderíamos capturar o fato que os polos são mais frios que o equador e considerar o fluxo de calor das regiões quentes para as mais frias.
 
@@ -81,9 +81,9 @@ md"""
 
 # ╔═╡ 42190984-277d-11eb-1ac2-7d84516c3269
 md"""
-Uma equação diferencial necessita de um valor inicial para cada variável. Analogamente, agora vamos precisar de uma *função* inicial $T_0(x)$ que nos dá a temperatura em cada posição $x$. Vamos considerar que essa posição está restrita a um intervalo $[0, L_x]$. 
+Uma equação diferencial necessita de um valor inicial para cada variável. Analogamente, agora vamos precisar de uma *função* inicial $T_0(x)$ que nos dá a temperatura em cada posição $x$ no instante 0. Vamos considerar que essa posição está restrita a um intervalo $[0, L_x]$. 
 
-Agora, como vamos representar uma função contínua no computador, isso irá nos obrigar a discretizá-la de algum modo. Ou seja, vamos ter que aproximar essa função contínua por um conjunto finito de números. 
+Vamos representar uma função contínua no computador discretizando-o de algum modo. Isso está relacionando com a forma de solução numérica de equações diferenciais. Ou seja, vamos ter que aproximar essa função contínua por um conjunto finito de números. 
 
 A forma mais simples de fazer isso (há outras) é **amostrar** o valor da função em pontos discretos de uma **malha** (ou **nós**) $x_i$, para $i = 1, \dots, N_x$. Por simplicidade, vamos tomar esses pontos equiespaçados, com espaçamento $x_{i+1} - x_i =: \delta x := L_x / N_x$.
 """
@@ -119,7 +119,7 @@ Uma boa ideia é tomar os pontos da malha no *centro* de cada intervalo e assim 
 
 # ╔═╡ 468a0590-2780-11eb-045c-d1f468fc4e50
 md"""
-Nós chamamos essa função de $x$ em um instante do tempo de um **perfil de tempreratura**. Vamos apresentá-lo tanto como uma função quando com um mapa de calor.
+Nós chamamos essa função de $x$ em um instante do tempo de um **perfil de temperatura**. Vamos apresentá-lo tanto como uma função quando com um mapa de calor.
 """
 
 # ╔═╡ af30a0d0-2781-11eb-0274-ab423205facb
@@ -129,7 +129,7 @@ Vamos denotar por $T^0_i$ a temperatura inicial no ponto $i$ da malha.
 
 # ╔═╡ 646bc32e-284c-11eb-2ce8-5f64b1a49534
 md"""
-Pode ser interessante pensar em $T^n_i$ como uma espécie de média (espacial) de $T(t_n, x)$ nos intervalos de posições que contém os pontos da malha. Assim, $T_i$ seria a média no intervalor entre $x_i - \frac{\delta x}{2}$ and $x_i + \frac{\delta x}{2}$. Isso leva, naturalmente, a seguinte aproximação **constante por partes** da função contínua original:
+Pode ser interessante pensar em $T^n_i$ como uma espécie de média (espacial) de $T(t_n, x)$ nos intervalos de posições que contém os pontos da malha. Assim, $T_i$ seria a média no intervalo entre $x_i - \frac{\delta x}{2}$ and $x_i + \frac{\delta x}{2}$. Isso leva, naturalmente, a seguinte aproximação **constante por partes** da função contínua original:
 """
 
 # ╔═╡ 79ce4b10-284c-11eb-2258-2155f850171d
@@ -189,7 +189,7 @@ md"""
 
 # ╔═╡ b63bb2e8-1d23-48fb-94b5-60d947465830
 md"""
-Vamos visualizar o que ocorre quando o fluido se movem atravesando um ponto da malha ou, sendo mais preciso, o intervalo ou célula centrada no ponto escolhido. Vamos visualizar partículas marcadoras se movendo dentro do fluido:
+Vamos visualizar o que ocorre quando o fluido se movem atravessando um ponto da malha ou, sendo mais preciso, o intervalo ou célula centrada no ponto escolhido. Vamos visualizar partículas marcadoras se movendo dentro do fluido:
 """
 
 # ╔═╡ e94a90c5-f2c1-4b5b-9946-7869ef7775a6
@@ -197,7 +197,7 @@ Vamos visualizar o que ocorre quando o fluido se movem atravesando um ponto da m
 N = 5000
 
 # ╔═╡ dd87fc01-4bf0-44f6-a9f6-560e433754a0
-# Place initial particles between  -1.5 and 2 (in x), more concetrated in the 
+# Place initial particles between  -1.5 and 2 (in x), more concentrated in the 
 # beginning
 begin
     xx = (abs.(-2 .+ 4 .* rand(N)) .^ 2) .- 1.5
@@ -236,7 +236,7 @@ Então,
 
 $$T^{n+1}_i \simeq T(t_n + \delta t, x_i)\ \ \text{e}\ \ T^{n}_{i+1} \simeq T(t_n, x_i + \delta x).$$
 
-[Observe que os superescritos $n$ nesses algoritmos não representam potências. Eles são apenas um rótulo para o passo no tempo. Poderíamos uma notação mais pesada, como  $T_i^{(n)}$, mas isso sobrecarrega a escrita e iremos usar a forma sem parênteses.]
+[Observe que os super-escritos $n$ nesses algoritmos não representam potências. Eles são apenas um rótulo para o passo no tempo. Poderíamos uma notação mais pesada, como  $T_i^{(n)}$, mas isso sobrecarrega a escrita e iremos usar a forma sem parênteses.]
 """
 
 # ╔═╡ 44433a34-2782-11eb-0079-837c9306c5bd
@@ -349,7 +349,7 @@ end
 
 # ╔═╡ fcbec610-d9fc-4e41-8e76-729dbbc61d92
 md"""
-Essa equação executa um passo temporal da equação de adveccção, recebendo o vetor $T$ original e devolvendo o vetor no próximo passo de tempo $T'$.
+Essa equação executa um passo temporal da equação de advecção, recebendo o vetor $T$ original e devolvendo o vetor no próximo passo de tempo $T'$.
 
 Observe que a ideia fundamental que empregamos aqui é semelhante àquela do método de Euler usada na resolução de EDOs. Mas agora há várias variáveis para atualizar ao mesmo tempo já que, efetivamente, estamos resolvendo um grande sistemas de EDOs acopladas".
 """
@@ -363,7 +363,7 @@ begin
 end;
 
 # ╔═╡ addab3e6-f189-41d6-badb-92f0323b6192
-# assign colours to particles that will enter and leave between 0 ... δ
+# assign colors to particles that will enter and leave between 0 ... δ
 cs = map(xx) do x
     if -U * δ < x < 0
         1
@@ -443,7 +443,7 @@ Outro processo físico fundamental é a **difusão**. Ele modela como temperatur
 
 ## Mecanismo físico: passeios aleatórios
 
-O mecanismo físico por trás desse fenômeno é o **passeio aleatório**: o limite contínuo de equações descrevendo a evolução da distribuição de probabilidade no espaço e tempo de uma nuvem de andarilhos aleatórios.
+O mecanismo físico por trás desse fenômeno é o **passeio aleatório browniano**: o limite contínuo de equações descrevendo a evolução da distribuição de probabilidade no espaço e tempo de uma nuvem de andarilhos aleatórios.
 
 Esse é o processo que já vimos antes no curso. Usando nossa notação atual, já vimos que a distribuição de probabilidade de uma nuvem de andarilhos aleatórios satisfaz uma evolução temporal do tipo
 
@@ -1759,3 +1759,5 @@ version = "1.4.1+0"
 # ╠═9187350a-2851-11eb-05f0-d3a6eef190fe
 # ╟─00000000-0000-0000-0000-000000000001
 # ╟─00000000-0000-0000-0000-000000000002
+
+#  LocalWords:  equiespaçados
