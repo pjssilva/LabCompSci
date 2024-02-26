@@ -24,7 +24,7 @@ adaptação e re-uso.
 
 ## O curso
 
-Esse é um curso de laboratório de computação científica que irá usar a
+Esse é um curso de laboratório de computação científica - MS513 - que irá usar a
 [linguagem de programação Julia](http://www.julialang.org) em exemplos "do mundo
 real" em que aplicaremos ideias modelagem matemática e computacional e também de
 análise de dados. A ideia é ter um curso do tipo "mão na massa", onde escrever e
@@ -32,10 +32,12 @@ entender código será nossa principal forma de comunicação.
 
 ## Logística do curso
 
-As aulas serão terças e quintas às 14hs. Durante as aulas apresentarei cadernos
-Julia com código e discutirei os problemas que vamos estudar mostrando como usar
-técnicas modernas de programação e matemática aplicada para atacá-los. Além
-disso, temos o servidor Discord da disciplina onde podemos interagir em fóruns.
+As aulas serão terças e quintas às 8hs. Durante as aulas apresentarei cadernos
+Julia com código e discutirei os problemas que vamos estudar empregando técnicas
+modernas de programação e matemática aplicada para atacá-los. Além disso, temos
+o servidor Discord da disciplina onde podemos interagir em fóruns. O link do
+servidor Discord
+[https://github.com/pjssilva/LabCompSci](https://github.com/pjssilva/LabCompSci).
 
 ## Detalhes burocráticos
 
@@ -44,13 +46,14 @@ disso, temos o servidor Discord da disciplina onde podemos interagir em fóruns.
 Será feita através de trabalhos computacionais durante o semestre e duas provas
 presenciais no laboratório.
 
-No segundo semestre de 2022 as datas das provas são **06/10 e 01/12**.
+No primeiro semestre de 2024 as datas das provas são *30/04 e 27/06**.
 
 Médias: Definimos `ME` = "média aritméticas das listas descartando as duas
 piores notas", e `MP` = "média aritmética das provas". A média ao final do
-semestre será `M = 0.4*ME + 0.6*MP`. Se `M >= 5`, o aluno está aprovado. Se `2.0
-<= M < 5.0`, o aluno deverá fazer o exame no dia **15/12**. A média final será
-então `max(M, 0.5*M + 0.5*Exame)`. Se `MF >= 5.0`, o aluno estará aprovado.
+semestre será `M = 0.7*ME + 0.3*MP`, se `MP >= 5`, caso contrário `M = MP`. Se
+`M >= 5`, o aluno está aprovado. Se `2.0 <= M < 5.0`, o aluno deverá fazer o
+exame no dia **09/07**. A média final será então `max(M, 0.5*M + 0.5*Exame)`. Se
+`MF >= 5.0`, o aluno estará aprovado.
 
 ### Ementa 
 
