@@ -41,6 +41,10 @@ servidor Discord
 
 ## Detalhes burocráticos
 
+### Atendimento
+
+Quintas 13-14 h, Sala 137, IMECC ou atentimento pessoal sob demanda a combinar com o(a) aluno(a).
+
 ### Avaliação
 
 Será feita através de trabalhos computacionais durante o semestre e duas provas
