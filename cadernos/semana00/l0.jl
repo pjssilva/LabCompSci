@@ -46,9 +46,9 @@ Submetido por: **_$(student.name)_** ($(student.email_dac)@unicamp.br)
 md"""
 # Lista 0: Ficando pronto para o jogo
 
-Disponível em: Terça, 16 de agosto de 2022.
+Disponível em: Quinta, 14 de março de 2024.
 
-**L0 data de entrega: Quinta 18 de agosto de 2022. Mas é melhor entregar na quarta para estar pronto para a aula da quinta**.
+**data de entrega: Quinta 21 de março de 2024.**
 
 Em primeiro lugar: **bem vindo ao curso**. Estou muito animado em dividir com vocês ferramentas e ideias que uso cotidianamente para atacar problemas _reais_.
 
