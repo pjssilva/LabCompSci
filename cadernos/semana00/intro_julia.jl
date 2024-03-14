@@ -793,16 +793,16 @@ LinearAlgebra = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
 MKL = "33e6dc65-8f57-5167-99aa-e5a354878fb2"
 
 [compat]
-MKL = "~0.6.2"
+MKL = "~0.6.3"
 """
 
 # ╔═╡ 00000000-0000-0000-0000-000000000002
 PLUTO_MANIFEST_TOML_CONTENTS = """
 # This file is machine-generated - editing it directly is not advised
 
-julia_version = "1.10.1"
+julia_version = "1.10.2"
 manifest_format = "2.0"
-project_hash = "0b3f3dbbe8e7ad52198cfec554fee9d8486acfec"
+project_hash = "9be43f7d801cd8c15ed1b3736c98ba660a014153"
 
 [[deps.ArgTools]]
 uuid = "0dad84c5-d112-42e6-8d28-ef12dabb789f"
@@ -832,10 +832,10 @@ version = "1.6.0"
 uuid = "7b1f6079-737a-58dc-b8bc-7a2ca5c1b5ee"
 
 [[deps.IntelOpenMP_jll]]
-deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg"]
-git-tree-sha1 = "ad37c091f7d7daf900963171600d7c1c5c3ede32"
+deps = ["Artifacts", "JLLWrappers", "Libdl"]
+git-tree-sha1 = "5fdf2fe6724d8caabf43b557b84ce53f3b7e2f6b"
 uuid = "1d5cc7b8-4909-519e-a0f8-d0f5ad9712d0"
-version = "2023.2.0+0"
+version = "2024.0.2+0"
 
 [[deps.InteractiveUtils]]
 deps = ["Markdown"]
@@ -886,16 +886,16 @@ uuid = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
 uuid = "56ddb016-857b-54e1-b83d-db4d58db5568"
 
 [[deps.MKL]]
-deps = ["Artifacts", "Libdl", "LinearAlgebra", "MKL_jll"]
-git-tree-sha1 = "0e25aae49a4a43b3a03eb7ac7aba8473c60a87d2"
+deps = ["Artifacts", "Libdl", "LinearAlgebra", "Logging", "MKL_jll"]
+git-tree-sha1 = "17f06b6fb5198b757413d8379bfa62246c5da5a3"
 uuid = "33e6dc65-8f57-5167-99aa-e5a354878fb2"
-version = "0.6.2"
+version = "0.6.3"
 
 [[deps.MKL_jll]]
-deps = ["Artifacts", "IntelOpenMP_jll", "JLLWrappers", "LazyArtifacts", "Libdl", "Pkg"]
-git-tree-sha1 = "eb006abbd7041c28e0d16260e50a24f8f9104913"
+deps = ["Artifacts", "IntelOpenMP_jll", "JLLWrappers", "LazyArtifacts", "Libdl"]
+git-tree-sha1 = "72dc3cf284559eb8f53aa593fe62cb33f83ed0c0"
 uuid = "856f044c-d86e-5d09-b602-aeab76dc8ba7"
-version = "2023.2.0+0"
+version = "2024.0.0+0"
 
 [[deps.Markdown]]
 deps = ["Base64"]
@@ -926,9 +926,9 @@ version = "1.10.0"
 
 [[deps.Preferences]]
 deps = ["TOML"]
-git-tree-sha1 = "00805cd429dcb4870060ff49ef443486c262e38e"
+git-tree-sha1 = "9306f6085165d270f7e3db02af26a400d580f5c6"
 uuid = "21216c6a-2e73-6563-6e65-726566657250"
-version = "1.4.1"
+version = "1.4.3"
 
 [[deps.Printf]]
 deps = ["Unicode"]
