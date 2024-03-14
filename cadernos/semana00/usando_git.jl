@@ -163,11 +163,38 @@ bigbreak = html"""
 <br>
 """;
 
+# ╔═╡ 4d303641-0299-44d7-ba74-6daea0026b09
+md"""
+# Como usar o GitHub
+
+Agora vamos ver como criar um repositório no Github.
+"""
+
+# ╔═╡ 2c456900-047d-432c-a62a-87f8eeaba8d5
+md"""
+##### Requisitos
+
+Para seguir essa introdução você vai precisar de:
+* Criar uma conta no [github.com](github.com). Adicione algumas linhas para o seu perfil e uma foto!
+
+* Para usuários Windows & MacOS, vocês podem baixar o programa [GitHub Desktop](https://desktop.github.com/), uma interface gráfica para lidar com repositório git que pode ser mais fácil para quem não está acostumado com a linha de comando. Usuários Linux podem usar diretamente a linha de comando ou o programa de janela (um pouco mais avançado) [GitKraken](https://www.gitkraken.com/). Há ainda muitas outras opções disponíveis para a sua distribuição.
+
+* Um editor de texto. Se você ainda não escolheu um editor de textos ou ainda está usado programas como  Notepad, gedit or Notepad++, _sugerimos fortemente o [VS Code](https://code.visualstudio.com/)_. Ele é um editor de código aberto, de fácil uso, com várias funcionalidades e possibilidades de expansão. Ele pode parecer complicado no início, mas é relativamente fácil de usar e pode ser estendido gradualmente. Ele tem também ótimas funcionalidades para quem programa, sendo capaz de "entender" o seu código e lhe auxiliar em tarefas típicas de programação. Hoje em dia ele também tem um assistente de programação baseado em IA chamado CoPilot que é gratuido para alunos da Unicamp.
+"""
+
+# ╔═╡ dc112303-061e-4e53-8f58-cf9ea0f556f1
+md"""
+> Agora vamos criar o repositório ao vivo.
+"""
+
+# ╔═╡ d400d538-4f73-4490-ad68-aedbb57cd70f
+
+
 # ╔═╡ e3fe649e-2733-455a-897d-d4d2d70b9dc6
 md"""
 # Uma primeira contribuição _documentação_
 
-Vamos tentar ver como é o fluxo de colaboração em projetos de código aberto. Uma das melhores maneiras de fazer isso inicialmente é tentar contribuir para melhorar a _documentação_ de um projeto. No nosso exemplo de hoje vamos usar o próprio repositório do curso e vamos corrigir esse texto aqui. Lembrem-se, o código dos cadernos e listas de nosso curso estão no [site da disciplina no Github](https://github.com/pjssilva/LabCompSci).
+Vamos tentar ver como é o fluxo de colaboração em projetos de código aberto. Uma das melhores maneiras de fazer isso inicialmente é tentar contribuir para melhorar a _documentação_ de um projeto. No nosso exemplo de hoje vamos usar o próprio repositório do curso e vamos corrigir essssssssssssse tttttttttexxxxxxxxxxxxxto aaaaaaaaaaaaaqqqqqqqqqqqui. Lembrem-se, o código dos cadernos e listas de nosso curso estão no [site da disciplina no Github](https://github.com/pjssilva/LabCompSci).
 
 O Github, além de fornecer o repositório para o código, também possui outras facilidades como um sistema para lidar com [requisições](https://github.com/pjssilva/LabCompSci/issues) — e para aceitar contribuições de terceiros - chamadas de [_Pull Request_](https://github.com/pjssilva/LabCompSci/pulls). Vamos fazer agora o nosso primeiro _Pull Request_!
 """
@@ -188,6 +215,11 @@ md"""
 > Dica (para mim - para usar outro usuário): `export GIT_SSH_COMMAND='ssh -i private_key_file -o PasswordAuthentication=no'`
 """
 
+# ╔═╡ b83ade3d-6f8d-4ac8-9255-956d0a348416
+md"""
+Como um exemplo de um caso real de _pull request_ no mundo real podemos analisar esse feito para  `JuliaLang/julia`: [github.com/JuliaLang/julia/pull/40596](https://github.com/JuliaLang/julia/pull/40596). A mudança no código não é o importante nesse momento. Para nós é interessante ver a comunicação que ocorreu entre as partes envolvidas.
+"""
+
 # ╔═╡ bbb59b45-de20-41c1-b5dd-079fc51655f2
 md"""
 ##  Após o _Pull Request_
@@ -197,43 +229,13 @@ Submeter o _pull request_ é recompensador, mas não é o último passo. Após a
 Isso é possível porque um _pull request_ não é estático - você pode fazer novas modificações e atualizá-lo. Lembre-se que um PR é de uma _bifurcação para outra_. Você pode alterar seu PR simplesmente alterando a sua ramificação e subindo o resultado para o Github.
 """
 
-# ╔═╡ b83ade3d-6f8d-4ac8-9255-956d0a348416
-md"""
-Como um exemplo de um caso real de _pull request_ no mundo real podemos analisar esse feito para  `JuliaLang/julia`: [github.com/JuliaLang/julia/pull/40596](https://github.com/JuliaLang/julia/pull/40596). A mudança no código não é o importante nesse momento. Para nós é interessante ver a comunicação que ocorreu entre as partes envolvidas.
-"""
-
-# ╔═╡ 4d303641-0299-44d7-ba74-6daea0026b09
-md"""
-# Como usar o GitHub
-
-Agora vamos ver como criar um repositório no Github.
-"""
-
-# ╔═╡ 2c456900-047d-432c-a62a-87f8eeaba8d5
-md"""
-##### Requisitos
-
-Para seguir essa introdução você vai precisar de:
-* Criar uma conta no [github.com](github.com). Adicione algumas linhas para o seu perfil e uma foto!
-* Para usuários Windows & MacOS, vocês podem baixar o programa [GitHub Desktop](https://desktop.github.com/), uma interface gráfica para lidar com repositório git que pode ser mais fácil para quem não está acostumado com a linha de comando. Usuários Linux podem usar diretamente a linha de comando ou o programa de janela (um pouco mais avançado) [GitKraken](https://www.gitkraken.com/). Há ainda muitas outras opções disponíveis para a sua distribuição.
-* Um editor de texto. Se você ainda não escolheu um editor de textos ou ainda está usado programas como  Notepad, gedit or Notepad++, nós sugerimos fortemente o [VS Code](https://code.visualstudio.com/). Ele é um editor de código aberto, de fácil uso que tem várias funcionalidades e possibilidades de expansão. _Ele pode parece complicado no início, mas é relativamente fácil de usar e pode ser estendido gradualmente. Ele tem também ótimas funcionalidades para quem programa, sendo capaz de "entender" o se código e lhe auxiliar em tarefas típicas de programação._
-"""
-
-# ╔═╡ dc112303-061e-4e53-8f58-cf9ea0f556f1
-md"""
-> Agora vamos criar o repositório ao vivo.
-"""
-
-# ╔═╡ d400d538-4f73-4490-ad68-aedbb57cd70f
-
-
 # ╔═╡ 67cf205a-3d89-4cd9-ab5e-febc85ea8af1
 md"""
 ## ⛑ Problemas com o Git!
 
 Em algum momento você vai enfrentar _problemas com o git_. Ele ao detectar problemas, como conflitos de versões, não toma atitudes sozinhos. Ele para e pede intervenção manual. O caso mais comum é 
 
-#### `🤐 conflito de mesclagem`
+#### `🤐 conflito de mesclagem`.
 
 Isso quer dizer que alguém modificou um arquivo que você também modificou, nesse caso você deve usar ferramentas para ver as diferenças e escolher a melhor solução. O git pode tentar fazer automaticamente a mescla se as mudanças ocorreram em posições diferentes do código (mas tome cuidado com isso, lembre que mudanças em um local do código pode gerar consequências em outros locais). Mas certamente você terá que intervir se as mudanças ocorrerem na mesma região. Uma boa ferramenta para isso é o `meld`, ele também é útil para você ver as mudanças que você fez na versão antes do último _commit_. O VS Code também tem boas ferramentas para isso.
 """
@@ -269,9 +271,6 @@ Clone the repository novamente e copie os arquivos modificados de volta no local
 Obs: antes de copiar os seus arquivos modificados pode ser interessante criar uma ramificação, um _branch_, para as modificações.
 """
 
-# ╔═╡ a7df39f0-0e97-4fff-9202-cfc629b68f46
-bigbreak
-
 # ╔═╡ aeafbdbb-4aeb-452e-a21b-d2c8ec48c64e
 md"""
 ### Testes
@@ -304,7 +303,7 @@ Você pode executar os testes de um pacote de Julia abrindo o REPL e executando:
 ```julia
 julia> ]
 
-(v1.6) pkg> test Example
+(v1.10) pkg> test Example
 ```
 Como já mencionamos, vários projetos usam _automatização do github_ para executar os testes em um servidor após cada mudança e você pode ver os resultados online. Uma aplicação importante dessa execução automática de testes é verificar se um _pull request_ não quebrou algo. Ou seja, testes robustos facilitam a cooperação porque permitem verificar a cada instante que o código está em um estado razoável, sem problemas aparentes.
 
@@ -485,9 +484,9 @@ vocabulary(x) = grid(stackrows((
 
 # ╔═╡ a98993b9-a5c0-4260-b96e-2655c472ccba
 [
-	"fetch" => md"Torna o seui git local ciente de modificações que ocorreram online. Faça isso sempre!",
+	"fetch" => md"Torna o seu git local ciente de modificações que ocorreram online. Faça isso sempre!",
 	"pull" => md"Pegue as mudanças remotas e incorpore à sua cópia local. Isso vai sincronizar as cópias. Faça isso sempre!",
-	"commit" => md"Cria uma coleção de arquivos modificados que estão prontos para serem enviados ao _remote_.",
+	"stage/commit" => md"Cria uma coleção de arquivos modificados que estão prontos para serem enviados ao _remote_.",
 	"push" => md"Publique os `commit`s locais para o _remote_.",
 	] |> vocabulary
 
@@ -545,7 +544,7 @@ md"""
 > 
 > Como mencionei antes, algumas pessoas _primeiro_ escrevem testes que começam falhando e depois escrevem o código que irá resolver de fato o problema. À medida que o código é escrito ele é continuamente testado até que todos as verificações retornem verde. Essa pode ser uma forma efetiva e agradável de programar.
 > 
-> De fato, se você fez as listas, você já está acostumado com esse conceito. Muitos exercícios possuíam testes específicos e o seu objetivo é, pelo menos, escrever código capaz de passar nesses testes simples.
+> De fato, quando você fizer as listas, você irá se deparar várias vezes essa abordagem. Muitos exercícios possuem testes específicos e o seu objetivo é, no mínimo, escrever código capaz de passar nesses testes simples.
 """ |> aside
 
 # ╔═╡ 00000000-0000-0000-0000-000000000001
@@ -565,267 +564,271 @@ PlutoUI = "~0.7.58"
 PLUTO_MANIFEST_TOML_CONTENTS = """
 # This file is machine-generated - editing it directly is not advised
 
-[[AbstractPlutoDingetjes]]
+julia_version = "1.10.2"
+manifest_format = "2.0"
+project_hash = "ab59edaf731ee671d6a84507f1dccb93f54c76c4"
+
+[[deps.AbstractPlutoDingetjes]]
 deps = ["Pkg"]
 git-tree-sha1 = "0f748c81756f2e5e6854298f11ad8b2dfae6911a"
 uuid = "6e696c72-6542-2067-7265-42206c756150"
 version = "1.3.0"
 
-[[ArgTools]]
+[[deps.ArgTools]]
 uuid = "0dad84c5-d112-42e6-8d28-ef12dabb789f"
 version = "1.1.1"
 
-[[Artifacts]]
+[[deps.Artifacts]]
 uuid = "56f22d72-fd6d-98f1-02f0-08ddc0907c33"
 
-[[Base64]]
+[[deps.Base64]]
 uuid = "2a0f44e3-6c83-55bd-87e4-b1978d98bd5f"
 
-[[ColorTypes]]
+[[deps.ColorTypes]]
 deps = ["FixedPointNumbers", "Random"]
 git-tree-sha1 = "eb7f0f8307f71fac7c606984ea5fb2817275d6e4"
 uuid = "3da002f7-5984-5a60-b8a6-cbb66c0b333f"
 version = "0.11.4"
 
-[[CompilerSupportLibraries_jll]]
+[[deps.CompilerSupportLibraries_jll]]
 deps = ["Artifacts", "Libdl"]
 uuid = "e66e0078-7015-5450-92f7-15fbd957f2ae"
 version = "1.1.0+0"
 
-[[Dates]]
+[[deps.Dates]]
 deps = ["Printf"]
 uuid = "ade2ca70-3891-5945-98fb-dc099432e06a"
 
-[[Downloads]]
+[[deps.Downloads]]
 deps = ["ArgTools", "FileWatching", "LibCURL", "NetworkOptions"]
 uuid = "f43a241f-c20a-4ad4-852c-f6b1247861c6"
 version = "1.6.0"
 
-[[FileWatching]]
+[[deps.FileWatching]]
 uuid = "7b1f6079-737a-58dc-b8bc-7a2ca5c1b5ee"
 
-[[FixedPointNumbers]]
+[[deps.FixedPointNumbers]]
 deps = ["Statistics"]
 git-tree-sha1 = "335bfdceacc84c5cdf16aadc768aa5ddfc5383cc"
 uuid = "53c48c17-4a7d-5ca2-90c5-79b7896eea93"
 version = "0.8.4"
 
-[[Hyperscript]]
+[[deps.Hyperscript]]
 deps = ["Test"]
 git-tree-sha1 = "179267cfa5e712760cd43dcae385d7ea90cc25a4"
 uuid = "47d2ed2b-36de-50cf-bf87-49c2cf4b8b91"
 version = "0.0.5"
 
-[[HypertextLiteral]]
+[[deps.HypertextLiteral]]
 deps = ["Tricks"]
 git-tree-sha1 = "7134810b1afce04bbc1045ca1985fbe81ce17653"
 uuid = "ac1192a8-f4b3-4bfe-ba22-af5b92cd3ab2"
 version = "0.9.5"
 
-[[IOCapture]]
+[[deps.IOCapture]]
 deps = ["Logging", "Random"]
 git-tree-sha1 = "8b72179abc660bfab5e28472e019392b97d0985c"
 uuid = "b5f81e59-6552-4d32-b1f0-c071b021bf89"
 version = "0.2.4"
 
-[[InteractiveUtils]]
+[[deps.InteractiveUtils]]
 deps = ["Markdown"]
 uuid = "b77e0a4c-d291-57a0-90e8-8db25a27a240"
 
-[[JSON]]
+[[deps.JSON]]
 deps = ["Dates", "Mmap", "Parsers", "Unicode"]
 git-tree-sha1 = "31e996f0a15c7b280ba9f76636b3ff9e2ae58c9a"
 uuid = "682c06a0-de6a-54ab-a142-c8b1cf79cde6"
 version = "0.21.4"
 
-[[LibCURL]]
+[[deps.LibCURL]]
 deps = ["LibCURL_jll", "MozillaCACerts_jll"]
 uuid = "b27032c2-a3e7-50c8-80cd-2d36dbcbfd21"
 version = "0.6.4"
 
-[[LibCURL_jll]]
+[[deps.LibCURL_jll]]
 deps = ["Artifacts", "LibSSH2_jll", "Libdl", "MbedTLS_jll", "Zlib_jll", "nghttp2_jll"]
 uuid = "deac9b47-8bc7-5906-a0fe-35ac56dc84c0"
 version = "8.4.0+0"
 
-[[LibGit2]]
+[[deps.LibGit2]]
 deps = ["Base64", "LibGit2_jll", "NetworkOptions", "Printf", "SHA"]
 uuid = "76f85450-5226-5b5a-8eaa-529ad045b433"
 
-[[LibGit2_jll]]
+[[deps.LibGit2_jll]]
 deps = ["Artifacts", "LibSSH2_jll", "Libdl", "MbedTLS_jll"]
 uuid = "e37daf67-58a4-590a-8e99-b0245dd2ffc5"
 version = "1.6.4+0"
 
-[[LibSSH2_jll]]
+[[deps.LibSSH2_jll]]
 deps = ["Artifacts", "Libdl", "MbedTLS_jll"]
 uuid = "29816b5a-b9ab-546f-933c-edad1886dfa8"
 version = "1.11.0+1"
 
-[[Libdl]]
+[[deps.Libdl]]
 uuid = "8f399da3-3557-5675-b5ff-fb832c97cbdb"
 
-[[LinearAlgebra]]
+[[deps.LinearAlgebra]]
 deps = ["Libdl", "OpenBLAS_jll", "libblastrampoline_jll"]
 uuid = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
 
-[[Logging]]
+[[deps.Logging]]
 uuid = "56ddb016-857b-54e1-b83d-db4d58db5568"
 
-[[MIMEs]]
+[[deps.MIMEs]]
 git-tree-sha1 = "65f28ad4b594aebe22157d6fac869786a255b7eb"
 uuid = "6c6e2e6c-3030-632d-7369-2d6c69616d65"
 version = "0.1.4"
 
-[[Markdown]]
+[[deps.Markdown]]
 deps = ["Base64"]
 uuid = "d6f4376e-aef5-505a-96c1-9c027394607a"
 
-[[MbedTLS_jll]]
+[[deps.MbedTLS_jll]]
 deps = ["Artifacts", "Libdl"]
 uuid = "c8ffd9c3-330d-5841-b78e-0817d7145fa1"
 version = "2.28.2+1"
 
-[[Mmap]]
+[[deps.Mmap]]
 uuid = "a63ad114-7e13-5084-954f-fe012c677804"
 
-[[MozillaCACerts_jll]]
+[[deps.MozillaCACerts_jll]]
 uuid = "14a3606d-f60d-562e-9121-12d972cd8159"
 version = "2023.1.10"
 
-[[NetworkOptions]]
+[[deps.NetworkOptions]]
 uuid = "ca575930-c2e3-43a9-ace4-1e988b2c1908"
 version = "1.2.0"
 
-[[OpenBLAS_jll]]
+[[deps.OpenBLAS_jll]]
 deps = ["Artifacts", "CompilerSupportLibraries_jll", "Libdl"]
 uuid = "4536629a-c528-5b80-bd46-f80d51c5b363"
 version = "0.3.23+4"
 
-[[Parsers]]
+[[deps.Parsers]]
 deps = ["Dates", "PrecompileTools", "UUIDs"]
 git-tree-sha1 = "8489905bcdbcfac64d1daa51ca07c0d8f0283821"
 uuid = "69de0a69-1ddd-5017-9359-2bf0b02dc9f0"
 version = "2.8.1"
 
-[[Pkg]]
+[[deps.Pkg]]
 deps = ["Artifacts", "Dates", "Downloads", "FileWatching", "LibGit2", "Libdl", "Logging", "Markdown", "Printf", "REPL", "Random", "SHA", "Serialization", "TOML", "Tar", "UUIDs", "p7zip_jll"]
 uuid = "44cfe95a-1eb2-52ea-b672-e2afdf69b78f"
 version = "1.10.0"
 
-[[PlutoTest]]
+[[deps.PlutoTest]]
 deps = ["HypertextLiteral", "InteractiveUtils", "Markdown", "Test"]
 git-tree-sha1 = "17aa9b81106e661cffa1c4c36c17ee1c50a86eda"
 uuid = "cb4044da-4d16-4ffa-a6a3-8cad7f73ebdc"
 version = "0.2.2"
 
-[[PlutoUI]]
+[[deps.PlutoUI]]
 deps = ["AbstractPlutoDingetjes", "Base64", "ColorTypes", "Dates", "FixedPointNumbers", "Hyperscript", "HypertextLiteral", "IOCapture", "InteractiveUtils", "JSON", "Logging", "MIMEs", "Markdown", "Random", "Reexport", "URIs", "UUIDs"]
 git-tree-sha1 = "71a22244e352aa8c5f0f2adde4150f62368a3f2e"
 uuid = "7f904dfe-b85e-4ff6-b463-dae2292396a8"
 version = "0.7.58"
 
-[[PrecompileTools]]
+[[deps.PrecompileTools]]
 deps = ["Preferences"]
 git-tree-sha1 = "5aa36f7049a63a1528fe8f7c3f2113413ffd4e1f"
 uuid = "aea7be01-6a6a-4083-8856-8a6e6704d82a"
 version = "1.2.1"
 
-[[Preferences]]
+[[deps.Preferences]]
 deps = ["TOML"]
 git-tree-sha1 = "9306f6085165d270f7e3db02af26a400d580f5c6"
 uuid = "21216c6a-2e73-6563-6e65-726566657250"
 version = "1.4.3"
 
-[[Printf]]
+[[deps.Printf]]
 deps = ["Unicode"]
 uuid = "de0858da-6303-5e67-8744-51eddeeeb8d7"
 
-[[REPL]]
+[[deps.REPL]]
 deps = ["InteractiveUtils", "Markdown", "Sockets", "Unicode"]
 uuid = "3fa0cd96-eef1-5676-8a61-b3b8758bbffb"
 
-[[Random]]
+[[deps.Random]]
 deps = ["SHA"]
 uuid = "9a3f8284-a2c9-5f02-9a11-845980a1fd5c"
 
-[[Reexport]]
+[[deps.Reexport]]
 git-tree-sha1 = "45e428421666073eab6f2da5c9d310d99bb12f9b"
 uuid = "189a3867-3050-52da-a836-e630ba90ab69"
 version = "1.2.2"
 
-[[SHA]]
+[[deps.SHA]]
 uuid = "ea8e919c-243c-51af-8825-aaa63cd721ce"
 version = "0.7.0"
 
-[[Serialization]]
+[[deps.Serialization]]
 uuid = "9e88b42a-f829-5b0c-bbe9-9e923198166b"
 
-[[Sockets]]
+[[deps.Sockets]]
 uuid = "6462fe0b-24de-5631-8697-dd941f90decc"
 
-[[SparseArrays]]
+[[deps.SparseArrays]]
 deps = ["Libdl", "LinearAlgebra", "Random", "Serialization", "SuiteSparse_jll"]
 uuid = "2f01184e-e22b-5df5-ae63-d93ebab69eaf"
 version = "1.10.0"
 
-[[Statistics]]
+[[deps.Statistics]]
 deps = ["LinearAlgebra", "SparseArrays"]
 uuid = "10745b16-79ce-11e8-11f9-7d13ad32a3b2"
 version = "1.10.0"
 
-[[SuiteSparse_jll]]
+[[deps.SuiteSparse_jll]]
 deps = ["Artifacts", "Libdl", "libblastrampoline_jll"]
 uuid = "bea87d4a-7f5b-5778-9afe-8cc45184846c"
 version = "7.2.1+1"
 
-[[TOML]]
+[[deps.TOML]]
 deps = ["Dates"]
 uuid = "fa267f1f-6049-4f14-aa54-33bafae1ed76"
 version = "1.0.3"
 
-[[Tar]]
+[[deps.Tar]]
 deps = ["ArgTools", "SHA"]
 uuid = "a4e569a6-e804-4fa4-b0f3-eef7a1d5b13e"
 version = "1.10.0"
 
-[[Test]]
+[[deps.Test]]
 deps = ["InteractiveUtils", "Logging", "Random", "Serialization"]
 uuid = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
 
-[[Tricks]]
+[[deps.Tricks]]
 git-tree-sha1 = "eae1bb484cd63b36999ee58be2de6c178105112f"
 uuid = "410a4b4d-49e4-4fbc-ab6d-cb71b17b3775"
 version = "0.1.8"
 
-[[URIs]]
+[[deps.URIs]]
 git-tree-sha1 = "67db6cc7b3821e19ebe75791a9dd19c9b1188f2b"
 uuid = "5c2747f8-b7ea-4ff2-ba2e-563bfd36b1d4"
 version = "1.5.1"
 
-[[UUIDs]]
+[[deps.UUIDs]]
 deps = ["Random", "SHA"]
 uuid = "cf7118a7-6976-5b1a-9a39-7adc72f591a4"
 
-[[Unicode]]
+[[deps.Unicode]]
 uuid = "4ec0a83e-493e-50e2-b9ac-8f72acf5a8f5"
 
-[[Zlib_jll]]
+[[deps.Zlib_jll]]
 deps = ["Libdl"]
 uuid = "83775a58-1f1d-513f-b197-d71354ab007a"
 version = "1.2.13+1"
 
-[[libblastrampoline_jll]]
+[[deps.libblastrampoline_jll]]
 deps = ["Artifacts", "Libdl"]
 uuid = "8e850b90-86db-534c-a0d3-1478176c7d93"
 version = "5.8.0+1"
 
-[[nghttp2_jll]]
+[[deps.nghttp2_jll]]
 deps = ["Artifacts", "Libdl"]
 uuid = "8e850ede-7688-5339-a07c-302acd2aaf8d"
 version = "1.52.0+1"
 
-[[p7zip_jll]]
+[[deps.p7zip_jll]]
 deps = ["Artifacts", "Libdl"]
 uuid = "3f19e933-33d8-53b3-aaab-bd5110c3b7a0"
 version = "17.4.0+2"
@@ -865,23 +868,22 @@ version = "17.4.0+2"
 # ╟─a0a97cd2-838c-4a2c-9233-969b3274764c
 # ╟─0faa4042-42f5-4c74-9270-fbf2205920ca
 # ╟─167cbd94-851f-4147-9b9d-9b46c7959785
-# ╟─e3fe649e-2733-455a-897d-d4d2d70b9dc6
-# ╟─2dd5d359-eb44-4696-bc83-f257eff95618
-# ╟─3229f0aa-54d1-43f4-a6aa-cf212620ae13
-# ╟─bbb59b45-de20-41c1-b5dd-079fc51655f2
 # ╟─7af9e69c-2b81-4a90-861c-ed737a4a9ec4
-# ╟─b83ade3d-6f8d-4ac8-9255-956d0a348416
 # ╟─4d303641-0299-44d7-ba74-6daea0026b09
 # ╟─2c456900-047d-432c-a62a-87f8eeaba8d5
 # ╟─dc112303-061e-4e53-8f58-cf9ea0f556f1
 # ╟─b2e49cd5-49d5-4ac7-a3ae-9820a97720fb
 # ╟─d400d538-4f73-4490-ad68-aedbb57cd70f
 # ╟─a98993b9-a5c0-4260-b96e-2655c472ccba
+# ╟─e3fe649e-2733-455a-897d-d4d2d70b9dc6
+# ╟─2dd5d359-eb44-4696-bc83-f257eff95618
+# ╟─3229f0aa-54d1-43f4-a6aa-cf212620ae13
+# ╟─b83ade3d-6f8d-4ac8-9255-956d0a348416
+# ╟─bbb59b45-de20-41c1-b5dd-079fc51655f2
 # ╟─67cf205a-3d89-4cd9-ab5e-febc85ea8af1
 # ╟─c4442667-072a-4e17-94a4-104a8ec33bd0
 # ╟─d8c5273f-7ebc-4399-b893-36f742162938
 # ╟─cc1149de-4895-48aa-8335-6dcc78d882c9
-# ╟─a7df39f0-0e97-4fff-9202-cfc629b68f46
 # ╟─aeafbdbb-4aeb-452e-a21b-d2c8ec48c64e
 # ╠═40f9fe4d-ddae-4bdb-aee2-7999e288931a
 # ╠═f7425775-55aa-4e46-a11f-7d981a4cfacc
