@@ -1026,7 +1026,7 @@ Aqui você pode ver o resultado dos filtros na imagem da câmera. Se você não 
 # ╔═╡ 87dabfd2-461e-4769-ad0f-132cb2370b88
 md"""
 $(bigbreak)
-### Escreva seu próprio filtro
+### Escreva seu próprio filtro (opcional)
 
 Pense em uma manipulação diferente que você gostaria de fazer na imagem e escreva o seu próprio filtro.
 """
