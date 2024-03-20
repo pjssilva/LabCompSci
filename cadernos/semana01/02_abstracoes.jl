@@ -144,7 +144,7 @@ md"""
 begin
     oneimage = load(
         download(
-            "https://gallery.yopriceville.com/var/albums/Free-Clipart-Pictures/Decorative-Numbers/Cute_Number_One_PNG_Clipart_Image.png?m=1437447301",
+            "https://gallery.yopriceville.com/var/resizes/Free-Clipart-Pictures/Decorative-Numbers/Cute_Number_One_PNG_Clipart_Image.png?m=1507172102",
         ),
     )
     rocket = load(
