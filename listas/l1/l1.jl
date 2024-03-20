@@ -1,5 +1,5 @@
 ### A Pluto.jl notebook ###
-# v0.19.40
+# v0.19.39
 
 using Markdown
 using InteractiveUtils
@@ -342,9 +342,6 @@ md"""
 _Ao final dessa lista você pode capturar uma imagem com a sua webcam e ver o resultado de todas as suas funções aplicada a essa nova foto!_
 """
 
-# ╔═╡ 62e2899f-5eac-410b-9060-5ccf1334622e
-# Parei aqui!!!!!!
-
 # ╔═╡ 63e8d636-ee0b-11ea-173d-bd3327347d55
 function invert(color::AbstractRGB)
     # seu código aqui!
@@ -374,7 +371,7 @@ apolo_inverted = missing # replace `missing` with your code!
 
 # ╔═╡ 55b138b7-19fb-4da1-9eb1-1e8304528251
 md"""
-_Ao final desse caderno você poderá ver os seus filtros aplicados a imagem qeu capturou com a webcam!_
+_Ao final desse caderno você poderá ver os seus filtros aplicados à imagem que capturou com a webcam!_
 """
 
 # ╔═╡ f68d4a36-ee07-11ea-0832-0360530f102e
@@ -411,7 +408,7 @@ end
 # ╔═╡ b2329e4c-6204-453e-8998-2414b869b808
 function double(x::Vector)
 
-    return [x..., x...]
+    return vcat(x, x)
 end
 
 # ╔═╡ 23fcd65f-0182-41f3-80ec-d85b05136c47
@@ -1310,7 +1307,7 @@ noisify(cam_image, 0.5)
 custom_filter(cam_image)
 
 # ╔═╡ 83eb9ca0-ed68-11ea-0bc5-99a09c68f867
-md"_Lista 1, version 9_"
+md"_Lista 1, version 10_"
 
 # ╔═╡ 00000000-0000-0000-0000-000000000001
 PLUTO_PROJECT_TOML_CONTENTS = """
@@ -2391,7 +2388,6 @@ version = "17.4.0+2"
 # ╠═5be9b144-ee0d-11ea-2a8d-8775de265a1d
 # ╟─4d0158d0-ee0d-11ea-17c3-c169d4284acb
 # ╟─5f6635b4-63ed-4a62-969c-bd4084a8202f
-# ╠═62e2899f-5eac-410b-9060-5ccf1334622e
 # ╟─f6cc03a0-ee07-11ea-17d8-013991514d42
 # ╠═63e8d636-ee0b-11ea-173d-bd3327347d55
 # ╟─80a4cb23-49c9-4446-a3ec-b2203128dc27
