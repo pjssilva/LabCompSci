@@ -14,14 +14,27 @@ Obs: These instructions were inspired by other [instructions to create a Pluto
 server from Maximilian
 Koehler](https://www.maximiliankoehler.de/posts/pluto-server/).
 
-## Steps to install the server
+## Steps to install the server with conda
 
 1. Create users for each student. You may also want to create a common group for
    these students. For example, you can create the group `lcs` and the students'
    users are named `lcsXX` where `XX` is a double-digit integer. You also need a
    way to send the users their credentials (username and password).
 
-1. To avoid each user installing packages in Julia you may create a user that
+1. Create a separate conda environment for jupyterhub, believe this is good
+   practice. As root, do
+   ```bash
+   conda create --yes --name jupyterhub python=3.11
+   conda activate jupyterhub
+   ```
+
+1. **Optional**. I will want the same server to be used for Python, so I
+   need to install extra packages from Anaconda. 
+   ```bash
+   conda install --yes anaconda
+   ```
+
+2. To avoid each user installing packages in Julia you may create a user that
    will install a common package set. The trick is that this user should have a
    dir where only he can write and all can read where he will install the files.
    When needed it should set
@@ -40,12 +53,12 @@ Koehler](https://www.maximiliankoehler.de/posts/pluto-server/).
    (in the right version). Otherwise, they will be able to install their own
    files.
 
-1. I am assuming that conda will be used. So first install JuliaHub using
+3. Now first install JupyterHaub using
    ```bash
-   conda install jupyter jupyterhub jupyter-server-proxy
+   conda install --yes jupyter jupyterhub jupyter-server-proxy
    pip install git+https://github.com/fonsp/pluto-on-jupyterlab.git
    ```
-1. Depois disso, já dá para testar o servidor rodando `jupyterhub`. Ele aceitará
+4. Depois disso, já dá para testar o servidor rodando `jupyterhub`. Ele aceitará
    conxeões na port 8000 a partir de um browser. Note que você preisa se logar
    para acessar o servidor e a autenticação é feita usando as credenciais da
    máquna.

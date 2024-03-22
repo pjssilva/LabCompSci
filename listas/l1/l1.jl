@@ -1,5 +1,5 @@
 ### A Pluto.jl notebook ###
-# v0.19.39
+# v0.19.40
 
 using Markdown
 using InteractiveUtils
@@ -68,7 +68,7 @@ example_vector = [0.5, 0.4, 0.3, 0.2, 0.1, 0.0, 0.7, 0.0, 0.7, 0.9]
 # ╔═╡ ad6a33b0-eded-11ea-324c-cfabfd658b56
 md"""
 #### Exercício 1.1
-👉 Escreva uma função que cria um vetor de `Float64` chamado `random_vect` de comprimento 10 usando a função `rand`. Você pode olhar a definição dessa função usando o sistema de ajuda do Pluto.
+👉 Escreva uma função que cria um vetor de `Float64` chamado `random_vect` de comprimento 10 usando a função pré-definida `rand`. Você pode olhar a definição de `rand` usando o sistema de ajuda do Pluto.
 """
 
 # ╔═╡ f51333a6-eded-11ea-34e6-bfbb3a69bcb0
@@ -101,7 +101,7 @@ my_sum([1, 2, 3])
 
 # ╔═╡ cf738088-eded-11ea-2915-61735c2aa990
 md"#### Exercício 1.3
-👉 Use sua função `my_sum` para escrever uma função `mean`, que calcula a média (aritmética) de um vetor de números."
+👉 Use sua `my_sum` para escrever uma função `mean`, que calcula a média (aritmética) de um vetor de números."
 
 # ╔═╡ 0ffa8354-edee-11ea-2883-9d5bfea4a236
 function mean(xs)
