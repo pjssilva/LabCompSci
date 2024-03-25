@@ -939,9 +939,9 @@ version = "0.1.36"
 
 [[deps.Adapt]]
 deps = ["LinearAlgebra", "Requires"]
-git-tree-sha1 = "cea4ac3f5b4bc4b3000aa55afb6e5626518948fa"
+git-tree-sha1 = "6a55b747d1812e699320963ffde36f1ebdda4099"
 uuid = "79e6a3ab-5dfb-504d-930d-738a2a938a0e"
-version = "4.0.3"
+version = "4.0.4"
 weakdeps = ["StaticArrays"]
 
     [deps.Adapt.extensions]
@@ -2218,9 +2218,9 @@ uuid = "06e1c1a7-607b-532d-9fad-de7d9aa2abac"
 version = "0.5.0"
 
 [[deps.TranscodingStreams]]
-git-tree-sha1 = "a09c933bebed12501890d8e92946bbab6a1690f1"
+git-tree-sha1 = "14389d51751169994b2e1317d5c72f7dc4f21045"
 uuid = "3bb67fe8-82b1-5028-8e26-92a6c54297fa"
-version = "0.10.5"
+version = "0.10.6"
 weakdeps = ["Random", "Test"]
 
     [deps.TranscodingStreams.extensions]
@@ -2569,7 +2569,7 @@ version = "1.4.1+1"
 # ╟─339ccfca-74b1-11eb-0c35-774da6b189ed
 # ╟─8711c698-7500-11eb-2505-d35a4de169b4
 # ╟─84350cb8-7501-11eb-095e-8f1a7e015f25
-# ╠═91a1bca4-74aa-11eb-3917-1dfd73d0ad9c
+# ╟─91a1bca4-74aa-11eb-3917-1dfd73d0ad9c
 # ╠═8e698bdc-7501-11eb-1d2e-c336ccbde0b0
 # ╠═ab2bc924-7501-11eb-03ba-8dfc1ffe3f36
 # ╟─e11d6300-7501-11eb-239a-135596309d20
