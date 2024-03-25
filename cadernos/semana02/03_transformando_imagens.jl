@@ -21,6 +21,7 @@ end;
 
 # ╔═╡ 86f770fe-74a1-11eb-01f7-5b3ecf057124
 begin
+	using LinearAlgebra
     import PNGFiles
     import ImageIO
     import ImageMagick
@@ -31,11 +32,13 @@ begin
     using OffsetArrays
     using Plots
 	import PlotlyBase
+	import PlotlyKaleido
     using BenchmarkTools
+	import Folds
 end
 
 # ╔═╡ f5c464b6-663a-4c4d-9e93-30e469d3a496
-md"Tradução livre de [`transforming_images.jl`](https://github.com/mitmath/18S191/blob/Spring21/notebooks/week2/transforming_images.jl)"
+md"Tradução livre de [`transforming_images.jl`](https://github.com/mitmath/18S191/blob/Spring21/notebooks/week2/transforming_images.jl) + parte final de bordas"
 
 # ╔═╡ 8d389d80-74a1-11eb-3452-f38eff03483b
 PlutoUI.TableOfContents(aside=true)
@@ -466,7 +469,7 @@ Z[1, -2]
 
 # ╔═╡ 0f765670-7506-11eb-2a37-931b15bb387f
 md"""
-## 2.5 Contínuo vs discreto
+## Contínuo vs discreto
 """
 
 # ╔═╡ 82737d28-7507-11eb-1e39-c7dc12e18882
@@ -486,7 +489,7 @@ Para entender isso, basta pensar na relação entre derivadas e integrais. Se su
 
 # ╔═╡ 60c8db60-7506-11eb-1468-c989809c933a
 md"""
-## 2.6 Respeitando as fronteiras
+## Respeitando as fronteiras
 """
 
 # ╔═╡ 8ed0be60-7506-11eb-2769-5f7da1c66243
@@ -499,6 +502,352 @@ html"""
 <div notthestyle="position: relative; right: 0; top: 0; z-index: 300;"><iframe src="https://www.youtube.com/embed/8rrHTtUzyZA?start=173&end=259" width=400 height=250  frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>
 """
 
+# ╔═╡ 0fd8810a-3c1b-461b-a809-8ffb3bfcbb45
+md"""
+Como ele disse há algumas opções possíveis. Vejamos algumas um pouco mais formalmente, pois vamos implementá-las;
+
+1. Aumentar a imagem, criando bordas falsas, que funcionem como salvaguardas, e aplicar o filtro somentre nos píxeis originais. Essa bordas falsas devem ser preenchidas com valores que façam algum sentido para o resultado ser bom como citado no vídeo. Como dito, uma opção muito natural é preencher as bordas com a cor do píxel mais próximo da imagem original.
+
+1. Ao se tentar aplicar o filtro, calcular os índices que serão necessários e se estiverem fora da imagem, substituir os índices que apontam para fora pelos índices válidos mais próximos. Isso é equivalente às bordas de salvaguarda mas evitando usar memória extra.
+
+1. Ao se tentar aplicar o filtro, calcular os índíces necessários e se algum deles estiver fora da imagem simplesmente devolver o píxel orignal sem alteração. Aqui a postura é que se evita circundar a imagem com bordas falsas e assim a solução natural é devolver o píxel intacto.
+
+Vamos implementar duas rotinas que implementam as duas últimas estratégias para um único pixel.
+"""
+
+# ╔═╡ 33a998e8-3a53-44e5-a353-1ccf3bd2d41f
+md"Obs: antes de começar deixa eu mostrar um comportamento interessante da função `imfilter` da biblioteca `ImageFiltering.jl`. Ela sempre converte os tipos de seus argumentos para a imagem baseada em `Float64`. Para ver isso vamos aplicar os filtros `identity` (que não deveria mudar nada) e `box_blur`  à imagem `apolohead` e verificar os tipos retornados." 
+
+# ╔═╡ 5a1a4ca4-4223-4fe3-99ae-86453295dc52
+typeof(apolohead)
+
+# ╔═╡ bde5ca1c-44d6-446b-857e-bc39cacaea33
+typeof(imfilter(apolohead, identity))
+
+# ╔═╡ 3bb1c9b2-5ca5-46a4-8fcc-c11c5bd79139
+typeof(imfilter(apolohead, box_blur))
+
+# ╔═╡ edf08ce0-f47e-44d0-92c3-216bf187ad09
+md"Como podemos ver parecer que ele sempre converte de `N0f8` para algum tipo de `Float`, possivelmente relacioando com o tipo presente no filtro. Vamos tentar deduzir uma forma de calcular o tipo correto.."
+
+# ╔═╡ 54097a87-1233-4524-a263-4e7dfe0c6897
+# Uses the automatic upcast system of Julia to convert to the right type
+typeof(one(identity[1, 1])*apolohead)
+
+# ╔═╡ 5a1c12be-bc67-4df2-9e69-35e0543d29d8
+# Uses the automatic upcast system of Julia to convert to the right type
+typeof(one(box_blur[1, 1])*apolohead)
+
+# ╔═╡ 121d4880-c68c-44f1-a890-123928dd855b
+typeof(one(box_blur[1, 1])*apolohead[1,1])
+
+# ╔═╡ 2f5afff8-0ead-4840-a42d-5c39a2907b29
+md"Esse tipo de conversão será usada no topo das nossas funções que aplicam filtros para conseguir um resultado comparável a `imfilter` original."
+
+# ╔═╡ 592dab5b-efa2-44b7-a23b-cc5270a4870a
+"""
+    applyfilter1(K, M, i, j, m, n)
+
+Applies filter `M` to `M[i, j]`, assume that `M` is of size `(m, n)`.
+
+If `K` acts on pixels outside `M`, it just returns `M[i, j]`
+"""
+function applyfilter1(K, M, i, j, m, n)
+	# This gets the zero of the correct type
+	res = zero(M[1, 1])
+	@inbounds for indK in CartesianIndices(K)
+		# Compute the respective pixel in the image
+		k, l = indK[1], indK[2]
+		il, jl = i + k, j + l
+		# if it leaves outside the image, abort the operatrion returning
+		# the original pixel
+		if il < 1 || il > m || jl < 1 || jl > n
+			return M[i, j]
+		end
+		# Apply current weight
+		res += K[k, l]*M[il, jl]
+	end
+	return res
+end
+
+# ╔═╡ 7020309a-5eb0-4210-a990-4ec71583d3c9
+md"Using this function we can easily create a first version of imfilter."
+
+# ╔═╡ 0d91923c-13d7-4fd1-b8da-fa549964024f
+function myimfilter1(M, K)
+	# Convert the image to the right type
+	Ml = one(K[0, 0])*M
+	m, n = size(Ml)
+	res = similar(Ml)
+	@inbounds for indM in CartesianIndices(M)
+		res[indM] = applyfilter1(K, Ml, indM[1], indM[2], m, n)
+	end
+	return res
+end
+
+# ╔═╡ f5d57a7c-dabb-4672-8605-69661e9f434d
+blur_kernel = kernelize(box_blur)
+
+# ╔═╡ d56b81af-803b-4306-a24c-17c6c8afe63a
+myimfilter1(apolohead, sel_kernel)
+
+# ╔═╡ 0820f98f-ed3c-460e-822b-7ea5f375ac53
+@benchmark myimfilter1(apolo, blur_kernel)
+
+# ╔═╡ 2a41464f-b666-4ba1-8cc7-fb975b6c62b8
+md"Agora vamos implementar a variante que aplica o filtro de qualquer forma usando o píxel mais próximo."
+
+# ╔═╡ 74526d38-c8f7-4459-a625-882e1cb134b4
+"""
+    applyfilter2(K, M, i, j, m, n)
+
+Applies filter `M` to `M[i, j]`, assume that `M` is of size `(m, n)`.
+
+If `K` acts on pixels outside `M`, it just returns `M[i, j]`
+"""
+function applyfilter2(K, M, i, j, m, n)
+	res = zero(M[1, 1])
+	@inbounds for indK in CartesianIndices(K)
+		# Compute the respective pixel in the image
+		k, l = indK[1], indK[2]
+		il, jl = clamp(i + k, 1, m), clamp(j + l, 1, n)
+		# Apply current weight
+		res += K[k, l]*M[il, jl] 
+	end
+	return res
+end
+
+# ╔═╡ 10e20805-126c-428c-a7a2-d45146140b5b
+function myimfilter2(M, K)
+	# Convert the image to the right type
+	Ml = one(K[0, 0])*M
+	m, n = size(Ml)
+	res = similar(Ml)
+	@inbounds for indM in CartesianIndices(Ml)
+		res[indM] = applyfilter2(K, Ml, indM[1], indM[2], m, n)
+	end
+	return res
+end
+
+# ╔═╡ 6b360a92-e0dd-4cdd-bd39-2cc8b3300b99
+myimfilter2(apolohead, blur_kernel)
+
+# ╔═╡ aac35f1e-88ef-4030-91d8-d6917b766c68
+@benchmark myimfilter2(apolo, blur_kernel)
+
+# ╔═╡ 30880ced-75ea-4e20-acac-d00a0c081f4b
+md"Tem algo estranho aí... O código das duas funções `myimfilter` é quase o mesmo. A única difereça é a função que é aplicada. Mas isso é feio, o ideal é não repetir código. Uma opção melhor é criar uma única função que receba a função a ser aplicada a cada píxel como parâmetro."
+
+# ╔═╡ 1292aa60-c355-4442-a81f-b26039ee1126
+function myimfilter(M, K, apply=applyfilter1)
+	# Convert the image to the right type
+	Ml = one(K[0, 0])*M
+	m, n = size(Ml)
+	res = similar(Ml)
+	for indM in CartesianIndices(Ml)
+		res[indM] = apply(K, Ml, indM[1], indM[2], m, n)
+	end
+	return res
+end
+
+# ╔═╡ 3fb66414-5c29-4e44-96be-db066bc6a763
+@benchmark myimfilter(apolo, blur_kernel)
+
+# ╔═╡ afa47a7b-4c45-4f87-a1cc-ffc92b8f6b69
+@benchmark myimfilter(apolo, blur_kernel, applyfilter2)
+
+# ╔═╡ 19797ee3-08ef-4700-8799-259620a4b154
+md"Esse padrão de _percorrer um iterator aplicando uma função para obter uma versão modificada_ é comum. Isso pode ser feito também por uma compreensão de lista, por exemplo. Esse padrão tem um nome em computação. Ele é conhecido como aplicar um `map`. Julia também tem a rotina map para fazer isso, que deixa explícita esse intenção. Vamos ver uma implementação usando essa função."
+
+# ╔═╡ 059b559a-e4db-4879-a9c5-14790918618b
+function myimfiltermap1(M, K, apply=applyfilter1)
+	Ml = one(K[0, 0])*M
+	m, n = size(Ml)
+	# Using an anonymous function.
+	@inbounds return map(i -> apply(K, Ml, i[1], i[2], m, n), CartesianIndices(Ml))
+end
+
+# ╔═╡ 0cd1a998-521e-4e52-ac08-45bc99640500
+@benchmark myimfiltermap1(apolo, blur_kernel)
+
+# ╔═╡ 12f78a86-6abe-4e28-a6f8-6245f17b334a
+@benchmark myimfiltermap1(apolo, blur_kernel, applyfilter2)
+
+# ╔═╡ 3dfa0f35-a3b8-4964-a7ee-1cdf2c40ce68
+md"Vamos agora comparar com a função da biblioteca `Imagefiltering.jl`"
+
+# ╔═╡ c06b29a7-eeb3-4a85-8efe-c9f43eae7849
+@benchmark imfilter(apolo, blur_kernel)
+
+# ╔═╡ eded09fc-b838-43e2-9b6b-980d80af48b1
+md"""
+Muito mais rápido! Por quê?
+
+## Um introdução ao paralelismo
+
+Primeiro vamos rodar de novo o benchmark da rotina da `ImageFilterig.jl` e verificar quantos processadores estão sendo usado. Vemos que ela usa vários processadores ao mesmo tempo. Isso deve explicar a sua velocidade.
+
+Para verificar isso vamos usar a biblioteca `Folds.jl` essa biblioteca reimplementa funções como `map` e `reduce` para usar múltiplos processadores ou mesmo múltiplos computadores em um cluster.
+"""
+
+# ╔═╡ e6fa4f26-6baa-48bd-a733-e9cc6847ef49
+function myimfiltermap2(M, K, apply=applyfilter1)
+	# Convert the image to the right type
+	Ml = one(K[0, 0])*M
+	m, n = size(Ml)
+	# Using an anonymous function e a único
+	@inbounds return Folds.map(i -> apply(K, Ml, i[1], i[2], m, n), CartesianIndices(Ml))
+end
+
+# ╔═╡ 56ed0197-e311-4ccc-ac4f-634ca6810553
+@benchmark myimfiltermap2(apolo, blur_kernel)
+
+# ╔═╡ 9d39577f-8300-4d71-8f24-6ff4cc798a3b
+@benchmark myimfiltermap2(apolo, blur_kernel)
+
+# ╔═╡ f98f7de4-f509-48c5-a9eb-ebe9eb3b75ff
+md"Melhor, mas ainda mais lento.
+
+Conseguimos chegar razoavelmente perto usando rotinas de alto nível e bibliotecas que permitem aproveitar o paralelismo inerente da operação de aplicar filtros em imagens de forma automática. Vamos tentar uma implementação mais explícita com laços encaixados para evitar algum overhead de chamada de função. Será que faz alguma diferença? Vou tentar adaptar a função mais rápida.
+"
+
+# ╔═╡ b555626b-822c-4695-a0c8-3c3a8eb94dda
+function myimfilter3(M, K)
+	# Convert the image to the right type
+	Ml = one(K[0, 0])*M
+	m, n = size(Ml)
+	res = similar(Ml)
+	for indM in CartesianIndices(Ml)
+		i, j = indM[1], indM[2]
+		res[indM] = 0.0
+	    @inbounds for indK in CartesianIndices(K)
+			# Compute the respective pixel in the image
+			k, l = indK[1], indK[2]
+			il, jl = i + k, j + l
+			# if it leaves outside the image, abort the operatrion returning
+			# the original pixel
+			if il < 1 || il > m || jl < 1 || jl > n
+				res[indM] = Ml[indM]
+				continue
+			end
+			# Apply current weight
+			res[indM] += K[k, l]*Ml[il, jl] 
+		end
+	end
+	return res
+end
+
+# ╔═╡ 7eed1a6a-3d65-4d7a-b6d1-e0e144d75709
+@benchmark myimfilter3(apolo, blur_kernel)
+
+# ╔═╡ 4227f552-aba3-4eba-b725-d1e7dc85a8af
+md"Não parece ter tido grande melhora com respeito à versão sequencial acima. Parece até ser um pouco mais lento. Podemos transformar essa versão em paralela prometendo para a Julia que as tarefas executadas nos laços são independentes e, portanto, podem ser paralilizadas. Para isso vou usar a macro `@threads`. Basta adicioná-las antes do primeiro laço e rodar de novo.
+
+Mais uma vez muito parecido com a versão paralela, só que dessa vez um pouco mais rápida (isso pode variar de uma máquina para outra). Mas veio uma ideia. Olhando para o código, fica claro que ele só descobre que precisa copiar o valor original do píxel quando o filtro sai dos limites dentro do laço mais interno. Mas isso pode ser evitado se nós pré-calcularmos os índices que terão píxeis copiados. A rotina abaixo faz isso." 
+
+# ╔═╡ 66a856c8-ea1d-4c35-8d37-2c548df3696c
+function myimfilter4(M, K)
+	# Convert the image to the right type
+	Ml = one(K[0, 0])*M
+	m, n = size(Ml)
+	
+	# Precomputes the bounds that will induce a pure copy from M
+	Kstart = 1 .+ K.offsets
+	Kend = size(K) .+ K.offsets
+	lowi, upi = max(1, 1 - Kstart[1]), min(m, m - Kend[1])
+	lowj, upj = max(1, 1 - Kstart[2]), min(n, n - Kend[2])
+
+	# Now apply the filter explicitly
+	res = zero(Ml)
+	Threads.@threads for indM in CartesianIndices(M)
+		i, j = indM[1], indM[2]
+		if i < lowi || i > upi || j < lowj || j > upj
+			@inbounds res[i, j] = M[i ,j]
+			continue
+		end
+		for inds in CartesianIndices(K)
+			k, w = inds[1], inds[2]
+			@inbounds res[i, j] += K[k, w]*Ml[i + k, j + w]
+		end
+	end
+	return res
+end
+
+# ╔═╡ d6178507-de1b-4e67-9bbc-40cb3854199d
+@benchmark myimfilter4(apolohead, blur_kernel)
+
+# ╔═╡ e3d9f172-522b-4a2e-b067-aa6450b7d6e9
+md"""
+Bingo! Ficou ainda mais rápido do que a versão da biblioteca! Vamos ver se elas geram o mesmo resultado.
+"""
+
+# ╔═╡ 4ffa5bec-8555-46c7-89c9-2e07a5b0c04d
+res1, res2 = imfilter(apolo, blur_kernel), myimfilter4(apolo, blur_kernel);
+
+# ╔═╡ 312b3d4b-9a50-44f7-8e8f-3ef9dd5c9ac0
+norm(res1 - res2)/norm(res1)
+
+# ╔═╡ bbe8f277-43ac-4333-abad-8dc9a28e43f0
+norm(res1[2:end-1, 2:end-1] - res2[2:end-1, 2:end-1])/norm(res1)
+
+# ╔═╡ e6cf9542-c3b8-46d4-ace9-e00e21070c2f
+md"Vemos que as duas rotinas calculam os mesmos valores nas porções em que o filtro podia ser aplicado sem problemas. Mas há diferenças nas bordas. Será que a biblioteca usa a mesma estratégia que a nossa segunda rotina, repetindo os valores mais próximos fora da borda?"
+
+# ╔═╡ 66e4c242-7c9b-46fd-a36a-d6815c38296f
+res3 = myimfilter(apolo, blur_kernel, applyfilter2);
+
+# ╔═╡ 9639eb79-3ebe-41ab-8512-c3bc9e37122c
+norm(res1 - res3) / norm(res1)
+
+# ╔═╡ 8baebaf5-4216-4d7d-a964-e4ade787fee8
+md"Sim, parece que é isso mesmo. Mas a biblioteca é mais rápida. Talvez porque ela aloque um pouco mais de memória e aplique o filtro sem precisar verificar os limites. Ou seja, use a primeira opção discutida no topo desse caderno que nem chegamos a discutir. Vamos fazer uma implementação dessa abordagem para verificar. Leia a implementação com calma em casa para se convencer que ela está correta."
+
+# ╔═╡ 56330752-59d1-4765-a2c1-f5b73ee13004
+function myimfilter5(M, K)
+	m, n = size(M)
+	
+	# Precomputes the bounds that will induce a pure copy from M
+	Kstart = 1 .+ K.offsets
+	Kend = size(K) .+ K.offsets
+	lowi, upi = 1 + Kstart[1], m + Kend[1]
+	lowj, upj = 1 + Kstart[2], n + Kend[2]
+
+	# Create a copy of M that has the extra copied boundary
+	oneK = one(K[0, 0])
+	elemtype = typeof(oneK*M[1, 1])
+	preOMl = Matrix{elemtype}(undef, upi - lowi + 1, upj - lowj + 1)
+	OMl = OffsetArray(preOMl, lowi:upi, lowj:upj)
+	Threads.@threads for indM in CartesianIndices(OMl)
+		i, j = indM[1], indM[2]
+		il, jl = clamp(i, 1, m), clamp(j, 1, n)
+		@inbounds OMl[indM] = oneK*M[il, jl]
+	end
+
+	# Now apply the filter explicitly
+	res = Matrix{elemtype}(undef, m, n)
+	Threads.@threads for indM in CartesianIndices(res)
+		i, j = indM[1], indM[2]
+		res[indM] = 0 
+		for indK in CartesianIndices(K)
+			k, w = indK[1], indK[2]
+			@inbounds res[indM] += K[indK]*OMl[i + k, j + w]
+		end
+	end
+	return res
+end
+
+# ╔═╡ 62ad7d41-5928-48ec-a4bb-27cf176d263a
+@benchmark myimfilter5(apolo, blur_kernel)
+
+# ╔═╡ e939e881-ac7a-4cbc-a308-f97cdbbcdb40
+res4 = myimfilter5(apolo, blur_kernel);
+
+# ╔═╡ 4e72aeb3-86ae-4f3c-9481-3e59c96ae010
+norm(res4 - res1) / norm(res1)
+
+# ╔═╡ c57da07e-d874-41cd-8910-ec8336db754e
+md"Ufa, tudo muito próximo do `imfilter` original!"
+
 # ╔═╡ 00000000-0000-0000-0000-000000000001
 PLUTO_PROJECT_TOML_CONTENTS = """
 [deps]
@@ -506,13 +855,16 @@ BenchmarkTools = "6e4b80f9-dd63-53aa-95a3-0cdb28fa8baf"
 ColorVectorSpace = "c3611d14-8923-5661-9e6a-0046d554d3a4"
 Colors = "5ae59095-9a9b-59fe-a467-6f913c188581"
 FileIO = "5789e2e9-d7fb-5bc7-8068-2c6fae9b9549"
+Folds = "41a02a25-b8f0-4f67-bc48-60067656b558"
 ImageFiltering = "6a3955dd-da59-5b1f-98d4-e7296123deb5"
 ImageIO = "82e4d734-157c-48bb-816b-45c225c6df19"
 ImageMagick = "6218d12a-5da1-5696-b52f-db25d2ecc6d1"
 ImageShow = "4e3cecfd-b093-5904-9786-8bbb286a6a31"
+LinearAlgebra = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
 OffsetArrays = "6fe1bfb0-de20-5000-8ca7-80f57d26f881"
 PNGFiles = "f57f5aa1-a3ce-4bc8-8ab9-96f992907883"
 PlotlyBase = "a03496cd-edff-5a9b-9e67-9cda94a718b5"
+PlotlyKaleido = "f2990250-8cf9-495f-b13a-cce12b45703c"
 Plots = "91a5bcdd-55d7-5caf-9e0b-520d859cae80"
 PlutoUI = "7f904dfe-b85e-4ff6-b463-dae2292396a8"
 Unitful = "1986cc42-f94f-5a68-af5c-568840ba703d"
@@ -522,6 +874,7 @@ BenchmarkTools = "~1.5.0"
 ColorVectorSpace = "~0.10.0"
 Colors = "~0.12.10"
 FileIO = "~1.16.3"
+Folds = "~0.2.10"
 ImageFiltering = "~0.7.8"
 ImageIO = "~0.6.7"
 ImageMagick = "~1.3.1"
@@ -529,6 +882,7 @@ ImageShow = "~0.3.8"
 OffsetArrays = "~1.13.0"
 PNGFiles = "~0.4.3"
 PlotlyBase = "~0.8.19"
+PlotlyKaleido = "~2.2.4"
 Plots = "~1.40.2"
 PlutoUI = "~0.7.58"
 Unitful = "~1.19.0"
@@ -540,7 +894,7 @@ PLUTO_MANIFEST_TOML_CONTENTS = """
 
 julia_version = "1.10.2"
 manifest_format = "2.0"
-project_hash = "0dc2fa701db40e1bfa0dc52aabf68ae9d015a4ee"
+project_hash = "61c067db5b7bf770870d99dec378b67848284e71"
 
 [[deps.AbstractFFTs]]
 deps = ["LinearAlgebra"]
@@ -562,6 +916,27 @@ git-tree-sha1 = "0f748c81756f2e5e6854298f11ad8b2dfae6911a"
 uuid = "6e696c72-6542-2067-7265-42206c756150"
 version = "1.3.0"
 
+[[deps.Accessors]]
+deps = ["CompositionsBase", "ConstructionBase", "Dates", "InverseFunctions", "LinearAlgebra", "MacroTools", "Markdown", "Test"]
+git-tree-sha1 = "c0d491ef0b135fd7d63cbc6404286bc633329425"
+uuid = "7d9f7c33-5ae7-4f3b-8dc6-eff91059b697"
+version = "0.1.36"
+
+    [deps.Accessors.extensions]
+    AccessorsAxisKeysExt = "AxisKeys"
+    AccessorsIntervalSetsExt = "IntervalSets"
+    AccessorsStaticArraysExt = "StaticArrays"
+    AccessorsStructArraysExt = "StructArrays"
+    AccessorsUnitfulExt = "Unitful"
+
+    [deps.Accessors.weakdeps]
+    AxisKeys = "94b1ba4f-4ee9-5380-92f1-94cde586c3c5"
+    IntervalSets = "8197267c-284f-5f27-9208-e0e47529a953"
+    Requires = "ae029012-a4dd-5104-9daa-d747884805df"
+    StaticArrays = "90137ffa-7385-5640-81b9-e52037218182"
+    StructArrays = "09ab397b-f2b6-538f-b94a-2f83cf4a842a"
+    Unitful = "1986cc42-f94f-5a68-af5c-568840ba703d"
+
 [[deps.Adapt]]
 deps = ["LinearAlgebra", "Requires"]
 git-tree-sha1 = "cea4ac3f5b4bc4b3000aa55afb6e5626518948fa"
@@ -571,6 +946,11 @@ weakdeps = ["StaticArrays"]
 
     [deps.Adapt.extensions]
     AdaptStaticArraysExt = "StaticArrays"
+
+[[deps.ArgCheck]]
+git-tree-sha1 = "a3a402a35a2f7e0b87828ccabbd5ebfbebe356b4"
+uuid = "dce04be8-c92d-5529-be00-80e4d2c0e197"
+version = "2.3.0"
 
 [[deps.ArgTools]]
 uuid = "0dad84c5-d112-42e6-8d28-ef12dabb789f"
@@ -611,8 +991,35 @@ git-tree-sha1 = "16351be62963a67ac4083f748fdb3cca58bfd52f"
 uuid = "39de3d68-74b9-583c-8d2d-e117c070f3a9"
 version = "0.4.7"
 
+[[deps.BangBang]]
+deps = ["Accessors", "Compat", "ConstructionBase", "InitialValues", "LinearAlgebra", "Requires"]
+git-tree-sha1 = "490e739172eb18f762e68dc3b928cad2a077983a"
+uuid = "198e06fe-97b7-11e9-32a5-e1d131e6ad66"
+version = "0.4.1"
+
+    [deps.BangBang.extensions]
+    BangBangChainRulesCoreExt = "ChainRulesCore"
+    BangBangDataFramesExt = "DataFrames"
+    BangBangStaticArraysExt = "StaticArrays"
+    BangBangStructArraysExt = "StructArrays"
+    BangBangTablesExt = "Tables"
+    BangBangTypedTablesExt = "TypedTables"
+
+    [deps.BangBang.weakdeps]
+    ChainRulesCore = "d360d2e6-b24c-11e9-a2a3-2a2ae2dbcce4"
+    DataFrames = "a93c6f00-e57d-5684-b7b6-d8193f3e46c0"
+    StaticArrays = "90137ffa-7385-5640-81b9-e52037218182"
+    StructArrays = "09ab397b-f2b6-538f-b94a-2f83cf4a842a"
+    Tables = "bd369af6-aec1-5ad0-b16a-f7cc5008161c"
+    TypedTables = "9d95f2ec-7b3d-5a63-8d20-e2491e220bb9"
+
 [[deps.Base64]]
 uuid = "2a0f44e3-6c83-55bd-87e4-b1978d98bd5f"
+
+[[deps.Baselet]]
+git-tree-sha1 = "aebf55e6d7795e02ca500a689d326ac979aaf89e"
+uuid = "9718e550-a3fa-408a-8086-8db961cd8217"
+version = "0.1.1"
 
 [[deps.BenchmarkTools]]
 deps = ["JSON", "Logging", "Printf", "Profile", "Statistics", "UUIDs"]
@@ -699,6 +1106,15 @@ deps = ["Artifacts", "Libdl"]
 uuid = "e66e0078-7015-5450-92f7-15fbd957f2ae"
 version = "1.1.0+0"
 
+[[deps.CompositionsBase]]
+git-tree-sha1 = "802bb88cd69dfd1509f6670416bd4434015693ad"
+uuid = "a33af91c-f02d-484b-be07-31d278c5ca2b"
+version = "0.1.2"
+weakdeps = ["InverseFunctions"]
+
+    [deps.CompositionsBase.extensions]
+    CompositionsBaseInverseFunctionsExt = "InverseFunctions"
+
 [[deps.ComputationalResources]]
 git-tree-sha1 = "52cb3ec90e8a8bea0e62e275ba577ad0f74821f7"
 uuid = "ed09eef8-17a6-5b46-8889-db040fac31e3"
@@ -709,6 +1125,17 @@ deps = ["Serialization", "Sockets"]
 git-tree-sha1 = "6cbbd4d241d7e6579ab354737f4dd95ca43946e1"
 uuid = "f0e56b4a-5159-44fe-b623-3e5288b988bb"
 version = "2.4.1"
+
+[[deps.ConstructionBase]]
+deps = ["LinearAlgebra"]
+git-tree-sha1 = "260fd2400ed2dab602a7c15cf10c1933c59930a2"
+uuid = "187b0558-2788-49d3-abe0-74a17ed4e7c9"
+version = "1.5.5"
+weakdeps = ["IntervalSets", "StaticArrays"]
+
+    [deps.ConstructionBase.extensions]
+    ConstructionBaseIntervalSetsExt = "IntervalSets"
+    ConstructionBaseStaticArraysExt = "StaticArrays"
 
 [[deps.Contour]]
 git-tree-sha1 = "d05d9e7b7aedff4e5b51a029dced05cfb6125781"
@@ -731,9 +1158,19 @@ git-tree-sha1 = "0f4b5d62a88d8f59003e43c25a8a90de9eb76317"
 uuid = "864edb3b-99cc-5e75-8d2d-829cb0a9cfe8"
 version = "0.18.18"
 
+[[deps.DataValueInterfaces]]
+git-tree-sha1 = "bfc1187b79289637fa0ef6d4436ebdfe6905cbd6"
+uuid = "e2d170a0-9d28-54be-80f0-106bbe20a464"
+version = "1.0.0"
+
 [[deps.Dates]]
 deps = ["Printf"]
 uuid = "ade2ca70-3891-5945-98fb-dc099432e06a"
+
+[[deps.DefineSingletons]]
+git-tree-sha1 = "0fba8b706d0178b4dc7fd44a96a92382c9065c2c"
+uuid = "244e2a9f-e319-4986-a169-4d1fe445cd52"
+version = "0.1.2"
 
 [[deps.DelimitedFiles]]
 deps = ["Mmap"]
@@ -773,6 +1210,11 @@ deps = ["Artifacts", "JLLWrappers", "Libdl"]
 git-tree-sha1 = "4558ab818dcceaab612d1bb8c19cee87eda2b83c"
 uuid = "2e619515-83b5-522b-bb60-26c02a35a201"
 version = "2.5.0+0"
+
+[[deps.ExternalDocstrings]]
+git-tree-sha1 = "1224740fc4d07c989949e1c1b508ebd49a65a5f6"
+uuid = "e189563c-0753-4f5e-ad5c-be4293c83fb4"
+version = "0.1.1"
 
 [[deps.FFMPEG]]
 deps = ["FFMPEG_jll"]
@@ -819,6 +1261,18 @@ git-tree-sha1 = "335bfdceacc84c5cdf16aadc768aa5ddfc5383cc"
 uuid = "53c48c17-4a7d-5ca2-90c5-79b7896eea93"
 version = "0.8.4"
 
+[[deps.Folds]]
+deps = ["Accessors", "BangBang", "Baselet", "DefineSingletons", "Distributed", "ExternalDocstrings", "InitialValues", "MicroCollections", "Referenceables", "Requires", "Test", "ThreadedScans", "Transducers"]
+git-tree-sha1 = "7eb4bc88d8295e387a667fd43d67c157ddee76cf"
+uuid = "41a02a25-b8f0-4f67-bc48-60067656b558"
+version = "0.2.10"
+
+    [deps.Folds.extensions]
+    FoldsOnlineStatsBaseExt = "OnlineStatsBase"
+
+    [deps.Folds.weakdeps]
+    OnlineStatsBase = "925886fa-5bf2-5e8e-b522-a9147a512338"
+
 [[deps.Fontconfig_jll]]
 deps = ["Artifacts", "Bzip2_jll", "Expat_jll", "FreeType2_jll", "JLLWrappers", "Libdl", "Libuuid_jll", "Pkg", "Zlib_jll"]
 git-tree-sha1 = "21efd19106a55620a188615da6d3d06cd7f6ee03"
@@ -841,6 +1295,10 @@ deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg"]
 git-tree-sha1 = "aa31987c2ba8704e23c6c8ba8a4f769d5d7e4f91"
 uuid = "559328eb-81f9-559d-9380-de523a88c83c"
 version = "1.0.10+0"
+
+[[deps.Future]]
+deps = ["Random"]
+uuid = "9fa8497b-333b-5362-9e8d-4d0656e87820"
 
 [[deps.GLFW_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Libglvnd_jll", "Xorg_libXcursor_jll", "Xorg_libXi_jll", "Xorg_libXinerama_jll", "Xorg_libXrandr_jll"]
@@ -994,6 +1452,11 @@ git-tree-sha1 = "ea8031dea4aff6bd41f1df8f2fdfb25b33626381"
 uuid = "d25df0c9-e2be-5dd7-82c8-3ad0b3e990b9"
 version = "0.1.4"
 
+[[deps.InitialValues]]
+git-tree-sha1 = "4da0f88e9a39111c2fa3add390ab15f3a44f3ca3"
+uuid = "22cec73e-a1b8-11e9-2c92-598750a2cf9c"
+version = "0.3.1"
+
 [[deps.IntelOpenMP_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl"]
 git-tree-sha1 = "5fdf2fe6724d8caabf43b557b84ce53f3b7e2f6b"
@@ -1015,6 +1478,16 @@ weakdeps = ["Random", "RecipesBase", "Statistics"]
     IntervalSetsRecipesBaseExt = "RecipesBase"
     IntervalSetsStatisticsExt = "Statistics"
 
+[[deps.InverseFunctions]]
+deps = ["Test"]
+git-tree-sha1 = "896385798a8d49a255c398bd49162062e4a4c435"
+uuid = "3587e190-3f89-42d0-90ee-14403ec27112"
+version = "0.1.13"
+weakdeps = ["Dates"]
+
+    [deps.InverseFunctions.extensions]
+    DatesExt = "Dates"
+
 [[deps.IrrationalConstants]]
 git-tree-sha1 = "630b497eafcc20001bba38a4651b327dcfc491d2"
 uuid = "92d709cd-6900-40b7-9082-c6be49f344b6"
@@ -1024,6 +1497,11 @@ version = "0.2.2"
 git-tree-sha1 = "42d5f897009e7ff2cf88db414a389e5ed1bdd023"
 uuid = "c8e1da08-722c-5040-9ed9-7db0dc04731e"
 version = "1.10.0"
+
+[[deps.IteratorInterfaceExtensions]]
+git-tree-sha1 = "a3f24677c21f5bbe9d2a714f95dcd58337fb2856"
+uuid = "82899510-4779-5014-852e-03e436cf321d"
+version = "1.0.0"
 
 [[deps.JLFzf]]
 deps = ["Pipe", "REPL", "Random", "fzf_jll"]
@@ -1054,6 +1532,12 @@ deps = ["Artifacts", "JLLWrappers", "Libdl"]
 git-tree-sha1 = "3336abae9a713d2210bb57ab484b1e065edd7d23"
 uuid = "aacddb02-875f-59d6-b918-886e6ef4fbf8"
 version = "3.0.2+0"
+
+[[deps.Kaleido_jll]]
+deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg"]
+git-tree-sha1 = "43032da5832754f58d14a91ffbe86d5f176acda9"
+uuid = "f7e6163d-2fa5-5f23-b69c-1db539e41963"
+version = "0.2.1+0"
 
 [[deps.LAME_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg"]
@@ -1259,6 +1743,12 @@ git-tree-sha1 = "c13304c81eec1ed3af7fc20e75fb6b26092a1102"
 uuid = "442fdcdd-2543-5da2-b0f3-8c86c306513e"
 version = "0.3.2"
 
+[[deps.MicroCollections]]
+deps = ["Accessors", "BangBang", "InitialValues"]
+git-tree-sha1 = "44d32db644e84c75dab479f1bc15ee76a1a3618f"
+uuid = "128add7d-3638-4c79-886c-908ea0c25c34"
+version = "0.2.0"
+
 [[deps.Missings]]
 deps = ["DataAPI"]
 git-tree-sha1 = "f66bdc5de519e8f8ae43bdc598782d35a25b1272"
@@ -1429,6 +1919,12 @@ git-tree-sha1 = "56baf69781fc5e61607c3e46227ab17f7040ffa2"
 uuid = "a03496cd-edff-5a9b-9e67-9cda94a718b5"
 version = "0.8.19"
 
+[[deps.PlotlyKaleido]]
+deps = ["Base64", "JSON", "Kaleido_jll"]
+git-tree-sha1 = "2650cd8fb83f73394996d507b3411a7316f6f184"
+uuid = "f2990250-8cf9-495f-b13a-cce12b45703c"
+version = "2.2.4"
+
 [[deps.Plots]]
 deps = ["Base64", "Contour", "Dates", "Downloads", "FFMPEG", "FixedPointNumbers", "GR", "JLFzf", "JSON", "LaTeXStrings", "Latexify", "LinearAlgebra", "Measures", "NaNMath", "Pkg", "PlotThemes", "PlotUtils", "PrecompileTools", "Printf", "REPL", "Random", "RecipesBase", "RecipesPipeline", "Reexport", "RelocatableFolders", "Requires", "Scratch", "Showoff", "SparseArrays", "Statistics", "StatsBase", "UUIDs", "UnicodeFun", "UnitfulLatexify", "Unzip"]
 git-tree-sha1 = "3c403c6590dd93b36752634115e20137e79ab4df"
@@ -1523,6 +2019,12 @@ git-tree-sha1 = "45e428421666073eab6f2da5c9d310d99bb12f9b"
 uuid = "189a3867-3050-52da-a836-e630ba90ab69"
 version = "1.2.2"
 
+[[deps.Referenceables]]
+deps = ["Adapt"]
+git-tree-sha1 = "02d31ad62838181c1a3a5fd23a1ce5914a643601"
+uuid = "42d2dcc6-99eb-4e98-b66c-637b7d73030e"
+version = "0.1.3"
+
 [[deps.RelocatableFolders]]
 deps = ["SHA", "Scratch"]
 git-tree-sha1 = "ffdaf70d81cf6ff22c2b6e733c900c3321cab864"
@@ -1547,6 +2049,12 @@ version = "1.2.1"
 
 [[deps.Serialization]]
 uuid = "9e88b42a-f829-5b0c-bbe9-9e923198166b"
+
+[[deps.Setfield]]
+deps = ["ConstructionBase", "Future", "MacroTools", "StaticArraysCore"]
+git-tree-sha1 = "e2cc6d8c88613c05e1defb55170bf5ff211fbeac"
+uuid = "efcf1570-3423-57d1-acb7-fd33fddbac46"
+version = "1.1.1"
 
 [[deps.Showoff]]
 deps = ["Dates", "Grisu"]
@@ -1584,6 +2092,12 @@ version = "1.2.1"
 deps = ["Libdl", "LinearAlgebra", "Random", "Serialization", "SuiteSparse_jll"]
 uuid = "2f01184e-e22b-5df5-ae63-d93ebab69eaf"
 version = "1.10.0"
+
+[[deps.SplittablesBase]]
+deps = ["Setfield", "Test"]
+git-tree-sha1 = "e08a62abc517eb79667d0a29dc08a3b589516bb5"
+uuid = "171d559e-b47b-412a-8079-5efa626c420e"
+version = "0.1.15"
 
 [[deps.StackViews]]
 deps = ["OffsetArrays"]
@@ -1658,6 +2172,18 @@ deps = ["Dates"]
 uuid = "fa267f1f-6049-4f14-aa54-33bafae1ed76"
 version = "1.0.3"
 
+[[deps.TableTraits]]
+deps = ["IteratorInterfaceExtensions"]
+git-tree-sha1 = "c06b2f539df1c6efa794486abfb6ed2022561a39"
+uuid = "3783bdb8-4a98-5b6b-af9a-565f29a5fe9c"
+version = "1.0.1"
+
+[[deps.Tables]]
+deps = ["DataAPI", "DataValueInterfaces", "IteratorInterfaceExtensions", "LinearAlgebra", "OrderedCollections", "TableTraits"]
+git-tree-sha1 = "cb76cf677714c095e535e3501ac7954732aeea2d"
+uuid = "bd369af6-aec1-5ad0-b16a-f7cc5008161c"
+version = "1.11.1"
+
 [[deps.Tar]]
 deps = ["ArgTools", "SHA"]
 uuid = "a4e569a6-e804-4fa4-b0f3-eef7a1d5b13e"
@@ -1672,6 +2198,12 @@ version = "0.1.1"
 [[deps.Test]]
 deps = ["InteractiveUtils", "Logging", "Random", "Serialization"]
 uuid = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
+
+[[deps.ThreadedScans]]
+deps = ["ArgCheck"]
+git-tree-sha1 = "ca1ba3000289eacba571aaa4efcefb642e7a1de6"
+uuid = "24d252fe-5d94-4a69-83ea-56a14333d47a"
+version = "0.1.0"
 
 [[deps.TiffImages]]
 deps = ["ColorTypes", "DataStructures", "DocStringExtensions", "FileIO", "FixedPointNumbers", "IndirectArrays", "Inflate", "Mmap", "OffsetArrays", "PkgVersion", "ProgressMeter", "UUIDs"]
@@ -1693,6 +2225,26 @@ weakdeps = ["Random", "Test"]
 
     [deps.TranscodingStreams.extensions]
     TestExt = ["Test", "Random"]
+
+[[deps.Transducers]]
+deps = ["Accessors", "Adapt", "ArgCheck", "BangBang", "Baselet", "CompositionsBase", "ConstructionBase", "DefineSingletons", "Distributed", "InitialValues", "Logging", "Markdown", "MicroCollections", "Requires", "SplittablesBase", "Tables"]
+git-tree-sha1 = "47e516e2eabd0cf1304cd67839d9a85d52dd659d"
+uuid = "28d57a85-8fef-5791-bfe6-a80928e7c999"
+version = "0.4.81"
+
+    [deps.Transducers.extensions]
+    TransducersBlockArraysExt = "BlockArrays"
+    TransducersDataFramesExt = "DataFrames"
+    TransducersLazyArraysExt = "LazyArrays"
+    TransducersOnlineStatsBaseExt = "OnlineStatsBase"
+    TransducersReferenceablesExt = "Referenceables"
+
+    [deps.Transducers.weakdeps]
+    BlockArrays = "8e7c35d0-a365-5155-bbbb-fb81a777f24e"
+    DataFrames = "a93c6f00-e57d-5684-b7b6-d8193f3e46c0"
+    LazyArrays = "5078a376-72f3-5289-bfd5-ec5146d43c02"
+    OnlineStatsBase = "925886fa-5bf2-5e8e-b522-a9147a512338"
+    Referenceables = "42d2dcc6-99eb-4e98-b66c-637b7d73030e"
 
 [[deps.Tricks]]
 git-tree-sha1 = "eae1bb484cd63b36999ee58be2de6c178105112f"
@@ -1727,14 +2279,11 @@ deps = ["Dates", "LinearAlgebra", "Random"]
 git-tree-sha1 = "3c793be6df9dd77a0cf49d80984ef9ff996948fa"
 uuid = "1986cc42-f94f-5a68-af5c-568840ba703d"
 version = "1.19.0"
+weakdeps = ["ConstructionBase", "InverseFunctions"]
 
     [deps.Unitful.extensions]
     ConstructionBaseUnitfulExt = "ConstructionBase"
     InverseFunctionsUnitfulExt = "InverseFunctions"
-
-    [deps.Unitful.weakdeps]
-    ConstructionBase = "187b0558-2788-49d3-abe0-74a17ed4e7c9"
-    InverseFunctions = "3587e190-3f89-42d0-90ee-14403ec27112"
 
 [[deps.UnitfulLatexify]]
 deps = ["LaTeXStrings", "Latexify", "Unitful"]
@@ -2037,7 +2586,7 @@ version = "1.4.1+1"
 # ╠═c9dcac48-74aa-11eb-31a6-23357180c1c8
 # ╟─30b1c1f0-7504-11eb-1be7-a9463caea809
 # ╟─1fe70e38-751b-11eb-25b8-c741e1726613
-# ╠═215291ec-74a2-11eb-3476-0dab43fd5a5e
+# ╟─215291ec-74a2-11eb-3476-0dab43fd5a5e
 # ╟─61db42c6-7505-11eb-1ddf-05e906234572
 # ╟─cdd4cffc-74b1-11eb-1aa4-e333cb8601d1
 # ╟─7489a570-74a3-11eb-1d0b-09d41604ffe1
@@ -2048,7 +2597,7 @@ version = "1.4.1+1"
 # ╠═54448d18-7528-11eb-209a-9717affa0d02
 # ╟─acbc563a-7528-11eb-3c38-75a5b66c9241
 # ╠═995392ee-752a-11eb-3394-0de331e24f40
-# ╠═d22903d6-7529-11eb-2dcd-132cd27104c2
+# ╟─d22903d6-7529-11eb-2dcd-132cd27104c2
 # ╟─275bf7ac-74b3-11eb-32c3-cda1e4f1f8c2
 # ╟─c6e340ee-751e-11eb-3ca7-69595b3693b7
 # ╟─844ed844-74b3-11eb-2ee1-2de664b26bc6
@@ -2070,12 +2619,66 @@ version = "1.4.1+1"
 # ╠═08642690-7523-11eb-00dd-63d4cf6513dc
 # ╠═deac4cf2-7523-11eb-2832-7b9d31389b08
 # ╠═32887dfa-7524-11eb-35cd-051eff594fa9
-# ╟─0f765670-7506-11eb-2a37-931b15bb387f
+# ╠═0f765670-7506-11eb-2a37-931b15bb387f
 # ╟─82737d28-7507-11eb-1e39-c7dc12e18882
 # ╟─40d538b2-7506-11eb-116b-efeb16b3478d
 # ╟─df060a88-7507-11eb-034b-5346d67a0e0d
 # ╟─60c8db60-7506-11eb-1468-c989809c933a
 # ╟─8ed0be60-7506-11eb-2769-5f7da1c66243
 # ╟─b9d636da-7506-11eb-37a6-3116d47b2787
+# ╟─0fd8810a-3c1b-461b-a809-8ffb3bfcbb45
+# ╟─33a998e8-3a53-44e5-a353-1ccf3bd2d41f
+# ╠═5a1a4ca4-4223-4fe3-99ae-86453295dc52
+# ╠═bde5ca1c-44d6-446b-857e-bc39cacaea33
+# ╠═3bb1c9b2-5ca5-46a4-8fcc-c11c5bd79139
+# ╟─edf08ce0-f47e-44d0-92c3-216bf187ad09
+# ╠═54097a87-1233-4524-a263-4e7dfe0c6897
+# ╠═5a1c12be-bc67-4df2-9e69-35e0543d29d8
+# ╠═121d4880-c68c-44f1-a890-123928dd855b
+# ╟─2f5afff8-0ead-4840-a42d-5c39a2907b29
+# ╠═592dab5b-efa2-44b7-a23b-cc5270a4870a
+# ╟─7020309a-5eb0-4210-a990-4ec71583d3c9
+# ╠═0d91923c-13d7-4fd1-b8da-fa549964024f
+# ╠═f5d57a7c-dabb-4672-8605-69661e9f434d
+# ╠═d56b81af-803b-4306-a24c-17c6c8afe63a
+# ╠═0820f98f-ed3c-460e-822b-7ea5f375ac53
+# ╟─2a41464f-b666-4ba1-8cc7-fb975b6c62b8
+# ╠═74526d38-c8f7-4459-a625-882e1cb134b4
+# ╠═10e20805-126c-428c-a7a2-d45146140b5b
+# ╠═6b360a92-e0dd-4cdd-bd39-2cc8b3300b99
+# ╠═aac35f1e-88ef-4030-91d8-d6917b766c68
+# ╟─30880ced-75ea-4e20-acac-d00a0c081f4b
+# ╠═1292aa60-c355-4442-a81f-b26039ee1126
+# ╠═3fb66414-5c29-4e44-96be-db066bc6a763
+# ╠═afa47a7b-4c45-4f87-a1cc-ffc92b8f6b69
+# ╟─19797ee3-08ef-4700-8799-259620a4b154
+# ╠═059b559a-e4db-4879-a9c5-14790918618b
+# ╠═0cd1a998-521e-4e52-ac08-45bc99640500
+# ╠═12f78a86-6abe-4e28-a6f8-6245f17b334a
+# ╟─3dfa0f35-a3b8-4964-a7ee-1cdf2c40ce68
+# ╠═c06b29a7-eeb3-4a85-8efe-c9f43eae7849
+# ╟─eded09fc-b838-43e2-9b6b-980d80af48b1
+# ╠═e6fa4f26-6baa-48bd-a733-e9cc6847ef49
+# ╠═56ed0197-e311-4ccc-ac4f-634ca6810553
+# ╠═9d39577f-8300-4d71-8f24-6ff4cc798a3b
+# ╟─f98f7de4-f509-48c5-a9eb-ebe9eb3b75ff
+# ╠═b555626b-822c-4695-a0c8-3c3a8eb94dda
+# ╠═7eed1a6a-3d65-4d7a-b6d1-e0e144d75709
+# ╟─4227f552-aba3-4eba-b725-d1e7dc85a8af
+# ╠═66a856c8-ea1d-4c35-8d37-2c548df3696c
+# ╠═d6178507-de1b-4e67-9bbc-40cb3854199d
+# ╟─e3d9f172-522b-4a2e-b067-aa6450b7d6e9
+# ╠═4ffa5bec-8555-46c7-89c9-2e07a5b0c04d
+# ╠═312b3d4b-9a50-44f7-8e8f-3ef9dd5c9ac0
+# ╠═bbe8f277-43ac-4333-abad-8dc9a28e43f0
+# ╟─e6cf9542-c3b8-46d4-ace9-e00e21070c2f
+# ╠═66e4c242-7c9b-46fd-a36a-d6815c38296f
+# ╠═9639eb79-3ebe-41ab-8512-c3bc9e37122c
+# ╟─8baebaf5-4216-4d7d-a964-e4ade787fee8
+# ╠═56330752-59d1-4765-a2c1-f5b73ee13004
+# ╠═62ad7d41-5928-48ec-a4bb-27cf176d263a
+# ╠═e939e881-ac7a-4cbc-a308-f97cdbbcdb40
+# ╠═4e72aeb3-86ae-4f3c-9481-3e59c96ae010
+# ╟─c57da07e-d874-41cd-8910-ec8336db754e
 # ╟─00000000-0000-0000-0000-000000000001
 # ╟─00000000-0000-0000-0000-000000000002
