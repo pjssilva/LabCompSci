@@ -467,7 +467,7 @@ quantize(apolo)
 # ╔═╡ f6d6c71a-ee07-11ea-2b63-d759af80707b
 md"""
 #### Exercício 3.5
-👉 Escreva uma função `noisify(x::Number, s)` que adiciona uma intensidade aleatória $s$ ao valor $x$, i.e. ela adiciona um valor aletório entre $-s$ e $+s$ a $x$. Se, após a soma, o valor cair fora do intervalo $[0, 1]$ você deve truncar a resposta para caber nessa faixa. (Julia tem uma função já pronta chamada `clamp` que vai lhe ajudar nisso, ou você pode escrever a sua função do zero.)
+👉 Escreva uma função `noisify(x::Number, s)` que adiciona uma intensidade aleatória $s$ ao valor $x$, i.e. ela adiciona um valor aleatório uniforme no intervalo $[-s, +s]$ a $x$. Se, após a soma, o valor cair fora do intervalo $[0, 1]$ você deve truncar a resposta para caber nessa faixa. (Julia tem uma função já pronta chamada `clamp` que vai lhe ajudar nisso, ou você pode escrever a sua função do zero.)
 """
 
 # ╔═╡ f38b198d-39cf-456f-a841-1ba08f206010
