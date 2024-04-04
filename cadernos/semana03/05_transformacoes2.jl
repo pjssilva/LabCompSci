@@ -377,6 +377,9 @@ warp₃(α) = ((x, y),) -> rotate(α * √(x^2 + y^2))([x, y])
 # ╔═╡ a05a2667-ed48-4610-bc4d-bff0317788ef
 md"Vejamos que são todas equivalentes:"
 
+# ╔═╡ 8981cfcb-64a2-4d9e-be8e-b4de0abddfbb
+
+
 # ╔═╡ 2b50dc4e-6549-4640-922d-c1c15bb82d7c
 begin
     test_v = rand(2)
@@ -412,7 +415,7 @@ Já nós, seres humanos, tendemos em misturar os conceitos da função seno e do
 
 ```sin(cos(x))```
 
-mas isso não define a função composta, apenas calcula o seu valor para um argumento em particular.
+mas isso não define a função composta, apenas calcula o seu valor para um argumento em particular (o valor atual de `x`).
 
 Por outro lado, Julia possui um operador para definir novas funções a partir de outras fazendo a composição. E, já que podemos usar caracters Unicode, isso é feito com o operador "bola" (∘), exatemente como na matemática. Ou seja, em Julia se escrevemos
 
@@ -420,7 +423,7 @@ Por outro lado, Julia possui um operador para definir novas funções a partir d
 
 estamos definindo uma nova função que por sua vez pode avaliada em um `x` qualquer, por `(sin∘cos)(x)`. Para conseguir escrever o operador bola use `\circ<TAB>`.
 
-Julia busca encorajar o uso desse operador para gerar comportamento sofisticado, vamos ver mais exemplos durante o curso.
+Julia busca encorajar o uso desse operador para gerar comportamento sofisticado.
 """
 
 # ╔═╡ 4b0e8742-7a70-11eb-1e78-813f6ad005f4
@@ -472,7 +475,7 @@ md"""
 md"""
 - A definição mais intuitiva (geométrica):
 
-   > Os retângulos (formados por linhas da malha) na imagem transformada, [vistos acima](#e0b657ce-7a03-11eb-1f9d-f32168cb5394), sempre se tornam paralelogramas congruentes.
+   > Retângulos congruentes (formados por linhas da malha) na imagem de partida  sempre se tornam paralelogramas congruentes na imagem transformada.
 
 - A definição operacional mais simples (mas sem muita intuição):
 
@@ -645,7 +648,7 @@ end
 
 # ╔═╡ 0957fd9a-7a72-11eb-0566-e93ef32fb626
 md"""
-Observanmos numericamente que as operações `rotate(30)` e `rotate(-30)`, assim como `scale(2)` e `scale(.5)` são inversas entre si. Pensando um pouco isso é muito natural.
+Observamos numericamente que as operações `rotate(30)` e `rotate(-30)`, assim como `scale(2)` e `scale(.5)` são inversas entre si. Pensando um pouco isso é muito natural.
 """
 
 # ╔═╡ c7cc412c-7aa5-11eb-2df1-d3d788047238
@@ -706,12 +709,14 @@ let
 end
 
 # ╔═╡ c2b0a488-7aac-11eb-1d8b-edd6bd23d1fd
-md"""
-``A^{-1}
-=
-\begin{pmatrix} d & -b \\ -c & a  \end{pmatrix} / (ad-bc) \quad
+md""" Fórmula da inversa $2 \times 2$:
+
 ``
-if
+A^{-1}
+=
+\frac{1}{ad - bc}\begin{pmatrix} d & -b \\ -c & a \end{pmatrix} / (ad-bc), \quad
+``
+se
 ``\ A \ =
 \begin{pmatrix} a & b \\ c & d  \end{pmatrix} .
 ``
@@ -2369,6 +2374,7 @@ version = "17.4.0+2"
 # ╠═3d28ce92-6c12-4143-9f53-3634bbc687ce
 # ╠═3460ad26-daeb-4e9c-9c75-1e00e43d592d
 # ╟─a05a2667-ed48-4610-bc4d-bff0317788ef
+# ╠═8981cfcb-64a2-4d9e-be8e-b4de0abddfbb
 # ╠═2b50dc4e-6549-4640-922d-c1c15bb82d7c
 # ╟─46898e66-8d95-43bd-83f6-6806e3c1ead7
 # ╠═069988e7-1262-47b6-b399-a464bdcab21b
