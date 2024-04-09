@@ -30,9 +30,9 @@ end
 # ╔═╡ ac8ff080-ed61-11ea-3650-d9df06123e1f
 md"""
 # **Lista 2** - _convoluções_
-`MS905`, 2º sem. 2022
+`MS513`, 1º sem. 2024
 
-`Data de entrega`: **08/09, 2022 às 23:59**
+`Data de entrega`: **16/04, 2024 às 23:55**
 
 Este caderno contém _verificações ativas das respostas_! Em alguns exercícios você verá uma caixa colorida que roda alguns casos simples de teste e provê retorno imediato para a sua solução. Edite sua solução, execute a célula e verifique se passou na verificação. Note que a verificação feita é apenas superficial. Para a correção serão verificados mais casos e você tem a obrigação de escrever código que funcione adequadamente.
 
@@ -521,7 +521,7 @@ md"""
 #### Exercício 2.4
 👉 Crie um **filtro de detecção de bordas de Sobel**.
 
-Vamos detectar bordas. Para isso é melhor transformar a imagem para uma matriz de números (quando maior o número, mais branco seria a imagem naquela posição). Uma forma simples de fazer isso é usar a função norma, `norm`, aplicando-a pixel-a-pixel. Ela vai calcular um número que é a norma dos valores guardados nos três canais de cores e resulta uma versão razoável da imagem em tons de cinza. Teste! Vamos chamar a imagem depois dessa operação de `PB`.
+Vamos detectar bordas. Para isso é melhor transformar a imagem para uma matriz de números (quando maior o número, mais branco seria a imagem naquela posição). Uma forma simples de fazer isso é usar a função norma, `norm()`, aplicando-a pixel-a-pixel. Ela vai calcular um número que é a norma dos valores guardados nos três canais de cores e resulta uma versão razoável da imagem em tons de cinza. Teste! Vamos chamar a imagem depois dessa operação de `PB`.
 
 De posse da imagem em tons de cinza, vamos passá-la por dois filtros que separadamente detectam bordas na vertical e na horizontal definidos pelos núcleos:
 
@@ -539,7 +539,7 @@ G_y = \begin{bmatrix}
 \end{bmatrix} 
 ```
 
-Inicialmente devemos calcular a convolução de `PB` com esses dois núcleos obtendo `PBX` e `PBY`. Essas matrizes tem informação de borda na horizontal e na vertical, repectivamente. Ou em outras palavras, elas aproximam as derivadas direcionais de PB ma horizontal e vertical.
+Inicialmente devemos calcular a convolução de `PB` com esses dois núcleos obtendo `PBX` e `PBY`. Essas matrizes tem informação de borda na horizontal e na vertical, repectivamente. Ou em outras palavras, elas aproximam as derivadas direcionais de PB na horizontal e vertical.
 
 Agora podemos combinar essas duas imagems calculando magnitude do **gradiente** (o vetor composto pelas derivadas direcionais). Isso pode ser feito definindo
 
