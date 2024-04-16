@@ -6,6 +6,6 @@ PlutoUI = "7f904dfe-b85e-4ff6-b463-dae2292396a8"
 Unicode = "4ec0a83e-493e-50e2-b9ac-8f72acf5a8f5"
 
 [compat]
-Colors = "~0.12.8"
-Compose = "~0.9.2"
-PlutoUI = "~0.7.9"
+Colors = "~0.12.10"
+Compose = "~0.9.5"
+PlutoUI = "~0.7.58"
