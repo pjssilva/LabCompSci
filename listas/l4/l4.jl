@@ -1,5 +1,5 @@
 ### A Pluto.jl notebook ###
-# v0.19.40
+# v0.19.41
 
 using Markdown
 using InteractiveUtils
@@ -156,7 +156,7 @@ md"""
 # **Lista 4**: _Otimização dinâmica_
 `MS513`, 1º sem. 2024
 
-`Data de entrega`: **23/04, 2024**.
+`Data de entrega`: **30/04, 2024**.
 
 Este caderno contém _verificações ativas das respostas_! Em alguns exercícios você verá uma caixa colorida que roda alguns casos simples de teste e provê retorno imediato para a sua solução. Edite sua solução, execute a célula e verifique se passou na verificação. Note que a verificação feita é apenas superficial. Para a correção serão verificados mais casos e você tem a obrigação de escrever código que funcione adequadamente.
 
