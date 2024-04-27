@@ -1,0 +1,10 @@
+[Unit]
+Description=JupyterHub
+After=syslog.target network.target
+
+[Service]
+User=root
+ExecStart=/usr/local/bin/jupyterhub_driver.sh
+
+[Install]
+WantedBy=multi-user.target
