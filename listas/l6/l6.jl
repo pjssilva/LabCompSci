@@ -587,7 +587,7 @@ C_n := \sum_{k=1}^n P_k = my \cdot answer \cdot here
 
 # ╔═╡ fa599248-8c52-11eb-147a-99b5fb75d131
 md"""
-👉 Use a fórmula anterior para encontrar (analiticamente) em qual o subintervalo $n$ um valor dado $r \in [0, 1]$ cai, usando a desigualdade $C_{n} \le r \le C_{n + 1}$.
+👉 Use a fórmula anterior para encontrar (analiticamente) em qual o subintervalo $n$ um valor dado $r \in [0, 1]$ cai, usando a desigualdade $C_{n - 1} \le r \le C_{n}$.
 """
 
 # ╔═╡ 16b4e98c-4ae7-4145-addf-f43a0a96ec82
@@ -975,15 +975,15 @@ bigbreak
 # ╔═╡ a5234680-8b02-11eb-2574-15489d0d49ea
 bigbreak
 
-# ╔═╡ 887a5106-c44a-4437-8c6f-04ad6610738a
-begin
-	fruits = ["🍉"]
-	length(fruits)
-end
-
 # ╔═╡ 2962c6da-feda-4d65-918b-d3b178a18fa0
 begin
 	fruits = ["🍒", "🍐", "🍋"]
+	length(fruits)
+end
+
+# ╔═╡ 887a5106-c44a-4437-8c6f-04ad6610738a
+begin
+	fruits = ["🍉"]
 	length(fruits)
 end
 
@@ -2206,7 +2206,7 @@ version = "1.4.1+1"
 # ╠═e649c914-dd28-4194-9393-4dc8836f3743
 # ╟─fa59099a-8c52-11eb-37a7-291f80ea0406
 # ╠═1ae91530-c77e-4d92-9ad3-c969bc7e1fa8
-# ╠═fa599248-8c52-11eb-147a-99b5fb75d131
+# ╟─fa599248-8c52-11eb-147a-99b5fb75d131
 # ╠═16b4e98c-4ae7-4145-addf-f43a0a96ec82
 # ╟─fa671c06-8c52-11eb-20e0-85e2abb4ecc7
 # ╠═47d56992-8c54-11eb-302a-eb3153978d26
