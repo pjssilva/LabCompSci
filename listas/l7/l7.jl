@@ -295,7 +295,7 @@ md"""
 
 1. Cria $N$ agentes.
 
-2. Executa `sweep!` $T$ vezes. Calcula e armazena o número total de agentes em cada estado a cada passo nos vetores `S_counts`, `I_counts` e `R_counts`.
+2. Executa `sweep!` $T$ vezes. Calcula e armazena o número total de agentes após cada estado a cada passagem (`sweep!`) nos vetores `S_counts`, `I_counts` e `R_counts`. Note que o valor inicial, antes do primeiro `sweep` não deve ser devolvido.
 
 3. Retorna os vetores `S_counts`, `I_counts` e `R_counts` usando uma **tupla nomeada** com chaves `S`, `I` e `R`.
 
