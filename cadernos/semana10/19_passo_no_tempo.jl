@@ -47,7 +47,7 @@ Vamos denominar $N_k$ o número (médio) de lâmpadas que ainda estão funcionan
 
 Nós podemos encontrar a equação para o número $N_{k + 1}$, de lâmpadas que ainda funcionam no início do dia seguinte, estimando quantas lâmpadas devem falhar em um dado dia. Para isso, vamos denotar por $p$ a probabilidade de que cada bulbo, individualmente, falhe em um dia. Por exemplo, se 10% das lâmpadas falham por dia, $p = 0.1$. 
 
-Se inicialmente havia 100 bulbos e 10% falham por dia, ao final do primeiro dia esperamos que falhem 10. Logo, 90 continuarão funcionando. Generalizando, se há $N_k$ lambdas funcionando no início de dia, esperamos que ao final haja $p N_k$ falhas. Desse modo, $N_{k+1} = N_k - p \, N_k$.
+Se inicialmente havia 100 bulbos e 10% falham por dia, ao final do primeiro dia esperamos que falhem 10. Logo, 90 continuarão funcionando. Generalizando, se há $N_k$ lâmpadas funcionando no início de dia, esperamos que ao final haja $p N_k$ falhas. Desse modo, $N_{k+1} = N_k - p \, N_k$.
 
 Esse é um modelo muito simples cuja recorrência conseguimos resolver (déjà vu). A expressão do número de lâmpadas ainda funcionando no início do dia $k + 1$:
 
@@ -153,7 +153,7 @@ Nesse caso, será possível calcular o número $N(t)$ que representa a média do
 
 # ╔═╡ fc6899d3-ea18-487a-add1-20be86ce9c74
 md"""
-Em cálculos aprendemos que
+Em Cálculo aprendemos que
 """
 
 # ╔═╡ 75a60bcf-3f77-49fb-a7ee-db4580aae6f3
@@ -243,7 +243,7 @@ Vemos graficamente que de fato as curvas discretas têm como limite a curva cont
 
 # ╔═╡ ccb35ad7-db20-46fa-abff-a6e88ef999e0
 md"""
-Nesse contexto, $p$ é uma **taxa** (de variação). Ele é uma _probabilidade por unidade de tempo_, ou seja a razão entre probabilidade e tempo. Para recuperar a probabilidade de falha em um intervalo  $\delta t$, nós tivemos que *multiplicar* $p$ por $\delta t$.)
+Nesse contexto, $p$ é uma **taxa** (de variação). Ele é uma _probabilidade por unidade de tempo_, ou seja a razão entre probabilidade e tempo. Para recuperar a probabilidade de falha em um intervalo  $\delta t$, nós tivemos que *multiplicar* $p$ por $\delta t$.
 """
 
 # ╔═╡ d03d9bfc-20ea-49bc-bc7b-df22cc240ffe
@@ -282,14 +282,14 @@ md"""
 
 # ╔═╡ dbdf2812-08f4-11eb-25e7-811522b24627
 md"""
-Vamos começar pensando como ocorre uma infecção que ocorre entre agentes pode ser suscetíveis (S) e infecciosos (I). Uma pessoa suscetível pode se tornar infecciosa quando entra em contato com outra pessoa infecciosa, com alguma probabilidade.
+Vamos começar pensando como uma infecção que ocorre entre agentes em que um é suscetível (S) e o outro infeccioso (I): uma pessoa suscetível pode se tornar infecciosa quando entra em contato com outra pessoa doente (infecciosa), com alguma probabilidade.
 """
 
 # ╔═╡ 238f0716-0903-11eb-1595-df71600f5de7
 md"""
 Vamos chamar $S_t$ e $I_t$ o número de indivíduos suscetíveis e infecciosos no instante $t$, respectivamente. Já $N$ será o número total de pessoas.
 
-Vamos supor, que a cada passo de tempo, cada pessoa infecciosa tem a mesma chance de interagir as outras pessoas (em média). A pessoa será escolhida aleatoriamente da população total de tamanho $N$. Uma nova infecção irá ocorrer apenas se a pessoa escolhida é suscetível, o que ocorre com probabilidade $S_t / N$ _e_ apenas se a oportunidade de infecção for bem sucedida, digamos com probabilidade $b$.
+Vamos supor, que a cada passo de tempo cada indivíduo tem uma iteração e cada tem a mesma chance de interagir as outras pessoas (em média). A pessoa será escolhida aleatoriamente da população total de tamanho $N$. Para cada pessoa infecciosa, uma nova infecção irá ocorrer justamente quando a pessoa com quem ela iterage é suscetível, o que ocorre com probabilidade $S_t / N$ _e_ apenas se a oportunidade de infecção for bem sucedida, digamos com probabilidade $b$.
 
 Dessa forma a mudança que ocorrerá nesse passo tempo (em média) será 
 """
@@ -452,7 +452,7 @@ O método de Euler, como passo de tempo constante, é descrito pela iteração
 
 $$x_{k+1} = x_k + h \, f(x_k)$$
 
-Se a EDO possui várias variáveis, podemos agrupá-las em um vetor e usar 1 _mesma_ ideia, só que no caso vetorial. Ou seja, dada uma EDO vetorial
+Se a EDO possui várias variáveis, podemos agrupá-las em um vetor e usar a _mesma_ ideia, só que no caso vetorial. Ou seja, dada uma EDO vetorial
 
 $$\dot{\mathbf{x}} = \mathbf{f}(\mathbf{x})$$
 
@@ -465,7 +465,7 @@ em que $\mathbf{f}$ representa a função que mapeia o vetor de variáveis no ve
 
 # ╔═╡ 763bbb15-c52e-4159-99b7-f3d17f47d56a
 md"""
-Entretanto, em geral, o método de Euler _não_ é um bom algoritmos para simular a dinâmica de uma equação diferencial. Nós podemos ver isso ao olhar os gráficos no início do nosso caderno: passos discretos constantes não conseguem recuperar uma boa aproximação da curva contínua a não ser como tamanho de passo bem curtos. Esse é o domínio da análise numérica: o estudo de como obter boas aproximações da solução real de uma EDO de forma mais precisa e eficiente.
+Entretanto, em geral, o método de Euler _não_ é um bom algoritmos para simular a dinâmica de uma equação diferencial. Nós podemos ver isso ao analisar os gráficos no início do nosso caderno: passos discretos constantes não conseguem recuperar uma boa aproximação da curva contínua a não ser com tamanhos de passo bem curtos. Esse é o domínio da análise numérica: o estudo de como obter boas aproximações da solução real de uma EDO de forma mais precisa e eficiente.
 
 Julia possui um rico ecossistema de pacotes para resolver EDOs e outros tipos de equações diferenciais usando métodos do estado-da-arte. Veja  [SciML / DifferentialEquations.jl](https://diffeq.sciml.ai/stable/tutorials/ode_example/).
 """
@@ -1618,7 +1618,7 @@ version = "1.4.1+1"
 # ╟─76268535-e232-4e02-97cd-cf9b3ddec256
 # ╟─11e24e1d-39db-4b7e-96db-50458def72af
 # ╟─dbdf2812-08f4-11eb-25e7-811522b24627
-# ╟─238f0716-0903-11eb-1595-df71600f5de7
+# ╠═238f0716-0903-11eb-1595-df71600f5de7
 # ╟─8e771c8a-0903-11eb-1e34-39de4f45412b
 # ╟─fb52c62d-15d3-46a2-8e3d-2de20c68ded4
 # ╟─e83fc5b8-0904-11eb-096b-8da3a1acba12

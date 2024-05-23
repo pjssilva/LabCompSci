@@ -1,5 +1,5 @@
 ### A Pluto.jl notebook ###
-# v0.19.39
+# v0.19.41
 
 using Markdown
 using InteractiveUtils
@@ -386,16 +386,6 @@ function vecinc!(x)
     x .= inc.(x, 1)
 end
 
-# ╔═╡ 99e9a000-6ea0-4139-96fc-95cec4b4998a
-# ╠═╡ disabled = true
-#=╠═╡
-begin
-	x = [1 ,2]
-	vecinc!(x)
-	x
-end
-  ╠═╡ =#
-
 # ╔═╡ 696cde3f-b88b-4ec4-977e-3038b0c21271
 bar(13, 3)
 
@@ -420,12 +410,10 @@ md"# Vetores e matrizes
 * Se você agora dimensiona no momento da criação, poderá se beneficiar do `StaticArrays.jl`
 "
 
-# ╔═╡ 8d6e7a4f-5d7f-4f94-abc1-3113f10c7171
-# Create a vector
-x = [1, 2, 3]
-
 # ╔═╡ 4ab388f8-2281-4a2e-807c-97ae3ac2b9e7
+#=╠═╡
 typeof(x)
+  ╠═╡ =#
 
 # ╔═╡ 47ea0a4c-b824-42df-a590-e89dcd55e22c
 # Create a matrix
@@ -435,7 +423,9 @@ A = [1.0 2.0 3.0;
      7.0 8.0 9.0]
 
 # ╔═╡ ee91ec53-7d30-4c1a-bbdc-7c8eb4990e32
+#=╠═╡
 A*x
+  ╠═╡ =#
 
 # ╔═╡ 6da67a71-420c-4419-8613-0f246d914e8b
 begin
@@ -547,37 +537,36 @@ Também é possível definir novos tipos combinando tipos existentes"
 # ╔═╡ eae70dad-eb70-4f6f-9d24-0ed8b8baa46d
 md"# Tuplas"
 
-# ╔═╡ 48c07054-33ab-4f11-9560-5e27a2e5ff6b
-# ╠═╡ disabled = true
-#=╠═╡
-# Tuples are single list of elements that are immutable
-t = (1, 2, 3)
-  ╠═╡ =#
-
-# ╔═╡ 2d04c4c1-67e6-46cb-bfd1-f3ff6e0819a3
-# The parenthesis are actually optional
-t = 1, 2, 3
-
 # ╔═╡ 4f0ebfe0-bf39-41b6-8945-b9e6ec3450c7
+#=╠═╡
 # You access them with indexes
 t[1], t[3]
+  ╠═╡ =#
 
 # ╔═╡ ac5a8fa5-1647-4216-84a3-6e7234116ae9
+#=╠═╡
 begin
 	# They can be destructured (you did this when receiving multiple output values)
 	first, second, third = t
 	print("First = $first, second = $second, third = $third")
 end
+  ╠═╡ =#
 
 # ╔═╡ f166a4bc-aefa-4b2a-8316-82c7c615bfc3
+#=╠═╡
 # You can convert them to arrays with
 v1 = collect(t)
+  ╠═╡ =#
 
 # ╔═╡ 629ce257-ec35-4921-a673-4a5064ffd5c5
+#=╠═╡
 v2 = [i for i ∈ t]
+  ╠═╡ =#
 
 # ╔═╡ 8731aeaf-a9b9-4542-960a-438c58c1207f
+#=╠═╡
 v3 = [t...]
+  ╠═╡ =#
 
 # ╔═╡ a761dc45-8b46-40cb-998c-22d5435ddbe5
 md"# Tuplas nomeadas
@@ -633,10 +622,12 @@ for e ∈ y
 end
 
 # ╔═╡ a3dfcb00-4ccb-47d5-9050-b980c1e12e8a
+#=╠═╡
 # As in tuples
 for e ∈ t
     print("$e ")
 end
+  ╠═╡ =#
 
 # ╔═╡ 277f923c-6e63-46c9-ba53-b0d6444d21d3
 # As in named tuples
@@ -785,6 +776,35 @@ md"# Atividade
 
 # ╔═╡ a6c2e6be-9646-448c-84f4-ab830e8e0533
 
+
+# ╔═╡ 8d6e7a4f-5d7f-4f94-abc1-3113f10c7171
+#=╠═╡
+# Create a vector
+x = [1, 2, 3]
+  ╠═╡ =#
+
+# ╔═╡ 99e9a000-6ea0-4139-96fc-95cec4b4998a
+# ╠═╡ disabled = true
+#=╠═╡
+begin
+	x = [1 ,2]
+	vecinc!(x)
+	x
+end
+  ╠═╡ =#
+
+# ╔═╡ 2d04c4c1-67e6-46cb-bfd1-f3ff6e0819a3
+#=╠═╡
+# The parenthesis are actually optional
+t = 1, 2, 3
+  ╠═╡ =#
+
+# ╔═╡ 48c07054-33ab-4f11-9560-5e27a2e5ff6b
+# ╠═╡ disabled = true
+#=╠═╡
+# Tuples are single list of elements that are immutable
+t = (1, 2, 3)
+  ╠═╡ =#
 
 # ╔═╡ 00000000-0000-0000-0000-000000000001
 PLUTO_PROJECT_TOML_CONTENTS = """
