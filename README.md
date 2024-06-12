@@ -56,7 +56,7 @@ Médias: Definimos `ME` = "média aritméticas das listas descartando as duas
 piores notas", e `MP` = "média aritmética das provas". A média ao final do
 semestre será `M = 0.7*ME + 0.3*MP`, se `MP >= 5`, caso contrário `M = MP`. Se
 `M >= 5`, o aluno está aprovado. Se `2.0 <= M < 5.0`, o aluno deverá fazer o
-exame no dia **09/07**. A média final será então `max(M, 0.5*M + 0.5*Exame)`. Se
+exame no dia **11/07**. A média final será então `max(M, 0.5*M + 0.5*Exame)`. Se
 `MF >= 5.0`, o aluno estará aprovado.
 
 ### Ementa 
