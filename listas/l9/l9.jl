@@ -561,7 +561,7 @@ does_not_cause_outbreak = CollisionInfectionRecovery(0.5, 0.001)
 # ╔═╡ 20477a78-0a45-11eb-39d7-93918212a8bc
 md"""
 #### Exercise 3.6
-👉 Com os parâmetros do exercício 3.2, execute 50 simulações. Faça os gráficos das várias curvas Plot $S$, $I$ and $R$ em função do tempo para cada simulação (usando transparência!). Essas figuras devem parecer similares às que você viu na lista anterior. Você precisou ajustar `p_infection` e `p_recovery` quando comparado aos valores da lista passada, por quê?
+👉 Com os parâmetros do exercício 3.2, mas aumentando o número de varridas(sweeps) para 10.000, execute 50 simulações. Faça os gráficos das várias curvas Plot $S$, $I$ and $R$ em função do tempo para cada simulação (usando transparência!). Essas figuras devem parecer similares às que você viu na lista anterior. Você precisou ajustar `p_infection` e `p_recovery` quando comparado aos valores da lista passada, por quê?
 """
 
 # ╔═╡ 601f4f54-0a45-11eb-3d6c-6b9ec75c6d4a
@@ -819,7 +819,7 @@ PlutoUI = "~0.7.59"
 PLUTO_MANIFEST_TOML_CONTENTS = """
 # This file is machine-generated - editing it directly is not advised
 
-julia_version = "1.10.3"
+julia_version = "1.10.4"
 manifest_format = "2.0"
 project_hash = "35c103ad1060997c461bd8886a09a0936f5c4c8c"
 

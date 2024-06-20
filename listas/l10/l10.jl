@@ -27,7 +27,7 @@ md"""
 
 # **Lista 10**: _Modelagem climática_
 
-`Data de entrega`: **29/11, 2022**
+`Data de entrega`: **27/06, 2024**
 
 Este caderno contém _verificações ativas das respostas_! Em alguns exercícios você verá uma caixa colorida que roda alguns casos simples de teste e provê retorno imediato para a sua solução. Edite sua solução, execute a célula e verifique se passou na verificação. Note que a verificação feita é apenas superficial. Para a correção serão verificados mais casos e você tem a obrigação de escrever código que funcione adequadamente.
 
