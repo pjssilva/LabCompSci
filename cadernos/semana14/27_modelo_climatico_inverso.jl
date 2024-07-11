@@ -379,6 +379,200 @@ pp = (;
 # ╔═╡ bb4b25e4-0db5-414b-a384-0a27fe7efb66
 gauss_stdev = 30
 
+# ╔═╡ 5c484595-4646-484f-9e75-a4a3b4c2af9b
+function plotclicktracker2(p::Plots.Plot, initial::Dict; draggable::Bool=true)
+
+    # we need to render the plot before its dimensions are available:
+    # plot_render = repr(MIME"image/svg+xml"(),  p)
+    plot_render = repr(MIME"image/svg+xml"(), p)
+
+    # these are the _bounding boxes_ of our plot
+    big = bbox(p.layout)
+    small = plotarea(p[1])
+
+    # the axis limits
+    xl = xlims(p)
+    yl = ylims(p)
+
+    # with this information, we can form the linear transformation from 
+    # screen coordinate -> plot coordinate
+
+    # this is done on the JS side, to avoid one step in the Julia side
+    # we send the linear coefficients:
+    r = (
+        x_offset=xl[1] - (xl[2] - xl[1]) * small.x0[1] / small.a[1],
+        x_scale=(big.a[1] / small.a[1]) * (xl[2] - xl[1]),
+        y_offset=(yl[2] - yl[1]) + (small.x0[2] / small.a[2]) * (yl[2] - yl[1]) + yl[1],
+        y_scale=-(big.a[2] / small.a[2]) * (yl[2] - yl[1]),
+        x_min=xl[1], # TODO: add margin
+        x_max=xl[2],
+        y_min=yl[1],
+        y_max=yl[2],
+    )
+
+    @htl("""<script id="hello">
+
+     const initial = $(initial)
+
+
+     const colors = $(colors_js)
+     const names = $(names_js)
+
+
+     const body = $(HypertextLiteral.JavaScript(PlutoRunner.publish_to_js(plot_render)))
+     const mime = "image/svg+xml"
+
+
+     const knob = (name) => {
+     	const k = html`<margo-knob id=\${name}><margo-knob-label>👈 Move me!</margo-knob-label></margo-knob>`
+     	k.style.backgroundColor = colors[name]
+     	return k
+     }
+
+     const wrapper = this ?? html`
+     	<div>
+     		<img>
+     		\${Object.keys(initial).map(knob)}
+     	</div>
+     `
+     const img = wrapper.firstElementChild
+
+     let url = URL.createObjectURL(new Blob([body], { type: mime }))
+
+     img.type = mime
+     img.src = url
+     img.draggable = false
+
+     const clamp = (x,a,b) => Math.min(Math.max(x, a), b)
+     wrapper.transform = f => [
+     	clamp(f[0] * $(r.x_scale) + $(r.x_offset), $(r.x_min), $(r.x_max)),
+     	clamp(f[1] * $(r.y_scale) + $(r.y_offset), $(r.y_min), $(r.y_max)),
+     ]
+     wrapper.inversetransform = f => [
+     	(f[0] - $(r.x_offset)) / $(r.x_scale),
+     	(f[1] - $(r.y_offset)) / $(r.y_scale),
+     ]
+
+     const set_knob_coord = (k, coord) => {
+     	const svgrect = img.getBoundingClientRect()
+     	const r = wrapper.inversetransform(coord)
+     	k.style.left = `\${r[0] * svgrect.width}px`
+     	k.style.top = `\${r[1] * svgrect.height}px`
+     }
+
+
+     wrapper.fired = false
+
+
+     wrapper.last_render_time = Date.now()
+
+
+     // If running for the first time
+     if(this == null) {
+
+
+     	// will contain the currently dragging HTMLElement
+     	const dragging = { current: undefined }
+
+     	const value = {...initial}
+
+     	Object.defineProperty(wrapper, "value", {
+     		get: () => value,
+     		set: (x) => {
+     			/* console.log("old", value, "new", x)
+     			Object.assign(value, x)
+     			Object.entries(value).forEach(([k,v]) => {
+     				set_knob_coord(
+     					wrapper.querySelector(`margo-knob#\${k}`),
+     					v
+     				)
+     			}) */
+     		},
+     	})
+
+
+     	
+     	
+     	////
+     	// Event listener for pointer move
+
+     	const on_pointer_move = (e) => {
+     		if(Object.keys(initial).includes(dragging.current.id)){
+
+     			const svgrect = img.getBoundingClientRect()
+     			const f = [
+     				(e.clientX - svgrect.left) / svgrect.width, 
+     				(e.clientY - svgrect.top) / svgrect.height
+     			]
+     			if(wrapper.fired === false){
+     				const new_coord = wrapper.transform(f)
+     				value[dragging.current.id] = new_coord
+     				set_knob_coord(dragging.current, new_coord)
+
+     				wrapper.classList.toggle("wiggle", false)
+     				wrapper.fired = true
+     				wrapper.dispatchEvent(new CustomEvent("input"), {})
+     			}
+     		}
+     	}
+
+     	
+     	////
+     	// Add the listeners
+
+     	wrapper.addEventListener("pointerdown", e => {
+     		window.getSelection().empty()
+
+     		
+     		dragging.current = e.target
+     		if($(draggable)){
+     			wrapper.addEventListener("pointermove", on_pointer_move);
+     		}
+     		on_pointer_move(e);
+     	});
+     	const mouseup = e => {
+     		wrapper.removeEventListener("pointermove", on_pointer_move);
+     	};
+     	document.addEventListener("pointerup", mouseup);
+     	document.addEventListener("pointerleave", mouseup);
+     	wrapper.onselectstart = () => false
+
+
+
+     	////
+     	// Set knobs to initial positions, using the inverse transformation
+
+     	new Promise(r => {
+     		img.onload = r
+     	}).then(() => {
+     		Array.from(wrapper.querySelectorAll("margo-knob")).forEach(k => {
+     			set_knob_coord(k, initial[k.id])
+     		})
+     	})
+
+     	////
+     	// Intersection observer to trigger to wiggle animation
+     	const observer = new IntersectionObserver((es) => {
+     		es.forEach((e) => {
+     			if(Date.now() - wrapper.last_render_time > 500){
+     				wrapper.classList.toggle("wiggle", e.isIntersecting)
+     			}
+     		})
+     	}, {
+     		rootMargin: `20px`,
+     		threshold: 1,
+     	})
+
+     	observer.observe(wrapper)
+     	wrapper.classList.toggle("wiggle", true)
+     }
+
+
+
+     return wrapper
+     </script>""")
+end
+
 # ╔═╡ 013807a0-bddb-448b-9300-f7f559e48a45
 begin
     default_usage_error = :(error("Example usage:\n\n@intially [1,2] @bind x f(x)\n"))
@@ -423,6 +617,74 @@ begin
             $bond
         end
     end
+end
+
+# ╔═╡ 9aa73ce0-cec6-4d53-bbbc-f5c85de7b521
+@initially initial_1 @bind input_1 begin
+
+    local t = input_1["M"][1]
+    local y = input_1["M"][2]
+
+    controls_1 = MRGA(
+        M=gaussish(t, clamp(0.07 * (10 - y), 0, 1)),
+        R=gaussish(t, clamp(0.07 * (10 - y) * 0.25, 0, 1)),
+    )
+
+    result_1 = forward_controls_temp(controls_1)
+
+    plotclicktracker2(
+        plot_emissions(result_1),
+        initial_1
+    )
+end
+
+# ╔═╡ ff2b1c0a-e419-4f41-aa3b-d017642ffc13
+@initially initial_2 @bind input_2 begin
+
+
+    controls_2 = MRGA(
+        M=gaussish(input_2["M"]...),
+    )
+
+    result_2 = forward_controls_temp(controls_2)
+
+    plotclicktracker2(
+        plot_controls(controls_2; title="Deployment of mitigation"),
+        initial_2
+    )
+end
+
+# ╔═╡ f4203dcf-b251-4e2b-be07-922bc7c4496d
+(@initially initial_3 @bind input_3 begin
+
+
+    controls_3 = MRGA(
+        M=gaussish(input_3["M"]...),
+    )
+
+    result_3 = forward_controls_temp(controls_3)
+
+    plotclicktracker2(
+        plot_controls(controls_3; title="Deployment of mitigation"),
+        initial_3
+    )
+end) |> cloak("cost_benefits_narrative_input")
+
+# ╔═╡ aac86adf-465f-464f-b258-406c2e55b82f
+@initially initial_4 @bind input_4 begin
+
+
+    controls_4 = MRGA(
+        M=gaussish(input_4["M"]...),
+        R=gaussish(input_4["R"]...),
+    )
+
+    result_4 = forward_controls_temp(controls_4)
+
+    plotclicktracker2(
+        plot_controls(controls_4; title="Deployment of mitigation"),
+        initial_4
+    )
 end
 
 # ╔═╡ 4e91fb48-fc5e-409e-9a7e-bf846f1d211d
@@ -803,200 +1065,6 @@ colors_js = Dict((k, string("#", hex(v))) for (k, v) in pairs(colors));
 # ╔═╡ ac779b93-e19e-41de-94cb-6a2a919bcd2e
 names_js = Dict(pairs(nnames));
 
-# ╔═╡ 5c484595-4646-484f-9e75-a4a3b4c2af9b
-function plotclicktracker2(p::Plots.Plot, initial::Dict; draggable::Bool=true)
-
-    # we need to render the plot before its dimensions are available:
-    # plot_render = repr(MIME"image/svg+xml"(),  p)
-    plot_render = repr(MIME"image/svg+xml"(), p)
-
-    # these are the _bounding boxes_ of our plot
-    big = bbox(p.layout)
-    small = plotarea(p[1])
-
-    # the axis limits
-    xl = xlims(p)
-    yl = ylims(p)
-
-    # with this information, we can form the linear transformation from 
-    # screen coordinate -> plot coordinate
-
-    # this is done on the JS side, to avoid one step in the Julia side
-    # we send the linear coefficients:
-    r = (
-        x_offset=xl[1] - (xl[2] - xl[1]) * small.x0[1] / small.a[1],
-        x_scale=(big.a[1] / small.a[1]) * (xl[2] - xl[1]),
-        y_offset=(yl[2] - yl[1]) + (small.x0[2] / small.a[2]) * (yl[2] - yl[1]) + yl[1],
-        y_scale=-(big.a[2] / small.a[2]) * (yl[2] - yl[1]),
-        x_min=xl[1], # TODO: add margin
-        x_max=xl[2],
-        y_min=yl[1],
-        y_max=yl[2],
-    )
-
-    @htl("""<script id="hello">
-
-     const initial = $(initial)
-
-
-     const colors = $(colors_js)
-     const names = $(names_js)
-
-
-     const body = $(HypertextLiteral.JavaScript(PlutoRunner.publish_to_js(plot_render)))
-     const mime = "image/svg+xml"
-
-
-     const knob = (name) => {
-     	const k = html`<margo-knob id=\${name}><margo-knob-label>👈 Move me!</margo-knob-label></margo-knob>`
-     	k.style.backgroundColor = colors[name]
-     	return k
-     }
-
-     const wrapper = this ?? html`
-     	<div>
-     		<img>
-     		\${Object.keys(initial).map(knob)}
-     	</div>
-     `
-     const img = wrapper.firstElementChild
-
-     let url = URL.createObjectURL(new Blob([body], { type: mime }))
-
-     img.type = mime
-     img.src = url
-     img.draggable = false
-
-     const clamp = (x,a,b) => Math.min(Math.max(x, a), b)
-     wrapper.transform = f => [
-     	clamp(f[0] * $(r.x_scale) + $(r.x_offset), $(r.x_min), $(r.x_max)),
-     	clamp(f[1] * $(r.y_scale) + $(r.y_offset), $(r.y_min), $(r.y_max)),
-     ]
-     wrapper.inversetransform = f => [
-     	(f[0] - $(r.x_offset)) / $(r.x_scale),
-     	(f[1] - $(r.y_offset)) / $(r.y_scale),
-     ]
-
-     const set_knob_coord = (k, coord) => {
-     	const svgrect = img.getBoundingClientRect()
-     	const r = wrapper.inversetransform(coord)
-     	k.style.left = `\${r[0] * svgrect.width}px`
-     	k.style.top = `\${r[1] * svgrect.height}px`
-     }
-
-
-     wrapper.fired = false
-
-
-     wrapper.last_render_time = Date.now()
-
-
-     // If running for the first time
-     if(this == null) {
-
-
-     	// will contain the currently dragging HTMLElement
-     	const dragging = { current: undefined }
-
-     	const value = {...initial}
-
-     	Object.defineProperty(wrapper, "value", {
-     		get: () => value,
-     		set: (x) => {
-     			/* console.log("old", value, "new", x)
-     			Object.assign(value, x)
-     			Object.entries(value).forEach(([k,v]) => {
-     				set_knob_coord(
-     					wrapper.querySelector(`margo-knob#\${k}`),
-     					v
-     				)
-     			}) */
-     		},
-     	})
-
-
-     	
-     	
-     	////
-     	// Event listener for pointer move
-
-     	const on_pointer_move = (e) => {
-     		if(Object.keys(initial).includes(dragging.current.id)){
-
-     			const svgrect = img.getBoundingClientRect()
-     			const f = [
-     				(e.clientX - svgrect.left) / svgrect.width, 
-     				(e.clientY - svgrect.top) / svgrect.height
-     			]
-     			if(wrapper.fired === false){
-     				const new_coord = wrapper.transform(f)
-     				value[dragging.current.id] = new_coord
-     				set_knob_coord(dragging.current, new_coord)
-
-     				wrapper.classList.toggle("wiggle", false)
-     				wrapper.fired = true
-     				wrapper.dispatchEvent(new CustomEvent("input"), {})
-     			}
-     		}
-     	}
-
-     	
-     	////
-     	// Add the listeners
-
-     	wrapper.addEventListener("pointerdown", e => {
-     		window.getSelection().empty()
-
-     		
-     		dragging.current = e.target
-     		if($(draggable)){
-     			wrapper.addEventListener("pointermove", on_pointer_move);
-     		}
-     		on_pointer_move(e);
-     	});
-     	const mouseup = e => {
-     		wrapper.removeEventListener("pointermove", on_pointer_move);
-     	};
-     	document.addEventListener("pointerup", mouseup);
-     	document.addEventListener("pointerleave", mouseup);
-     	wrapper.onselectstart = () => false
-
-
-
-     	////
-     	// Set knobs to initial positions, using the inverse transformation
-
-     	new Promise(r => {
-     		img.onload = r
-     	}).then(() => {
-     		Array.from(wrapper.querySelectorAll("margo-knob")).forEach(k => {
-     			set_knob_coord(k, initial[k.id])
-     		})
-     	})
-
-     	////
-     	// Intersection observer to trigger to wiggle animation
-     	const observer = new IntersectionObserver((es) => {
-     		es.forEach((e) => {
-     			if(Date.now() - wrapper.last_render_time > 500){
-     				wrapper.classList.toggle("wiggle", e.isIntersecting)
-     			}
-     		})
-     	}, {
-     		rootMargin: `20px`,
-     		threshold: 1,
-     	})
-
-     	observer.observe(wrapper)
-     	wrapper.classList.toggle("wiggle", true)
-     }
-
-
-
-     return wrapper
-     </script>""")
-end
-
 # ╔═╡ 060cbeab-5503-4eda-95d8-3f554765b2ee
 begin
     mutable struct MRGA{T}
@@ -1148,6 +1216,108 @@ blob(
 # ╔═╡ 44ad72e3-efb7-48a3-bfd7-593312f4fd30
 blob(md"Maximum allowed temperature increase = $Tmax_9.", "#c5710014")
 
+# ╔═╡ 8e89f521-c19d-4f87-9497-f9b61c19c176
+let
+    default_cost = let
+        e = default_parameters().economics
+        MRGA(e.mitigate_cost, e.remove_cost, e.geoeng_cost, e.adapt_cost)
+    end
+    blob(
+        @htl("""
+       <h4>Which controls?</h4>
+
+       <style>
+
+       .controltable thead th,
+       .controltable tbody td {
+         text-align: center;
+       }
+
+       .controltable input[type=range] {
+         width: 10em;
+       }
+
+       </style>
+
+       <table class="controltable">
+       <thead>
+       <th></th><th>Enabled?</th><th style="text-align: center;">Cost multiplier</th>
+       </thead>
+       <tbody>
+
+       	<tr>
+       	<th>$(longname.M)</th>
+       	<td>$(@bind enable_M_9 CheckBox(;default=true))</td>
+       	<td>$(@bind cost_M_9 multiplier(default_cost.M, 4))</td>
+       	</tr>
+       	
+       	<tr>
+       	<th>$(longname.R)</th>
+       	<td>$(@bind enable_R_9 CheckBox(;default=true))</td>
+       	<td>$(@bind cost_R_9 multiplier(default_cost.R, 4))</td>
+       	</tr>
+       	
+       	<tr>
+       	<th>$(longname.G)</th>
+       	<td>$(@bind enable_G_9 CheckBox(;default=false))</td>
+       	<td>$(@bind cost_G_9 multiplier(default_cost.G, 4))</td>
+       	</tr>
+       	
+       	<tr>
+       	<th>$(longname.A)</th>
+       	<td>$(@bind enable_A_9 CheckBox(;default=false))</td>
+       	<td>$(@bind cost_A_9 multiplier(default_cost.A, 4))</td>
+       	</tr>
+       	
+       </tbody>
+       </table>
+       	"""),
+        "#c500b40a"
+    )
+end
+
+# ╔═╡ a83e47fa-4b48-4bbc-b210-382d1cf19f55
+control_enabled_9 = MRGA(
+    enable_M_9,
+    enable_R_9,
+    enable_G_9,
+    enable_A_9,
+)
+
+# ╔═╡ 242f3109-244b-4884-a0e9-6ea8950ca47e
+control_cost_9 = MRGA(
+    Float64(cost_M_9),
+    Float64(cost_R_9),
+    Float64(cost_G_9),
+    Float64(cost_A_9),
+)
+
+# ╔═╡ f861935a-8b03-426e-aebe-6963e034ad49
+output_9 = let
+    parameters = default_parameters()
+
+    parameters.economics.mitigate_cost = control_cost_9.M
+    parameters.economics.remove_cost = control_cost_9.R
+    parameters.economics.geoeng_cost = control_cost_9.G
+    parameters.economics.adapt_cost = control_cost_9.A
+
+    # modify the parameters here!
+
+    opt_controls_temp(parameters;
+        temp_overshoot=allow_overshoot_9 ? 999.0 : Tmax_9,
+        temp_goal=Tmax_9,
+        max_deployment=let
+            e = control_enabled_9
+            Dict(
+                "mitigate" => e.M ? 1.0 : 0.0,
+                "remove" => e.R ? 1.0 : 0.0,
+                "geoeng" => e.G ? 1.0 : 0.0,
+                "adapt" => e.A ? 0.4 : 0.0,
+            )
+        end
+    )
+end
+
 # ╔═╡ 64c9f002-3d5d-4f14-b39a-980738fd824d
 md"""
 # Apêndice
@@ -1226,6 +1396,16 @@ function plot_costs(result::ClimateModel;
 
 end
 
+# ╔═╡ 3e26d311-6abc-4b2c-ada4-f8a3171d9f75
+if cost_benefits_narrative_slide == 1
+    local uncontrolled = ClimateModel(default_parameters())
+    plot_costs(uncontrolled; show_controls=false, show_baseline=false)
+elseif cost_benefits_narrative_slide == 2
+    plot_costs(result_3; show_controls=false)
+else
+    plot_costs(result_3)
+end
+
 # ╔═╡ cff9f952-4850-4d55-bb8d-c0a759d1b7d8
 function plot_concentrations(result::ClimateModel;
     relative_to_preindustrial::Bool=true)
@@ -1281,6 +1461,9 @@ function plot_controls(controls::MRGA; title=nothing)
     finish!(p)
 
 end
+
+# ╔═╡ 6978acad-9cac-4490-85fb-7e43d9558aca
+plot_controls(output_9.result.controls) |> feasibility_overlay(output_9)
 
 # ╔═╡ 6634bcf1-8af6-4000-9b00-a5b4c02596c6
 function plot_emissions(result::ClimateModel)
@@ -1393,6 +1576,36 @@ function plot_temp(result::ClimateModel)
     finish!(p)
 end
 
+# ╔═╡ 65d31fbf-322d-459a-a2dd-2894edbecc4d
+plot_temp(result_1)
+
+# ╔═╡ 02851ee9-8050-4821-b3c9-1f65c9b8135b
+if which_graph_2 == "Emissions"
+    plot_emissions(result_2)
+elseif which_graph_2 == "Concentrations"
+    plot_concentrations(result_2; relative_to_preindustrial=true)
+else
+    plot_temp(result_2)
+end
+
+# ╔═╡ a751fb75-952e-41d4-a8b5-aba512c10e55
+if which_graph_4 == "Emissions"
+    plot_emissions(result_4)
+elseif which_graph_4 == "Concentrations"
+    plot_concentrations(result_4; relative_to_preindustrial=true)
+elseif which_graph_4 == "Temperature"
+    plot_temp(result_4)
+else
+    plot_costs(result_4)
+end
+
+# ╔═╡ 7a435e46-4f36-4037-a9a6-d296b20bf6ac
+plot!(plot_temp(output_9.result),
+    years, zero(years) .+ Tmax_9;
+    lw=2,
+    pp.T_max...
+)
+
 # ╔═╡ ab557633-e0b5-4439-bc81-d274770f2e65
 md"""
 ## "Mágica" para pegar informações com pontos em gráficos
@@ -1430,107 +1643,6 @@ function forward_controls_temp(controls::MRGA=MRGA(), model_parameters=default_p
     # )
 end
 
-# ╔═╡ 9aa73ce0-cec6-4d53-bbbc-f5c85de7b521
-@initially initial_1 @bind input_1 begin
-
-    local t = input_1["M"][1]
-    local y = input_1["M"][2]
-
-    controls_1 = MRGA(
-        M=gaussish(t, clamp(0.07 * (10 - y), 0, 1)),
-        R=gaussish(t, clamp(0.07 * (10 - y) * 0.25, 0, 1)),
-    )
-
-    result_1 = forward_controls_temp(controls_1)
-
-    plotclicktracker2(
-        plot_emissions(result_1),
-        initial_1
-    )
-end
-
-# ╔═╡ 65d31fbf-322d-459a-a2dd-2894edbecc4d
-plot_temp(result_1)
-
-# ╔═╡ ff2b1c0a-e419-4f41-aa3b-d017642ffc13
-@initially initial_2 @bind input_2 begin
-
-
-    controls_2 = MRGA(
-        M=gaussish(input_2["M"]...),
-    )
-
-    result_2 = forward_controls_temp(controls_2)
-
-    plotclicktracker2(
-        plot_controls(controls_2; title="Deployment of mitigation"),
-        initial_2
-    )
-end
-
-# ╔═╡ 02851ee9-8050-4821-b3c9-1f65c9b8135b
-if which_graph_2 == "Emissions"
-    plot_emissions(result_2)
-elseif which_graph_2 == "Concentrations"
-    plot_concentrations(result_2; relative_to_preindustrial=true)
-else
-    plot_temp(result_2)
-end
-
-# ╔═╡ f4203dcf-b251-4e2b-be07-922bc7c4496d
-(@initially initial_3 @bind input_3 begin
-
-
-    controls_3 = MRGA(
-        M=gaussish(input_3["M"]...),
-    )
-
-    result_3 = forward_controls_temp(controls_3)
-
-    plotclicktracker2(
-        plot_controls(controls_3; title="Deployment of mitigation"),
-        initial_3
-    )
-end) |> cloak("cost_benefits_narrative_input")
-
-# ╔═╡ 3e26d311-6abc-4b2c-ada4-f8a3171d9f75
-if cost_benefits_narrative_slide == 1
-    local uncontrolled = ClimateModel(default_parameters())
-    plot_costs(uncontrolled; show_controls=false, show_baseline=false)
-elseif cost_benefits_narrative_slide == 2
-    plot_costs(result_3; show_controls=false)
-else
-    plot_costs(result_3)
-end
-
-# ╔═╡ aac86adf-465f-464f-b258-406c2e55b82f
-@initially initial_4 @bind input_4 begin
-
-
-    controls_4 = MRGA(
-        M=gaussish(input_4["M"]...),
-        R=gaussish(input_4["R"]...),
-    )
-
-    result_4 = forward_controls_temp(controls_4)
-
-    plotclicktracker2(
-        plot_controls(controls_4; title="Deployment of mitigation"),
-        initial_4
-    )
-end
-
-# ╔═╡ a751fb75-952e-41d4-a8b5-aba512c10e55
-if which_graph_4 == "Emissions"
-    plot_emissions(result_4)
-elseif which_graph_4 == "Concentrations"
-    plot_concentrations(result_4; relative_to_preindustrial=true)
-elseif which_graph_4 == "Temperature"
-    plot_temp(result_4)
-else
-    plot_costs(result_4)
-end
-
 # ╔═╡ 89752d91-9c8e-4203-b6f1-bdad41386b31
 shortname = MRGA("M", "R", "G", "A")
 
@@ -1539,118 +1651,6 @@ mediumname = MRGA("mitigate", "remove", "geoeng", "adapt")
 
 # ╔═╡ 2821b722-75c2-4072-b142-d13553a84b7b
 longname = MRGA("Mitigation", "Removal", "Geo-engineering", "Adaptation")
-
-# ╔═╡ 8e89f521-c19d-4f87-9497-f9b61c19c176
-let
-    default_cost = let
-        e = default_parameters().economics
-        MRGA(e.mitigate_cost, e.remove_cost, e.geoeng_cost, e.adapt_cost)
-    end
-    blob(
-        @htl("""
-       <h4>Which controls?</h4>
-
-       <style>
-
-       .controltable thead th,
-       .controltable tbody td {
-         text-align: center;
-       }
-
-       .controltable input[type=range] {
-         width: 10em;
-       }
-
-       </style>
-
-       <table class="controltable">
-       <thead>
-       <th></th><th>Enabled?</th><th style="text-align: center;">Cost multiplier</th>
-       </thead>
-       <tbody>
-
-       	<tr>
-       	<th>$(longname.M)</th>
-       	<td>$(@bind enable_M_9 CheckBox(;default=true))</td>
-       	<td>$(@bind cost_M_9 multiplier(default_cost.M, 4))</td>
-       	</tr>
-       	
-       	<tr>
-       	<th>$(longname.R)</th>
-       	<td>$(@bind enable_R_9 CheckBox(;default=true))</td>
-       	<td>$(@bind cost_R_9 multiplier(default_cost.R, 4))</td>
-       	</tr>
-       	
-       	<tr>
-       	<th>$(longname.G)</th>
-       	<td>$(@bind enable_G_9 CheckBox(;default=false))</td>
-       	<td>$(@bind cost_G_9 multiplier(default_cost.G, 4))</td>
-       	</tr>
-       	
-       	<tr>
-       	<th>$(longname.A)</th>
-       	<td>$(@bind enable_A_9 CheckBox(;default=false))</td>
-       	<td>$(@bind cost_A_9 multiplier(default_cost.A, 4))</td>
-       	</tr>
-       	
-       </tbody>
-       </table>
-       	"""),
-        "#c500b40a"
-    )
-end
-
-# ╔═╡ a83e47fa-4b48-4bbc-b210-382d1cf19f55
-control_enabled_9 = MRGA(
-    enable_M_9,
-    enable_R_9,
-    enable_G_9,
-    enable_A_9,
-)
-
-# ╔═╡ 242f3109-244b-4884-a0e9-6ea8950ca47e
-control_cost_9 = MRGA(
-    Float64(cost_M_9),
-    Float64(cost_R_9),
-    Float64(cost_G_9),
-    Float64(cost_A_9),
-)
-
-# ╔═╡ f861935a-8b03-426e-aebe-6963e034ad49
-output_9 = let
-    parameters = default_parameters()
-
-    parameters.economics.mitigate_cost = control_cost_9.M
-    parameters.economics.remove_cost = control_cost_9.R
-    parameters.economics.geoeng_cost = control_cost_9.G
-    parameters.economics.adapt_cost = control_cost_9.A
-
-    # modify the parameters here!
-
-    opt_controls_temp(parameters;
-        temp_overshoot=allow_overshoot_9 ? 999.0 : Tmax_9,
-        temp_goal=Tmax_9,
-        max_deployment=let
-            e = control_enabled_9
-            Dict(
-                "mitigate" => e.M ? 1.0 : 0.0,
-                "remove" => e.R ? 1.0 : 0.0,
-                "geoeng" => e.G ? 1.0 : 0.0,
-                "adapt" => e.A ? 0.4 : 0.0,
-            )
-        end
-    )
-end
-
-# ╔═╡ 6978acad-9cac-4490-85fb-7e43d9558aca
-plot_controls(output_9.result.controls) |> feasibility_overlay(output_9)
-
-# ╔═╡ 7a435e46-4f36-4037-a9a6-d296b20bf6ac
-plot!(plot_temp(output_9.result),
-    years, zero(years) .+ Tmax_9;
-    lw=2,
-    pp.T_max...
-)
 
 # ╔═╡ 7ffad0f8-082b-4ca1-84f7-37c08d5f7266
 md"""

@@ -190,7 +190,7 @@ md"""
 
 # ╔═╡ 16348b6a-1fc2-11eb-0b9c-65df528db2a1
 md"""
-##### Exercise 1.1 - _Compreendendo retro-alimentações (retornos) e sensitividade climática_
+##### Exercício 1.1 - _Compreendendo retro-alimentações (retornos) e sensitividade climática_
 """
 
 # ╔═╡ e296c6e8-259c-11eb-1385-53f757f4d585
@@ -239,7 +239,7 @@ md"""
 md"""
 #### Exercício 1.2 - _Duplicando CO₂_
 
-Para calcular ECS, nos duplicamos o CO₂ na atmosfera. Esse fator de 2 não é completamente arbitrário: sem que haja um esforço hercúleo para reduzir as emissões de CO₂ espera-se que haja **no mínimo** uma duplicação da concentração desse gás até 2100.
+Para calcular ECS, nós duplicamos o CO₂ na atmosfera. Esse fator de 2 não é completamente arbitrário: sem que haja um esforço hercúleo para reduzir as emissões de CO₂ espera-se que haja **no mínimo** uma duplicação da concentração desse gás até 2100.
 
 Atualmente, nossa concentração de CO₂ é de 415 ppm -- $(round(415 / 280, digits=3)) vezes o valor de 280 que representa a concentração pré-industrial, presente em 1850. 
 
@@ -248,7 +248,7 @@ Já as concentrações _futuras_ dependem da ação humana. Existem vários mode
 
 # ╔═╡ 2dfab366-25a1-11eb-15c9-b3dd9cd6b96c
 md"""
-👉 Em qual ano espera-se atingir a duplicação da concentração de CO₂ sob o cenário RCP8.5?
+👉 Em qual ano espera-se atingir a duplicação da concentração de CO₂ sob o cenário RCP8.5? Considere que `Model.CO2_RCP85(t)` devolve a concentração às 0 h de 1º de janeiro do ano `t`.
 """
 
 # ╔═╡ 50ea30ba-25a1-11eb-05d8-b3d579f85652
@@ -739,7 +739,7 @@ CO2 = 10^log_CO2
 ")
 
 # ╔═╡ cb15cd88-25ed-11eb-2be4-f31500a726c8
-hint(md"Use uma condição no albedo ou na temperatura par verificar se a bola de nve derreteu.")
+hint(md"Use uma condição no albedo ou na temperatura para verificar se a bola de nve derreteu.")
 
 # ╔═╡ 232b9bec-2544-11eb-0401-97a60bb172fc
 hint(md"Uma opção é começar escrevendo uma função `equilibrium_temperature(CO2)` que cria um novo `EBM` na temperatura da Terra bola de neve T = $(Tneo) e retorna a temperatura final para o nível de CO₂ fornecido.")
@@ -1639,9 +1639,9 @@ deps = ["InteractiveUtils", "Logging", "Random", "Serialization"]
 uuid = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
 
 [[deps.TranscodingStreams]]
-git-tree-sha1 = "a947ea21087caba0a798c5e494d0bb78e3a1a3a0"
+git-tree-sha1 = "d73336d81cafdc277ff45558bb7eaa2b04a8e472"
 uuid = "3bb67fe8-82b1-5028-8e26-92a6c54297fa"
-version = "0.10.9"
+version = "0.10.10"
 weakdeps = ["Random", "Test"]
 
     [deps.TranscodingStreams.extensions]
@@ -1767,9 +1767,9 @@ version = "0.1.1+0"
 
 [[deps.Xorg_libxcb_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "XSLT_jll", "Xorg_libXau_jll", "Xorg_libXdmcp_jll", "Xorg_libpthread_stubs_jll"]
-git-tree-sha1 = "b4bfde5d5b652e22b9c790ad00af08b6d042b97d"
+git-tree-sha1 = "bcd466676fef0878338c61e655629fa7bbc69d8e"
 uuid = "c7cfdc94-dc32-55de-ac96-5a1b8d977c5b"
-version = "1.15.0+0"
+version = "1.17.0+0"
 
 [[deps.Xorg_libxkbfile_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Xorg_libX11_jll"]
