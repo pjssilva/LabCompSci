@@ -32,31 +32,31 @@ entender código será nossa principal forma de comunicação.
 
 ## Logística do curso
 
-As aulas serão terças e quintas às 8hs. Durante as aulas apresentarei cadernos
-Julia com código e discutirei os problemas que vamos estudar empregando técnicas
-modernas de programação e matemática aplicada para atacá-los. Além disso, temos
-o servidor Discord da disciplina onde podemos interagir em fóruns. O link do
-servidor Discord
-[https://github.com/pjssilva/LabCompSci](https://github.com/pjssilva/LabCompSci).
+As aulas serão terças e quintas às 10h na sala 150 do IMECC. Durante as aulas
+apresentarei cadernos Julia com código e discutirei os problemas que vamos
+estudar empregando técnicas modernas de programação e matemática aplicada para
+atacá-los. Além disso, temos o servidor Discord da disciplina onde podemos
+interagir em fóruns. O link do servidor [Discord](https://discord.gg/aCgPCHnj4E).
 
 ## Detalhes burocráticos
 
 ### Atendimento
 
-Quintas 13-14 h, Sala 137, IMECC ou atentimento pessoal sob demanda a combinar com o(a) aluno(a).
+Quintas 13-14h, sala 137, IMECC ou atendimento pessoal sob demanda a combinar
+com o(a) aluno(a).
 
 ### Avaliação
 
-Será feita através de trabalhos computacionais durante o semestre e duas provas
+Será feita por trabalhos computacionais durante o semestre e duas provas
 presenciais no laboratório.
 
-No primeiro semestre de 2024 as datas das provas são *30/04 e 27/06**.
+No primeiro semestre de 2025 as datas das provas são **24/04 e 24/06**.
 
 Médias: Definimos `ME` = "média aritméticas das listas descartando as duas
 piores notas", e `MP` = "média aritmética das provas". A média ao final do
 semestre será `M = 0.7*ME + 0.3*MP`, se `MP >= 5`, caso contrário `M = MP`. Se
 `M >= 5`, o aluno está aprovado. Se `2.0 <= M < 5.0`, o aluno deverá fazer o
-exame no dia **11/07**. A média final será então `max(M, 0.5*M + 0.5*Exame)`. Se
+exame no dia **15/07**. A média final será então `max(M, 0.5*M + 0.5*Exame)`. Se
 `MF >= 5.0`, o aluno estará aprovado.
 
 ### Ementa 
