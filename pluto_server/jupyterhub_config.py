@@ -48,21 +48,21 @@ c = get_config()  #noqa
 #  .. code-block:: python
 #  
 #     c.Application.logging_config = {
-#         'handlers': {
-#             'file': {
-#                 'class': 'logging.FileHandler',
-#                 'level': 'DEBUG',
-#                 'filename': '<path/to/file>',
+#         "handlers": {
+#             "file": {
+#                 "class": "logging.FileHandler",
+#                 "level": "DEBUG",
+#                 "filename": "<path/to/file>",
 #             }
 #         },
-#         'loggers': {
-#             '<application-name>': {
-#                 'level': 'DEBUG',
+#         "loggers": {
+#             "<application-name>": {
+#                 "level": "DEBUG",
 #                 # NOTE: if you don't list the default "console"
 #                 # handler here then it will be disabled
-#                 'handlers': ['console', 'file'],
+#                 "handlers": ["console", "file"],
 #             },
-#         }
+#         },
 #     }
 #  Default: {}
 # c.Application.logging_config = {}
@@ -181,9 +181,6 @@ c = get_config()  #noqa
 #  
 #          Add this to the beginning of all JupyterHub URLs.
 #          Use base_url to run JupyterHub within an existing website.
-#  
-#          .. deprecated: 0.9
-#              Use JupyterHub.bind_url
 #  Default: '/'
 # c.JupyterHub.base_url = '/'
 
@@ -246,6 +243,22 @@ c = get_config()  #noqa
 #  Default: False
 # c.JupyterHub.confirm_no_ssl = False
 
+## Enable `__Host-` prefix on authentication cookies.
+#  
+#          The `__Host-` prefix on JupyterHub cookies provides further
+#          protection against cookie tossing when untrusted servers
+#          may control subdomains of your jupyterhub deployment.
+#  
+#          _However_, it also requires that cookies be set on the path `/`,
+#          which means they are shared by all JupyterHub components,
+#          so a compromised server component will have access to _all_ JupyterHub-related
+#          cookies of the visiting browser.
+#          It is recommended to only combine `__Host-` cookies with per-user domains.
+#  
+#          .. versionadded:: 4.1
+#  Default: False
+# c.JupyterHub.cookie_host_prefix_enabled = False
+
 ## Number of days for a login cookie to be valid.
 #          Default is two weeks.
 #  Default: 14
@@ -282,8 +295,8 @@ c = get_config()  #noqa
 # c.JupyterHub.custom_scopes = {}
 
 ## The location of jupyterhub data files (e.g. /usr/local/share/jupyterhub)
-#  Default: '/opt/conda/envs/py3/share/jupyterhub'
-# c.JupyterHub.data_files_path = '/opt/conda/envs/py3/share/jupyterhub'
+#  Default: '/opt/conda/envs/jupyterhub/share/jupyterhub'
+# c.JupyterHub.data_files_path = '/opt/conda/envs/jupyterhub/share/jupyterhub'
 
 ## Include any kwargs to pass to the database connection.
 #          See sqlalchemy.create_engine for details.
@@ -531,9 +544,6 @@ c = get_config()  #noqa
 #          This is the address on which the proxy will listen. The default is to
 #          listen on all interfaces. This is the only address through which JupyterHub
 #          should be accessed by users.
-#  
-#          .. deprecated: 0.9
-#              Use JupyterHub.bind_url
 #  Default: ''
 # c.JupyterHub.ip = ''
 
@@ -589,20 +599,7 @@ c = get_config()  #noqa
 #  
 #          Default roles are defined in roles.py.
 #  Default: []
-c.JupyterHub.load_roles = [
-    {
-        "name": "jupyterhub-idle-culler-role",
-        "scopes": [
-            "list:users",
-            "read:users:activity",
-            "read:servers",
-            "delete:servers",
-            # "admin:users", # if using --cull-users
-        ],
-        # assignment of role's permissions to:
-        "services": ["jupyterhub-idle-culler-service"],
-    }
-]
+# c.JupyterHub.load_roles = []
 
 ## The date format used by logging formatters for %(asctime)s
 #  See also: Application.log_datefmt
@@ -682,13 +679,8 @@ c.JupyterHub.load_roles = [
 #          This is the port on which the proxy will listen.
 #          This is the only port through which JupyterHub
 #          should be accessed by users.
-#  
-#          .. deprecated: 0.9
-#              Use JupyterHub.bind_url
 #  Default: 8000
 # c.JupyterHub.port = 8000
-
-c.ConfigurableHTTPProxy.api_url = 'http://localhost:8101'
 
 ## DEPRECATED since version 0.8 : Use ConfigurableHTTPProxy.api_url
 #  Default: ''
@@ -723,6 +715,20 @@ c.ConfigurableHTTPProxy.api_url = 'http://localhost:8101'
 ## DEPRECATED since version 0.8. Use ConfigurableHTTPProxy.command
 #  Default: []
 # c.JupyterHub.proxy_cmd = []
+
+## Set the public URL of JupyterHub
+#  
+#          This will skip any detection of URL and protocol from requests,
+#          which isn't always correct when JupyterHub is behind
+#          multiple layers of proxies, etc.
+#          Usually the failure is detecting http when it's really https.
+#  
+#          Should include the full, public URL of JupyterHub,
+#          including the public-facing base_url prefix
+#          (i.e. it should include a trailing slash), e.g.
+#          https://jupyterhub.example.org/prefix/
+#  Default: ''
+# c.JupyterHub.public_url = ''
 
 ## Recreate all certificates used within JupyterHub on restart.
 #  
@@ -771,18 +777,7 @@ c.ConfigurableHTTPProxy.api_url = 'http://localhost:8101'
 #                  }
 #              ]
 #  Default: []
-import sys
-c.JupyterHub.services = [
-    {
-        "name": "jupyterhub-idle-culler-service",
-        "command": [
-            sys.executable,
-            "-m", "jupyterhub_idle_culler",
-            "--timeout=3600",
-        ],
-        # "admin": True,
-    }
-]
+# c.JupyterHub.services = []
 
 ## Instead of starting the Application, dump configuration to stdout
 #  See also: Application.show_config
@@ -805,12 +800,13 @@ c.JupyterHub.services = [
 #              e.g. `c.JupyterHub.spawner_class = 'localprocess'`
 #  
 #  Currently installed: 
+#    - systemd: systemdspawner.SystemdSpawner
+#    - systemdspawner: systemdspawner.SystemdSpawner
 #    - default: jupyterhub.spawner.LocalProcessSpawner
 #    - localprocess: jupyterhub.spawner.LocalProcessSpawner
 #    - simple: jupyterhub.spawner.SimpleLocalProcessSpawner
 #  Default: 'jupyterhub.spawner.LocalProcessSpawner'
 # c.JupyterHub.spawner_class = 'jupyterhub.spawner.LocalProcessSpawner'
-c.JupyterHub.spawner_class = 'systemd'
 
 ## Path to SSL certificate file for the public facing interface of the proxy
 #  
@@ -837,6 +833,38 @@ c.JupyterHub.spawner_class = 'systemd'
 #  Default: 'jupyterhub'
 # c.JupyterHub.statsd_prefix = 'jupyterhub'
 
+## Hook for constructing subdomains for users and services. Only used when
+#  `JupyterHub.subdomain_host` is set.
+#  
+#  There are two predefined hooks, which can be selected by name:
+#  
+#  - 'legacy' (deprecated) - 'idna' (default, more robust. No change for _most_
+#  usernames)
+#  
+#  Otherwise, should be a function which must not be async. A custom
+#  subdomain_hook should have the signature:
+#  
+#  def subdomain_hook(name, domain, kind) -> str:
+#      ...
+#  
+#  and should return a unique, valid domain name for all usernames.
+#  
+#  - `name` is the original name, which may need escaping to be safe as a domain
+#  name label - `domain` is the domain of the Hub itself - `kind` will be one of
+#  'user' or 'service'
+#  
+#  JupyterHub itself puts very little limit on usernames to accommodate a wide
+#  variety of Authenticators, but your identity provider is likely much more
+#  strict, allowing you to make assumptions about the name.
+#  
+#  The 'idna' hook should produce a valid domain name for any user, using IDNA
+#  encoding for unicode usernames, and a truncate-and-hash approach for any
+#  usernames that can't be easily encoded into a domain component.
+#  
+#  .. versionadded:: 5.0
+#  Default: 'idna'
+# c.JupyterHub.subdomain_hook = 'idna'
+
 ## Run single-user servers on subdomains of this host.
 #  
 #          This should be the full `https://hub.domain.tld[:port]`.
@@ -858,9 +886,42 @@ c.JupyterHub.spawner_class = 'systemd'
 #  Default: []
 # c.JupyterHub.template_paths = []
 
-## Extra variables to be passed into jinja templates
+## Extra variables to be passed into jinja templates.
+#  
+#          Values in dict may contain callable objects.
+#          If value is callable, the current user is passed as argument.
+#  
+#          Example::
+#  
+#              def callable_value(user):
+#                  # user is generated by handlers.base.get_current_user
+#                  with open("/tmp/file.txt", "r") as f:
+#                      ret = f.read()
+#                  ret = ret.replace("<username>", user.name)
+#                  return ret
+#  
+#              c.JupyterHub.template_vars = {
+#                  "key1": "value1",
+#                  "key2": callable_value,
+#              }
 #  Default: {}
 # c.JupyterHub.template_vars = {}
+
+## Set the maximum expiration (in seconds) of tokens created via the API.
+#  
+#  Set to any positive value to disallow creation of tokens with no expiration.
+#  
+#  0 (default) = no limit.
+#  
+#  Does not affect:
+#  
+#  - Server API tokens ($JUPYTERHUB_API_TOKEN is tied to lifetime of the server)
+#  - Tokens issued during oauth (use `oauth_token_expires_in`) - Tokens created
+#  via the API before configuring this limit
+#  
+#  .. versionadded:: 5.1
+#  Default: 0
+# c.JupyterHub.token_expires_in_max_seconds = 0
 
 ## Extra settings overrides to pass to the tornado application.
 #  Default: {}
@@ -940,6 +1001,670 @@ c.JupyterHub.spawner_class = 'systemd'
 #  behavior.
 #  Default: None
 # c.JupyterHub.user_redirect_hook = None
+
+#------------------------------------------------------------------------------
+# Authenticator(LoggingConfigurable) configuration
+#------------------------------------------------------------------------------
+## Base class for implementing an authentication provider for JupyterHub
+
+## Set of users that will be granted admin rights on this JupyterHub.
+#  
+#  Note:
+#  
+#      As of JupyterHub 2.0,
+#      full admin rights should not be required,
+#      and more precise permissions can be managed via roles.
+#  
+#  Caution:
+#  
+#      Adding users to `admin_users` can only *grant* admin rights,
+#      removing a username from the admin_users set **DOES NOT** remove admin rights previously granted.
+#  
+#      For an authoritative, restricted set of admins,
+#      assign explicit membership of the `admin` *role*::
+#  
+#          c.JupyterHub.load_roles = [
+#              {
+#                  "name": "admin",
+#                  "users": ["admin1", "..."],
+#              }
+#          ]
+#  
+#  Admin users can take every possible action on behalf of all users, for
+#  example:
+#  
+#  - Use the admin panel to see list of users logged in - Add / remove users in
+#  some authenticators - Restart / halt the hub - Start / stop users' single-user
+#  servers - Can access each individual users' single-user server
+#  
+#  Admin access should be treated the same way root access is.
+#  
+#  Defaults to an empty set, in which case no user has admin access.
+#  Default: set()
+# c.Authenticator.admin_users = set()
+
+## Allow every user who can successfully authenticate to access JupyterHub.
+#  
+#  False by default, which means for most Authenticators, _some_ allow-related
+#  configuration is required to allow users to log in.
+#  
+#  Authenticator subclasses may override the default with e.g.::
+#  
+#      @default("allow_all")
+#      def _default_allow_all(self):
+#          # if _any_ auth config (depends on the Authenticator)
+#          if self.allowed_users or self.allowed_groups or self.allow_existing_users:
+#              return False
+#          else:
+#              return True
+#  
+#  .. versionadded:: 5.0
+#  
+#  .. versionchanged:: 5.0
+#      Prior to 5.0, `allow_all` wasn't defined on its own,
+#      and was instead implicitly True when no allow config was provided,
+#      i.e. `allowed_users` unspecified or empty on the base Authenticator class.
+#  
+#      To preserve pre-5.0 behavior,
+#      set `allow_all = True` if you have no other allow configuration.
+#  Default: False
+c.Authenticator.allow_all = True
+
+## Allow existing users to login.
+#  
+#  Defaults to True if `allowed_users` is set for historical reasons, and False
+#  otherwise.
+#  
+#  With this enabled, all users present in the JupyterHub database are allowed to
+#  login. This has the effect of any user who has _previously_ been allowed to
+#  login via any means will continue to be allowed until the user is deleted via
+#  the /hub/admin page or REST API.
+#  
+#  .. warning::
+#  
+#     Before enabling this you should review the existing users in the
+#     JupyterHub admin panel at `/hub/admin`. You may find users existing
+#     there because they have previously been declared in config such as
+#     `allowed_users` or allowed to sign in.
+#  
+#  .. warning::
+#  
+#     When this is enabled and you wish to remove access for one or more
+#     users previously allowed, you must make sure that they
+#     are removed from the jupyterhub database. This can be tricky to do
+#     if you stop allowing an externally managed group of users for example.
+#  
+#  With this enabled, JupyterHub admin users can visit `/hub/admin` or use
+#  JupyterHub's REST API to add and remove users to manage who can login.
+#  
+#  .. versionadded:: 5.0
+#  Default: False
+# c.Authenticator.allow_existing_users = False
+
+## Set of usernames that are allowed to log in.
+#  
+#  Use this to limit which authenticated users may login. Default behavior: only
+#  users in this set are allowed.
+#  
+#  If empty, does not perform any restriction, in which case any authenticated
+#  user is allowed.
+#  
+#  Authenticators may extend :meth:`.Authenticator.check_allowed` to combine
+#  `allowed_users` with other configuration to either expand or restrict access.
+#  
+#  .. versionchanged:: 1.2
+#      `Authenticator.whitelist` renamed to `allowed_users`
+#  Default: set()
+# c.Authenticator.allowed_users = set()
+
+## Is there any allow config?
+#  
+#          Used to show a warning if it looks like nobody can access the Hub,
+#          which can happen when upgrading to JupyterHub 5,
+#          now that `allow_all` defaults to False.
+#  
+#          Deployments can set this explicitly to True to suppress
+#          the "No allow config found" warning.
+#  
+#          Will be True if any config tagged with `.tag(allow_config=True)`
+#          or starts with `allow` is truthy.
+#  
+#          .. versionadded:: 5.0
+#  Default: False
+# c.Authenticator.any_allow_config = False
+
+## The max age (in seconds) of authentication info
+#          before forcing a refresh of user auth info.
+#  
+#          Refreshing auth info allows, e.g. requesting/re-validating auth
+#  tokens.
+#  
+#          See :meth:`.refresh_user` for what happens when user auth info is refreshed
+#          (nothing by default).
+#  Default: 300
+# c.Authenticator.auth_refresh_age = 300
+
+## Automatically begin the login process
+#  
+#          rather than starting with a "Login with..." link at `/hub/login`
+#  
+#          To work, `.login_url()` must give a URL other than the default `/hub/login`,
+#          such as an oauth handler or another automatic login handler,
+#          registered with `.get_handlers()`.
+#  
+#          .. versionadded:: 0.8
+#  Default: False
+# c.Authenticator.auto_login = False
+
+## Automatically begin login process for OAuth2 authorization requests
+#  
+#  When another application is using JupyterHub as OAuth2 provider, it sends
+#  users to `/hub/api/oauth2/authorize`. If the user isn't logged in already, and
+#  auto_login is not set, the user will be dumped on the hub's home page, without
+#  any context on what to do next.
+#  
+#  Setting this to true will automatically redirect users to login if they aren't
+#  logged in *only* on the `/hub/api/oauth2/authorize` endpoint.
+#  
+#  .. versionadded:: 1.5
+#  Default: False
+# c.Authenticator.auto_login_oauth2_authorize = False
+
+## Set of usernames that are not allowed to log in.
+#  
+#  Use this with supported authenticators to restrict which users can not log in.
+#  This is an additional block list that further restricts users, beyond whatever
+#  restrictions the authenticator has in place.
+#  
+#  If empty, does not perform any additional restriction.
+#  
+#  .. versionadded: 0.9
+#  
+#  .. versionchanged:: 5.2
+#      Users blocked via `blocked_users` that may have logged in in the past
+#      have all permissions and group membership revoked
+#      and all servers stopped at JupyterHub startup.
+#      Previously, User permissions (e.g. API tokens)
+#      and servers were unaffected and required additional
+#      administrator operations to block after a user is added to `blocked_users`.
+#  
+#  .. versionchanged:: 1.2
+#      `Authenticator.blacklist` renamed to `blocked_users`
+#  Default: set()
+# c.Authenticator.blocked_users = set()
+
+## Delete any users from the database that do not pass validation
+#  
+#          When JupyterHub starts, `.add_user` will be called
+#          on each user in the database to verify that all users are still valid.
+#  
+#          If `delete_invalid_users` is True,
+#          any users that do not pass validation will be deleted from the database.
+#          Use this if users might be deleted from an external system,
+#          such as local user accounts.
+#  
+#          If False (default), invalid users remain in the Hub's database
+#          and a warning will be issued.
+#          This is the default to avoid data loss due to config changes.
+#  Default: False
+# c.Authenticator.delete_invalid_users = False
+
+## Enable persisting auth_state (if available).
+#  
+#          auth_state will be encrypted and stored in the Hub's database.
+#          This can include things like authentication tokens, etc.
+#          to be passed to Spawners as environment variables.
+#  
+#          Encrypting auth_state requires the cryptography package.
+#  
+#          Additionally, the JUPYTERHUB_CRYPT_KEY environment variable must
+#          contain one (or more, separated by ;) 32B encryption keys.
+#          These can be either base64 or hex-encoded.
+#  
+#          If encryption is unavailable, auth_state cannot be persisted.
+#  
+#          New in JupyterHub 0.8
+#  Default: False
+# c.Authenticator.enable_auth_state = False
+
+## Let authenticator manage user groups
+#  
+#          If True, Authenticator.authenticate and/or .refresh_user
+#          may return a list of group names in the 'groups' field,
+#          which will be assigned to the user.
+#  
+#          All group-assignment APIs are disabled if this is True.
+#  Default: False
+# c.Authenticator.manage_groups = False
+
+## Let authenticator manage roles
+#  
+#          If True, Authenticator.authenticate and/or .refresh_user
+#          may return a list of roles in the 'roles' field,
+#          which will be added to the database.
+#  
+#          When enabled, all role management will be handled by the
+#          authenticator; in particular, assignment of roles via
+#          `JupyterHub.load_roles` traitlet will not be possible.
+#  
+#          .. versionadded:: 5.0
+#  Default: False
+# c.Authenticator.manage_roles = False
+
+## The prompt string for the extra OTP (One Time Password) field.
+#  
+#  .. versionadded:: 5.0
+#  Default: 'OTP:'
+# c.Authenticator.otp_prompt = 'OTP:'
+
+## An optional hook function that you can implement to do some bootstrapping work
+#  during authentication. For example, loading user account details from an
+#  external system.
+#  
+#  This function is called after the user has passed all authentication checks
+#  and is ready to successfully authenticate. This function must return the
+#  auth_model dict reguardless of changes to it. The hook is called with 3
+#  positional arguments: `(authenticator, handler, auth_model)`.
+#  
+#  This may be a coroutine.
+#  
+#  .. versionadded: 1.0
+#  
+#  Example::
+#  
+#      import os
+#      import pwd
+#      def my_hook(authenticator, handler, auth_model):
+#          user_data = pwd.getpwnam(auth_model['name'])
+#          spawn_data = {
+#              'pw_data': user_data
+#              'gid_list': os.getgrouplist(auth_model['name'], user_data.pw_gid)
+#          }
+#  
+#          if auth_model['auth_state'] is None:
+#              auth_model['auth_state'] = {}
+#          auth_model['auth_state']['spawn_data'] = spawn_data
+#  
+#          return auth_model
+#  
+#      c.Authenticator.post_auth_hook = my_hook
+#  Default: None
+# c.Authenticator.post_auth_hook = None
+
+## Force refresh of auth prior to spawn.
+#  
+#          This forces :meth:`.refresh_user` to be called prior to launching
+#          a server, to ensure that auth state is up-to-date.
+#  
+#          This can be important when e.g. auth tokens that may have expired
+#          are passed to the spawner via environment variables from auth_state.
+#  
+#          If refresh_user cannot refresh the user auth data,
+#          launch will fail until the user logs in again.
+#  Default: False
+# c.Authenticator.refresh_pre_spawn = False
+
+## Prompt for OTP (One Time Password) in the login form.
+#  
+#  .. versionadded:: 5.0
+#  Default: False
+# c.Authenticator.request_otp = False
+
+## Reset managed roles to result of `load_managed_roles()` on startup.
+#  
+#          If True:
+#            - stale managed roles will be removed,
+#            - stale assignments to managed roles will be removed.
+#  
+#          Any role not present in `load_managed_roles()` will be considered
+#  'stale'.
+#  
+#          The 'stale' status for role assignments is also determined from
+#  `load_managed_roles()` result:
+#  
+#          - user role assignments status will depend on whether the `users` key
+#  is defined or not:
+#  
+#            * if a list is defined under the `users` key and the user is not listed, then the user role assignment will be considered 'stale',
+#            * if the `users` key is not provided, the user role assignment will be preserved;
+#          - service and group role assignments will be considered 'stale':
+#  
+#            * if not included in the `services` and `groups` list,
+#            * if the `services` and `groups` keys are not provided.
+#  
+#          .. versionadded:: 5.0
+#  Default: False
+# c.Authenticator.reset_managed_roles_on_startup = False
+
+## Dictionary mapping authenticator usernames to JupyterHub users.
+#  
+#          Primarily used to normalize OAuth user names to local users.
+#  Default: {}
+# c.Authenticator.username_map = {}
+
+## Regular expression pattern that all valid usernames must match.
+#  
+#  If a username does not match the pattern specified here, authentication will
+#  not be attempted.
+#  
+#  If not set, allow any username.
+#  Default: ''
+# c.Authenticator.username_pattern = ''
+
+## Deprecated, use `Authenticator.allowed_users`
+#  Default: set()
+# c.Authenticator.whitelist = set()
+
+#------------------------------------------------------------------------------
+# LocalAuthenticator(Authenticator) configuration
+#------------------------------------------------------------------------------
+## Base class for Authenticators that work with local Linux/UNIX users
+#  
+#      Checks for local users, and can attempt to create them if they exist.
+
+## The command to use for creating users as a list of strings
+#  
+#  For each element in the list, the string USERNAME will be replaced with the
+#  user's username. The username will also be appended as the final argument.
+#  
+#  For Linux, the default value is:
+#  
+#      ['adduser', '-q', '--gecos', '""', '--disabled-password']
+#  
+#  To specify a custom home directory, set this to:
+#  
+#      ['adduser', '-q', '--gecos', '""', '--home', '/customhome/USERNAME', '--
+#  disabled-password']
+#  
+#  This will run the command:
+#  
+#      adduser -q --gecos "" --home /customhome/river --disabled-password river
+#  
+#  when the user 'river' is created.
+#  Default: []
+# c.LocalAuthenticator.add_user_cmd = []
+
+## 
+#  See also: Authenticator.admin_users
+# c.LocalAuthenticator.admin_users = set()
+
+## 
+#  See also: Authenticator.allow_all
+# c.LocalAuthenticator.allow_all = False
+
+## 
+#  See also: Authenticator.allow_existing_users
+# c.LocalAuthenticator.allow_existing_users = False
+
+## Allow login from all users in these UNIX groups.
+#  
+#  .. versionchanged:: 5.0
+#      `allowed_groups` may be specified together with allowed_users,
+#      to grant access by group OR name.
+#  Default: set()
+# c.LocalAuthenticator.allowed_groups = set()
+
+## 
+#  See also: Authenticator.allowed_users
+# c.LocalAuthenticator.allowed_users = set()
+
+## Is there any allow config?
+#  See also: Authenticator.any_allow_config
+# c.LocalAuthenticator.any_allow_config = False
+
+## The max age (in seconds) of authentication info
+#  See also: Authenticator.auth_refresh_age
+# c.LocalAuthenticator.auth_refresh_age = 300
+
+## Automatically begin the login process
+#  See also: Authenticator.auto_login
+# c.LocalAuthenticator.auto_login = False
+
+## 
+#  See also: Authenticator.auto_login_oauth2_authorize
+# c.LocalAuthenticator.auto_login_oauth2_authorize = False
+
+## 
+#  See also: Authenticator.blocked_users
+# c.LocalAuthenticator.blocked_users = set()
+
+## If set to True, will attempt to create local system users if they do not exist
+#  already.
+#  
+#  Supports Linux and BSD variants only.
+#  Default: False
+# c.LocalAuthenticator.create_system_users = False
+
+## Delete any users from the database that do not pass validation
+#  See also: Authenticator.delete_invalid_users
+# c.LocalAuthenticator.delete_invalid_users = False
+
+## Enable persisting auth_state (if available).
+#  See also: Authenticator.enable_auth_state
+# c.LocalAuthenticator.enable_auth_state = False
+
+## DEPRECATED: use allowed_groups
+#  Default: set()
+# c.LocalAuthenticator.group_whitelist = set()
+
+## Let authenticator manage user groups
+#  See also: Authenticator.manage_groups
+# c.LocalAuthenticator.manage_groups = False
+
+## Let authenticator manage roles
+#  See also: Authenticator.manage_roles
+# c.LocalAuthenticator.manage_roles = False
+
+## 
+#  See also: Authenticator.otp_prompt
+# c.LocalAuthenticator.otp_prompt = 'OTP:'
+
+## 
+#  See also: Authenticator.post_auth_hook
+# c.LocalAuthenticator.post_auth_hook = None
+
+## Force refresh of auth prior to spawn.
+#  See also: Authenticator.refresh_pre_spawn
+# c.LocalAuthenticator.refresh_pre_spawn = False
+
+## 
+#  See also: Authenticator.request_otp
+# c.LocalAuthenticator.request_otp = False
+
+## Reset managed roles to result of `load_managed_roles()` on startup.
+#  See also: Authenticator.reset_managed_roles_on_startup
+# c.LocalAuthenticator.reset_managed_roles_on_startup = False
+
+## Dictionary of uids to use at user creation time. This helps ensure that users
+#  created from the database get the same uid each time they are created in
+#  temporary deployments or containers.
+#  Default: {}
+# c.LocalAuthenticator.uids = {}
+
+## Dictionary mapping authenticator usernames to JupyterHub users.
+#  See also: Authenticator.username_map
+# c.LocalAuthenticator.username_map = {}
+
+## 
+#  See also: Authenticator.username_pattern
+# c.LocalAuthenticator.username_pattern = ''
+
+## Deprecated, use `Authenticator.allowed_users`
+#  See also: Authenticator.whitelist
+# c.LocalAuthenticator.whitelist = set()
+
+#------------------------------------------------------------------------------
+# PAMAuthenticator(LocalAuthenticator) configuration
+#------------------------------------------------------------------------------
+## Authenticate local UNIX users with PAM
+
+## 
+#  See also: LocalAuthenticator.add_user_cmd
+# c.PAMAuthenticator.add_user_cmd = []
+
+## Authoritative list of user groups that determine admin access. Users not in
+#  these groups can still be granted admin status through admin_users.
+#  
+#  allowed/blocked rules still apply.
+#  
+#  Note: As of JupyterHub 2.0, full admin rights should not be required, and more
+#  precise permissions can be managed via roles.
+#  Default: set()
+# c.PAMAuthenticator.admin_groups = set()
+
+## 
+#  See also: Authenticator.admin_users
+# c.PAMAuthenticator.admin_users = set()
+
+## 
+#  See also: Authenticator.allow_all
+# c.PAMAuthenticator.allow_all = False
+
+## 
+#  See also: Authenticator.allow_existing_users
+# c.PAMAuthenticator.allow_existing_users = False
+
+## 
+#  See also: LocalAuthenticator.allowed_groups
+# c.PAMAuthenticator.allowed_groups = set()
+
+## 
+#  See also: Authenticator.allowed_users
+# c.PAMAuthenticator.allowed_users = set()
+
+## Is there any allow config?
+#  See also: Authenticator.any_allow_config
+# c.PAMAuthenticator.any_allow_config = False
+
+## The max age (in seconds) of authentication info
+#  See also: Authenticator.auth_refresh_age
+# c.PAMAuthenticator.auth_refresh_age = 300
+
+## Automatically begin the login process
+#  See also: Authenticator.auto_login
+# c.PAMAuthenticator.auto_login = False
+
+## 
+#  See also: Authenticator.auto_login_oauth2_authorize
+# c.PAMAuthenticator.auto_login_oauth2_authorize = False
+
+## 
+#  See also: Authenticator.blocked_users
+# c.PAMAuthenticator.blocked_users = set()
+
+## Whether to check the user's account status via PAM during authentication.
+#  
+#  The PAM account stack performs non-authentication based account management. It
+#  is typically used to restrict/permit access to a service and this step is
+#  needed to access the host's user access control.
+#  
+#  Disabling this can be dangerous as authenticated but unauthorized users may be
+#  granted access and, therefore, arbitrary execution on the system.
+#  Default: True
+# c.PAMAuthenticator.check_account = True
+
+## 
+#  See also: LocalAuthenticator.create_system_users
+# c.PAMAuthenticator.create_system_users = False
+
+## Delete any users from the database that do not pass validation
+#  See also: Authenticator.delete_invalid_users
+# c.PAMAuthenticator.delete_invalid_users = False
+
+## Enable persisting auth_state (if available).
+#  See also: Authenticator.enable_auth_state
+# c.PAMAuthenticator.enable_auth_state = False
+
+## The text encoding to use when communicating with PAM
+#  Default: 'utf8'
+# c.PAMAuthenticator.encoding = 'utf8'
+
+## Number of executor threads.
+#  
+#  PAM auth requests happen in this thread, so it is mostly waiting for the pam
+#  stack. One thread is usually enough, unless your pam stack is doing something
+#  slow like network requests
+#  Default: 4
+# c.PAMAuthenticator.executor_threads = 4
+
+## DEPRECATED: use allowed_groups
+#  See also: LocalAuthenticator.group_whitelist
+# c.PAMAuthenticator.group_whitelist = set()
+
+## Let authenticator manage user groups
+#  See also: Authenticator.manage_groups
+# c.PAMAuthenticator.manage_groups = False
+
+## Let authenticator manage roles
+#  See also: Authenticator.manage_roles
+# c.PAMAuthenticator.manage_roles = False
+
+## Whether to open a new PAM session when spawners are started.
+#  
+#  This may trigger things like mounting shared filesystems, loading credentials,
+#  etc. depending on system configuration.
+#  
+#  The lifecycle of PAM sessions is not correct, so many PAM session
+#  configurations will not work.
+#  
+#  If any errors are encountered when opening/closing PAM sessions, this is
+#  automatically set to False.
+#  
+#  .. versionchanged:: 2.2
+#  
+#      Due to longstanding problems in the session lifecycle,
+#      this is now disabled by default.
+#      You may opt-in to opening sessions by setting this to True.
+#  Default: False
+# c.PAMAuthenticator.open_sessions = False
+
+## 
+#  See also: Authenticator.otp_prompt
+# c.PAMAuthenticator.otp_prompt = 'OTP:'
+
+## Round-trip the username via PAM lookups to make sure it is unique
+#  
+#  PAM can accept multiple usernames that map to the same user, for example
+#  DOMAIN\username in some cases.  To prevent this, convert username into uid,
+#  then back to uid to normalize.
+#  Default: False
+# c.PAMAuthenticator.pam_normalize_username = False
+
+## 
+#  See also: Authenticator.post_auth_hook
+# c.PAMAuthenticator.post_auth_hook = None
+
+## Force refresh of auth prior to spawn.
+#  See also: Authenticator.refresh_pre_spawn
+# c.PAMAuthenticator.refresh_pre_spawn = False
+
+## 
+#  See also: Authenticator.request_otp
+# c.PAMAuthenticator.request_otp = False
+
+## Reset managed roles to result of `load_managed_roles()` on startup.
+#  See also: Authenticator.reset_managed_roles_on_startup
+# c.PAMAuthenticator.reset_managed_roles_on_startup = False
+
+## The name of the PAM service to use for authentication
+#  Default: 'login'
+# c.PAMAuthenticator.service = 'login'
+
+## 
+#  See also: LocalAuthenticator.uids
+# c.PAMAuthenticator.uids = {}
+
+## Dictionary mapping authenticator usernames to JupyterHub users.
+#  See also: Authenticator.username_map
+# c.PAMAuthenticator.username_map = {}
+
+## 
+#  See also: Authenticator.username_pattern
+# c.PAMAuthenticator.username_pattern = ''
+
+## Deprecated, use `Authenticator.allowed_users`
+#  See also: Authenticator.whitelist
+# c.PAMAuthenticator.whitelist = set()
 
 #------------------------------------------------------------------------------
 # Spawner(LoggingConfigurable) configuration
@@ -1032,7 +1757,7 @@ c.JupyterHub.spawner_class = 'systemd'
 #  implement this support. A custom spawner **must** add support for this setting
 #  for it to be enforced.
 #  Default: None
-# c.Spawner.cpu_limit = 4
+# c.Spawner.cpu_limit = None
 
 ## Enable debug-logging of the single-user server
 #  Default: False
@@ -1068,8 +1793,8 @@ c.JupyterHub.spawner_class = 'systemd'
 #  This list is used to ensure that sensitive information in the JupyterHub
 #  process's environment (such as `CONFIGPROXY_AUTH_TOKEN`) is not passed to the
 #  single-user server's process.
-#  Default: ['PATH', 'PYTHONPATH', 'CONDA_ROOT', 'CONDA_DEFAULT_ENV', 'VIRTUAL_ENV', 'LANG', 'LC_ALL', 'JUPYTERHUB_SINGLEUSER_APP']
-# c.Spawner.env_keep = ['PATH', 'PYTHONPATH', 'CONDA_ROOT', 'CONDA_DEFAULT_ENV', 'VIRTUAL_ENV', 'LANG', 'LC_ALL', 'JUPYTERHUB_SINGLEUSER_APP']
+#  Default: ['JUPYTERHUB_SINGLEUSER_APP']
+# c.Spawner.env_keep = ['JUPYTERHUB_SINGLEUSER_APP']
 
 ## Extra environment variables to set for the single-user server's process.
 #  
@@ -1094,10 +1819,54 @@ c.JupyterHub.spawner_class = 'systemd'
 #      allowing override of 'default' env variables,
 #      such as JUPYTERHUB_API_URL.
 #  Default: {}
-c.Spawner.environment = {
-    "JULIA_DEPOT_PATH": "~/.julia:/usr/local/lib/julia/labcompsci",
-    "JULIA_NUM_THREADS": "4"
-}
+# c.Spawner.environment = {}
+
+## Override specific traitlets based on group membership of the user.
+#  
+#  This can be a dict, or a callable that returns a dict. The keys of the dict
+#  are *only* used for lexicographical sorting, to guarantee consistent ordering
+#  of the overrides. If it is a callable, it may be async, and will be passed one
+#  parameter - the spawner instance. It should return a dictionary.
+#  
+#  The values of the dict are dicts with the following keys:
+#  
+#  - `"groups"` - If the user belongs to *any* of these groups, these overrides are
+#    applied to their server before spawning.
+#  - `"spawner_override"` - a dictionary with overrides to apply to the Spawner
+#    settings. Each value can be either the final value to change or a callable that
+#    take the `Spawner` instance as parameter and returns the final value.
+#    If the traitlet being overriden is a *dictionary*, the dictionary
+#    will be *recursively updated*, rather than overriden. If you want to
+#    remove a key, set its value to `None`.
+#  
+#  Example:
+#  
+#      The following example config will:
+#  
+#      1. Add the environment variable "AM_I_GROUP_ALPHA" to everyone in the "group-alpha" group
+#      2. Add the environment variable "AM_I_GROUP_BETA" to everyone in the "group-beta" group.
+#         If a user is part of both "group-beta" and "group-alpha", they will get *both* these env
+#         vars, due to the dictionary merging functionality.
+#      3. Add a higher memory limit for everyone in the "group-beta" group.
+#  
+#      ::
+#  
+#          c.Spawner.group_overrides = {
+#              "01-group-alpha-env-add": {
+#                  "groups": ["group-alpha"],
+#                  "spawner_override": {"environment": {"AM_I_GROUP_ALPHA": "yes"}},
+#              },
+#              "02-group-beta-env-add": {
+#                  "groups": ["group-beta"],
+#                  "spawner_override": {"environment": {"AM_I_GROUP_BETA": "yes"}},
+#              },
+#              "03-group-beta-mem-limit": {
+#                  "groups": ["group-beta"],
+#                  "spawner_override": {"mem_limit": "2G"}
+#              }
+#          }
+#  Default: traitlets.Undefined
+# c.Spawner.group_overrides = traitlets.Undefined
 
 ## Timeout (in seconds) before giving up on a spawned HTTP server
 #  
@@ -1166,7 +1935,7 @@ c.Spawner.environment = {
 #  implement this support. A custom spawner **must** add support for this setting
 #  for it to be enforced.
 #  Default: None
-c.Spawner.mem_limit = '8G'
+# c.Spawner.mem_limit = None
 
 ## Path to the notebook directory for the single-user server.
 #  
@@ -1275,6 +2044,15 @@ c.Spawner.mem_limit = '8G'
 #  Default: 30
 # c.Spawner.poll_interval = 30
 
+## Jitter fraction for poll_interval.
+#  
+#  Avoids alignment of poll calls for many Spawners, e.g. when restarting
+#  JupyterHub, which restarts all polls for running Spawners.
+#  
+#  `poll_jitter=0` means no jitter, 0.1 means 10%, etc.
+#  Default: 0.1
+# c.Spawner.poll_jitter = 0.1
+
 ## The port for single-user servers to listen on.
 #  
 #  Defaults to `0`, which uses a randomly allocated port number each time.
@@ -1303,14 +2081,31 @@ c.Spawner.mem_limit = '8G'
 #  
 #  Example::
 #  
-#      from subprocess import check_call
 #      def my_hook(spawner):
 #          username = spawner.user.name
-#          check_call(['./examples/bootstrap-script/bootstrap.sh', username])
+#          spawner.environment["GREETING"] = f"Hello {username}"
 #  
 #      c.Spawner.pre_spawn_hook = my_hook
 #  Default: None
 # c.Spawner.pre_spawn_hook = None
+
+## An optional hook function that you can implement to modify the ready event,
+#  which will be shown to the user on the spawn progress page when their server
+#  is ready.
+#  
+#  This can be set independent of any concrete spawner implementation.
+#  
+#  This maybe a coroutine.
+#  
+#  Example::
+#  
+#      async def my_ready_hook(spawner, ready_event):
+#          ready_event["html_message"] = f"Server {spawner.name} is ready for {spawner.user.name}"
+#          return ready_event
+#  
+#      c.Spawner.progress_ready_hook = my_ready_hook
+#  Default: None
+# c.Spawner.progress_ready_hook = None
 
 ## The list of scopes to request for $JUPYTERHUB_API_TOKEN
 #  
@@ -1348,201 +2143,885 @@ c.Spawner.mem_limit = '8G'
 # c.Spawner.start_timeout = 60
 
 #------------------------------------------------------------------------------
-# Authenticator(LoggingConfigurable) configuration
+# SystemdSpawner(Spawner) configuration
 #------------------------------------------------------------------------------
-## Base class for implementing an authentication provider for JupyterHub
+## 
+#  See also: Spawner.args
+# c.SystemdSpawner.args = []
 
-## Set of users that will have admin rights on this JupyterHub.
-#  
-#  Note: As of JupyterHub 2.0, full admin rights should not be required, and more
-#  precise permissions can be managed via roles.
-#  
-#  Admin users have extra privileges:
-#   - Use the admin panel to see list of users logged in
-#   - Add / remove users in some authenticators
-#   - Restart / halt the hub
-#   - Start / stop users' single-user servers
-#   - Can access each individual users' single-user server (if configured)
-#  
-#  Admin access should be treated the same way root access is.
-#  
-#  Defaults to an empty set, in which case no user has admin access.
-#  Default: set()
-# c.Authenticator.admin_users = set()
+## 
+#  See also: Spawner.auth_state_hook
+# c.SystemdSpawner.auth_state_hook = None
 
-## Set of usernames that are allowed to log in.
+## 
+#  See also: Spawner.cmd
+# c.SystemdSpawner.cmd = ['jupyterhub-singleuser']
+
+## 
+#  See also: Spawner.consecutive_failure_limit
+# c.SystemdSpawner.consecutive_failure_limit = 0
+
+## 
+#  See also: Spawner.cpu_guarantee
+# c.SystemdSpawner.cpu_guarantee = None
+
+## 
+#  See also: Spawner.cpu_limit
+# c.SystemdSpawner.cpu_limit = None
+
+## Enable debug-logging of the single-user server
+#  See also: Spawner.debug
+# c.SystemdSpawner.debug = False
+
+## Default shell for users on the notebook terminal
+#  Default: '/bin/bash'
+# c.SystemdSpawner.default_shell = '/bin/bash'
+
+## 
+#  See also: Spawner.default_url
+# c.SystemdSpawner.default_url = ''
+
+## 
+#  See also: Spawner.disable_user_config
+# c.SystemdSpawner.disable_user_config = False
+
+## Set to true to disallow becoming root (or any other user) via sudo or other
+#  means from inside the notebook
+#  Default: True
+# c.SystemdSpawner.disable_user_sudo = True
+
+## Allocate system users dynamically for each user.
 #  
-#  Use this with supported authenticators to restrict which users can log in.
-#  This is an additional list that further restricts users, beyond whatever
-#  restrictions the authenticator has in place. Any user in this list is granted
-#  the 'user' role on hub startup.
+#  Uses the DynamicUser= feature of Systemd to make a new system user for each
+#  hub user dynamically. Their home directories are set up under
+#  /var/lib/{USERNAME}, and persist over time. The system user is deallocated
+#  whenever the user's server is not running.
 #  
-#  If empty, does not perform any additional restriction.
+#  See http://0pointer.net/blog/dynamic-users-with-systemd.html for more
+#  information.
+#  Default: False
+# c.SystemdSpawner.dynamic_users = False
+
+## 
+#  See also: Spawner.env_keep
+# c.SystemdSpawner.env_keep = ['JUPYTERHUB_SINGLEUSER_APP']
+
+## 
+#  See also: Spawner.environment
+# c.SystemdSpawner.environment = {}
+
+## Extra paths to prepend to the $PATH environment variable.
 #  
-#  .. versionchanged:: 1.2
-#      `Authenticator.whitelist` renamed to `allowed_users`
-#  Default: set()
-# c.Authenticator.allowed_users = set()
+#  {USERNAME} and {USERID} are expanded
+#  Default: []
+# c.SystemdSpawner.extra_paths = []
+
+## 
+#  See also: Spawner.group_overrides
+# c.SystemdSpawner.group_overrides = traitlets.Undefined
+
+## 
+#  See also: Spawner.http_timeout
+# c.SystemdSpawner.http_timeout = 30
+
+## 
+#  See also: Spawner.hub_connect_url
+# c.SystemdSpawner.hub_connect_url = None
+
+## 
+#  See also: Spawner.ip
+# c.SystemdSpawner.ip = '127.0.0.1'
+
+## Give each notebook user their own /dev, with a very limited set of devices
+#  mounted
+#  Default: False
+# c.SystemdSpawner.isolate_devices = False
+
+## Give each notebook user their own /tmp, isolated from the system & each other
+#  Default: False
+# c.SystemdSpawner.isolate_tmp = False
+
+## 
+#  See also: Spawner.mem_guarantee
+# c.SystemdSpawner.mem_guarantee = None
+
+## 
+#  See also: Spawner.mem_limit
+# c.SystemdSpawner.mem_limit = None
+
+## 
+#  See also: Spawner.notebook_dir
+# c.SystemdSpawner.notebook_dir = ''
+
+## Allowed scopes for oauth tokens issued by this server's oauth client.
+#  See also: Spawner.oauth_client_allowed_scopes
+# c.SystemdSpawner.oauth_client_allowed_scopes = traitlets.Undefined
+
+## Allowed roles for oauth tokens.
+#  See also: Spawner.oauth_roles
+# c.SystemdSpawner.oauth_roles = traitlets.Undefined
+
+## 
+#  See also: Spawner.options_form
+# c.SystemdSpawner.options_form = traitlets.Undefined
+
+## 
+#  See also: Spawner.options_from_form
+# c.SystemdSpawner.options_from_form = traitlets.Undefined
+
+## 
+#  See also: Spawner.poll_interval
+# c.SystemdSpawner.poll_interval = 30
+
+## 
+#  See also: Spawner.poll_jitter
+# c.SystemdSpawner.poll_jitter = 0.1
+
+## 
+#  See also: Spawner.port
+# c.SystemdSpawner.port = 0
+
+## 
+#  See also: Spawner.post_stop_hook
+# c.SystemdSpawner.post_stop_hook = None
+
+## 
+#  See also: Spawner.pre_spawn_hook
+# c.SystemdSpawner.pre_spawn_hook = None
+
+## 
+#  See also: Spawner.progress_ready_hook
+# c.SystemdSpawner.progress_ready_hook = None
+
+## List of paths that should be marked readonly from the user notebook.
+#  
+#  Subpaths maybe be made writeable by setting readwrite_paths
+#  Default: []
+# c.SystemdSpawner.readonly_paths = []
+
+## List of paths that should be marked read-write from the user notebook.
+#  
+#  Used to make a subpath of a readonly path writeable
+#  Default: []
+# c.SystemdSpawner.readwrite_paths = []
+
+## The list of scopes to request for $JUPYTERHUB_API_TOKEN
+#  See also: Spawner.server_token_scopes
+# c.SystemdSpawner.server_token_scopes = traitlets.Undefined
+
+## Ensure that all users that are created are run within a given slice. This
+#  allow global configuration of the maximum resources that all users
+#  collectively can use by creating a a slice beforehand.
+#  Default: None
+# c.SystemdSpawner.slice = None
+
+## List of SSL alt names
+#  See also: Spawner.ssl_alt_names
+# c.SystemdSpawner.ssl_alt_names = []
+
+## Whether to include `DNS:localhost`, `IP:127.0.0.1` in alt names
+#  See also: Spawner.ssl_alt_names_include_local
+# c.SystemdSpawner.ssl_alt_names_include_local = True
+
+## 
+#  See also: Spawner.start_timeout
+# c.SystemdSpawner.start_timeout = 60
+
+## Dict of extra properties for systemd-run --property=[...].
+#  
+#  Keys are property names, and values are either strings or list of strings (for
+#  multiple entries). When values are lists, ordering is guaranteed. Ordering
+#  across keys of the dictionary are *not* guaranteed.
+#  
+#  Used to add arbitrary properties for spawned Jupyter units. Read `man systemd-
+#  run` for details on per-unit properties available in transient units.
+#  Default: {}
+# c.SystemdSpawner.unit_extra_properties = {}
+
+## Template to use to make the systemd service names.
+#  
+#  {USERNAME} and {USERID} are expanded}
+#  Default: 'jupyter-{USERNAME}-singleuser'
+# c.SystemdSpawner.unit_name_template = 'jupyter-{USERNAME}-singleuser'
+
+## Path to start each notebook user on.
+#  
+#  {USERNAME} and {USERID} are expanded.
+#  
+#  Defaults to the home directory of the user.
+#  
+#  Not respected if dynamic_users is set to True.
+#  Default: None
+# c.SystemdSpawner.user_workingdir = None
+
+## Template for unix username each user should be spawned as.
+#  
+#  {USERNAME} and {USERID} are expanded.
+#  
+#  This user should already exist in the system.
+#  
+#  Not respected if dynamic_users is set to True
+#  Default: '{USERNAME}'
+# c.SystemdSpawner.username_template = '{USERNAME}'
+
+#------------------------------------------------------------------------------
+# Proxy(LoggingConfigurable) configuration
+#------------------------------------------------------------------------------
+## Base class for configurable proxies that JupyterHub can use.
+#  
+#      A proxy implementation should subclass this and must define the following
+#  methods:
+#  
+#      - :meth:`.get_all_routes` return a dictionary of all JupyterHub-related routes
+#      - :meth:`.add_route` adds a route
+#      - :meth:`.delete_route` deletes a route
+#  
+#      In addition to these, the following method(s) may need to be implemented:
+#  
+#      - :meth:`.start` start the proxy, if it should be launched by the Hub
+#        instead of externally managed.
+#        If the proxy is externally managed, it should set :attr:`should_start` to False.
+#      - :meth:`.stop` stop the proxy. Only used if :meth:`.start` is also used.
+#  
+#      And the following method(s) are optional, but can be provided:
+#  
+#      - :meth:`.get_route` gets a single route.
+#        There is a default implementation that extracts data from :meth:`.get_all_routes`,
+#        but implementations may choose to provide a more efficient implementation
+#        of fetching a single route.
+
+## Additional routes to be maintained in the proxy.
+#  
+#  A dictionary with a route specification as key, and a URL as target. The hub
+#  will ensure this route is present in the proxy.
+#  
+#  If the hub is running in host based mode (with JupyterHub.subdomain_host set),
+#  the routespec *must* have a domain component (example.com/my-url/). If the hub
+#  is not running in host based mode, the routespec *must not* have a domain
+#  component (/my-url/).
+#  
+#  Helpful when the hub is running in API-only mode.
+#  Default: {}
+# c.Proxy.extra_routes = {}
+
+## Should the Hub start the proxy
+#  
+#          If True, the Hub will start the proxy and stop it.
+#          Set to False if the proxy is managed externally,
+#          such as by systemd, docker, or another service manager.
+#  Default: True
+# c.Proxy.should_start = True
+
+#------------------------------------------------------------------------------
+# ConfigurableHTTPProxy(Proxy) configuration
+#------------------------------------------------------------------------------
+## Proxy implementation for the default configurable-http-proxy.
+#  
+#      This is the default proxy implementation
+#      for running the nodejs proxy `configurable-http-proxy`.
+#  
+#      If the proxy should not be run as a subprocess of the Hub,
+#      (e.g. in a separate container),
+#      set::
+#  
+#          c.ConfigurableHTTPProxy.should_start = False
+
+## The ip (or hostname) of the proxy's API endpoint
+#  Default: ''
+# c.ConfigurableHTTPProxy.api_url = ''
+
+## The Proxy auth token
+#  
+#          Loaded from the CONFIGPROXY_AUTH_TOKEN env variable by default.
+#  Default: ''
+# c.ConfigurableHTTPProxy.auth_token = ''
+
+## Interval (in seconds) at which to check if the proxy is running.
+#  Default: 5
+# c.ConfigurableHTTPProxy.check_running_interval = 5
+
+## The command to start the proxy
+#  Default: ['configurable-http-proxy']
+# c.ConfigurableHTTPProxy.command = ['configurable-http-proxy']
+
+## The number of requests allowed to be concurrently outstanding to the proxy
+#  
+#  Limiting this number avoids potential timeout errors by sending too many
+#  requests to update the proxy at once
+#  Default: 10
+# c.ConfigurableHTTPProxy.concurrency = 10
+
+## Add debug-level logging to the Proxy.
+#  Default: False
+# c.ConfigurableHTTPProxy.debug = False
+
+## 
+#  See also: Proxy.extra_routes
+# c.ConfigurableHTTPProxy.extra_routes = {}
+
+## Proxy log level
+#  Choices: any of ['debug', 'info', 'warn', 'error'] (case-insensitive)
+#  Default: 'info'
+# c.ConfigurableHTTPProxy.log_level = 'info'
+
+## File in which to write the PID of the proxy process.
+#  Default: 'jupyterhub-proxy.pid'
+# c.ConfigurableHTTPProxy.pid_file = 'jupyterhub-proxy.pid'
+
+## Should the Hub start the proxy
+#  See also: Proxy.should_start
+# c.ConfigurableHTTPProxy.should_start = True
+
+#------------------------------------------------------------------------------
+# DummyAuthenticator(Authenticator) configuration
+#------------------------------------------------------------------------------
+## Dummy Authenticator for testing
+#  
+#      By default, any username + password is allowed
+#      If a non-empty password is set, any username will be allowed
+#      if it logs in with that password.
+#  
+#      .. versionadded:: 1.0
+#  
+#      .. versionadded:: 5.0
+#          `allow_all` defaults to True,
+#          preserving default behavior.
+
+## 
+#  See also: Authenticator.admin_users
+# c.DummyAuthenticator.admin_users = set()
+
+## 
+#  See also: Authenticator.allow_all
+# c.DummyAuthenticator.allow_all = False
+
+## 
+#  See also: Authenticator.allow_existing_users
+# c.DummyAuthenticator.allow_existing_users = False
+
+## 
+#  See also: Authenticator.allowed_users
+# c.DummyAuthenticator.allowed_users = set()
+
+## Is there any allow config?
+#  See also: Authenticator.any_allow_config
+# c.DummyAuthenticator.any_allow_config = False
 
 ## The max age (in seconds) of authentication info
-#          before forcing a refresh of user auth info.
-#  
-#          Refreshing auth info allows, e.g. requesting/re-validating auth
-#  tokens.
-#  
-#          See :meth:`.refresh_user` for what happens when user auth info is refreshed
-#          (nothing by default).
-#  Default: 300
-# c.Authenticator.auth_refresh_age = 300
+#  See also: Authenticator.auth_refresh_age
+# c.DummyAuthenticator.auth_refresh_age = 300
 
 ## Automatically begin the login process
-#  
-#          rather than starting with a "Login with..." link at `/hub/login`
-#  
-#          To work, `.login_url()` must give a URL other than the default `/hub/login`,
-#          such as an oauth handler or another automatic login handler,
-#          registered with `.get_handlers()`.
-#  
-#          .. versionadded:: 0.8
-#  Default: False
-# c.Authenticator.auto_login = False
+#  See also: Authenticator.auto_login
+# c.DummyAuthenticator.auto_login = False
 
-## Automatically begin login process for OAuth2 authorization requests
-#  
-#  When another application is using JupyterHub as OAuth2 provider, it sends
-#  users to `/hub/api/oauth2/authorize`. If the user isn't logged in already, and
-#  auto_login is not set, the user will be dumped on the hub's home page, without
-#  any context on what to do next.
-#  
-#  Setting this to true will automatically redirect users to login if they aren't
-#  logged in *only* on the `/hub/api/oauth2/authorize` endpoint.
-#  
-#  .. versionadded:: 1.5
-#  Default: False
-# c.Authenticator.auto_login_oauth2_authorize = False
+## 
+#  See also: Authenticator.auto_login_oauth2_authorize
+# c.DummyAuthenticator.auto_login_oauth2_authorize = False
 
-## Set of usernames that are not allowed to log in.
-#  
-#  Use this with supported authenticators to restrict which users can not log in.
-#  This is an additional block list that further restricts users, beyond whatever
-#  restrictions the authenticator has in place.
-#  
-#  If empty, does not perform any additional restriction.
-#  
-#  .. versionadded: 0.9
-#  
-#  .. versionchanged:: 1.2
-#      `Authenticator.blacklist` renamed to `blocked_users`
-#  Default: set()
-# c.Authenticator.blocked_users = set()
+## 
+#  See also: Authenticator.blocked_users
+# c.DummyAuthenticator.blocked_users = set()
 
 ## Delete any users from the database that do not pass validation
-#  
-#          When JupyterHub starts, `.add_user` will be called
-#          on each user in the database to verify that all users are still valid.
-#  
-#          If `delete_invalid_users` is True,
-#          any users that do not pass validation will be deleted from the database.
-#          Use this if users might be deleted from an external system,
-#          such as local user accounts.
-#  
-#          If False (default), invalid users remain in the Hub's database
-#          and a warning will be issued.
-#          This is the default to avoid data loss due to config changes.
-#  Default: False
-# c.Authenticator.delete_invalid_users = False
+#  See also: Authenticator.delete_invalid_users
+# c.DummyAuthenticator.delete_invalid_users = False
 
 ## Enable persisting auth_state (if available).
-#  
-#          auth_state will be encrypted and stored in the Hub's database.
-#          This can include things like authentication tokens, etc.
-#          to be passed to Spawners as environment variables.
-#  
-#          Encrypting auth_state requires the cryptography package.
-#  
-#          Additionally, the JUPYTERHUB_CRYPT_KEY environment variable must
-#          contain one (or more, separated by ;) 32B encryption keys.
-#          These can be either base64 or hex-encoded.
-#  
-#          If encryption is unavailable, auth_state cannot be persisted.
-#  
-#          New in JupyterHub 0.8
-#  Default: False
-# c.Authenticator.enable_auth_state = False
+#  See also: Authenticator.enable_auth_state
+# c.DummyAuthenticator.enable_auth_state = False
 
 ## Let authenticator manage user groups
-#  
-#          If True, Authenticator.authenticate and/or .refresh_user
-#          may return a list of group names in the 'groups' field,
-#          which will be assigned to the user.
-#  
-#          All group-assignment APIs are disabled if this is True.
-#  Default: False
-# c.Authenticator.manage_groups = False
+#  See also: Authenticator.manage_groups
+# c.DummyAuthenticator.manage_groups = False
 
-## An optional hook function that you can implement to do some bootstrapping work
-#  during authentication. For example, loading user account details from an
-#  external system.
+## Let authenticator manage roles
+#  See also: Authenticator.manage_roles
+# c.DummyAuthenticator.manage_roles = False
+
+## 
+#  See also: Authenticator.otp_prompt
+# c.DummyAuthenticator.otp_prompt = 'OTP:'
+
+## Set a global password for all users wanting to log in.
 #  
-#  This function is called after the user has passed all authentication checks
-#  and is ready to successfully authenticate. This function must return the
-#  authentication dict reguardless of changes to it.
-#  
-#  This maybe a coroutine.
-#  
-#  .. versionadded: 1.0
-#  
-#  Example::
-#  
-#      import os, pwd
-#      def my_hook(authenticator, handler, authentication):
-#          user_data = pwd.getpwnam(authentication['name'])
-#          spawn_data = {
-#              'pw_data': user_data
-#              'gid_list': os.getgrouplist(authentication['name'], user_data.pw_gid)
-#          }
-#  
-#          if authentication['auth_state'] is None:
-#              authentication['auth_state'] = {}
-#          authentication['auth_state']['spawn_data'] = spawn_data
-#  
-#          return authentication
-#  
-#      c.Authenticator.post_auth_hook = my_hook
-#  Default: None
-# c.Authenticator.post_auth_hook = None
+#  This allows users with any username to log in with the same static password.
+#  Default: ''
+# c.DummyAuthenticator.password = ''
+
+## 
+#  See also: Authenticator.post_auth_hook
+# c.DummyAuthenticator.post_auth_hook = None
 
 ## Force refresh of auth prior to spawn.
-#  
-#          This forces :meth:`.refresh_user` to be called prior to launching
-#          a server, to ensure that auth state is up-to-date.
-#  
-#          This can be important when e.g. auth tokens that may have expired
-#          are passed to the spawner via environment variables from auth_state.
-#  
-#          If refresh_user cannot refresh the user auth data,
-#          launch will fail until the user logs in again.
-#  Default: False
-# c.Authenticator.refresh_pre_spawn = False
+#  See also: Authenticator.refresh_pre_spawn
+# c.DummyAuthenticator.refresh_pre_spawn = False
+
+## 
+#  See also: Authenticator.request_otp
+# c.DummyAuthenticator.request_otp = False
+
+## Reset managed roles to result of `load_managed_roles()` on startup.
+#  See also: Authenticator.reset_managed_roles_on_startup
+# c.DummyAuthenticator.reset_managed_roles_on_startup = False
 
 ## Dictionary mapping authenticator usernames to JupyterHub users.
-#  
-#          Primarily used to normalize OAuth user names to local users.
-#  Default: {}
-# c.Authenticator.username_map = {}
+#  See also: Authenticator.username_map
+# c.DummyAuthenticator.username_map = {}
 
-## Regular expression pattern that all valid usernames must match.
-#  
-#  If a username does not match the pattern specified here, authentication will
-#  not be attempted.
-#  
-#  If not set, allow any username.
-#  Default: ''
-# c.Authenticator.username_pattern = ''
+## 
+#  See also: Authenticator.username_pattern
+# c.DummyAuthenticator.username_pattern = ''
 
 ## Deprecated, use `Authenticator.allowed_users`
-#  Default: set()
-# c.Authenticator.whitelist = set()
+#  See also: Authenticator.whitelist
+# c.DummyAuthenticator.whitelist = set()
+
+#------------------------------------------------------------------------------
+# LocalProcessSpawner(Spawner) configuration
+#------------------------------------------------------------------------------
+## A Spawner that uses `subprocess.Popen` to start single-user servers as local
+#  processes.
+#  
+#  Requires local UNIX users matching the authenticated users to exist. Does not
+#  work on Windows.
+#  
+#  This is the default spawner for JupyterHub.
+#  
+#  Note: This spawner does not implement CPU / memory guarantees and limits.
+
+## 
+#  See also: Spawner.args
+# c.LocalProcessSpawner.args = []
+
+## 
+#  See also: Spawner.auth_state_hook
+# c.LocalProcessSpawner.auth_state_hook = None
+
+## 
+#  See also: Spawner.cmd
+# c.LocalProcessSpawner.cmd = ['jupyterhub-singleuser']
+
+## 
+#  See also: Spawner.consecutive_failure_limit
+# c.LocalProcessSpawner.consecutive_failure_limit = 0
+
+## 
+#  See also: Spawner.cpu_guarantee
+# c.LocalProcessSpawner.cpu_guarantee = None
+
+## 
+#  See also: Spawner.cpu_limit
+# c.LocalProcessSpawner.cpu_limit = None
+
+## Enable debug-logging of the single-user server
+#  See also: Spawner.debug
+# c.LocalProcessSpawner.debug = False
+
+## 
+#  See also: Spawner.default_url
+# c.LocalProcessSpawner.default_url = ''
+
+## 
+#  See also: Spawner.disable_user_config
+# c.LocalProcessSpawner.disable_user_config = False
+
+## 
+#  See also: Spawner.env_keep
+# c.LocalProcessSpawner.env_keep = ['JUPYTERHUB_SINGLEUSER_APP']
+
+## 
+#  See also: Spawner.environment
+# c.LocalProcessSpawner.environment = {}
+
+## 
+#  See also: Spawner.group_overrides
+# c.LocalProcessSpawner.group_overrides = traitlets.Undefined
+
+## 
+#  See also: Spawner.http_timeout
+# c.LocalProcessSpawner.http_timeout = 30
+
+## 
+#  See also: Spawner.hub_connect_url
+# c.LocalProcessSpawner.hub_connect_url = None
+
+## Seconds to wait for single-user server process to halt after SIGINT.
+#  
+#  If the process has not exited cleanly after this many seconds, a SIGTERM is
+#  sent.
+#  Default: 10
+# c.LocalProcessSpawner.interrupt_timeout = 10
+
+## 
+#  See also: Spawner.ip
+# c.LocalProcessSpawner.ip = '127.0.0.1'
+
+## Seconds to wait for process to halt after SIGKILL before giving up.
+#  
+#  If the process does not exit cleanly after this many seconds of SIGKILL, it
+#  becomes a zombie process. The hub process will log a warning and then give up.
+#  Default: 5
+# c.LocalProcessSpawner.kill_timeout = 5
+
+## 
+#  See also: Spawner.mem_guarantee
+# c.LocalProcessSpawner.mem_guarantee = None
+
+## 
+#  See also: Spawner.mem_limit
+# c.LocalProcessSpawner.mem_limit = None
+
+## 
+#  See also: Spawner.notebook_dir
+# c.LocalProcessSpawner.notebook_dir = ''
+
+## Allowed scopes for oauth tokens issued by this server's oauth client.
+#  See also: Spawner.oauth_client_allowed_scopes
+# c.LocalProcessSpawner.oauth_client_allowed_scopes = traitlets.Undefined
+
+## Allowed roles for oauth tokens.
+#  See also: Spawner.oauth_roles
+# c.LocalProcessSpawner.oauth_roles = traitlets.Undefined
+
+## 
+#  See also: Spawner.options_form
+# c.LocalProcessSpawner.options_form = traitlets.Undefined
+
+## 
+#  See also: Spawner.options_from_form
+# c.LocalProcessSpawner.options_from_form = traitlets.Undefined
+
+## 
+#  See also: Spawner.poll_interval
+# c.LocalProcessSpawner.poll_interval = 30
+
+## 
+#  See also: Spawner.poll_jitter
+# c.LocalProcessSpawner.poll_jitter = 0.1
+
+## Extra keyword arguments to pass to Popen
+#  
+#          when spawning single-user servers.
+#  
+#          For example::
+#  
+#              popen_kwargs = dict(shell=True)
+#  Default: {}
+# c.LocalProcessSpawner.popen_kwargs = {}
+
+## 
+#  See also: Spawner.port
+# c.LocalProcessSpawner.port = 0
+
+## 
+#  See also: Spawner.post_stop_hook
+# c.LocalProcessSpawner.post_stop_hook = None
+
+## 
+#  See also: Spawner.pre_spawn_hook
+# c.LocalProcessSpawner.pre_spawn_hook = None
+
+## 
+#  See also: Spawner.progress_ready_hook
+# c.LocalProcessSpawner.progress_ready_hook = None
+
+## The list of scopes to request for $JUPYTERHUB_API_TOKEN
+#  See also: Spawner.server_token_scopes
+# c.LocalProcessSpawner.server_token_scopes = traitlets.Undefined
+
+## Specify a shell command to launch.
+#  
+#          The single-user command will be appended to this list,
+#          so it sould end with `-c` (for bash) or equivalent.
+#  
+#          For example::
+#  
+#              c.LocalProcessSpawner.shell_cmd = ['bash', '-l', '-c']
+#  
+#          to launch with a bash login shell, which would set up the user's own
+#  complete environment.
+#  
+#          .. warning::
+#  
+#              Using shell_cmd gives users control over PATH, etc.,
+#              which could change what the jupyterhub-singleuser launch command does.
+#              Only use this for trusted users.
+#  Default: []
+# c.LocalProcessSpawner.shell_cmd = []
+
+## List of SSL alt names
+#  See also: Spawner.ssl_alt_names
+# c.LocalProcessSpawner.ssl_alt_names = []
+
+## Whether to include `DNS:localhost`, `IP:127.0.0.1` in alt names
+#  See also: Spawner.ssl_alt_names_include_local
+# c.LocalProcessSpawner.ssl_alt_names_include_local = True
+
+## 
+#  See also: Spawner.start_timeout
+# c.LocalProcessSpawner.start_timeout = 60
+
+## Seconds to wait for single-user server process to halt after SIGTERM.
+#  
+#  If the process does not exit cleanly after this many seconds of SIGTERM, a
+#  SIGKILL is sent.
+#  Default: 5
+# c.LocalProcessSpawner.term_timeout = 5
+
+#------------------------------------------------------------------------------
+# NullAuthenticator(Authenticator) configuration
+#------------------------------------------------------------------------------
+## Null Authenticator for JupyterHub
+#  
+#      For cases where authentication should be disabled,
+#      e.g. only allowing access via API tokens.
+#  
+#      .. versionadded:: 2.0
+
+## 
+#  See also: Authenticator.admin_users
+# c.NullAuthenticator.admin_users = set()
+
+## 
+#  See also: Authenticator.allow_all
+# c.NullAuthenticator.allow_all = False
+
+## 
+#  See also: Authenticator.allow_existing_users
+# c.NullAuthenticator.allow_existing_users = False
+
+## 
+#  See also: Authenticator.allowed_users
+# c.NullAuthenticator.allowed_users = set()
+
+## Is there any allow config?
+#  See also: Authenticator.any_allow_config
+# c.NullAuthenticator.any_allow_config = False
+
+## The max age (in seconds) of authentication info
+#  See also: Authenticator.auth_refresh_age
+# c.NullAuthenticator.auth_refresh_age = 300
+
+## 
+#  See also: Authenticator.auto_login_oauth2_authorize
+# c.NullAuthenticator.auto_login_oauth2_authorize = False
+
+## 
+#  See also: Authenticator.blocked_users
+# c.NullAuthenticator.blocked_users = set()
+
+## Delete any users from the database that do not pass validation
+#  See also: Authenticator.delete_invalid_users
+# c.NullAuthenticator.delete_invalid_users = False
+
+## Enable persisting auth_state (if available).
+#  See also: Authenticator.enable_auth_state
+# c.NullAuthenticator.enable_auth_state = False
+
+## Let authenticator manage user groups
+#  See also: Authenticator.manage_groups
+# c.NullAuthenticator.manage_groups = False
+
+## Let authenticator manage roles
+#  See also: Authenticator.manage_roles
+# c.NullAuthenticator.manage_roles = False
+
+## 
+#  See also: Authenticator.otp_prompt
+# c.NullAuthenticator.otp_prompt = 'OTP:'
+
+## 
+#  See also: Authenticator.post_auth_hook
+# c.NullAuthenticator.post_auth_hook = None
+
+## Force refresh of auth prior to spawn.
+#  See also: Authenticator.refresh_pre_spawn
+# c.NullAuthenticator.refresh_pre_spawn = False
+
+## 
+#  See also: Authenticator.request_otp
+# c.NullAuthenticator.request_otp = False
+
+## Reset managed roles to result of `load_managed_roles()` on startup.
+#  See also: Authenticator.reset_managed_roles_on_startup
+# c.NullAuthenticator.reset_managed_roles_on_startup = False
+
+## Dictionary mapping authenticator usernames to JupyterHub users.
+#  See also: Authenticator.username_map
+# c.NullAuthenticator.username_map = {}
+
+## 
+#  See also: Authenticator.username_pattern
+# c.NullAuthenticator.username_pattern = ''
+
+## Deprecated, use `Authenticator.allowed_users`
+#  See also: Authenticator.whitelist
+# c.NullAuthenticator.whitelist = set()
+
+#------------------------------------------------------------------------------
+# SimpleLocalProcessSpawner(LocalProcessSpawner) configuration
+#------------------------------------------------------------------------------
+## A version of LocalProcessSpawner that doesn't require users to exist on the
+#  system beforehand.
+#  
+#  Only use this for testing.
+#  
+#  Note: DO NOT USE THIS FOR PRODUCTION USE CASES! It is very insecure, and
+#  provides absolutely no isolation between different users!
+
+## 
+#  See also: Spawner.args
+# c.SimpleLocalProcessSpawner.args = []
+
+## 
+#  See also: Spawner.auth_state_hook
+# c.SimpleLocalProcessSpawner.auth_state_hook = None
+
+## 
+#  See also: Spawner.cmd
+# c.SimpleLocalProcessSpawner.cmd = ['jupyterhub-singleuser']
+
+## 
+#  See also: Spawner.consecutive_failure_limit
+# c.SimpleLocalProcessSpawner.consecutive_failure_limit = 0
+
+## 
+#  See also: Spawner.cpu_guarantee
+# c.SimpleLocalProcessSpawner.cpu_guarantee = None
+
+## 
+#  See also: Spawner.cpu_limit
+# c.SimpleLocalProcessSpawner.cpu_limit = None
+
+## Enable debug-logging of the single-user server
+#  See also: Spawner.debug
+# c.SimpleLocalProcessSpawner.debug = False
+
+## 
+#  See also: Spawner.default_url
+# c.SimpleLocalProcessSpawner.default_url = ''
+
+## 
+#  See also: Spawner.disable_user_config
+# c.SimpleLocalProcessSpawner.disable_user_config = False
+
+## 
+#  See also: Spawner.env_keep
+# c.SimpleLocalProcessSpawner.env_keep = ['JUPYTERHUB_SINGLEUSER_APP']
+
+## 
+#  See also: Spawner.environment
+# c.SimpleLocalProcessSpawner.environment = {}
+
+## 
+#  See also: Spawner.group_overrides
+# c.SimpleLocalProcessSpawner.group_overrides = traitlets.Undefined
+
+## Template to expand to set the user home. {username} is expanded to the
+#  jupyterhub username.
+#  Default: '/tmp/{username}'
+# c.SimpleLocalProcessSpawner.home_dir_template = '/tmp/{username}'
+
+## 
+#  See also: Spawner.http_timeout
+# c.SimpleLocalProcessSpawner.http_timeout = 30
+
+## 
+#  See also: Spawner.hub_connect_url
+# c.SimpleLocalProcessSpawner.hub_connect_url = None
+
+## 
+#  See also: LocalProcessSpawner.interrupt_timeout
+# c.SimpleLocalProcessSpawner.interrupt_timeout = 10
+
+## 
+#  See also: Spawner.ip
+# c.SimpleLocalProcessSpawner.ip = '127.0.0.1'
+
+## 
+#  See also: LocalProcessSpawner.kill_timeout
+# c.SimpleLocalProcessSpawner.kill_timeout = 5
+
+## 
+#  See also: Spawner.mem_guarantee
+# c.SimpleLocalProcessSpawner.mem_guarantee = None
+
+## 
+#  See also: Spawner.mem_limit
+# c.SimpleLocalProcessSpawner.mem_limit = None
+
+## 
+#  See also: Spawner.notebook_dir
+# c.SimpleLocalProcessSpawner.notebook_dir = ''
+
+## Allowed scopes for oauth tokens issued by this server's oauth client.
+#  See also: Spawner.oauth_client_allowed_scopes
+# c.SimpleLocalProcessSpawner.oauth_client_allowed_scopes = traitlets.Undefined
+
+## Allowed roles for oauth tokens.
+#  See also: Spawner.oauth_roles
+# c.SimpleLocalProcessSpawner.oauth_roles = traitlets.Undefined
+
+## 
+#  See also: Spawner.options_form
+# c.SimpleLocalProcessSpawner.options_form = traitlets.Undefined
+
+## 
+#  See also: Spawner.options_from_form
+# c.SimpleLocalProcessSpawner.options_from_form = traitlets.Undefined
+
+## 
+#  See also: Spawner.poll_interval
+# c.SimpleLocalProcessSpawner.poll_interval = 30
+
+## 
+#  See also: Spawner.poll_jitter
+# c.SimpleLocalProcessSpawner.poll_jitter = 0.1
+
+## Extra keyword arguments to pass to Popen
+#  See also: LocalProcessSpawner.popen_kwargs
+# c.SimpleLocalProcessSpawner.popen_kwargs = {}
+
+## 
+#  See also: Spawner.port
+# c.SimpleLocalProcessSpawner.port = 0
+
+## 
+#  See also: Spawner.post_stop_hook
+# c.SimpleLocalProcessSpawner.post_stop_hook = None
+
+## 
+#  See also: Spawner.pre_spawn_hook
+# c.SimpleLocalProcessSpawner.pre_spawn_hook = None
+
+## 
+#  See also: Spawner.progress_ready_hook
+# c.SimpleLocalProcessSpawner.progress_ready_hook = None
+
+## The list of scopes to request for $JUPYTERHUB_API_TOKEN
+#  See also: Spawner.server_token_scopes
+# c.SimpleLocalProcessSpawner.server_token_scopes = traitlets.Undefined
+
+## Specify a shell command to launch.
+#  See also: LocalProcessSpawner.shell_cmd
+# c.SimpleLocalProcessSpawner.shell_cmd = []
+
+## List of SSL alt names
+#  See also: Spawner.ssl_alt_names
+# c.SimpleLocalProcessSpawner.ssl_alt_names = []
+
+## Whether to include `DNS:localhost`, `IP:127.0.0.1` in alt names
+#  See also: Spawner.ssl_alt_names_include_local
+# c.SimpleLocalProcessSpawner.ssl_alt_names_include_local = True
+
+## 
+#  See also: Spawner.start_timeout
+# c.SimpleLocalProcessSpawner.start_timeout = 60
+
+## 
+#  See also: LocalProcessSpawner.term_timeout
+# c.SimpleLocalProcessSpawner.term_timeout = 5
 
 #------------------------------------------------------------------------------
 # CryptKeeper(SingletonConfigurable) configuration
@@ -1557,9 +3036,3 @@ c.Spawner.mem_limit = '8G'
 ## The number of threads to allocate for encryption
 #  Default: 24
 # c.CryptKeeper.n_threads = 24
-
-#------------------------------------------------------------------------------
-# Systemd spawner configuration
-#------------------------------------------------------------------------------
-c.SystemdSpawner.default_shell = '/bin/bash'
-c.SystemdSpawner.cpu_limit = 4.0

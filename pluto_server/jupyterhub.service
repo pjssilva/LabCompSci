@@ -4,6 +4,7 @@ After=syslog.target network.target
 
 [Service]
 User=root
+WorkingDirectory=/opt/conda/envs/jupyterhub/etc/jupyterhub
 ExecStart=/usr/local/bin/jupyterhub_driver.sh
 
 [Install]
