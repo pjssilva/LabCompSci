@@ -1,26 +1,5 @@
 # Laboratório de computação científica - MS513
 
-## About this material / Sobre esse material
-
-This repository is based on the course material from
-["Computational Thinking, a live online Julia/Pluto textbook](https://computationalthinking.mit.edu/)
-that is available at [Github](https://github.com/mitmath/18S191).
-
-Let me start by thanking deeply the original authors, profs. Alan
-Edelman, David P. Sanders, Charles E. Leiserson, Henri F. Drake, Teaching
-Assistant Bola Malek, and Techinical Assistants Fons van der Plas, Logan
-Kilpatrick for making available such wonderful material under a Creative Commons
-Licence that allows remix the original content.
-
-Esse repositório é baseado no material de
-["Computational Thinking, a live online Julia/Pluto textbook](https://computationalthinking.mit.edu/)
-que está disponível no [Github](https://github.com/mitmath/18S191).
-
-Deixo aqui um enorme agradecimento aos autores originais, professores Alan
-Edelman, David P. Sanders, Charles E. Leiserson, Henri F. Drake, assistente
-de ensino Bola Malek e os auxiliares técnicos Fons van der Plas, Logan
-Kilpatrick por criarem esse material sob uma licença aberta que permite a sua
-adaptação e re-uso.
 
 ## O curso
 
@@ -122,3 +101,17 @@ e fazer modificações ao longo da discussão.
 ### Pré-requisitos 
 
 MC102, MS211
+
+### Alunos PCD ou com necessidades de acomodação didático pedagógicas
+
+O aluno que precisar de acomodações didático pedagógicas curriculares pelo
+fato de ser uma pessoa com deficiência ou possuir transtornos de aprendizagem
+deverá solicitar atendimento educacional especializado. A Unicamp está
+comprometida em promover um ambiente acadêmico inclusivo e acessível para
+todos. Estudantes com deficiência ou transtornos de aprendizagem que
+necessitem de acomodações didático-pedagógicas podem solicitar atendimento
+educacional especializado por meio do [Programa de Atendimento Educacional
+Especializado
+(PAEE).](https://deape.unicamp.br/vida-estudantil/acessibilidade-pedagogica/paee/)
+Caso tenha dúvidas ou precise de orientações, entre em contato pelo e-mail:
+`paee@unicamp.br`.
