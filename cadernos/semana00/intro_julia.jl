@@ -1,5 +1,5 @@
 ### A Pluto.jl notebook ###
-# v0.19.41
+# v0.20.4
 
 using Markdown
 using InteractiveUtils
@@ -783,14 +783,11 @@ md"# Atividade
 x = [1, 2, 3]
   ╠═╡ =#
 
-# ╔═╡ 99e9a000-6ea0-4139-96fc-95cec4b4998a
+# ╔═╡ 48c07054-33ab-4f11-9560-5e27a2e5ff6b
 # ╠═╡ disabled = true
 #=╠═╡
-begin
-	x = [1 ,2]
-	vecinc!(x)
-	x
-end
+# Tuples are single list of elements that are immutable
+t = (1, 2, 3)
   ╠═╡ =#
 
 # ╔═╡ 2d04c4c1-67e6-46cb-bfd1-f3ff6e0819a3
@@ -799,11 +796,14 @@ end
 t = 1, 2, 3
   ╠═╡ =#
 
-# ╔═╡ 48c07054-33ab-4f11-9560-5e27a2e5ff6b
+# ╔═╡ 99e9a000-6ea0-4139-96fc-95cec4b4998a
 # ╠═╡ disabled = true
 #=╠═╡
-# Tuples are single list of elements that are immutable
-t = (1, 2, 3)
+begin
+	x = [1 ,2]
+	vecinc!(x)
+	x
+end
   ╠═╡ =#
 
 # ╔═╡ 00000000-0000-0000-0000-000000000001
@@ -820,7 +820,7 @@ MKL = "~0.6.3"
 PLUTO_MANIFEST_TOML_CONTENTS = """
 # This file is machine-generated - editing it directly is not advised
 
-julia_version = "1.10.2"
+julia_version = "1.10.8"
 manifest_format = "2.0"
 project_hash = "9be43f7d801cd8c15ed1b3736c98ba660a014153"
 
@@ -837,7 +837,7 @@ uuid = "2a0f44e3-6c83-55bd-87e4-b1978d98bd5f"
 [[deps.CompilerSupportLibraries_jll]]
 deps = ["Artifacts", "Libdl"]
 uuid = "e66e0078-7015-5450-92f7-15fbd957f2ae"
-version = "1.1.0+0"
+version = "1.1.1+0"
 
 [[deps.Dates]]
 deps = ["Printf"]
@@ -852,10 +852,10 @@ version = "1.6.0"
 uuid = "7b1f6079-737a-58dc-b8bc-7a2ca5c1b5ee"
 
 [[deps.IntelOpenMP_jll]]
-deps = ["Artifacts", "JLLWrappers", "Libdl"]
-git-tree-sha1 = "5fdf2fe6724d8caabf43b557b84ce53f3b7e2f6b"
+deps = ["Artifacts", "JLLWrappers", "LazyArtifacts", "Libdl"]
+git-tree-sha1 = "10bd689145d2c3b2a9844005d01087cc1194e79e"
 uuid = "1d5cc7b8-4909-519e-a0f8-d0f5ad9712d0"
-version = "2024.0.2+0"
+version = "2024.2.1+0"
 
 [[deps.InteractiveUtils]]
 deps = ["Markdown"]
@@ -863,9 +863,9 @@ uuid = "b77e0a4c-d291-57a0-90e8-8db25a27a240"
 
 [[deps.JLLWrappers]]
 deps = ["Artifacts", "Preferences"]
-git-tree-sha1 = "7e5d6779a1e09a36db2a7b6cff50942a0a7d0fca"
+git-tree-sha1 = "a007feb38b422fbdab534406aeca1b86823cb4d6"
 uuid = "692b3bcd-3c85-4b1f-b108-f13ce0eb3210"
-version = "1.5.0"
+version = "1.7.0"
 
 [[deps.LazyArtifacts]]
 deps = ["Artifacts", "Pkg"]
@@ -912,10 +912,10 @@ uuid = "33e6dc65-8f57-5167-99aa-e5a354878fb2"
 version = "0.6.3"
 
 [[deps.MKL_jll]]
-deps = ["Artifacts", "IntelOpenMP_jll", "JLLWrappers", "LazyArtifacts", "Libdl"]
-git-tree-sha1 = "72dc3cf284559eb8f53aa593fe62cb33f83ed0c0"
+deps = ["Artifacts", "IntelOpenMP_jll", "JLLWrappers", "LazyArtifacts", "Libdl", "oneTBB_jll"]
+git-tree-sha1 = "f046ccd0c6db2832a9f639e2c669c6fe867e5f4f"
 uuid = "856f044c-d86e-5d09-b602-aeab76dc8ba7"
-version = "2024.0.0+0"
+version = "2024.2.0+0"
 
 [[deps.Markdown]]
 deps = ["Base64"]
@@ -997,12 +997,18 @@ version = "1.2.13+1"
 [[deps.libblastrampoline_jll]]
 deps = ["Artifacts", "Libdl"]
 uuid = "8e850b90-86db-534c-a0d3-1478176c7d93"
-version = "5.8.0+1"
+version = "5.11.0+0"
 
 [[deps.nghttp2_jll]]
 deps = ["Artifacts", "Libdl"]
 uuid = "8e850ede-7688-5339-a07c-302acd2aaf8d"
 version = "1.52.0+1"
+
+[[deps.oneTBB_jll]]
+deps = ["Artifacts", "JLLWrappers", "Libdl"]
+git-tree-sha1 = "d5a767a3bb77135a99e433afe0eb14cd7f6914c3"
+uuid = "1317d2d5-d96f-522e-a858-c73665f53c3e"
+version = "2022.0.0+0"
 
 [[deps.p7zip_jll]]
 deps = ["Artifacts", "Libdl"]
