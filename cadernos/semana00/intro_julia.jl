@@ -1,5 +1,5 @@
 ### A Pluto.jl notebook ###
-# v0.20.4
+# v0.19.46
 
 using Markdown
 using InteractiveUtils
@@ -777,12 +777,6 @@ md"# Atividade
 # ╔═╡ a6c2e6be-9646-448c-84f4-ab830e8e0533
 
 
-# ╔═╡ 8d6e7a4f-5d7f-4f94-abc1-3113f10c7171
-#=╠═╡
-# Create a vector
-x = [1, 2, 3]
-  ╠═╡ =#
-
 # ╔═╡ 48c07054-33ab-4f11-9560-5e27a2e5ff6b
 # ╠═╡ disabled = true
 #=╠═╡
@@ -790,10 +784,10 @@ x = [1, 2, 3]
 t = (1, 2, 3)
   ╠═╡ =#
 
-# ╔═╡ 2d04c4c1-67e6-46cb-bfd1-f3ff6e0819a3
+# ╔═╡ 8d6e7a4f-5d7f-4f94-abc1-3113f10c7171
 #=╠═╡
-# The parenthesis are actually optional
-t = 1, 2, 3
+# Create a vector
+x = [1, 2, 3]
   ╠═╡ =#
 
 # ╔═╡ 99e9a000-6ea0-4139-96fc-95cec4b4998a
@@ -804,6 +798,12 @@ begin
 	vecinc!(x)
 	x
 end
+  ╠═╡ =#
+
+# ╔═╡ 2d04c4c1-67e6-46cb-bfd1-f3ff6e0819a3
+#=╠═╡
+# The parenthesis are actually optional
+t = 1, 2, 3
   ╠═╡ =#
 
 # ╔═╡ 00000000-0000-0000-0000-000000000001

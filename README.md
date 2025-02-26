@@ -1,5 +1,26 @@
 # Laboratório de computação científica - MS513
 
+## About this material / Sobre esse material
+
+This repository is based on the course material from
+["Computational Thinking, a live online Julia/Pluto textbook](https://computationalthinking.mit.edu/)
+that is available at [Github](https://github.com/mitmath/18S191).
+
+Let me start by thanking deeply the original authors, profs. Alan
+Edelman, David P. Sanders, Charles E. Leiserson, Henri F. Drake, Teaching
+Assistant Bola Malek, and Techinical Assistants Fons van der Plas, Logan
+Kilpatrick for making available such wonderful material under a Creative Commons
+Licence that allows remix the original content.
+
+Esse repositório é baseado no material de
+["Computational Thinking, a live online Julia/Pluto textbook](https://computationalthinking.mit.edu/)
+que está disponível no [Github](https://github.com/mitmath/18S191).
+
+Deixo aqui um enorme agradecimento aos autores originais, professores Alan
+Edelman, David P. Sanders, Charles E. Leiserson, Henri F. Drake, assistente
+de ensino Bola Malek e os auxiliares técnicos Fons van der Plas, Logan
+Kilpatrick por criarem esse material sob uma licença aberta que permite a sua
+adaptação e re-uso.
 
 ## O curso
 

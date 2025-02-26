@@ -1,5 +1,5 @@
 ### A Pluto.jl notebook ###
-# v0.19.36
+# v0.19.46
 
 using Markdown
 using InteractiveUtils
@@ -11,7 +11,7 @@ Lembre-se que para executar esse caderno em sua máquina é preciso primeiro ins
 
 Obs: Esse caderno é apenas uma introdução bem rápida à Julia para quem nunca viu a linguagem. Ele não tenta de fato ensiná-la, apenas faz um sobrevoo panorâmico. Para aprender Julia sugiro fortemente que você procure um texto introdutório completo ou mesmo um livro.
 
-Uma boa opção, em português, é o capítulo 1 do [texto do Leandro Martínez](http://leandro.iqm.unicamp.br/m3g/main/didatico/simulacoes2/simulacoes2.pdf), do IQ. Um bom livro é o [Julia 1.0 Programming](https://www.packtpub.com/product/julia-1-0-programming-second-edition/9781788999090) do Balbert.
+Uma boa opção, em português, é o capítulo 1 do [texto do Leandro Martínez](http://leandro.iqm.unicamp.br/m3g/main/didatico/simulacoes2/simulacoes2.pdf), do IQ. Se você entende inglês, gosto muito desse [tutorial do Martin Mass](https://www.matecdev.com/posts/julia-tutorial-science-engineering.html). Um bom livro é o [Julia 1.0 Programming](https://www.packtpub.com/product/julia-1-0-programming-second-edition/9781788999090) do Balbert.
 
 Outra ótima fonte de informação é o [manual da linguagem](https://docs.julialang.org/en/v1/).
 "
@@ -22,7 +22,7 @@ md"## Variáveis
 
 Em Julia definimos variáveis usando a atribuição `=`, nos moldes de linguagens dinâmicas como Python. O tipo da variável é então o tipo do valor que lhe foi atribuído. Há formas de se definir tipos explícitos de parâmetros de função e/ou variáveis locais para limitar os possíveis valores que elas podem receber, para ver isso consulte outro texto.
 
-De posse de uma variável é possível fazer conta com elas, que lembram os valores que lhe foram atribuídos (afinal de contas, essa é a função das variáveis). Note também que em Julia, quando não há dúvida, é possível omitir o sinal de multiplicação, assim como na notação matemática usual
+Após definir uma variável, é possível fazer conta com elas, recuperando os valores que lhe foram atribuídos (afinal de contas, essa é a função das variáveis). Note também que em Julia, quando não há dúvida, é possível omitir o sinal de multiplicação, assim como na notação matemática usual
 "
 
 # ╔═╡ 3e8e0ea0-edeb-11ea-22e0-c58f7c2168ce
@@ -36,7 +36,7 @@ md"Ao executar uma expressão Julia, tipicamente, devolve o valor calculado. Ass
 "
 
 # ╔═╡ 7e46f0e8-edeb-11ea-1092-4b5e8acd9ee0
-md"Se você quiser qual o tipo do valor que está em uma variável use `typeof`:"
+md"Se você quiser saber qual o tipo do valor que está em uma variável use `typeof`:"
 
 # ╔═╡ 8a695b86-edeb-11ea-08cc-17263bec09df
 typeof(y)
@@ -45,17 +45,17 @@ typeof(y)
 md"## Funções"
 
 # ╔═╡ 96b5a28c-edeb-11ea-11c0-597615962f54
-md"Há duas formas de definir funções. Uma mais simples e adequada para funções mais curtas usa uma notação próxima a matemática:"
+md"Há duas formas de definir funções. Uma mais simples e adequada para funções curtas usa uma notação próxima à matemática:"
 
 # ╔═╡ a7453572-edeb-11ea-1e27-9f710fd856a6
 f(x) = 2 + x
 
 # ╔═╡ b341db4e-edeb-11ea-078b-b71ac00089d7
-md"O nome da função a representa, ele é uma variável como outra qualquer. Ao se digitar o nome de uma função obtemos alguma informação ela: quantos *métodos* ela define. Aqui vemos algo novo, na verdade o nome de uma função representa todo um conjunto de funções concretas que são diferentes entre si pelos número e tipos dos parâmetros de entrada. Essas funções concretas são chamadas de _métodos_. Vamos pegar inicialmente informação sobre a função que acabamos de criar.
+md"O nome da função a representa, ele é uma variável como outra qualquer. Ao se digitar o nome de uma função obtemos alguma informação sobre ela: quantos *métodos* ela define. Aqui vemos algo novo, na verdade o nome de uma função representa todo um conjunto de funções concretas que são diferentes entre si pelos número e tipos dos parâmetros de entrada. Essas funções concretas são chamadas de _métodos_. Vamos pegar inicialmente informação sobre a função que acabamos de criar.
 "
 
 # ╔═╡ a92ff397-cd8d-4cd6-8b1a-d1b8703ea11f
-md"Agora podemos reutilizar o nome e definir uma função `f` que recebe dois valores. Note que, depois disso, o nome `f` está associado às duas funções concretas (métodos) que são distintas. Julia sabe qual função chamar pelo número de parâmetros. É também possível usar o tipo dos parâmetros para fazer a distinção."
+md"Agora podemos reutilizar o nome e definir uma função `f` que recebe dois valores. Depois disso, o nome `f` está associado às duas funções concretas (métodos) que são distintas. Julia sabe qual função chamar pelo número de parâmetros. É também possível usar o tipo dos parâmetros para fazer a distinção."
 
 # ╔═╡ 2f0acda8-b30c-4fa1-bd69-3d97ffcf84f0
 f(x, y) = x*y + 2
@@ -95,17 +95,17 @@ md"## Laços `For`"
 md"Use `for` para percorrer um conjunto de valores pré-determinados:"
 
 # ╔═╡ fe3fa290-edeb-11ea-121e-7114e5c573c1
-let s = 0
-	
+let 
+	s = 0
 	for i in 1:10
-		s += i    # Equivalente a s = s + i
+		s += i    # Equivale a s = s + i
 	end
 	
 	s
 end
 
 # ╔═╡ 394b0ec8-eded-11ea-31fb-27392068ef8f
-md"A expressão `1:10` representa uma sequência de números que inicia no 1 e vai a 10 (pulando de 1 em 1). Esse tipo de expressão recebe o nome de `Range`."
+md"A expressão `1:10` representa uma sequência de números que inicia no 1 e vai a 10 (pulando de 1 em 1). Esse tipo de expressão é do tipo `UnitRange`."
 
 # ╔═╡ 4dc00908-eded-11ea-25c5-0f7b2b7e18f9
 typeof(1:10)
@@ -140,7 +140,7 @@ a = 3
 a < 5
 
 # ╔═╡ a16299a2-eded-11ea-2b56-93eb7a1010a7
-md"Condições lógicas podem então ser usadas em expressões condicionais que escolhem uma linha de execução."
+md"Condições lógicas podem então ser usadas em expressões que escolhem uma linha de execução."
 
 # ╔═╡ bc6b124e-eded-11ea-0290-b3760cb81024
 if a < 5
@@ -150,7 +150,7 @@ else
 end
 
 # ╔═╡ cfb21014-eded-11ea-1261-3bc30952a88e
-md"""Note que o `if` também funciona como uma expressão, retornando o último valor que foi avaliado. No exemplo, o resultado foi a string `"small"`. Se a condição fosse falsa seria `"big"`. Como Pluto é um caderno *reativo* se você mudar o valor de `a` na célula que o define, o valor restulstando do `if` é atualizado!"""
+md"""Note que o `if` também funciona como uma expressão, retornando o último valor que foi avaliado. No exemplo, o resultado foi a string `"small"`. Se a condição fosse falsa seria `"big"`. Como Pluto é um caderno *reativo* se você mudar o valor de `a` na célula que o define, o valor devolvido pelo `if` é atualizado!"""
 
 # ╔═╡ ffee7d80-eded-11ea-26b1-1331df204c67
 md"## Arrays"
@@ -233,8 +233,9 @@ PLUTO_PROJECT_TOML_CONTENTS = """
 PLUTO_MANIFEST_TOML_CONTENTS = """
 # This file is machine-generated - editing it directly is not advised
 
-julia_version = "1.7.3"
+julia_version = "1.10.8"
 manifest_format = "2.0"
+project_hash = "da39a3ee5e6b4b0d3255bfef95601890afd80709"
 
 [deps]
 """
