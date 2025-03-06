@@ -18,7 +18,7 @@ md"Tradução livre de [how\_to\_collaborate\_on\_software.jl](https://github.co
 md"""
 # Como colaborar em software
 
-A solução mais simples para colaborar na rede? Para alguns é _enviar arquivos de um lado para o outro_, seja por e-mail, seja por outra forma (Dropbox, Googledrive, etc.). Isso até funciona em projetos pequenos, mas a partir de um certo ponto é interessante pensar em outras soluções. Alguns exemplos:
+A solução mais simples para colaborar na rede? Para alguns é _enviar arquivos de um lado para o outro_, seja por e-mail, seja por outra forma (Dropbox, Google Drive, etc.). Isso até funciona em projetos pequenos, mas a partir de um certo ponto é interessante pensar em outras soluções. Alguns exemplos:
 * Uma enciclopédia -- um sistema wiki.
 * Um artigo acadêmico -- Google Drive (ou assemelhados) ou Overleaf.
 * **Um projeto de software** -- Soluções baseadas em Git (Github, Gitlab, Bitbucket).
@@ -564,7 +564,7 @@ PlutoUI = "~0.7.58"
 PLUTO_MANIFEST_TOML_CONTENTS = """
 # This file is machine-generated - editing it directly is not advised
 
-julia_version = "1.10.8"
+julia_version = "1.10.6"
 manifest_format = "2.0"
 project_hash = "ab59edaf731ee671d6a84507f1dccb93f54c76c4"
 
