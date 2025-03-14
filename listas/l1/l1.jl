@@ -48,9 +48,9 @@ Submetido por: **_$(student.name)_** ($(student.email_dac)@dac.unicamp.br)
 md"""
 
 # **Lista 1** - _imagens and arrays_
-`MS513`, 1º sem. 2024
+`MS513`, 1º sem. 2025
 
-`Data de entrega`: **28/03, 2024 às 23:59**
+`Data de entrega`: **20/03, 2025 às 23:59**
 
 Este caderno contem _verificações ativas das respostas_! Em alguns exercícios você verá uma caixa colorida que roda alguns casos simples de teste e provê retorno imediato para a sua solução. Edite sua solução, execute a célula e verifique se passou na verificação. Note que a verificação feita é apenas superficial. Para a correção serão verificados mais casos e você tem a obrigação de escrever código que funcione adequadamente.
 
@@ -2490,8 +2490,8 @@ version = "17.4.0+2"
 # ╟─8cb0aee8-5774-4490-9b9e-ada93416c089
 # ╟─115ded8c-ee0a-11ea-3493-89487315feb7
 # ╟─dfb7c6be-ee0d-11ea-194e-9758857f7b20
-# ╠═e15ad330-ee0d-11ea-25b6-1b1b3f3d7888
-# ╠═86b9f767-71f2-49a8-ad2d-2489293d4127
+# ╟─e15ad330-ee0d-11ea-25b6-1b1b3f3d7888
+# ╟─86b9f767-71f2-49a8-ad2d-2489293d4127
 # ╟─83eb9ca0-ed68-11ea-0bc5-99a09c68f867
 # ╟─00000000-0000-0000-0000-000000000001
 # ╟─00000000-0000-0000-0000-000000000002
