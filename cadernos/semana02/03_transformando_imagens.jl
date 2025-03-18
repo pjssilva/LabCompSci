@@ -36,7 +36,7 @@ begin
 	import PlotlyBase
 	import PlotlyKaleido
     using BenchmarkTools
-	import Folds
+	import OhMyThreads
 end
 
 # ╔═╡ f5c464b6-663a-4c4d-9e93-30e469d3a496
@@ -386,9 +386,9 @@ Nesse sentido, os núcleos menores resultam em menor tempo de execução. Porém
 md"""
 ### Arquitetura de hardware: GPUs (Unidades de processamento gráfico)
 
-O uso de kernels de convolução em imagens é um exemplo típico de operações usadas em seu processamento. Elas normalmente resultam um um grupo de operações simples e bem estruturadas que devem ser realizadas em enorme quantidade e com pouca interdependência entre si. Para isso, com o tempo, os fabricantes de placas gráficas começaram a criar hardware específico que é capaz de realizar essas operações de forma muito rápida explorando o seu paralelismo intrínseco. Com isso nasceram as placas de aceleração para gráficos, as GPUs. Elas são compostas de uma grande quantidade de processadores que conseguem realizar esse tipo de operações de forma paralela e muito eficiente.
+O uso de kernels de convolução em imagens é um exemplo típico de operações usadas em seu processamento. Elas normalmente resultam um um grupo de operações simples e bem estruturadas que devem ser realizadas em enorme quantidade e com pouca interdependência. Para isso, com o tempo, os fabricantes de placas gráficas começaram a criar um hardware específico que é capaz de realizar essas operações de forma muito rápida, explorando o seu paralelismo intrínseco. Assim nasceram as placas de aceleração para gráficos, as GPUs. Elas são compostas de uma grande quantidade de processadores que conseguem realizar esse tipo de operações de forma paralela e muito eficiente.
 
-É interessante que com o tempo começou-se a usar as placas aceleradoras gráficas para realizar outras operações matemáticas que não estavam relacionadas diretamente ao processamento de imagens. Isso porque em outros domínios também há algoritmos que necessitam dessas de operações repetitivas, estruturadas e facilmente paralelizáveis. Assim, hoje em dia muitos dos supercomputadores são compostos por uma mistura de CPUs e GPUs que se adéquam ao tipo de processamento que se pretende fazer. As CPUs funcionam melhor para lidar com operações de fluxo mais complexo, já as GPUs brilham com operações altamente estruturadas e repetitivas.
+É interessante que com o tempo começou-se a usar as placas aceleradoras gráficas para realizar outras operações matemáticas que não estavam relacionadas diretamente ao processamento de imagens. Isso porque em outros domínios também há algoritmos que necessitam de operações repetitivas, estruturadas e facilmente paralelizáveis. Assim, hoje em dia muitos dos supercomputadores são compostos por uma mistura de CPUs e GPUs que se adéquam ao tipo de processamento que se pretende fazer. As CPUs funcionam melhor para lidar com operações de fluxo mais complexo, já as GPUs brilham com operações altamente estruturadas e repetitivas.
 """
 
 # ╔═╡ 844ed844-74b3-11eb-2ee1-2de664b26bc6
@@ -550,7 +550,7 @@ md"Esse tipo de conversão será usada no topo das nossas funções que aplicam 
 """
     applyfilter1(K, M, i, j, m, n)
 
-Applies filter `M` to `M[i, j]`, assume that `M` is of size `(m, n)`.
+Applies filter `K` to `M[i, j]`, assume that `M` is of size `(m, n)`.
 
 If `K` acts on pixels outside `M`, it just returns `M[i, j]`
 """
@@ -603,7 +603,7 @@ md"Agora vamos implementar a variante que aplica o filtro de qualquer forma usan
 """
     applyfilter2(K, M, i, j, m, n)
 
-Applies filter `M` to `M[i, j]`, assume that `M` is of size `(m, n)`.
+Applies filter `K` to `M[i, j]`, assume that `M` is of size `(m, n)`.
 
 If `K` acts on pixels outside `M`, it just returns `M[i, j]`
 """
@@ -685,11 +685,11 @@ md"Vamos agora comparar com a função da biblioteca `Imagefiltering.jl`"
 md"""
 Muito mais rápido! Por quê?
 
-## Um introdução ao paralelismo
+## Uma introdução ao paralelismo
 
-Primeiro vamos rodar de novo o benchmark da rotina da `ImageFilterig.jl` e verificar quantos processadores estão sendo usado. Vemos que ela usa vários processadores ao mesmo tempo. Isso deve explicar a sua velocidade.
+Primeiro vamos rodar de novo o benchmark da rotina da `ImageFilterig.jl` e verificar quantos processadores estão sendo usados. Vemos que ela usa vários processadores ao mesmo tempo. Isso deve explicar a sua velocidade.
 
-Para verificar isso vamos usar a biblioteca `Folds.jl` essa biblioteca reimplementa funções como `map` e `reduce` para usar múltiplos processadores ou mesmo múltiplos computadores em um cluster.
+Para verificar isso vamos usar a biblioteca `OMyThreads.jl`. Ela reimplementa `map` como `tmap` e `reduce` como `treduce` para usar múltiplos processadores.
 """
 
 # ╔═╡ e6fa4f26-6baa-48bd-a733-e9cc6847ef49
@@ -698,14 +698,14 @@ function myimfiltermap2(M, K, apply=applyfilter1)
 	Ml = one(K[0, 0])*M
 	m, n = size(Ml)
 	# Using an anonymous function e a único
-	@inbounds return Folds.map(i -> apply(K, Ml, i[1], i[2], m, n), CartesianIndices(Ml))
+	@inbounds return OhMyThreads.tmap(i -> apply(K, Ml, i[1], i[2], m, n), CartesianIndices(Ml))
 end
 
 # ╔═╡ 56ed0197-e311-4ccc-ac4f-634ca6810553
 @benchmark myimfiltermap2(apolo, blur_kernel)
 
 # ╔═╡ 9d39577f-8300-4d71-8f24-6ff4cc798a3b
-@benchmark myimfiltermap2(apolo, blur_kernel)
+@benchmark myimfiltermap2(apolo, blur_kernel, applyfilter2)
 
 # ╔═╡ f98f7de4-f509-48c5-a9eb-ebe9eb3b75ff
 md"Melhor, mas ainda mais lento.
@@ -745,7 +745,8 @@ end
 # ╔═╡ 4227f552-aba3-4eba-b725-d1e7dc85a8af
 md"Não parece ter tido grande melhora com respeito à versão sequencial acima. Parece até ser um pouco mais lento. Podemos transformar essa versão em paralela prometendo para a Julia que as tarefas executadas nos laços são independentes e, portanto, podem ser paralilizadas. Para isso vou usar a macro `@threads`. Basta adicioná-las antes do primeiro laço e rodar de novo.
 
-Mais uma vez muito parecido com a versão paralela, só que dessa vez um pouco mais rápida (isso pode variar de uma máquina para outra). Mas veio uma ideia. Olhando para o código, fica claro que ele só descobre que precisa copiar o valor original do píxel quando o filtro sai dos limites dentro do laço mais interno. Mas isso pode ser evitado se nós pré-calcularmos os índices que terão píxeis copiados. A rotina abaixo faz isso." 
+Mais uma vez muito parecido com a versão paralela, só que dessa vez um pouco 
+mais rápida (isso pode variar de uma máquina para outra). Mas veio uma ideia. Olhando para o código, fica claro que ele só descobre que precisa copiar o valor original do píxel quando o filtro sai dos limites dentro do laço mais interno. Mas isso pode ser evitado se nós pré-calcularmos os índices que terão píxeis copiados. A rotina abaixo faz isso." 
 
 # ╔═╡ 66a856c8-ea1d-4c35-8d37-2c548df3696c
 function myimfilter4(M, K)
@@ -802,7 +803,7 @@ res3 = myimfilter(apolo, blur_kernel, applyfilter2);
 norm(res1 - res3) / norm(res1)
 
 # ╔═╡ 8baebaf5-4216-4d7d-a964-e4ade787fee8
-md"Sim, parece que é isso mesmo. Mas a biblioteca é mais rápida. Talvez porque ela aloque um pouco mais de memória e aplique o filtro sem precisar verificar os limites. Ou seja, use a primeira opção discutida no topo desse caderno que nem chegamos a discutir. Vamos fazer uma implementação dessa abordagem para verificar. Leia a implementação com calma em casa para se convencer que ela está correta."
+md"Sim, parece que é isso mesmo. Mas a biblioteca implementou esse caso em paralelo. Talvez porque ela aloque um pouco mais de memória e aplique o filtro sem precisar verificar os limites. Ou seja, use a primeira opção discutida no topo desse caderno que nem chegamos a implementar. Vamos fazer uma implementação dessa abordagem para verificar. Leia a implementação com calma em casa para se convencer que ela está correta."
 
 # ╔═╡ 56330752-59d1-4765-a2c1-f5b73ee13004
 function myimfilter5(M, K)
@@ -857,13 +858,13 @@ BenchmarkTools = "6e4b80f9-dd63-53aa-95a3-0cdb28fa8baf"
 ColorVectorSpace = "c3611d14-8923-5661-9e6a-0046d554d3a4"
 Colors = "5ae59095-9a9b-59fe-a467-6f913c188581"
 FileIO = "5789e2e9-d7fb-5bc7-8068-2c6fae9b9549"
-Folds = "41a02a25-b8f0-4f67-bc48-60067656b558"
 ImageFiltering = "6a3955dd-da59-5b1f-98d4-e7296123deb5"
 ImageIO = "82e4d734-157c-48bb-816b-45c225c6df19"
 ImageMagick = "6218d12a-5da1-5696-b52f-db25d2ecc6d1"
 ImageShow = "4e3cecfd-b093-5904-9786-8bbb286a6a31"
 LinearAlgebra = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
 OffsetArrays = "6fe1bfb0-de20-5000-8ca7-80f57d26f881"
+OhMyThreads = "67456a42-1dca-4109-a031-0a68de7e3ad5"
 PNGFiles = "f57f5aa1-a3ce-4bc8-8ab9-96f992907883"
 PlotlyBase = "a03496cd-edff-5a9b-9e67-9cda94a718b5"
 PlotlyKaleido = "f2990250-8cf9-495f-b13a-cce12b45703c"
@@ -876,12 +877,12 @@ BenchmarkTools = "~1.5.0"
 ColorVectorSpace = "~0.10.0"
 Colors = "~0.12.10"
 FileIO = "~1.16.3"
-Folds = "~0.2.10"
 ImageFiltering = "~0.7.8"
 ImageIO = "~0.6.7"
 ImageMagick = "~1.3.1"
 ImageShow = "~0.3.8"
 OffsetArrays = "~1.13.0"
+OhMyThreads = "~0.7.0"
 PNGFiles = "~0.4.3"
 PlotlyBase = "~0.8.19"
 PlotlyKaleido = "~2.2.4"
@@ -894,9 +895,9 @@ Unitful = "~1.19.0"
 PLUTO_MANIFEST_TOML_CONTENTS = """
 # This file is machine-generated - editing it directly is not advised
 
-julia_version = "1.11.3"
+julia_version = "1.10.8"
 manifest_format = "2.0"
-project_hash = "d220844ab9505a5d68343a5f21a4163126b8b65f"
+project_hash = "67684583bbe331a70a6b93da9d4b54b8d5ac56ee"
 
 [[deps.AbstractFFTs]]
 deps = ["LinearAlgebra"]
@@ -959,14 +960,9 @@ git-tree-sha1 = "9876e1e164b144ca45e9e3198d0b689cadfed9ff"
 uuid = "66dad0bd-aa9a-41b7-9441-69ab47430ed8"
 version = "1.1.3"
 
-[[deps.ArgCheck]]
-git-tree-sha1 = "680b3b8759bd4c54052ada14e52355ab69e07876"
-uuid = "dce04be8-c92d-5529-be00-80e4d2c0e197"
-version = "2.4.0"
-
 [[deps.ArgTools]]
 uuid = "0dad84c5-d112-42e6-8d28-ef12dabb789f"
-version = "1.1.2"
+version = "1.1.1"
 
 [[deps.ArrayInterface]]
 deps = ["Adapt", "LinearAlgebra"]
@@ -1002,7 +998,6 @@ version = "7.18.0"
 
 [[deps.Artifacts]]
 uuid = "56f22d72-fd6d-98f1-02f0-08ddc0907c33"
-version = "1.11.0"
 
 [[deps.AxisArrays]]
 deps = ["Dates", "IntervalSets", "IterTools", "RangeArrays"]
@@ -1034,12 +1029,6 @@ version = "0.4.4"
 
 [[deps.Base64]]
 uuid = "2a0f44e3-6c83-55bd-87e4-b1978d98bd5f"
-version = "1.11.0"
-
-[[deps.Baselet]]
-git-tree-sha1 = "aebf55e6d7795e02ca500a689d326ac979aaf89e"
-uuid = "9718e550-a3fa-408a-8086-8db961cd8217"
-version = "0.1.1"
 
 [[deps.BenchmarkTools]]
 deps = ["JSON", "Logging", "Printf", "Profile", "Statistics", "UUIDs"]
@@ -1074,6 +1063,11 @@ deps = ["CustomUnitRanges", "OffsetArrays"]
 git-tree-sha1 = "a0f80a09780eed9b1d106a1bf62041c2efc995bc"
 uuid = "aafaddc9-749c-510e-ac4f-586e18779b91"
 version = "0.2.2"
+
+[[deps.ChunkSplitters]]
+git-tree-sha1 = "efd065d66c7d683e355a14f32ef1e149dbd37b24"
+uuid = "ae650224-84b6-46f8-82ea-d812ca08434e"
+version = "3.1.1"
 
 [[deps.CodecZlib]]
 deps = ["TranscodingStreams", "Zlib_jll"]
@@ -1183,26 +1177,15 @@ git-tree-sha1 = "1d0a14036acb104d9e89698bd408f63ab58cdc82"
 uuid = "864edb3b-99cc-5e75-8d2d-829cb0a9cfe8"
 version = "0.18.20"
 
-[[deps.DataValueInterfaces]]
-git-tree-sha1 = "bfc1187b79289637fa0ef6d4436ebdfe6905cbd6"
-uuid = "e2d170a0-9d28-54be-80f0-106bbe20a464"
-version = "1.0.0"
-
 [[deps.Dates]]
 deps = ["Printf"]
 uuid = "ade2ca70-3891-5945-98fb-dc099432e06a"
-version = "1.11.0"
 
 [[deps.Dbus_jll]]
 deps = ["Artifacts", "Expat_jll", "JLLWrappers", "Libdl"]
 git-tree-sha1 = "fc173b380865f70627d7dd1190dc2fce6cc105af"
 uuid = "ee1fde0b-3d02-5ea6-8484-8dfef6360eab"
 version = "1.14.10+0"
-
-[[deps.DefineSingletons]]
-git-tree-sha1 = "0fba8b706d0178b4dc7fd44a96a92382c9065c2c"
-uuid = "244e2a9f-e319-4986-a169-4d1fe445cd52"
-version = "0.1.2"
 
 [[deps.DelimitedFiles]]
 deps = ["Mmap"]
@@ -1213,7 +1196,6 @@ version = "1.9.1"
 [[deps.Distributed]]
 deps = ["Random", "Serialization", "Sockets"]
 uuid = "8ba89e20-285c-5b6f-9357-94700520ee1b"
-version = "1.11.0"
 
 [[deps.DocStringExtensions]]
 deps = ["LibGit2"]
@@ -1243,11 +1225,6 @@ deps = ["Artifacts", "JLLWrappers", "Libdl"]
 git-tree-sha1 = "d55dffd9ae73ff72f1c0482454dcf2ec6c6c4a63"
 uuid = "2e619515-83b5-522b-bb60-26c02a35a201"
 version = "2.6.5+0"
-
-[[deps.ExternalDocstrings]]
-git-tree-sha1 = "1224740fc4d07c989949e1c1b508ebd49a65a5f6"
-uuid = "e189563c-0753-4f5e-ad5c-be4293c83fb4"
-version = "0.1.1"
 
 [[deps.FFMPEG]]
 deps = ["FFMPEG_jll"]
@@ -1291,25 +1268,12 @@ weakdeps = ["HTTP"]
 
 [[deps.FileWatching]]
 uuid = "7b1f6079-737a-58dc-b8bc-7a2ca5c1b5ee"
-version = "1.11.0"
 
 [[deps.FixedPointNumbers]]
 deps = ["Statistics"]
 git-tree-sha1 = "05882d6995ae5c12bb5f36dd2ed3f61c98cbb172"
 uuid = "53c48c17-4a7d-5ca2-90c5-79b7896eea93"
 version = "0.8.5"
-
-[[deps.Folds]]
-deps = ["Accessors", "BangBang", "Baselet", "DefineSingletons", "Distributed", "ExternalDocstrings", "InitialValues", "MicroCollections", "Referenceables", "Requires", "Test", "ThreadedScans", "Transducers"]
-git-tree-sha1 = "7eb4bc88d8295e387a667fd43d67c157ddee76cf"
-uuid = "41a02a25-b8f0-4f67-bc48-60067656b558"
-version = "0.2.10"
-
-    [deps.Folds.extensions]
-    FoldsOnlineStatsBaseExt = "OnlineStatsBase"
-
-    [deps.Folds.weakdeps]
-    OnlineStatsBase = "925886fa-5bf2-5e8e-b522-a9147a512338"
 
 [[deps.Fontconfig_jll]]
 deps = ["Artifacts", "Bzip2_jll", "Expat_jll", "FreeType2_jll", "JLLWrappers", "Libdl", "Libuuid_jll", "Zlib_jll"]
@@ -1333,11 +1297,6 @@ deps = ["Artifacts", "JLLWrappers", "Libdl"]
 git-tree-sha1 = "846f7026a9decf3679419122b49f8a1fdb48d2d5"
 uuid = "559328eb-81f9-559d-9380-de523a88c83c"
 version = "1.0.16+0"
-
-[[deps.Future]]
-deps = ["Random"]
-uuid = "9fa8497b-333b-5362-9e8d-4d0656e87820"
-version = "1.11.0"
 
 [[deps.GLFW_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Libglvnd_jll", "Xorg_libXcursor_jll", "Xorg_libXi_jll", "Xorg_libXinerama_jll", "Xorg_libXrandr_jll", "libdecor_jll", "xkbcommon_jll"]
@@ -1511,7 +1470,6 @@ version = "2025.0.4+0"
 [[deps.InteractiveUtils]]
 deps = ["Markdown"]
 uuid = "b77e0a4c-d291-57a0-90e8-8db25a27a240"
-version = "1.11.0"
 
 [[deps.IntervalSets]]
 git-tree-sha1 = "dba9ddf07f77f60450fe5d2e2beb9854d9a49bd0"
@@ -1543,11 +1501,6 @@ version = "0.2.4"
 git-tree-sha1 = "42d5f897009e7ff2cf88db414a389e5ed1bdd023"
 uuid = "c8e1da08-722c-5040-9ed9-7db0dc04731e"
 version = "1.10.0"
-
-[[deps.IteratorInterfaceExtensions]]
-git-tree-sha1 = "a3f24677c21f5bbe9d2a714f95dcd58337fb2856"
-uuid = "82899510-4779-5014-852e-03e436cf321d"
-version = "1.0.0"
 
 [[deps.JLFzf]]
 deps = ["Pipe", "REPL", "Random", "fzf_jll"]
@@ -1633,7 +1586,6 @@ version = "0.16.6"
 [[deps.LazyArtifacts]]
 deps = ["Artifacts", "Pkg"]
 uuid = "4af54fe1-eca0-43a8-85a7-787d91b784e3"
-version = "1.11.0"
 
 [[deps.LazyModules]]
 git-tree-sha1 = "a560dd966b386ac9ae60bdd3a3d3a326062d3c3e"
@@ -1648,17 +1600,16 @@ version = "0.6.4"
 [[deps.LibCURL_jll]]
 deps = ["Artifacts", "LibSSH2_jll", "Libdl", "MbedTLS_jll", "Zlib_jll", "nghttp2_jll"]
 uuid = "deac9b47-8bc7-5906-a0fe-35ac56dc84c0"
-version = "8.6.0+0"
+version = "8.4.0+0"
 
 [[deps.LibGit2]]
 deps = ["Base64", "LibGit2_jll", "NetworkOptions", "Printf", "SHA"]
 uuid = "76f85450-5226-5b5a-8eaa-529ad045b433"
-version = "1.11.0"
 
 [[deps.LibGit2_jll]]
 deps = ["Artifacts", "LibSSH2_jll", "Libdl", "MbedTLS_jll"]
 uuid = "e37daf67-58a4-590a-8e99-b0245dd2ffc5"
-version = "1.7.2+0"
+version = "1.6.4+0"
 
 [[deps.LibSSH2_jll]]
 deps = ["Artifacts", "Libdl", "MbedTLS_jll"]
@@ -1667,7 +1618,6 @@ version = "1.11.0+1"
 
 [[deps.Libdl]]
 uuid = "8f399da3-3557-5675-b5ff-fb832c97cbdb"
-version = "1.11.0"
 
 [[deps.Libffi_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg"]
@@ -1720,7 +1670,6 @@ version = "2.40.3+0"
 [[deps.LinearAlgebra]]
 deps = ["Libdl", "OpenBLAS_jll", "libblastrampoline_jll"]
 uuid = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
-version = "1.11.0"
 
 [[deps.LittleCMS_jll]]
 deps = ["Artifacts", "JLLWrappers", "JpegTurbo_jll", "Libdl", "Libtiff_jll", "Pkg"]
@@ -1746,7 +1695,6 @@ version = "0.3.29"
 
 [[deps.Logging]]
 uuid = "56ddb016-857b-54e1-b83d-db4d58db5568"
-version = "1.11.0"
 
 [[deps.LoggingExtras]]
 deps = ["Dates", "Logging"]
@@ -1778,7 +1726,6 @@ version = "0.4.2"
 [[deps.Markdown]]
 deps = ["Base64"]
 uuid = "d6f4376e-aef5-505a-96c1-9c027394607a"
-version = "1.11.0"
 
 [[deps.MbedTLS]]
 deps = ["Dates", "MbedTLS_jll", "MozillaCACerts_jll", "NetworkOptions", "Random", "Sockets"]
@@ -1789,18 +1736,12 @@ version = "1.1.9"
 [[deps.MbedTLS_jll]]
 deps = ["Artifacts", "Libdl"]
 uuid = "c8ffd9c3-330d-5841-b78e-0817d7145fa1"
-version = "2.28.6+0"
+version = "2.28.2+1"
 
 [[deps.Measures]]
 git-tree-sha1 = "c13304c81eec1ed3af7fc20e75fb6b26092a1102"
 uuid = "442fdcdd-2543-5da2-b0f3-8c86c306513e"
 version = "0.3.2"
-
-[[deps.MicroCollections]]
-deps = ["Accessors", "BangBang", "InitialValues"]
-git-tree-sha1 = "44d32db644e84c75dab479f1bc15ee76a1a3618f"
-uuid = "128add7d-3638-4c79-886c-908ea0c25c34"
-version = "0.2.0"
 
 [[deps.Missings]]
 deps = ["DataAPI"]
@@ -1810,7 +1751,6 @@ version = "1.2.0"
 
 [[deps.Mmap]]
 uuid = "a63ad114-7e13-5084-954f-fe012c677804"
-version = "1.11.0"
 
 [[deps.MosaicViews]]
 deps = ["MappedArrays", "OffsetArrays", "PaddedViews", "StackViews"]
@@ -1820,7 +1760,7 @@ version = "0.3.4"
 
 [[deps.MozillaCACerts_jll]]
 uuid = "14a3606d-f60d-562e-9121-12d972cd8159"
-version = "2023.12.12"
+version = "2023.1.10"
 
 [[deps.NaNMath]]
 deps = ["OpenLibm_jll"]
@@ -1853,10 +1793,16 @@ git-tree-sha1 = "887579a3eb005446d514ab7aeac5d1d027658b8f"
 uuid = "e7412a2a-1a6e-54c0-be00-318e2571c051"
 version = "1.3.5+1"
 
+[[deps.OhMyThreads]]
+deps = ["BangBang", "ChunkSplitters", "StableTasks", "TaskLocalValues"]
+git-tree-sha1 = "5f81bdb937fd857bac9548fa8ab9390a06864bb5"
+uuid = "67456a42-1dca-4109-a031-0a68de7e3ad5"
+version = "0.7.0"
+
 [[deps.OpenBLAS_jll]]
 deps = ["Artifacts", "CompilerSupportLibraries_jll", "Libdl"]
 uuid = "4536629a-c528-5b80-bd46-f80d51c5b363"
-version = "0.3.27+1"
+version = "0.3.23+4"
 
 [[deps.OpenEXR]]
 deps = ["Colors", "FileIO", "OpenEXR_jll"]
@@ -1951,13 +1897,9 @@ uuid = "30392449-352a-5448-841d-b1acce4e97dc"
 version = "0.43.4+0"
 
 [[deps.Pkg]]
-deps = ["Artifacts", "Dates", "Downloads", "FileWatching", "LibGit2", "Libdl", "Logging", "Markdown", "Printf", "Random", "SHA", "TOML", "Tar", "UUIDs", "p7zip_jll"]
+deps = ["Artifacts", "Dates", "Downloads", "FileWatching", "LibGit2", "Libdl", "Logging", "Markdown", "Printf", "REPL", "Random", "SHA", "Serialization", "TOML", "Tar", "UUIDs", "p7zip_jll"]
 uuid = "44cfe95a-1eb2-52ea-b672-e2afdf69b78f"
-version = "1.11.0"
-weakdeps = ["REPL"]
-
-    [deps.Pkg.extensions]
-    REPLExt = "REPL"
+version = "1.10.0"
 
 [[deps.PkgVersion]]
 deps = ["Pkg"]
@@ -2042,11 +1984,10 @@ version = "1.4.3"
 [[deps.Printf]]
 deps = ["Unicode"]
 uuid = "de0858da-6303-5e67-8744-51eddeeeb8d7"
-version = "1.11.0"
 
 [[deps.Profile]]
+deps = ["Printf"]
 uuid = "9abbd945-dff8-562f-b5e8-e1ebf5ef1b79"
-version = "1.11.0"
 
 [[deps.ProgressMeter]]
 deps = ["Distributed", "Printf"]
@@ -2072,14 +2013,12 @@ uuid = "ea2cea3b-5b76-57ae-a6ef-0a8af62496e1"
 version = "5.15.3+2"
 
 [[deps.REPL]]
-deps = ["InteractiveUtils", "Markdown", "Sockets", "StyledStrings", "Unicode"]
+deps = ["InteractiveUtils", "Markdown", "Sockets", "Unicode"]
 uuid = "3fa0cd96-eef1-5676-8a61-b3b8758bbffb"
-version = "1.11.0"
 
 [[deps.Random]]
 deps = ["SHA"]
 uuid = "9a3f8284-a2c9-5f02-9a11-845980a1fd5c"
-version = "1.11.0"
 
 [[deps.RangeArrays]]
 git-tree-sha1 = "b9039e93773ddcfc828f12aadf7115b4b4d225f5"
@@ -2102,12 +2041,6 @@ version = "0.6.12"
 git-tree-sha1 = "45e428421666073eab6f2da5c9d310d99bb12f9b"
 uuid = "189a3867-3050-52da-a836-e630ba90ab69"
 version = "1.2.2"
-
-[[deps.Referenceables]]
-deps = ["Adapt"]
-git-tree-sha1 = "02d31ad62838181c1a3a5fd23a1ce5914a643601"
-uuid = "42d2dcc6-99eb-4e98-b66c-637b7d73030e"
-version = "0.1.3"
 
 [[deps.RelocatableFolders]]
 deps = ["SHA", "Scratch"]
@@ -2139,13 +2072,6 @@ version = "1.2.1"
 
 [[deps.Serialization]]
 uuid = "9e88b42a-f829-5b0c-bbe9-9e923198166b"
-version = "1.11.0"
-
-[[deps.Setfield]]
-deps = ["ConstructionBase", "Future", "MacroTools", "StaticArraysCore"]
-git-tree-sha1 = "c5391c6ace3bc430ca630251d02ea9687169ca68"
-uuid = "efcf1570-3423-57d1-acb7-fd33fddbac46"
-version = "1.1.2"
 
 [[deps.Showoff]]
 deps = ["Dates", "Grisu"]
@@ -2172,7 +2098,6 @@ version = "0.1.3"
 
 [[deps.Sockets]]
 uuid = "6462fe0b-24de-5631-8697-dd941f90decc"
-version = "1.11.0"
 
 [[deps.SortingAlgorithms]]
 deps = ["DataStructures"]
@@ -2183,19 +2108,18 @@ version = "1.2.1"
 [[deps.SparseArrays]]
 deps = ["Libdl", "LinearAlgebra", "Random", "Serialization", "SuiteSparse_jll"]
 uuid = "2f01184e-e22b-5df5-ae63-d93ebab69eaf"
-version = "1.11.0"
-
-[[deps.SplittablesBase]]
-deps = ["Setfield", "Test"]
-git-tree-sha1 = "e08a62abc517eb79667d0a29dc08a3b589516bb5"
-uuid = "171d559e-b47b-412a-8079-5efa626c420e"
-version = "0.1.15"
+version = "1.10.0"
 
 [[deps.StableRNGs]]
 deps = ["Random"]
 git-tree-sha1 = "83e6cce8324d49dfaf9ef059227f91ed4441a8e5"
 uuid = "860ef19b-820b-49d6-a774-d7a799459cd3"
 version = "1.0.2"
+
+[[deps.StableTasks]]
+git-tree-sha1 = "db1a5a7807c3b21fbbd853c835ce4fcb178993c7"
+uuid = "91464d47-22a1-43fe-8b7f-2d57ee82463f"
+version = "0.1.6"
 
 [[deps.StackViews]]
 deps = ["OffsetArrays"]
@@ -2240,14 +2164,9 @@ uuid = "1e83bf80-4336-4d27-bf5d-d5a4f845583c"
 version = "1.4.3"
 
 [[deps.Statistics]]
-deps = ["LinearAlgebra"]
-git-tree-sha1 = "ae3bb1eb3bba077cd276bc5cfc337cc65c3075c0"
+deps = ["LinearAlgebra", "SparseArrays"]
 uuid = "10745b16-79ce-11e8-11f9-7d13ad32a3b2"
-version = "1.11.1"
-weakdeps = ["SparseArrays"]
-
-    [deps.Statistics.extensions]
-    SparseArraysExt = ["SparseArrays"]
+version = "1.10.0"
 
 [[deps.StatsAPI]]
 deps = ["LinearAlgebra"]
@@ -2261,36 +2180,25 @@ git-tree-sha1 = "29321314c920c26684834965ec2ce0dacc9cf8e5"
 uuid = "2913bbd2-ae8a-5f71-8c99-4fb6c76f3a91"
 version = "0.34.4"
 
-[[deps.StyledStrings]]
-uuid = "f489334b-da3d-4c2e-b8f0-e476e12c162b"
-version = "1.11.0"
-
 [[deps.SuiteSparse_jll]]
 deps = ["Artifacts", "Libdl", "libblastrampoline_jll"]
 uuid = "bea87d4a-7f5b-5778-9afe-8cc45184846c"
-version = "7.7.0+0"
+version = "7.2.1+1"
 
 [[deps.TOML]]
 deps = ["Dates"]
 uuid = "fa267f1f-6049-4f14-aa54-33bafae1ed76"
 version = "1.0.3"
 
-[[deps.TableTraits]]
-deps = ["IteratorInterfaceExtensions"]
-git-tree-sha1 = "c06b2f539df1c6efa794486abfb6ed2022561a39"
-uuid = "3783bdb8-4a98-5b6b-af9a-565f29a5fe9c"
-version = "1.0.1"
-
-[[deps.Tables]]
-deps = ["DataAPI", "DataValueInterfaces", "IteratorInterfaceExtensions", "OrderedCollections", "TableTraits"]
-git-tree-sha1 = "598cd7c1f68d1e205689b1c2fe65a9f85846f297"
-uuid = "bd369af6-aec1-5ad0-b16a-f7cc5008161c"
-version = "1.12.0"
-
 [[deps.Tar]]
 deps = ["ArgTools", "SHA"]
 uuid = "a4e569a6-e804-4fa4-b0f3-eef7a1d5b13e"
 version = "1.10.0"
+
+[[deps.TaskLocalValues]]
+git-tree-sha1 = "d155450e6dff2a8bc2fcb81dcb194bd98b0aeb46"
+uuid = "ed4db957-447d-4319-bfb6-7fa9ae7ecf34"
+version = "0.1.2"
 
 [[deps.TensorCore]]
 deps = ["LinearAlgebra"]
@@ -2301,13 +2209,6 @@ version = "0.1.1"
 [[deps.Test]]
 deps = ["InteractiveUtils", "Logging", "Random", "Serialization"]
 uuid = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
-version = "1.11.0"
-
-[[deps.ThreadedScans]]
-deps = ["ArgCheck"]
-git-tree-sha1 = "ca1ba3000289eacba571aaa4efcefb642e7a1de6"
-uuid = "24d252fe-5d94-4a69-83ea-56a14333d47a"
-version = "0.1.0"
 
 [[deps.TiffImages]]
 deps = ["ColorTypes", "DataStructures", "DocStringExtensions", "FileIO", "FixedPointNumbers", "IndirectArrays", "Inflate", "Mmap", "OffsetArrays", "PkgVersion", "ProgressMeter", "SIMD", "UUIDs"]
@@ -2326,28 +2227,6 @@ git-tree-sha1 = "0c45878dcfdcfa8480052b6ab162cdd138781742"
 uuid = "3bb67fe8-82b1-5028-8e26-92a6c54297fa"
 version = "0.11.3"
 
-[[deps.Transducers]]
-deps = ["Accessors", "ArgCheck", "BangBang", "Baselet", "CompositionsBase", "ConstructionBase", "DefineSingletons", "Distributed", "InitialValues", "Logging", "Markdown", "MicroCollections", "Requires", "SplittablesBase", "Tables"]
-git-tree-sha1 = "7deeab4ff96b85c5f72c824cae53a1398da3d1cb"
-uuid = "28d57a85-8fef-5791-bfe6-a80928e7c999"
-version = "0.4.84"
-
-    [deps.Transducers.extensions]
-    TransducersAdaptExt = "Adapt"
-    TransducersBlockArraysExt = "BlockArrays"
-    TransducersDataFramesExt = "DataFrames"
-    TransducersLazyArraysExt = "LazyArrays"
-    TransducersOnlineStatsBaseExt = "OnlineStatsBase"
-    TransducersReferenceablesExt = "Referenceables"
-
-    [deps.Transducers.weakdeps]
-    Adapt = "79e6a3ab-5dfb-504d-930d-738a2a938a0e"
-    BlockArrays = "8e7c35d0-a365-5155-bbbb-fb81a777f24e"
-    DataFrames = "a93c6f00-e57d-5684-b7b6-d8193f3e46c0"
-    LazyArrays = "5078a376-72f3-5289-bfd5-ec5146d43c02"
-    OnlineStatsBase = "925886fa-5bf2-5e8e-b522-a9147a512338"
-    Referenceables = "42d2dcc6-99eb-4e98-b66c-637b7d73030e"
-
 [[deps.Tricks]]
 git-tree-sha1 = "6cae795a5a9313bbb4f60683f7263318fc7d1505"
 uuid = "410a4b4d-49e4-4fbc-ab6d-cb71b17b3775"
@@ -2361,7 +2240,6 @@ version = "1.5.1"
 [[deps.UUIDs]]
 deps = ["Random", "SHA"]
 uuid = "cf7118a7-6976-5b1a-9a39-7adc72f591a4"
-version = "1.11.0"
 
 [[deps.UnPack]]
 git-tree-sha1 = "387c1f73762231e86e0c9c5443ce3b4a0a9a0c2b"
@@ -2370,7 +2248,6 @@ version = "1.0.2"
 
 [[deps.Unicode]]
 uuid = "4ec0a83e-493e-50e2-b9ac-8f72acf5a8f5"
-version = "1.11.0"
 
 [[deps.UnicodeFun]]
 deps = ["REPL"]
@@ -2629,7 +2506,7 @@ version = "1.4.0+0"
 [[deps.nghttp2_jll]]
 deps = ["Artifacts", "Libdl"]
 uuid = "8e850ede-7688-5339-a07c-302acd2aaf8d"
-version = "1.59.0+0"
+version = "1.52.0+1"
 
 [[deps.oneTBB_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl"]
@@ -2747,7 +2624,7 @@ version = "1.4.1+2"
 # ╠═08642690-7523-11eb-00dd-63d4cf6513dc
 # ╠═deac4cf2-7523-11eb-2832-7b9d31389b08
 # ╠═32887dfa-7524-11eb-35cd-051eff594fa9
-# ╠═0f765670-7506-11eb-2a37-931b15bb387f
+# ╟─0f765670-7506-11eb-2a37-931b15bb387f
 # ╟─82737d28-7507-11eb-1e39-c7dc12e18882
 # ╟─40d538b2-7506-11eb-116b-efeb16b3478d
 # ╟─df060a88-7507-11eb-034b-5346d67a0e0d
@@ -2785,7 +2662,7 @@ version = "1.4.1+2"
 # ╠═12f78a86-6abe-4e28-a6f8-6245f17b334a
 # ╟─3dfa0f35-a3b8-4964-a7ee-1cdf2c40ce68
 # ╠═c06b29a7-eeb3-4a85-8efe-c9f43eae7849
-# ╟─eded09fc-b838-43e2-9b6b-980d80af48b1
+# ╠═eded09fc-b838-43e2-9b6b-980d80af48b1
 # ╠═e6fa4f26-6baa-48bd-a733-e9cc6847ef49
 # ╠═56ed0197-e311-4ccc-ac4f-634ca6810553
 # ╠═9d39577f-8300-4d71-8f24-6ff4cc798a3b
