@@ -144,8 +144,9 @@ cachorro real.
 pixelated_corgi = load(download("https://i.redd.it/99lhfbnwpgd31.png"))
 
 # ╔═╡ 516e73e2-74fb-11eb-213e-9dbd9472e0db
-apolo = load(
-    download("https://www.ime.unicamp.br/~pjssilva/images/ensino/labcompsci/apolo1.png"),
+apolo = convert(
+	Matrix{RGB{Float64}},
+	load(download("https://www.ime.unicamp.br/~pjssilva/images/ensino/labcompsci/apolo1.png"))
 )
 
 # ╔═╡ b5d0ef90-74fb-11eb-3126-792f954c7be7
@@ -187,10 +188,9 @@ Mas as imagens nada mais são que matrizes e matrizes podem ser vistas como veto
 """
 
 # ╔═╡ 91a1bca4-74aa-11eb-3917-1dfd73d0ad9c
-apolohead = load(
-    download(
-        "https://www.ime.unicamp.br/~pjssilva/images/ensino/labcompsci/cabeca_apolo.png",
-    ),
+apolohead = convert(
+	Matrix{RGB{Float64}},
+	load(download("https://www.ime.unicamp.br/~pjssilva/images/ensino/labcompsci/cabeca_apolo.png"))
 )
 
 # ╔═╡ 8e698bdc-7501-11eb-1d2e-c336ccbde0b0
@@ -209,7 +209,7 @@ Note que isso pode fazer diferença em alguns casos:
 """
 
 # ╔═╡ 39c73cc7-2ca8-4e4e-8651-ec0b87f37e94
-tmp = similar(1.5 * apolo);
+tmp = similar(apolo);
 
 # ╔═╡ e0988dbd-93ba-4428-8b47-fc5745fa85a8
 @benchmark tmp = 1.5 * apolo
@@ -518,7 +518,7 @@ Vamos implementar duas rotinas que implementam as duas últimas estratégias par
 """
 
 # ╔═╡ 33a998e8-3a53-44e5-a353-1ccf3bd2d41f
-md"Obs: antes de começar deixa eu mostrar um comportamento interessante da função `imfilter` da biblioteca `ImageFiltering.jl`. Ela sempre converte os tipos de seus argumentos para a imagem baseada em `Float64`. Para ver isso vamos aplicar os filtros `identity` (que não deveria mudar nada) e `box_blur`  à imagem `apolohead` e verificar os tipos retornados." 
+md"Obs: antes de começar deixa eu mostrar um comportamento interessante da função `imfilter` da biblioteca `ImageFiltering.jl`. Ela sempre converte os tipos de seus argumentos para a imagem baseada em `Float64`. Para evitar problemas com isso já li as imagens do Apolo e de sua cabeça convertendo para esse tipo. Dê uma olhada no códito das células que carregam as imagens. Isso garante que mesmo com todas as manipulações os tipos ficam estáveis evitando erros indesejáveis. Veja que o tipo retornado é sempre o mesmo, independente do filtro empregado."
 
 # ╔═╡ 5a1a4ca4-4223-4fe3-99ae-86453295dc52
 typeof(apolohead)
@@ -528,23 +528,6 @@ typeof(imfilter(apolohead, identity))
 
 # ╔═╡ 3bb1c9b2-5ca5-46a4-8fcc-c11c5bd79139
 typeof(imfilter(apolohead, box_blur))
-
-# ╔═╡ edf08ce0-f47e-44d0-92c3-216bf187ad09
-md"Como podemos ver parecer que ele sempre converte de `N0f8` para algum tipo de `Float`, possivelmente relacioando com o tipo presente no filtro. Vamos tentar deduzir uma forma de calcular o tipo correto.."
-
-# ╔═╡ 54097a87-1233-4524-a263-4e7dfe0c6897
-# Uses the automatic upcast system of Julia to convert to the right type
-typeof(one(identity[1, 1])*apolohead)
-
-# ╔═╡ 5a1c12be-bc67-4df2-9e69-35e0543d29d8
-# Uses the automatic upcast system of Julia to convert to the right type
-typeof(one(box_blur[1, 1])*apolohead)
-
-# ╔═╡ 121d4880-c68c-44f1-a890-123928dd855b
-typeof(one(box_blur[1, 1])*apolohead[1,1])
-
-# ╔═╡ 2f5afff8-0ead-4840-a42d-5c39a2907b29
-md"Esse tipo de conversão será usada no topo das nossas funções que aplicam filtros para conseguir um resultado comparável a `imfilter` original."
 
 # ╔═╡ 592dab5b-efa2-44b7-a23b-cc5270a4870a
 """
@@ -577,12 +560,10 @@ md"Using this function we can easily create a first version of imfilter."
 
 # ╔═╡ 0d91923c-13d7-4fd1-b8da-fa549964024f
 function myimfilter1(M, K)
-	# Convert the image to the right type
-	Ml = one(K[0, 0])*M
-	m, n = size(Ml)
-	res = similar(Ml)
+	m, n = size(M)
+	res = similar(M)
 	@inbounds for indM in CartesianIndices(M)
-		res[indM] = applyfilter1(K, Ml, indM[1], indM[2], m, n)
+		res[indM] = applyfilter1(K, M, indM[1], indM[2], m, n)
 	end
 	return res
 end
@@ -621,12 +602,10 @@ end
 
 # ╔═╡ 10e20805-126c-428c-a7a2-d45146140b5b
 function myimfilter2(M, K)
-	# Convert the image to the right type
-	Ml = one(K[0, 0])*M
-	m, n = size(Ml)
-	res = similar(Ml)
-	@inbounds for indM in CartesianIndices(Ml)
-		res[indM] = applyfilter2(K, Ml, indM[1], indM[2], m, n)
+	m, n = size(M)
+	res = similar(M)
+	@inbounds for indM in CartesianIndices(M)
+		res[indM] = applyfilter2(K, M, indM[1], indM[2], m, n)
 	end
 	return res
 end
@@ -642,12 +621,10 @@ md"Tem algo estranho aí... O código das duas funções `myimfilter` é quase o
 
 # ╔═╡ 1292aa60-c355-4442-a81f-b26039ee1126
 function myimfilter(M, K, apply=applyfilter1)
-	# Convert the image to the right type
-	Ml = one(K[0, 0])*M
-	m, n = size(Ml)
-	res = similar(Ml)
-	for indM in CartesianIndices(Ml)
-		res[indM] = apply(K, Ml, indM[1], indM[2], m, n)
+	m, n = size(M)
+	res = similar(M)
+	for indM in CartesianIndices(M)
+		res[indM] = apply(K, M, indM[1], indM[2], m, n)
 	end
 	return res
 end
@@ -663,10 +640,9 @@ md"Esse padrão de _percorrer um iterator aplicando uma função para obter uma 
 
 # ╔═╡ 059b559a-e4db-4879-a9c5-14790918618b
 function myimfiltermap1(M, K, apply=applyfilter1)
-	Ml = one(K[0, 0])*M
-	m, n = size(Ml)
+	m, n = size(M)
 	# Using an anonymous function.
-	@inbounds return map(i -> apply(K, Ml, i[1], i[2], m, n), CartesianIndices(Ml))
+	@inbounds return map(i -> apply(K, M, i[1], i[2], m, n), CartesianIndices(M))
 end
 
 # ╔═╡ 0cd1a998-521e-4e52-ac08-45bc99640500
@@ -695,10 +671,13 @@ Para verificar isso vamos usar a biblioteca `OMyThreads.jl`. Ela reimplementa `m
 # ╔═╡ e6fa4f26-6baa-48bd-a733-e9cc6847ef49
 function myimfiltermap2(M, K, apply=applyfilter1)
 	# Convert the image to the right type
-	Ml = one(K[0, 0])*M
-	m, n = size(Ml)
+	m, n = size(M)
 	# Using an anonymous function e a único
-	@inbounds return OhMyThreads.tmap(i -> apply(K, Ml, i[1], i[2], m, n), CartesianIndices(Ml))
+	return OhMyThreads.tmap(
+		i -> apply(K, M, i[1], i[2], m, n),
+		CartesianIndices(M),
+		scheduler = :static
+	)
 end
 
 # ╔═╡ 56ed0197-e311-4ccc-ac4f-634ca6810553
@@ -715,11 +694,9 @@ Conseguimos chegar razoavelmente perto usando rotinas de alto nível e bibliotec
 
 # ╔═╡ b555626b-822c-4695-a0c8-3c3a8eb94dda
 function myimfilter3(M, K)
-	# Convert the image to the right type
-	Ml = one(K[0, 0])*M
-	m, n = size(Ml)
-	res = similar(Ml)
-	for indM in CartesianIndices(Ml)
+	m, n = size(M)
+	res = similar(M)
+	for indM in CartesianIndices(M)
 		i, j = indM[1], indM[2]
 		res[indM] = 0.0
 	    @inbounds for indK in CartesianIndices(K)
@@ -729,11 +706,11 @@ function myimfilter3(M, K)
 			# if it leaves outside the image, abort the operatrion returning
 			# the original pixel
 			if il < 1 || il > m || jl < 1 || jl > n
-				res[indM] = Ml[indM]
+				res[indM] = M[indM]
 				continue
 			end
 			# Apply current weight
-			res[indM] += K[k, l]*Ml[il, jl] 
+			res[indM] += K[k, l]*M[il, jl] 
 		end
 	end
 	return res
@@ -750,9 +727,7 @@ mais rápida (isso pode variar de uma máquina para outra). Mas veio uma ideia. 
 
 # ╔═╡ 66a856c8-ea1d-4c35-8d37-2c548df3696c
 function myimfilter4(M, K)
-	# Convert the image to the right type
-	Ml = one(K[0, 0])*M
-	m, n = size(Ml)
+	m, n = size(M)
 	
 	# Precomputes the bounds that will induce a pure copy from M
 	Kstart = 1 .+ K.offsets
@@ -761,7 +736,7 @@ function myimfilter4(M, K)
 	lowj, upj = max(1, 1 - Kstart[2]), min(n, n - Kend[2])
 
 	# Now apply the filter explicitly
-	res = zero(Ml)
+	res = zero(M)
 	Threads.@threads for indM in CartesianIndices(M)
 		i, j = indM[1], indM[2]
 		if i < lowi || i > upi || j < lowj || j > upj
@@ -770,7 +745,7 @@ function myimfilter4(M, K)
 		end
 		for inds in CartesianIndices(K)
 			k, w = inds[1], inds[2]
-			@inbounds res[i, j] += K[k, w]*Ml[i + k, j + w]
+			@inbounds res[i, j] += K[k, w]*M[i + k, j + w]
 		end
 	end
 	return res
@@ -816,18 +791,16 @@ function myimfilter5(M, K)
 	lowj, upj = 1 + Kstart[2], n + Kend[2]
 
 	# Create a copy of M that has the extra copied boundary
-	oneK = one(K[0, 0])
-	elemtype = typeof(oneK*M[1, 1])
-	preOMl = Matrix{elemtype}(undef, upi - lowi + 1, upj - lowj + 1)
+	preOMl = Matrix{eltype(M)}(undef, upi - lowi + 1, upj - lowj + 1)
 	OMl = OffsetArray(preOMl, lowi:upi, lowj:upj)
 	Threads.@threads for indM in CartesianIndices(OMl)
 		i, j = indM[1], indM[2]
 		il, jl = clamp(i, 1, m), clamp(j, 1, n)
-		@inbounds OMl[indM] = oneK*M[il, jl]
+		@inbounds OMl[indM] = M[il, jl]
 	end
 
 	# Now apply the filter explicitly
-	res = Matrix{elemtype}(undef, m, n)
+	res = similar(M)
 	Threads.@threads for indM in CartesianIndices(res)
 		i, j = indM[1], indM[2]
 		res[indM] = 0 
@@ -2601,8 +2574,8 @@ version = "1.4.1+2"
 # ╟─4fab4616-74b0-11eb-0088-6b50237d7d54
 # ╠═54448d18-7528-11eb-209a-9717affa0d02
 # ╟─acbc563a-7528-11eb-3c38-75a5b66c9241
-# ╠═995392ee-752a-11eb-3394-0de331e24f40
-# ╟─d22903d6-7529-11eb-2dcd-132cd27104c2
+# ╟─995392ee-752a-11eb-3394-0de331e24f40
+# ╠═d22903d6-7529-11eb-2dcd-132cd27104c2
 # ╟─275bf7ac-74b3-11eb-32c3-cda1e4f1f8c2
 # ╟─c6e340ee-751e-11eb-3ca7-69595b3693b7
 # ╟─844ed844-74b3-11eb-2ee1-2de664b26bc6
@@ -2636,11 +2609,6 @@ version = "1.4.1+2"
 # ╠═5a1a4ca4-4223-4fe3-99ae-86453295dc52
 # ╠═bde5ca1c-44d6-446b-857e-bc39cacaea33
 # ╠═3bb1c9b2-5ca5-46a4-8fcc-c11c5bd79139
-# ╟─edf08ce0-f47e-44d0-92c3-216bf187ad09
-# ╠═54097a87-1233-4524-a263-4e7dfe0c6897
-# ╠═5a1c12be-bc67-4df2-9e69-35e0543d29d8
-# ╠═121d4880-c68c-44f1-a890-123928dd855b
-# ╟─2f5afff8-0ead-4840-a42d-5c39a2907b29
 # ╠═592dab5b-efa2-44b7-a23b-cc5270a4870a
 # ╟─7020309a-5eb0-4210-a990-4ec71583d3c9
 # ╠═0d91923c-13d7-4fd1-b8da-fa549964024f
@@ -2662,7 +2630,7 @@ version = "1.4.1+2"
 # ╠═12f78a86-6abe-4e28-a6f8-6245f17b334a
 # ╟─3dfa0f35-a3b8-4964-a7ee-1cdf2c40ce68
 # ╠═c06b29a7-eeb3-4a85-8efe-c9f43eae7849
-# ╠═eded09fc-b838-43e2-9b6b-980d80af48b1
+# ╟─eded09fc-b838-43e2-9b6b-980d80af48b1
 # ╠═e6fa4f26-6baa-48bd-a733-e9cc6847ef49
 # ╠═56ed0197-e311-4ccc-ac4f-634ca6810553
 # ╠═9d39577f-8300-4d71-8f24-6ff4cc798a3b

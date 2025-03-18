@@ -599,7 +599,20 @@ c = get_config()  #noqa
 #  
 #          Default roles are defined in roles.py.
 #  Default: []
-# c.JupyterHub.load_roles = []
+c.JupyterHub.load_roles = [
+    {
+        "name": "jupyterhub-idle-culler-role",
+        "scopes": [
+            "list:users",
+            "read:users:activity",
+            "read:servers",
+            "delete:servers",
+            # "admin:users", # if using --cull-users
+        ],
+        # assignment of role's permissions to:
+        "services": ["jupyterhub-idle-culler-service"],
+    }
+]
 
 ## The date format used by logging formatters for %(asctime)s
 #  See also: Application.log_datefmt
@@ -777,7 +790,29 @@ c = get_config()  #noqa
 #                  }
 #              ]
 #  Default: []
-# c.JupyterHub.services = []
+import sys
+c.JupyterHub.services = [
+    {
+        "name": "jupyterhub-idle-culler-service",
+        "command": [
+            sys.executable,
+            "-m", "jupyterhub_idle_culler",
+            "--timeout=3600",
+        ],
+        # "admin": True,
+    }
+]
+c.JupyterHub.services = [
+    {
+        "name": "jupyterhub-idle-culler-service",
+        "command": [
+            sys.executable,
+            "-m", "jupyterhub_idle_culler",
+            "--timeout=3600",
+        ],
+        # "admin": True,
+    }
+]
 
 ## Instead of starting the Application, dump configuration to stdout
 #  See also: Application.show_config
@@ -807,6 +842,7 @@ c = get_config()  #noqa
 #    - simple: jupyterhub.spawner.SimpleLocalProcessSpawner
 #  Default: 'jupyterhub.spawner.LocalProcessSpawner'
 # c.JupyterHub.spawner_class = 'jupyterhub.spawner.LocalProcessSpawner'
+c.JupyterHub.spawner_class = 'systemd'
 
 ## Path to SSL certificate file for the public facing interface of the proxy
 #  
@@ -1757,7 +1793,7 @@ c.Authenticator.allow_all = True
 #  implement this support. A custom spawner **must** add support for this setting
 #  for it to be enforced.
 #  Default: None
-# c.Spawner.cpu_limit = None
+c.Spawner.cpu_limit = 4
 
 ## Enable debug-logging of the single-user server
 #  Default: False
@@ -1795,6 +1831,7 @@ c.Authenticator.allow_all = True
 #  single-user server's process.
 #  Default: ['JUPYTERHUB_SINGLEUSER_APP']
 # c.Spawner.env_keep = ['JUPYTERHUB_SINGLEUSER_APP']
+# c.Spawner.env_keep = ['PATH', 'PYTHONPATH', 'CONDA_ROOT', 'CONDA_DEFAULT_ENV', 'VIRTUAL_ENV', 'LANG', 'LC_ALL', 'JUPYTERHUB_SINGLEUSER_APP']
 
 ## Extra environment variables to set for the single-user server's process.
 #  
@@ -1820,6 +1857,9 @@ c.Authenticator.allow_all = True
 #      such as JUPYTERHUB_API_URL.
 #  Default: {}
 # c.Spawner.environment = {}
+c.Spawner.environment = {
+    "JULIA_NUM_THREADS": "4"
+}
 
 ## Override specific traitlets based on group membership of the user.
 #  
@@ -1935,7 +1975,7 @@ c.Authenticator.allow_all = True
 #  implement this support. A custom spawner **must** add support for this setting
 #  for it to be enforced.
 #  Default: None
-# c.Spawner.mem_limit = None
+c.Spawner.mem_limit = '8G'
 
 ## Path to the notebook directory for the single-user server.
 #  
@@ -3036,3 +3076,8 @@ c.Authenticator.allow_all = True
 ## The number of threads to allocate for encryption
 #  Default: 24
 # c.CryptKeeper.n_threads = 24
+
+#------------------------------------------------------------------------------
+# Systemd spawner configuration
+#------------------------------------------------------------------------------
+c.SystemdSpawner.default_shell = '/bin/bash'
