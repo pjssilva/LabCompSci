@@ -32,9 +32,9 @@ end
 # ╔═╡ ac8ff080-ed61-11ea-3650-d9df06123e1f
 md"""
 # **Lista 2** - _convoluções_
-`MS513`, 1º sem. 2024
+`MS513`, 1º sem. 2025
 
-`Data de entrega`: **16/04, 2024 às 23:55**
+`Data de entrega`: **08/04, 2024 às 23:55**
 
 Este caderno contém _verificações ativas das respostas_! Em alguns exercícios você verá uma caixa colorida que roda alguns casos simples de teste e provê retorno imediato para a sua solução. Edite sua solução, execute a célula e verifique se passou na verificação. Note que a verificação feita é apenas superficial. Para a correção serão verificados mais casos e você tem a obrigação de escrever código que funcione adequadamente.
 
