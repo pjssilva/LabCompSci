@@ -209,7 +209,7 @@ Um exemplo é uma perspectiva que leva linhas em linhas mas paralelogramos não 
 
 # ╔═╡ aad4d6e4-79f9-11eb-0342-b900a41cfbaf
 md"""
-[Uma demostrantação iterativa de perspectiva](https://www.khanacademy.org/humanities/renaissance-reformation/early-renaissance1/beginners-renaissance-florence/a/linear-perspective-interactive), disponível na  Khan academy. (Possivelmente você precisa estar desconectar do Khan Academy se o usa em português.)
+[Uma demostrantação iterativa de perspectiva](https://www.khanacademy.org/humanities/renaissance-reformation/early-renaissance1/beginners-renaissance-florence/a/linear-perspective-interactive), disponível na  Khan academy. (Possivelmente você precisa desconectar do Khan Academy, se o usa em português.)
 """
 
 # ╔═╡ d42aec08-76ad-11eb-361a-a1f2c90fd4ec
@@ -295,7 +295,7 @@ $$A = \begin{bmatrix} a & b \\ c & d \end{bmatrix}$$
 """
 
 # ╔═╡ bf1fcb80-2a85-4b75-a8cf-a66fa6ab2744
-md"""Vocês notaram o uso do `SA` na frente dos arrays acima? Isso vem do pacote `StaticArrays` que permite criar arrays estáticos (cujo tamanho é fixo e não pode mudar) em Julia. Arrays estáticos pequenos são muito mais rápidos do que os arrays padrão em Julia, mas demandam mais do compilador, pois precisam de código muito otimizado. Assim, se você vai usar arrays pequenos com tamanho fixo, essa pode ser uma forma simples de ganhar tempo extra. Veja:
+md"""Vocês notaram o uso do `SA` na frente dos arrays acima? Isso vem do pacote `StaticArrays` que permite criar arrays estáticos (cujo tamanho é fixo e não pode mudar) em Julia. Arrays estáticos pequenos são muito mais rápidos do que os arrays padrão em Julia, mas demandam mais do compilador, pois precisam de código muito otimizado. Assim, se você vai usar arrays pequenos com tamanho fixo, essa pode ser uma forma simples de econimizar tempo. Veja:
 """
 
 # ╔═╡ 1943078d-9524-4cb6-ab66-9d069081b532
@@ -342,7 +342,9 @@ begin
         return fwarp
     end
 
+	# Polar to Cartesian
     xy((r, θ)) = SA[r*cos(θ), r*sin(θ)]
+	# Cartesian to polar
     rθ(x) = SA[norm(x), atan(x[2], x[1])]
 end
 
@@ -378,9 +380,6 @@ warp₃(α) = ((x, y),) -> rotate(α * √(x^2 + y^2))([x, y])
 
 # ╔═╡ a05a2667-ed48-4610-bc4d-bff0317788ef
 md"Vejamos que são todas equivalentes:"
-
-# ╔═╡ 8981cfcb-64a2-4d9e-be8e-b4de0abddfbb
-
 
 # ╔═╡ 2b50dc4e-6549-4640-922d-c1c15bb82d7c
 begin
@@ -551,7 +550,7 @@ md"""
 
 Você pode verificar isso você mesmo lembrando que a primeira coluna da matriz associada a `lin(A)∘lin(B)` deve ser o valor dessa transformação calculada no vetor $[1, 0]$. Isso é obtido fazendo primeiro $y=A[1,0]$ e, depois, $z = By$. Já a segunda coluna da matriz associada à composição é obtida fazendo o mesmo para o segundo vetor da base canônica $[0, 1]$.
 
-Se nunca viu isso, tente fazer você mesmo, valhe à pena tentar fazer isso sozinho.
+Se nunca viu isso, tente fazer você mesmo. Valhe à pena tentar fazer isso sozinho.
 """
 
 # ╔═╡ 17281256-7aa5-11eb-3144-b72777334326
@@ -630,7 +629,7 @@ Essa equação deve valer para todo $v$ ou pelo menos para todo $v$ em uma regi�
 
 # ╔═╡ 7a4e785e-7a71-11eb-07fb-cfba453a117b
 md"""
-## Examplos: rotações e escalamento
+## Exemplos: rotações e escalamento
 """
 
 # ╔═╡ 9264508a-7a71-11eb-1b7c-bf6e62788115
@@ -660,7 +659,7 @@ md"""
 
 # ╔═╡ ce620b8e-7aa5-11eb-370b-11e34b07d54d
 md"""
-O que de fato fazem funções inversas?
+O que de fato fazem as funções inversas?
 
 Vamos começar de novo com o exemplo simples de escalamento. Dado um vetor de entrada $x$, escalá-lo por $2$ é calcular o vetor
 
@@ -2559,7 +2558,6 @@ version = "17.4.0+2"
 # ╠═3d28ce92-6c12-4143-9f53-3634bbc687ce
 # ╠═3460ad26-daeb-4e9c-9c75-1e00e43d592d
 # ╟─a05a2667-ed48-4610-bc4d-bff0317788ef
-# ╠═8981cfcb-64a2-4d9e-be8e-b4de0abddfbb
 # ╠═2b50dc4e-6549-4640-922d-c1c15bb82d7c
 # ╟─46898e66-8d95-43bd-83f6-6806e3c1ead7
 # ╠═069988e7-1262-47b6-b399-a464bdcab21b

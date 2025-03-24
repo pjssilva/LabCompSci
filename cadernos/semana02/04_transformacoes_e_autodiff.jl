@@ -91,6 +91,12 @@ x -> sin(x)
 # ╔═╡ 98498f84-76ab-11eb-23cf-857c776a9163
 (x -> sin(x))(π / 2)
 
+# ╔═╡ 63f0c7cf-a4e1-4d53-a91a-320a23705055
+f₂ = x -> sin(x)
+
+# ╔═╡ 17927403-2ecb-4f39-aad6-20ca37cea03a
+f₂(π)
+
 # ╔═╡ c6c860a6-76ab-11eb-1dec-1b2f179a0fa9
 # Long version
 function f₃(x, α=3) # Valor default
@@ -154,9 +160,9 @@ De fato, as formas tradicionais de se diferenciar uma função numericamente sã
 
 * Implementar manualmente a fórmula da derivada.
 
-A primeira opção sofre por não ser exata, mas tem a grande vantagem de ser simples de implementar. Já a segunda pode dar trabalho, dependendo de quão complexa for a função, e está propensa a erros. Muitas vezes usamos a primeira para verificar se não comentemos erros grosseiros na segunda.
+A primeira opção sofre por não ser exata, mas tem a grande vantagem de ser simples de implementar, já que o mesmo código funcionaria para qualquer função (eventualmente, recebendo o $h$ ideal). Já a segunda pode dar trabalho, dependendo de quão complexa for a função, e está propensa a erros. Muitas vezes usamos a primeira para verificar se não comentemos erros grosseiros na segunda.
 
-Uma alternativa mais moderna é o uso de diferenciação automática. Nesse caso usamos um sistema que calcula automaticamente a função e a derivada, sem intervenção manual e sem erros numéricos. Uma boa biblioteca de diferenciação automática ainda faz isso com cuidado de não impor uma grande penalidade no tempo de execução. De fato, especialmente para funções com muitos parâmetros, a tendência é que a implementação automática seja mais eficiente que uma implementação manual simples.
+Uma alternativa mais moderna é o uso de diferenciação automática. Nesse caso, usamos um sistema que calcula automaticamente a função e a derivada, sem intervenção manual e sem erros numéricos. Uma boa biblioteca de diferenciação automática ainda faz isso com cuidado de não impor uma grande penalidade no tempo de execução. De fato, especialmente para funções com muitos parâmetros, a tendência é que a implementação automática seja mais eficiente que uma implementação manual simples.
 
 Em Julia, uma biblioteca com esse tipo de funcionalidade é a `ForwardDiff`. Vamos vê-la em ação inicialmente para funções de um único parâmetro.
 """
@@ -297,7 +303,7 @@ end
 
 # ╔═╡ dfb9d74c-76b8-11eb-24ff-e521f1294a6f
 md"""
-A fórmula acima é bastante natural ao recordamos o que é uma derivada parcial. Nela, mantemos todas as variáveis menos uma fixa e imaginamos que estamos derivando a função resultante que permite a mudança dessa única variável.
+A fórmula acima é bastante natural ao recordamos o que é uma derivada parcial. Nela, mantemos todas as variáveis fixas menos uma. Aí, imaginamos que estamos derivando a função resultante que permite a mudança dessa da única variável que ficou livre.
 """
 
 # ╔═╡ 1049f458-76b9-11eb-1d2d-af0b22480121
@@ -361,8 +367,10 @@ begin
         end
     end
 
+	# Cartesian to polar
     rθ(x) = (norm(x), atan(x[2], x[1])) # maybe vectors are more readable here?
 
+	# Polar to cartesian
     xy((r, θ)) = (r * cos(θ), r * sin(θ))
 end
 
@@ -1437,6 +1445,8 @@ version = "17.4.0+2"
 # ╠═81a00b78-76ab-11eb-072a-6b96847c2ce4
 # ╠═2369fb18-76ab-11eb-1189-85309c8f925b
 # ╠═98498f84-76ab-11eb-23cf-857c776a9163
+# ╠═63f0c7cf-a4e1-4d53-a91a-320a23705055
+# ╠═17927403-2ecb-4f39-aad6-20ca37cea03a
 # ╠═c6c860a6-76ab-11eb-1dec-1b2f179a0fa9
 # ╠═f07fbc6c-76ab-11eb-3382-87c7d65b4078
 # ╠═f4fa8c1a-76ab-11eb-302d-bd410432e3cf
