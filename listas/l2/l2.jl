@@ -1,17 +1,19 @@
 ### A Pluto.jl notebook ###
-# v0.19.40
+# v0.20.4
 
 using Markdown
 using InteractiveUtils
 
 # This Pluto notebook uses @bind for interactivity. When running this notebook outside of Pluto, the following 'mock version' of @bind gives bound variables a default value (instead of an error).
 macro bind(def, element)
+    #! format: off
     quote
         local iv = try Base.loaded_modules[Base.PkgId(Base.UUID("6e696c72-6542-2067-7265-42206c756150"), "AbstractPlutoDingetjes")].Bonds.initial_value catch; b -> missing; end
         local el = $(esc(element))
         global $(esc(def)) = Core.applicable(Base.get, el) ? Base.get(el) : iv(el)
         el
     end
+    #! format: on
 end
 
 # ╔═╡ f7a6d7c3-37b9-437d-8b8e-853665ddbae3
@@ -109,11 +111,11 @@ Precisamos pensar em como lidar com **condições de fronteira**. O que ocorre s
 
 Uma solução melhor, no caso de imagens, é usar como valor faltante o valor que existe e que está mais *próximo* da posição inválida. Isso é equivalente a estender o vetor para além de suas fronteiras com cópias dos seus valores extremos. Essa é inclusive uma das formas de se lidar com o problema, adicionas essas novas posições que são chamadas de **células fantasmas**. 
 
-👉 Escreva uma função chamada `extend(v, i)` que verifica se a posição $i$ corresponde a um índice válido de `v`. Caso afirmativo, ela devolve o valor `v[i]`. Caso contrário, devolve o valor em `v` mais próximo.
+👉 Escreva uma função chamada `closest(v, i)` que verifica se a posição $i$ corresponde a um índice válido de `v`. Caso afirmativo, ela devolve o valor `v[i]`. Caso contrário, devolve o valor em `v` mais próximo.
 """
 
 # ╔═╡ 802bec56-ee09-11ea-043e-51cf1db02a34
-function extend(v::AbstractVector, i)
+function closest(v::AbstractVector, i)
 
     return missing
 end
@@ -134,16 +136,16 @@ md"- Estendida com 0:"
 colored_line([0, 0, example_vector..., 0, 0])
 
 # ╔═╡ 9bde9f92-ee0f-11ea-27f8-ffef5fce2b3c
-md"- Estendida com sua função `extend`:"
+md"- Estendida com sua função `closest`:"
 
 # ╔═╡ 431ba330-0f72-416a-92e9-55f51ff3bcd1
 md"""
 #### Exercício 1.3
-👉 Adapte a função `mean` da primeira lista para receber um vetor `v`, um índice de início `s` e outro de fim `e` devolve a média dos valores de `v` ness faixa. Ela deve lidar com os valores além das fronteiras com sua função `extend`.
+👉 Adapte a função `mean` da primeira lista para receber um vetor `v`, um índice de início `s` e outro de fim `e` devolve a média dos valores de `v` ness faixa. Ela deve lidar com os valores além das fronteiras com sua função `closest`.
 """
 
 # ╔═╡ 5fdc5d0d-a52c-476e-b3b5-3b6364b706e4
-function mean(v, s, e)
+function intervalmean(v, s, e)
 
     return missing
 end
@@ -151,7 +153,7 @@ end
 # ╔═╡ e84c9cc2-e6e1-46f1-bf4e-9605da5e6f4a
 md"""
 
-👉 Escreva uma rotina `box_blur(v, l)` que borra (desfoca) os valores de um vetor `v` com  uma janela de comprimento `l` calculando a média dos elementos dentro dessa janela de $-\ell$ to $\ell$. Isso se chama **desfocagem de caixa** (do inglês _box blur_). Use sua função `mean` que já lida com a fronteira.
+👉 Escreva uma rotina `box_blur(v, l)` que borra (desfoca) os valores de um vetor `v` com  uma janela de comprimento `l` calculando a média dos elementos dentro dessa janela de $-\ell$ to $\ell$. Isso se chama **desfocagem de caixa** (do inglês _box blur_). Use sua função `intervalmean` que já lida com a fronteira.
 
 Ela deve devolver um vetor com o mesmo comprimento de `v`. Ela não deve alterar `v` e sim devolver um novo vetor com a resposta.
 """
@@ -319,29 +321,29 @@ M' = M \star K
 md"""
 #### Exercício 2.1
 
-👉 Escreva um novo método para `extend` que recebe uma matriz `M` e dupla de indices índices de linha `i` e coluna `j`, retornando o elemento mais próximo da matriz.
+👉 Escreva um novo método para `closest` que recebe uma matriz `M` e dupla de indices índices de linha `i` e coluna `j`, retornando o elemento mais próximo da matriz.
 """
 
 # ╔═╡ 7c2ec6c6-ee15-11ea-2d7d-0d9401a5e5d1
-function extend(M::AbstractMatrix, i, j)
+function closest(M::AbstractMatrix, i, j)
 
     return missing
 end
 
 # ╔═╡ 803905b2-ee09-11ea-2d52-e77ff79693b0
-extend([5, 6, 7], 1)
+closest([5, 6, 7], 1)
 
 # ╔═╡ 80479d98-ee09-11ea-169e-d166eef65874
-extend([5, 6, 7], -8)
+closest([5, 6, 7], -8)
 
 # ╔═╡ 805691ce-ee09-11ea-053d-6d2e299ee123
-extend([5, 6, 7], 10)
+closest([5, 6, 7], 10)
 
 # ╔═╡ 45c4da9a-ee0f-11ea-2c5b-1f6704559137
-if extend(v, 1) === missing
+if closest(v, 1) === missing
     missing
 else
-    colored_line([extend(example_vector, i) for i = -1:length(example_vector)+2])
+    colored_line([closest(example_vector, i) for i = -1:length(example_vector)+2])
 end
 
 # ╔═╡ 9afc4dca-ee16-11ea-354f-1d827aaa61d2
@@ -360,10 +362,10 @@ md"- Veja a imagem acima estendida com `0`:"
 
 
 # ╔═╡ d06ea762-ee27-11ea-2e9c-1bcff86a3fe0
-md"- Agora o resultado com sua função `extend`:"
+md"- Agora o resultado com sua função `closest`:"
 
 # ╔═╡ e1dc0622-ee16-11ea-274a-3b6ec9e15ab5
-[extend(small_image, i, j) for (i, j) in Iterators.product(-1:7, -1:7)]
+[closest(small_image, i, j) for (i, j) in Iterators.product(-1:7, -1:7)]
 
 # ╔═╡ 4bbea325-35f8-4a51-bd66-153aba4aed96
 md"""
@@ -384,7 +386,7 @@ apolo_head = apolo[50:380, 100:480];
 
 # ╔═╡ 3cd535e4-ee26-11ea-2482-fb4ad43dda19
 [
-    extend(apolo_head, i, j) for i = -50:size(apolo_head, 1)+51,
+    closest(apolo_head, i, j) for i = -50:size(apolo_head, 1)+51,
     j = -50:size(apolo_head, 2)+51
 ]
 
@@ -392,7 +394,7 @@ apolo_head = apolo[50:380, 100:480];
 md"""
 #### Exercício 2.2
 
-👉 Implemente um método `convolve(M, K)` que aplica uma convolução 2D a uma matriz `M` usando o núcleo (matricial) `K`. Use o seu método `extend` do último exercício.
+👉 Implemente um método `convolve(M, K)` que aplica uma convolução 2D a uma matriz `M` usando o núcleo (matricial) `K`. Use o seu método `closest` do último exercício.
 """
 
 # ╔═╡ 8b96e0bc-ee15-11ea-11cd-cfecea7075a0
@@ -545,19 +547,19 @@ Agora podemos combinar essas duas imagems calculando magnitude do **gradiente** 
 
 $$PB_\text{total} = \sqrt{PBX^2 + PBY^2},$$
 
-Observe que essas operações devem ser realizada **elemento-por-elemento** nas matrizes. Essa é matriz final que deve ser calculada pela função `with_sobel_edge_detect` abaixo.
+Observe que essas operações devem ser realizada **elemento-por-elemento** nas matrizes. Essa é matriz final que deve ser calculada pela função `detect_edge_with_sobel` abaixo.
 
 Use as funções anteriores na sua implementação, em particular use `convolve`, e adicione células intermediárias se necessário.
 """
 
 # ╔═╡ 9eeb876c-ee15-11ea-1794-d3ea79f47b75
-function with_sobel_edge_detect(image)
+function detect_edge_with_sobel(image)
 
     return [0]
 end
 
 # ╔═╡ 1bf94c00-ee19-11ea-0e3c-e12bc68d8e28
-Gray.(with_sobel_edge_detect(apolo_head))
+Gray.(detect_edge_with_sobel(apolo_head))
 
 # ╔═╡ 8ffe16ce-ee20-11ea-18bd-15640f94b839
 if student.name === "João Ninguém"
@@ -662,17 +664,17 @@ not_defined(variable_name) = Markdown.MD(
 )
 
 # ╔═╡ bcf98dfc-ee1b-11ea-21d0-c14439500971
-if !@isdefined(extend)
-    not_defined(:extend)
+if !@isdefined(closest)
+    not_defined(:closest)
 else
     let
-        result = extend([6, 7], -10)
+        result = closest([6, 7], -10)
 
         if ismissing(result)
             still_missing()
         elseif isnothing(result)
             keep_working(md"Você esqueceu de escrever `return`?")
-        elseif result != 6 || extend([6, 7], 10) != 7
+        elseif result != 6 || closest([6, 7], 10) != 7
             keep_working()
         else
             correct()
@@ -737,18 +739,18 @@ else
 end
 
 # ╔═╡ efd1ceb4-ee1c-11ea-350e-f7e3ea059024
-if !@isdefined(extend)
-    not_defined(:extend)
+if !@isdefined(closest)
+    not_defined(:closest)
 else
     let
         input = [42 37; 1 0]
-        result = extend(input, -2, -2)
+        result = closest(input, -2, -2)
 
         if ismissing(result)
             still_missing()
         elseif isnothing(result)
             keep_working(md"Você esqueceu de escrever `return`?")
-        elseif result != 42 || extend(input, -1, 3) != 37
+        elseif result != 42 || closest(input, -1, 3) != 37
             keep_working()
         else
             correct()
@@ -793,7 +795,7 @@ PlutoUI = "~0.7.39"
 PLUTO_MANIFEST_TOML_CONTENTS = """
 # This file is machine-generated - editing it directly is not advised
 
-julia_version = "1.10.2"
+julia_version = "1.10.6"
 manifest_format = "2.0"
 project_hash = "a1f26f28730f12c20958e7206c5881a89c9cc16d"
 
@@ -916,7 +918,7 @@ weakdeps = ["Dates", "LinearAlgebra"]
 [[deps.CompilerSupportLibraries_jll]]
 deps = ["Artifacts", "Libdl"]
 uuid = "e66e0078-7015-5450-92f7-15fbd957f2ae"
-version = "1.1.0+0"
+version = "1.1.1+0"
 
 [[deps.ComputationalResources]]
 git-tree-sha1 = "52cb3ec90e8a8bea0e62e275ba577ad0f74821f7"
@@ -1752,7 +1754,7 @@ version = "1.5.6+0"
 [[deps.libblastrampoline_jll]]
 deps = ["Artifacts", "Libdl"]
 uuid = "8e850b90-86db-534c-a0d3-1478176c7d93"
-version = "5.8.0+1"
+version = "5.11.0+0"
 
 [[deps.libpng_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Zlib_jll"]
