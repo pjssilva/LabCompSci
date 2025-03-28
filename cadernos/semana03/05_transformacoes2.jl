@@ -715,7 +715,7 @@ md""" Fórmula da inversa $2 \times 2$:
 ``
 A^{-1}
 =
-\frac{1}{ad - bc}\begin{pmatrix} d & -b \\ -c & a \end{pmatrix} / (ad-bc), \quad
+\frac{1}{ad - bc}\begin{pmatrix} d & -b \\ -c & a \end{pmatrix}, \quad
 ``
 se
 ``\ A \ =
@@ -798,11 +798,14 @@ begin
 
     end
 
-    function transform_ij_to_xy(i::Int, j::Int, pixels)
-        ij_to_xy = scale(2 / pixels) ∘ flipy ∘ swap ∘ translate(-pixels / 2, -pixels / 2)
+    function transform_ij_to_xy(i::Int, j::Int, rows, cols)
+        ij_to_xy = scale(2 / pixels) ∘ flipy ∘ swap ∘ translate(-rows / 2, -cols / 2)
 
         ij_to_xy([i, j])
     end
+
+	# Good for square images, used below
+	transform_ij_to_xy(i::Int, j::Int, pixels) = transform_ij_to_xy(i, j, pixels, pixels)
 
     function getpixel(img, i::Int, j::Int; circular::Bool=false, r::Real=200)
         #  grab image color or place default
@@ -942,7 +945,7 @@ StaticArrays = "~1.9.3"
 PLUTO_MANIFEST_TOML_CONTENTS = """
 # This file is machine-generated - editing it directly is not advised
 
-julia_version = "1.10.8"
+julia_version = "1.10.7"
 manifest_format = "2.0"
 project_hash = "3fa6865e953c13c6151e7069d40ec015dd5594f9"
 
