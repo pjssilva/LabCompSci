@@ -67,7 +67,7 @@ M = rand(0:9, m, n)
 
 # ╔═╡ 4e4d333e-8102-11eb-0ba1-0f0183d0d3c2
 md"""
-A maneira inocente de resolver o problema é enumerar **todos** os possíveis caminhos, calcular as repectivas somas, e selecionar a menor. Porém, a medida que a matriz cresce o número de possíveis caminhos cresce **exponencialmente** fazendo essa opção inviável a menos de matrizes bem pequenas. Mais embaixo nós vamos implementar isso.
+A maneira inocente de resolver o problema é enumerar **todos** os possíveis caminhos, calcular as repectivas somas, e selecionar a menor. Porém, a medida que a matriz cresce o número de possíveis caminhos cresce **exponencialmente** fazendo essa opção inviável a menos do casos de matrizes bem pequenas. Mais embaixo nós vamos implementar isso.
 """
 
 # ╔═╡ 4f969032-80e9-11eb-1ada-d1aa64960967
@@ -99,9 +99,9 @@ Será que podemos evitar esse recálculo?
 
 Isso é possível se fizermos duas coisas:
 
-1. Identificarmos pontos a partir do qual é fácil ver qual é o melhor caminho, guardando essa informação de alguma forma. No nosso problema, esses nós são so nós da penúltima linha. Pense um pouco.
+1. Devemos identificar pontos a partir do qual é fácil ver qual é o melhor caminho, guardando essa informação de alguma forma. No nosso problema, esses nós são so nós da penúltima linha. Pense um pouco.
 
-1. Como sugerido, atualizar o custo de passar por um nó para o valor total do melhor caminho que parte dele.
+1. Como sugerido, devemos atualizar o custo de passar por um nó para o valor total do melhor caminho que parte dele.
 """
 
 # ╔═╡ d9265982-80ed-11eb-3a5f-27712a23506b
@@ -111,7 +111,7 @@ md"""
 
 # ╔═╡ ba4acb08-8104-11eb-1771-15bc5d8076fd
 md"""
-A observação fundamental da otimzação dinâmica é que alguns problemas são na verdade inúmeros problemas sobrepostos. Numa primeira observação, parece que teremos que repetir as mesmas contas para os subproblemas inúmeras vezes. Mas o princípio da otimalidade, que no problema acima é a observação que o único caminho que importa a partir de um nó é o melhor caminho, mostra que na verdade podemos guardar toda a informação dos inúmeros caminhos que se seguem guardando o curso e a direção do melhor caminho possível.
+A observação fundamental da otimzação dinâmica é que alguns problemas são na verdade inúmeros problemas sobrepostos. Numa primeira observação, parece que teremos que repetir as mesmas contas para os subproblemas inúmeras vezes. Mas o princípio da otimalidade, que no problema acima é a observação que o único caminho que importa a partir de um nó é o melhor caminho, mostra que na verdade podemos guardar toda a informação dos inúmeros caminhos que se seguem guardando o custo e a direção do melhor caminho possível.
 
 Vamos implementar isso para o nosso problema?
 """
@@ -450,7 +450,7 @@ PlutoUI = "7f904dfe-b85e-4ff6-b463-dae2292396a8"
 PLUTO_MANIFEST_TOML_CONTENTS = """
 # This file is machine-generated - editing it directly is not advised
 
-julia_version = "1.10.8"
+julia_version = "1.10.6"
 manifest_format = "2.0"
 project_hash = "afe32d6e1a27b00f9e45bb29c4740cd4029823ca"
 
