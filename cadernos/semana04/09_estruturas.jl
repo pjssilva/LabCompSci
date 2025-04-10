@@ -47,7 +47,7 @@ end
 Base.size(x::OneHot) = (x.n,)
 
 # ╔═╡ 82c7046c-f5d3-11ea-04e2-ef7c0f4db5da
-Base.getindex(x::OneHot, i::Int) = Int(x.k == i)
+Base.getindex(x::OneHot, i::Int) = Int(i == x.k)
 
 # ╔═╡ bd88de2a-60c8-4df8-91aa-960efb470f0e
 md"Tradução livre de [structure.jl](https://github.com/mitmath/18S191/blob/Spring21/notebooks/week4/structure.jl)."
@@ -90,7 +90,7 @@ Julia permite a criação de novos tipos. Como exemplo, vamos criar um tipo para
 
 # ╔═╡ 9bdabef8-81cc-11eb-14a1-67a9a7d968c0
 md"""
-Pronto, decidimos por manter uma implementação que economiza memória (o que é meio que óbvio nesse caso). Agora a nossa tarefa é implementar os métodos que descrevem o comportamento de vetores. Dessa maneira, eles poderão ser usados como vetores. O segredo é usar o despacho múltiplo, especializando funções em métodos específicos para o nosso novo tipo. Isso é similar ao que foi feito na aula sobre otimização dinâmica, quando criamos nosso próprio iterador que gerava todos os possíveis caminhos descendentes.
+Pronto, decidimos por usar uma implementação que economiza memória (o que é meio que óbvio nesse caso). Agora a nossa tarefa é implementar os métodos que descrevem o comportamento de vetores. Dessa maneira, eles poderão ser usados como vetores. O segredo é usar o despacho múltiplo, especializando funções em métodos específicos para o nosso novo tipo. Isso é similar ao que foi feito na aula sobre otimização dinâmica, quando criamos nosso próprio iterador que gerava todos os possíveis caminhos descendentes.
 
 Inicialmente vamos definir a função que retorna o comprimento do vetor:
 """
@@ -102,7 +102,7 @@ Agora, a função que extrai o i-ésimo componente. Essa é a função que é ch
 
 # ╔═╡ b024c318-81cc-11eb-018c-e1f7830ff51b
 md"""
-Obs: `x.k == i` devolve um valor booleano: `true` ou `false`. Mas o vetor _1-hot_ é um vetor de inteiros, então convertemos esse valor para inteiro passando o resultado para `Int`.
+Obs: `i == x.k` devolve um valor booleano: `true` ou `false`. Mas o vetor _1-hot_ é um vetor de inteiros, então convertemos esse valor para inteiro passando o resultado para `Int`.
 """
 
 # ╔═╡ 93bfe3ac-f756-11ea-20fb-8f7d586b42f3
@@ -116,7 +116,7 @@ myonehotvector[2]
 
 # ╔═╡ c5ed7d3e-81cc-11eb-3386-15b72db8155d
 md"""
-Uma variável desse tipo se comporta como se fosse um vetor, mas ela armazena apenas dois inteiros e não n deles. Esse é um exemplo interessante de quando é melhor criar e usar sua própria estrutura.
+Uma variável desse tipo se comporta como se fosse um vetor, mas ela armazena apenas dois inteiros e não n deles. Esse é um exemplo interessante de quando é melhor criar, e usar, sua própria estrutura.
 """
 
 # ╔═╡ e2e354a8-81b7-11eb-311a-35151063c2a7
@@ -236,10 +236,10 @@ M = sparse(denseM)
 md"""
 Há várias formas de se armazenar matrizes esparsas. A mais natural seria guardar triplas `(linha, coluna, valor)`. Já o pacote `SparseArrays.jl` de Julia usa um outro formato que é mais compacto, chamado de _coluna esparsa comprimida_ (_compressed sparse column_). Esse formato é mais favorável para operações matriciais tipicas como produtos matriz vetor ou para obter rapidamente colunas da matriz. Nesse formato armazena-se:
 
-* `nzval` contém o número de elementos não nulos da matriz
+* `nzval` contém os elementos não nulos da matriz
 * `rowval` representa o índice `i` ou a linha de cada um dos `nzval` valores armazenados. Em particular:
   * `length(rowval) == length(nzval)`
-* `colptr[j]` e `col[j + 1]` tem a faixa de início e fim - 1 da coluna `j`. Obs: se o fim estiver antes do começo é porque a coluna é vazia.
+* `colptr[j]` e `col[j + 1]` tem a faixa de início e fim - 1 da coluna `j`. Obs: se o fim for igual ao (ou menor que) começo é porque a coluna é vazia.
 * A última entrada de `colptr` aponta para além de `nzval` para indicar que as colunas acabaram.
   * `length(colptr) == number of columns + 1`
 """
@@ -474,7 +474,7 @@ picture = Float64.(channelview(image));
 size(picture)
 
 # ╔═╡ 6156fd1e-f5f9-11ea-06a9-211c7ab813a4
-pr, pg, pb = eachslice(picture, dims=1)
+pr, pg, pb, α = eachslice(picture, dims=1)
 
 # ╔═╡ a9766e68-f5f9-11ea-0019-6f9d02050521
 [RGB.(pr, 0, 0) RGB.(0, pg, 0) RGB.(0, 0, pb)]
@@ -556,7 +556,7 @@ PlutoUI = "~0.7.58"
 PLUTO_MANIFEST_TOML_CONTENTS = """
 # This file is machine-generated - editing it directly is not advised
 
-julia_version = "1.10.8"
+julia_version = "1.10.6"
 manifest_format = "2.0"
 project_hash = "f43bfb28290311dec88e684435d68c0bd68a6bd4"
 
@@ -634,9 +634,9 @@ version = "1.1.1+0"
 
 [[deps.DataStructures]]
 deps = ["Compat", "InteractiveUtils", "OrderedCollections"]
-git-tree-sha1 = "1d0a14036acb104d9e89698bd408f63ab58cdc82"
+git-tree-sha1 = "4e1fe97fdaed23e9dc21d4d664bea76b65fc50a0"
 uuid = "864edb3b-99cc-5e75-8d2d-829cb0a9cfe8"
-version = "0.18.20"
+version = "0.18.22"
 
 [[deps.Dates]]
 deps = ["Printf"]
@@ -647,10 +647,9 @@ deps = ["Random", "Serialization", "Sockets"]
 uuid = "8ba89e20-285c-5b6f-9357-94700520ee1b"
 
 [[deps.DocStringExtensions]]
-deps = ["LibGit2"]
-git-tree-sha1 = "2fb1e02f2b635d0845df5d7c167fec4dd739b00d"
+git-tree-sha1 = "e7b7e6f178525d17c720ab9c081e4ef04429f860"
 uuid = "ffbed154-4ef7-542d-bbb7-c09d3a79fcae"
-version = "0.9.3"
+version = "0.9.4"
 
 [[deps.Downloads]]
 deps = ["ArgTools", "FileWatching", "LibCURL", "NetworkOptions"]
@@ -792,9 +791,9 @@ version = "0.21.4"
 
 [[deps.JpegTurbo]]
 deps = ["CEnum", "FileIO", "ImageCore", "JpegTurbo_jll", "TOML"]
-git-tree-sha1 = "fa6d0bcff8583bac20f1ffa708c3913ca605c611"
+git-tree-sha1 = "9496de8fb52c224a2e3f9ff403947674517317d9"
 uuid = "b835a17e-a41a-41e7-81f0-2f016b05efe0"
-version = "0.1.5"
+version = "0.1.6"
 
 [[deps.JpegTurbo_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl"]
@@ -842,9 +841,9 @@ uuid = "8f399da3-3557-5675-b5ff-fb832c97cbdb"
 
 [[deps.Libgcrypt_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Libgpg_error_jll"]
-git-tree-sha1 = "8be878062e0ffa2c3f67bb58a595375eda5de80b"
+git-tree-sha1 = "d77592fa54ad343c5043b6f38a03f1a3c3959ffe"
 uuid = "d4300ac3-e22c-5743-9152-c294e39db1e4"
-version = "1.11.0+0"
+version = "1.11.1+0"
 
 [[deps.Libglvnd_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Xorg_libX11_jll", "Xorg_libXext_jll"]
@@ -878,9 +877,9 @@ uuid = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
 uuid = "56ddb016-857b-54e1-b83d-db4d58db5568"
 
 [[deps.MIMEs]]
-git-tree-sha1 = "1833212fd6f580c20d4291da9c1b4e8a655b128e"
+git-tree-sha1 = "c64d943587f7187e751162b3b84445bbbd79f691"
 uuid = "6c6e2e6c-3030-632d-7369-2d6c69616d65"
-version = "1.0.0"
+version = "1.1.0"
 
 [[deps.MacroTools]]
 git-tree-sha1 = "72aebe0b5051e5143a079a4685a46da330a40472"
@@ -925,9 +924,9 @@ uuid = "ca575930-c2e3-43a9-ace4-1e988b2c1908"
 version = "1.2.0"
 
 [[deps.OffsetArrays]]
-git-tree-sha1 = "5e1897147d1ff8d98883cda2be2187dcf57d8f0c"
+git-tree-sha1 = "a414039192a155fb38c4599a60110f0018c6ec82"
 uuid = "6fe1bfb0-de20-5000-8ca7-80f57d26f881"
-version = "1.15.0"
+version = "1.16.0"
 
     [deps.OffsetArrays.extensions]
     OffsetArraysAdaptExt = "Adapt"
@@ -988,9 +987,9 @@ version = "0.3.3"
 
 [[deps.PlutoUI]]
 deps = ["AbstractPlutoDingetjes", "Base64", "ColorTypes", "Dates", "FixedPointNumbers", "Hyperscript", "HypertextLiteral", "IOCapture", "InteractiveUtils", "JSON", "Logging", "MIMEs", "Markdown", "Random", "Reexport", "URIs", "UUIDs"]
-git-tree-sha1 = "7e71a55b87222942f0f9337be62e26b1f103d3e4"
+git-tree-sha1 = "d3de2694b52a01ce61a036f18ea9c0f61c4a9230"
 uuid = "7f904dfe-b85e-4ff6-b463-dae2292396a8"
-version = "0.7.61"
+version = "0.7.62"
 
 [[deps.PrecompileTools]]
 deps = ["Preferences"]
@@ -1010,9 +1009,9 @@ uuid = "de0858da-6303-5e67-8744-51eddeeeb8d7"
 
 [[deps.ProgressMeter]]
 deps = ["Distributed", "Printf"]
-git-tree-sha1 = "8f6bc219586aef8baf0ff9a5fe16ee9c70cb65e4"
+git-tree-sha1 = "13c5103482a8ed1536a54c08d0e742ae3dca2d42"
 uuid = "92933f4c-e287-5a05-a399-4b506db050ca"
-version = "1.10.2"
+version = "1.10.4"
 
 [[deps.QOI]]
 deps = ["ColorTypes", "FileIO", "FixedPointNumbers"]
@@ -1040,9 +1039,9 @@ version = "1.2.2"
 
 [[deps.Requires]]
 deps = ["UUIDs"]
-git-tree-sha1 = "838a3a4188e2ded87a4f9f184b4b0d78a1e91cb7"
+git-tree-sha1 = "62389eeff14780bfe55195b7204c0d8738436d64"
 uuid = "ae029012-a4dd-5104-9daa-d747884805df"
-version = "1.3.0"
+version = "1.3.1"
 
 [[deps.SHA]]
 uuid = "ea8e919c-243c-51af-8825-aaa63cd721ce"
@@ -1125,9 +1124,9 @@ uuid = "410a4b4d-49e4-4fbc-ab6d-cb71b17b3775"
 version = "0.1.10"
 
 [[deps.URIs]]
-git-tree-sha1 = "67db6cc7b3821e19ebe75791a9dd19c9b1188f2b"
+git-tree-sha1 = "cbbebadbcc76c5ca1cc4b4f3b0614b3e603b5000"
 uuid = "5c2747f8-b7ea-4ff2-ba2e-563bfd36b1d4"
-version = "1.5.1"
+version = "1.5.2"
 
 [[deps.UUIDs]]
 deps = ["Random", "SHA"]
@@ -1144,21 +1143,21 @@ version = "0.1.3"
 
 [[deps.XML2_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Libiconv_jll", "Zlib_jll"]
-git-tree-sha1 = "ee6f41aac16f6c9a8cab34e2f7a200418b1cc1e3"
+git-tree-sha1 = "b8b243e47228b4a3877f1dd6aee0c5d56db7fcf4"
 uuid = "02c8fc9c-b97f-50b9-bbe4-9be30ff0a78a"
-version = "2.13.6+0"
+version = "2.13.6+1"
 
 [[deps.XSLT_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Libgcrypt_jll", "Libgpg_error_jll", "Libiconv_jll", "XML2_jll", "Zlib_jll"]
-git-tree-sha1 = "7d1671acbe47ac88e981868a078bd6b4e27c5191"
+git-tree-sha1 = "82df486bfc568c29de4a207f7566d6716db6377c"
 uuid = "aed1982a-8fda-507f-9586-7b0439959a61"
-version = "1.1.42+0"
+version = "1.1.43+0"
 
 [[deps.XZ_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl"]
-git-tree-sha1 = "56c6604ec8b2d82cc4cfe01aa03b00426aac7e1f"
+git-tree-sha1 = "fee71455b0aaa3440dfdd54a9a36ccef829be7d4"
 uuid = "ffd25f8a-64ca-5728-b0f7-c24cf3aae800"
-version = "5.6.4+1"
+version = "5.8.1+0"
 
 [[deps.Xorg_libX11_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Xorg_libxcb_jll", "Xorg_xtrans_jll"]
@@ -1198,9 +1197,9 @@ version = "1.17.0+3"
 
 [[deps.Xorg_xtrans_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl"]
-git-tree-sha1 = "6dba04dbfb72ae3ebe5418ba33d087ba8aa8cb00"
+git-tree-sha1 = "a63799ff68005991f9d9491b6e95bd3478d783cb"
 uuid = "c5fb5394-a638-5e4d-96e5-b29de1b5cf10"
-version = "1.5.1+0"
+version = "1.6.0+0"
 
 [[deps.Zlib_jll]]
 deps = ["Libdl"]
@@ -1209,9 +1208,9 @@ version = "1.2.13+1"
 
 [[deps.Zstd_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl"]
-git-tree-sha1 = "622cf78670d067c738667aaa96c553430b65e269"
+git-tree-sha1 = "446b23e73536f84e8037f5dce465e92275f6a308"
 uuid = "3161d3a3-bdf6-5164-811a-617609db77b4"
-version = "1.5.7+0"
+version = "1.5.7+1"
 
 [[deps.libblastrampoline_jll]]
 deps = ["Artifacts", "Libdl"]
@@ -1220,9 +1219,9 @@ version = "5.11.0+0"
 
 [[deps.libpng_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Zlib_jll"]
-git-tree-sha1 = "055a96774f383318750a1a5e10fd4151f04c29c5"
+git-tree-sha1 = "068dfe202b0a05b8332f1e8e6b4080684b9c7700"
 uuid = "b53b4c65-9356-5827-b1ea-8c7a1a84506f"
-version = "1.6.46+0"
+version = "1.6.47+0"
 
 [[deps.libsixel_jll]]
 deps = ["Artifacts", "JLLWrappers", "JpegTurbo_jll", "Libdl", "libpng_jll"]
