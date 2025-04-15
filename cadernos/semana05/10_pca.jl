@@ -26,7 +26,7 @@ begin
 	using Images
     using LaTeXStrings
     using Plots
-    gr()
+	gr()
 
     using Statistics, LinearAlgebra  # standard libraries
 end
@@ -43,7 +43,7 @@ md"""
 
 Vamos agora passar a olhar outros tipos de **dados** além de imagens. O nosso objetivo será extrair informação desses dados usando métodos estatísticos, nesse primeiro exemplo iremos usar [**análise de componentes principais**](https://en.wikipedia.org/wiki/Principal_component_analysis).  
 
-Esse método procura identificar quais são as _direções_ mais importantes para explicar os dados, para capturar a sua variação. Com isso seremos capazes de [diminuir a dimensionalidade](https://en.wikipedia.org/wiki/Dimensionality_reduction) (número de variáveis úteis ou explicativas) do dados.
+Esse método procura identificar quais são as _direções_ mais importantes para explicar os dados, capturando sua variação. Com isso seremos capazes de [diminuir a dimensionalidade](https://en.wikipedia.org/wiki/Dimensionality_reduction) (número de variáveis úteis ou explicativas) dos dados.
 
 Podemos encarar essa ideia como uma forma de buscar **estrutura** especial nos dados e, então, explorar esse conhecimento. Ela também leva naturalmente a alguns conceitos de **aprendizado de máquina**.
 """
@@ -157,7 +157,7 @@ md"## Imagens como (visualizações) de dados"
 
 # ╔═╡ 283f5da4-f866-11ea-27d4-957ca2551b92
 md"""
-Como dissemos, estamos lidando com dados que não são necessariamente imagens, mas sim observações de algum fenônomeno. De fato em Ciência de Dados s observações vêm tipicamente como linhas de uma matriz de dados observados, chamada de *matriz de dados*.
+Como dissemos, estamos lidando com dados que não são necessariamente imagens, mas sim observações de algum fenônomeno. De fato em Ciência de Dados as observações vêm tipicamente como linhas de uma matriz de dados observados, chamada de *matriz de dados*.
 
 Por outro lado, sempre podemos pegar os dados e gerar visualizações a partir deles como forma de ganhar intuição (_insight_) sobre o seu comportamento. 
 
@@ -188,7 +188,7 @@ begin
 
     default(alpha = 0.3, leg = :topright, framestyle = :origin, size = (500, 400), ratio = 1)
 
-    scatter(xs, ys, label = "ruidoso", m = :dot, ms = 4)
+    scatter(xs, ys, label = "ruidoso", m = :circle, ms = 4)
 
     scatter!(xx, yy, label = "Posto 1", m = :square, ms = 3, c = :red)
 
@@ -219,7 +219,7 @@ md"""
 md"Olhano a nuvem de pontos, podemos pensar naturalmente em *medir* suas dimensões: quão largo ou alto ele é? Em outras palavras, o quando ele varia ao longo dos eixos?"
 
 # ╔═╡ 24df1f32-ec90-11ea-1f6d-03c1bfa5df8e
-md"""Por exemplo, podemos focar em calcular a largura dos dados, ou seja o quanto ele varia em sua coordenada $x$. Para isso podemos ignorar completamente a informação na direção $y$.
+md"""Por exemplo, podemos focar em calcular a largura dos dados, ou seja o quanto ele varia em sua coordenada $x$. Iremos ignorar completamente a informação na direção $y$.
 """
 
 # ╔═╡ b264f724-81bf-11eb-1052-295b81cde5fb
@@ -291,7 +291,7 @@ md"""
 md"""
 O **desvio padrão** é a **raiz da média dos quadrados** das distâncias dos dados centralizados à origem. 
 
-Quebrando em partes. Primeiro nos elevamos as distâncias (o deslocamento) a partir da origem ao quadrado. Depois calculamos a média desses, obtendo a **variância**. Mas, como a variância é obtida somando quadrados, a unidade de medida não está certa. Ela está ao quadrado. Então, tomamos a raiz quadrada para obter uma medida na unidade correta:
+Quebrando em partes. Primeiro elevamos as distâncias (o deslocamento) a partir da origem ao quadrado. Depois calculamos a média desses valores, obtendo a **variância**. Mas, como a variância é obtida somando quadrados, a unidade de medida não está certa. Ela está ao quadrado. Então, tomamos a raiz quadrada para obter uma medida na unidade correta:
 """
 
 # ╔═╡ 2c3721da-f86b-11ea-36cf-3fe4c6622dc6
@@ -328,7 +328,7 @@ end
 
 # ╔═╡ 5fab2c32-f86b-11ea-2f27-ed5feaac1fa5
 md"""
-Para dados com distribuição normal, esperamos que a maior parte dele (cerca de 95%) esteja a até dois desvios padrão da média, ou seja entre $\mu \pm 2 \sigma$, em que $\mu$ é a média e $\sigma$ é o desvio padrão. A hipótese de distribuição normal não é de fato válida para os dados que estamos usando, mas de qualquer forma vemos que os intervalos dados capturam a maior parte dos dados.
+Para dados com distribuição normal, esperamos que a maior parte dele (cerca de 95%) esteja a até dois desvios padrão da média, ou seja entre $\mu \pm 2 \sigma$, em que $\mu$ é a média e $\sigma$ é o desvio padrão. A hipótese de distribuição normal não é de fato válida para os dados que estamos usando, mas de qualquer forma vemos que os intervalos de largura $4\sigma$ capturam a maior parte dos dados.
 """
 
 # ╔═╡ ae9a2900-ec93-11ea-1ae5-0748221328fc
@@ -852,10 +852,10 @@ PlutoUI = "7f904dfe-b85e-4ff6-b463-dae2292396a8"
 Statistics = "10745b16-79ce-11e8-11f9-7d13ad32a3b2"
 
 [compat]
-ColorSchemes = "~3.24.0"
+ColorSchemes = "~3.26.0"
 Colors = "~0.12.8"
 ForwardDiff = "~0.10.32"
-ImageMagick = "~1.3.1"
+ImageMagick = "~1.4.1"
 Images = "~0.25.2"
 LaTeXStrings = "~1.3.0"
 Plots = "~1.40.4"
@@ -868,7 +868,7 @@ PLUTO_MANIFEST_TOML_CONTENTS = """
 
 julia_version = "1.10.6"
 manifest_format = "2.0"
-project_hash = "87732355a5088ac9ecc8c26b8dd48398f6fb1381"
+project_hash = "fed55eb6ec17ab4762ca01868d5eace5c3c631ec"
 
 [[deps.AbstractFFTs]]
 deps = ["LinearAlgebra"]
@@ -983,9 +983,9 @@ version = "0.7.8"
 
 [[deps.ColorSchemes]]
 deps = ["ColorTypes", "ColorVectorSpace", "Colors", "FixedPointNumbers", "PrecompileTools", "Random"]
-git-tree-sha1 = "67c1f244b991cad9b0aa4b7540fb758c2488b129"
+git-tree-sha1 = "b5278586822443594ff615963b0c09755771b3e0"
 uuid = "35d6a980-a343-548e-a6ea-1d62b119f2f4"
-version = "3.24.0"
+version = "3.26.0"
 
 [[deps.ColorTypes]]
 deps = ["FixedPointNumbers", "Random"]
@@ -1278,9 +1278,9 @@ version = "1.0.2"
 
 [[deps.HTTP]]
 deps = ["Base64", "CodecZlib", "ConcurrentUtilities", "Dates", "ExceptionUnwrapping", "Logging", "LoggingExtras", "MbedTLS", "NetworkOptions", "OpenSSL", "PrecompileTools", "Random", "SimpleBufferStream", "Sockets", "URIs", "UUIDs"]
-git-tree-sha1 = "c67b33b085f6e2faf8bf79a61962e7339a81129c"
+git-tree-sha1 = "f93655dc73d7a0b4a368e3c0bce296ae035ad76e"
 uuid = "cd3eb016-35fb-5094-929b-558a96fad6f3"
-version = "1.10.15"
+version = "1.10.16"
 
 [[deps.HarfBuzz_jll]]
 deps = ["Artifacts", "Cairo_jll", "Fontconfig_jll", "FreeType2_jll", "Glib_jll", "Graphite2_jll", "JLLWrappers", "Libdl", "Libffi_jll"]
@@ -1350,15 +1350,15 @@ version = "0.6.8"
 
 [[deps.ImageMagick]]
 deps = ["FileIO", "ImageCore", "ImageMagick_jll", "InteractiveUtils"]
-git-tree-sha1 = "8e2eae13d144d545ef829324f1f0a5a4fe4340f3"
+git-tree-sha1 = "8582eca423c1c64aac78a607308ba0313eeaed56"
 uuid = "6218d12a-5da1-5696-b52f-db25d2ecc6d1"
-version = "1.3.1"
+version = "1.4.1"
 
 [[deps.ImageMagick_jll]]
-deps = ["Artifacts", "Ghostscript_jll", "JLLWrappers", "JpegTurbo_jll", "Libdl", "Libtiff_jll", "OpenJpeg_jll", "Pkg", "Zlib_jll", "libpng_jll"]
-git-tree-sha1 = "8d2e786fd090199a91ecbf4a66d03aedd0fb24d4"
+deps = ["Artifacts", "Ghostscript_jll", "JLLWrappers", "JpegTurbo_jll", "Libdl", "Libtiff_jll", "OpenJpeg_jll", "Zlib_jll", "libpng_jll"]
+git-tree-sha1 = "fa01c98985be12e5d75301c4527fff2c46fa3e0e"
 uuid = "c73af94c-d91f-53ed-93a7-00f77d67a9d7"
-version = "6.9.11+4"
+version = "7.1.1+1"
 
 [[deps.ImageMetadata]]
 deps = ["AxisArrays", "ImageAxes", "ImageBase", "ImageCore"]
@@ -1584,23 +1584,11 @@ git-tree-sha1 = "27ecae93dd25ee0909666e6835051dd684cc035e"
 uuid = "e9f186c6-92d2-5b65-8a66-fee21dc1b490"
 version = "3.2.2+2"
 
-[[deps.Libgcrypt_jll]]
-deps = ["Artifacts", "JLLWrappers", "Libdl", "Libgpg_error_jll"]
-git-tree-sha1 = "d77592fa54ad343c5043b6f38a03f1a3c3959ffe"
-uuid = "d4300ac3-e22c-5743-9152-c294e39db1e4"
-version = "1.11.1+0"
-
 [[deps.Libglvnd_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Xorg_libX11_jll", "Xorg_libXext_jll"]
 git-tree-sha1 = "ff3b4b9d35de638936a525ecd36e86a8bb919d11"
 uuid = "7e76a0d4-f3c7-5321-8279-8d96eeed0f29"
 version = "1.7.0+0"
-
-[[deps.Libgpg_error_jll]]
-deps = ["Artifacts", "JLLWrappers", "Libdl"]
-git-tree-sha1 = "df37206100d39f79b3376afb6b9cee4970041c61"
-uuid = "7add5ba3-2f88-524e-9cd5-f83b8a55f7b8"
-version = "1.51.1+0"
 
 [[deps.Libiconv_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl"]
@@ -2098,9 +2086,9 @@ version = "1.10.0"
 
 [[deps.SpecialFunctions]]
 deps = ["IrrationalConstants", "LogExpFunctions", "OpenLibm_jll", "OpenSpecFun_jll"]
-git-tree-sha1 = "64cca0c26b4f31ba18f13f6c12af7c85f478cfde"
+git-tree-sha1 = "41852b8679f78c8d8961eeadc8f62cef861a52e3"
 uuid = "276daf66-3868-5448-9aa4-cd146d93841b"
-version = "2.5.0"
+version = "2.5.1"
 weakdeps = ["ChainRulesCore"]
 
     [deps.SpecialFunctions.extensions]
@@ -2270,12 +2258,6 @@ git-tree-sha1 = "b8b243e47228b4a3877f1dd6aee0c5d56db7fcf4"
 uuid = "02c8fc9c-b97f-50b9-bbe4-9be30ff0a78a"
 version = "2.13.6+1"
 
-[[deps.XSLT_jll]]
-deps = ["Artifacts", "JLLWrappers", "Libdl", "Libgcrypt_jll", "Libgpg_error_jll", "Libiconv_jll", "XML2_jll", "Zlib_jll"]
-git-tree-sha1 = "82df486bfc568c29de4a207f7566d6716db6377c"
-uuid = "aed1982a-8fda-507f-9586-7b0439959a61"
-version = "1.1.43+0"
-
 [[deps.Xorg_libX11_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Xorg_libxcb_jll", "Xorg_xtrans_jll"]
 git-tree-sha1 = "9dafcee1d24c4f024e7edc92603cedba72118283"
@@ -2284,9 +2266,9 @@ version = "1.8.6+3"
 
 [[deps.Xorg_libXau_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl"]
-git-tree-sha1 = "e9216fdcd8514b7072b43653874fd688e4c6c003"
+git-tree-sha1 = "aa1261ebbac3ccc8d16558ae6799524c450ed16b"
 uuid = "0c0b7dd1-d40b-584c-a123-a41640f87eec"
-version = "1.0.12+0"
+version = "1.0.13+0"
 
 [[deps.Xorg_libXcursor_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Xorg_libXfixes_jll", "Xorg_libXrender_jll"]
@@ -2296,9 +2278,9 @@ version = "1.2.3+0"
 
 [[deps.Xorg_libXdmcp_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl"]
-git-tree-sha1 = "89799ae67c17caa5b3b5a19b8469eeee474377db"
+git-tree-sha1 = "52858d64353db33a56e13c341d7bf44cd0d7b309"
 uuid = "a3789734-cfe1-5b06-b2d0-1dd0d9d62d05"
-version = "1.1.5+0"
+version = "1.1.6+0"
 
 [[deps.Xorg_libXext_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Xorg_libX11_jll"]
@@ -2336,17 +2318,11 @@ git-tree-sha1 = "a490c6212a0e90d2d55111ac956f7c4fa9c277a6"
 uuid = "ea2f1a96-1ddc-540d-b46f-429655e07cfa"
 version = "0.9.11+1"
 
-[[deps.Xorg_libpthread_stubs_jll]]
-deps = ["Artifacts", "JLLWrappers", "Libdl"]
-git-tree-sha1 = "c57201109a9e4c0585b208bb408bc41d205ac4e9"
-uuid = "14d82f49-176c-5ed1-bb49-ad3f5cbd8c74"
-version = "0.1.2+0"
-
 [[deps.Xorg_libxcb_jll]]
-deps = ["Artifacts", "JLLWrappers", "Libdl", "XSLT_jll", "Xorg_libXau_jll", "Xorg_libXdmcp_jll", "Xorg_libpthread_stubs_jll"]
-git-tree-sha1 = "1a74296303b6524a0472a8cb12d3d87a78eb3612"
+deps = ["Artifacts", "JLLWrappers", "Libdl", "Xorg_libXau_jll", "Xorg_libXdmcp_jll"]
+git-tree-sha1 = "bfcaf7ec088eaba362093393fe11aa141fa15422"
 uuid = "c7cfdc94-dc32-55de-ac96-5a1b8d977c5b"
-version = "1.17.0+3"
+version = "1.17.1+0"
 
 [[deps.Xorg_libxkbfile_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Xorg_libX11_jll"]
