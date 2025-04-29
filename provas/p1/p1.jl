@@ -1,5 +1,5 @@
 ### A Pluto.jl notebook ###
-# v0.19.41
+# v0.20.6
 
 using Markdown
 using InteractiveUtils
@@ -16,7 +16,7 @@ end
 
 # ╔═╡ a267a81a-44a0-11ed-2997-89f4fa65e75f
 md"# Prova 1
-30 de abril de 2024
+29 de abril de 2025
 "
 
 # ╔═╡ 18020d1b-18fb-4046-be7e-fae9e86022b8
@@ -39,151 +39,121 @@ Submetido por: **_$(student.name)_** ($(student.email_dac)@unicamp.br)
 md"
 **Você não pode adicionar novos pacotes.**
 
-**Não entregue a prova com células com erro de sintaxe que impeçam a correção.**
+**Não entregue a prova com células com erro de sintaxe que impeçam a correção, assim como na lista.**
 "
 
 # ╔═╡ bb7f98a6-41a5-4703-8d97-3f78eb5f86d2
 md"""
-### 1 Ruído de sal e pimenta
+# 1 Rodando os canais
 
-Em processamento de imagens preto-e-branco (com píxeis do tipo `Gray`), dizemos que uma imagem possui ruído de _sal e pimenta_ se alguns de seus píxeis foram corrompidos aleatoriamente para parecer totalmente brancos (sal - `Gray(1)`) ou totalmente pretos (pimenta - `Gray(0)`).
+Como vimos em sala de aula, as imagens são compostas por píxeis que guardam informação de três canais de cores R (vermelho), G (verde) e B (azul). Neste exercício vamos brincar de trocar as intensidades entre esses canais. 
 
-👉 Complete a rotina abaixo que recebe um único píxel `p` e uma probabilidade `p` $\in [0, 1]$. Com probabilidade `p` a rotina devolve o píxel inalterado. Já com probabilidade `(1 - p) / 2`, devolve sal e com probabilidade `(1 - p)/2` devolve pimenta.
+👉 Altere a rotina abaixo que recebe um píxel `p` e devolve um novo pixel `q` que tem a intensidade no canal vermelho, verde e azul de `p` indo parar nos canais verde, azul e vemelho de `q`, repectivamente.
 """
 
 # ╔═╡ 59926e49-0179-4aad-9f00-1993ba9deea3
-# Complete a rotina abaixo
-function tempera(pixel::Gray, p)
-	return Gray(0)
+# Ajuste a rotina abaixo
+function rodacanais(p::RGB)
+	q = copy(p)
+	return q
 end
 
 # ╔═╡ e9f7aca5-ea14-4b85-8b11-87d9a53c1b0c
 md"""
-👉 Usando a sua função acima escreva uma função `tempera`, **de uma única linha**, que recebe uma imagem preto-e-branco (matriz de píxeis) e uma probabilidade e "tempera" cada pixel da imagem com sal e pimenta.
+👉 Usando a sua função acima escreva uma função `corrompe`, que recebe uma imagem RGB (matriz de píxeis) e uma probabilidade `prob` (em [0, 1]) e constrói uma nova imagem composta dos píxeis da imagem original com probabilidade `1 - prob` ou píxeis com os canais rotacionados com probabilidade `prob`. Ou seja, ela faz uma cópia da imagem original com os píxeis modificados pela rotina `rodacanais` com probabilidade `1 - prob`.
 """
+
+# ╔═╡ 2127bc56-8bc8-46b6-841d-74a62226083f
+# Você pode precisar escrever uma função auxliar. Se precisar, use essa célula ou crie outras.
 
 # ╔═╡ 817fb169-abb8-47db-9a76-267a55343fa1
 # Complete a rotina abaixo.
-tempera(img::AbstractMatrix, p) = nothing
-
-# ╔═╡ 39b97f4d-a3bd-4540-85b2-ff01b77e4f60
-md"Use a sua rotina para temperar a imagem do Apolo abaixo com `p`=0.95"
-
-# ╔═╡ f8d12ee3-179c-4287-9bc2-9eb60a7d345a
-apolo_head = let
-	apolo = load("./apolo1.png")
-	Gray.(apolo[50:380, 100:480])
+function corrompe(img::AbstractMatrix, p)
+	# Substitua por sua implementação.
+	return copy(img)
 end
 
+# ╔═╡ 39b97f4d-a3bd-4540-85b2-ff01b77e4f60
+md"Use a sua rotina para modificar a imagem do beija floar abaixo com `prob = 0.8`"
+
+# ╔═╡ f8d12ee3-179c-4287-9bc2-9eb60a7d345a
+beija_flor = RGB{Float64}.(load("./beija_flor.png"))
+
 # ╔═╡ ab764e60-f1d7-473f-97c4-8ec4b61d0e50
-# Tempere a cabeça do Apolo.
+# Coloque aqui código para corromper a imagem acima.
 
 # ╔═╡ 2f43cc6b-b1cd-4f14-ba7a-157cd10cbeb3
 md"""
-# 2 Limpando o Apolo
+# 2 Limpando a imagem 
 
-Vamos agora tentar limpar uma imagem do Apolo com ruído de sal e pimenta. A imagem abaixo foi obtida pelo processo descrito acima com a probabilidade `p` igual a 95%. Ou seja, 5% dos píxeis, em média, foram modificados para sal ou pimenta (em proporções iguais).
+Vamos agora tentar limpar uma imagem corrompida pelo processo acima. A ideia é usar o que sabemos sobre o processo que levou à modificão da imagem original para tentar restaurá-la.
+
+👉 Vamos começar escrevendo uma rotina que recebe um píxel modificado por `rodacanais` e retorna uma nova versão do píxel original. Para isso complete função abaixo.
 """
 
+# ╔═╡ fecfcc70-71fe-4754-970c-78222336a731
+function restaurapixel(pixel::RGB)
+	return copy(pixel)
+end
+
+# ╔═╡ c72caffe-f6e1-4737-b601-d94780f1b58a
+md"Agora vamos usar essa rotina para tentar restaurar a imagem original. Vamos supor para isso que a imagem tem uma tendência a transições suaves, logo cada píxel deve ser parecido com os vizinhos. A ideia então é a seguinte:
+
+1. Seja `p` um pixel da imagem corrompida e `q` a sua versão \"restaurada\" pela função `restaurapixel`.
+
+2. Calcula a soma das distâncias de `p` e `q` aos vizinhos de `p` da esquerda, direita, de cima e de baixo. Deixe na imagem resultante o pixel, `p` ou `q`, mais próximo dos vizinhos.
+
+3. Para distância entre dois píxeis considere a distância entre os seus valores RGB tratados como vetores do $$\mathbb{R}^3$$.
+
+4. A sua função deve aplicar esse processo de restauração apenas para os píxeis que não pertencem às primeira e última linhas e colunas. Desse modo, os vizinhos estão bem definidos.
+
+👉 Implemente esse processo na função `restauraimagem` abaixo."
+
+# ╔═╡ 7b5d9cf1-5069-4dd8-bc75-fb516b2d3559
+# Se precisar de mais céluas use essa ou adicione mais.
+
 # ╔═╡ 2a377e3f-c4b2-44ae-8f50-a092d6c2698c
-dirty_apolo = deserialize("apolo_temperado.jl")
+function restauraimagem(img::AbstractMatrix)
+	# Substitua pela implmentação do processo descrito acima.
+	return copy(img)
+end
+
+# ╔═╡ 68a8cbd7-7e56-41c4-bd4b-fe036312f0ae
+md"Agora aplique essa função na imagem abaixo."
+
+# ╔═╡ 9f8b438a-9efa-4688-86f7-33186cb4584c
+beija_flor_corrompido = RGB{Float64}.(load("./beija_flor_corrompido.png"))
 
 # ╔═╡ 22fd7b89-bd38-4a84-ae77-460cfcf11a90
-md"O objetivo é limpar a imagem. Para isso vamos usar três informações importantes:
+md"Veja o resultado de sua função aplicada em `beija_flor_corrompido` para observar o quão bem ela funciona."
 
-1. Sabemos quais são as cores de píxeis que foram modificados: ou valem `Gray(0)` ou `Gray(1)`.
-1. A chance de um píxel modificado ter como vizinho um outro modificado é baixa.
-1. Pixeis vizinhos na imagem original devem ter cores parecidas.
-
-Isso sugere o seguinte método de limpeza:
-
-1. Criar um filtro de convolução 3 × 3 que calcula a média dos quatro vizinhos mais próximos (na horizontal e vertical - **não considere as diagonais**) de um píxel ignorando os valores do píxel em si.
-
-1. Aplicar esse filtro apenas em píxeis que estão com os valores alterados para sal ou pimenta.
-
-Vamos fazer isso."
-
-# ╔═╡ f9dadba0-8969-421b-905c-8ed2f59adfd3
-md"👉 Crie um núcleo 3 × 3 que ao ser usado em uma função de convolução substitui o valor do píxel central pela média dos seus 4 vizinhos mais próximo (da horizontal e vertical)."
-
-# ╔═╡ 3771231d-cf19-4563-a7da-9ede7b54aafc
-# Mude o kernel abaixo para reproduzir o comportamento desejado
-vizinhos = zeros(3, 3)
-
-# ╔═╡ 6e8af021-d3fe-40c3-82cd-239e28de3430
-md"👉 Modifique a função convolve abaixo para apenas aplicar a convolução em píxeis que são sal (`Gray(1)`) ou pimenta (`Gray(0)`) apenas."
-
-# ╔═╡ 7f429e34-7455-4fd6-bad3-5da3cdc4c2e7
-md"👉 Use o kernel que você construiu e a função `convolve` que você modificou para limpar a imagem guardada em `dirty_apolo`."
-
-# ╔═╡ a4f841b4-ed2e-4fd4-9388-eacf3d889b9b
-# Adicione o seu código aqui.
+# ╔═╡ d3aa5526-7caa-4be1-a90e-992ab408a30e
+restauraimagem(beija_flor_corrompido)
 
 # ╔═╡ 97cd1cfc-d4ad-4cb6-a1b1-9ae8f4325b38
 md"""
-### 3 Palavras mais comuns 
+# 3 Palavras que aparecem um número par de vezes
 
-Como na lista, a variável `dc_words` abaixo possui a lista de todas as palavras e alguns símbolos gráficos presentes no livro Dom Casmurro.
+Como na lista, a variável `dc_words` abaixo possui todas as palavras e alguns símbolos gráficos presentes no livro Dom Casmurro.
 """
 
 # ╔═╡ 26c5aae4-ff1e-4494-bf8c-f67fa873fc41
-md"👉 Escreva uma rotina `count_words`  que recebe um vetor de strings e devolve um dicionário com cada string que aparece no vetor associada ao seu número de aparições."
+md"👉 Escreva uma rotina `count_even_words` que recebe um vetor de strings e devolve um dicionário com cada string que aparece um número par de vezes nesse vetor, associada ao seu número de aparições."
 
 # ╔═╡ 0145d9b2-ec8c-46c6-abba-1fba321a62bc
 # Escreva o seu código abaixo ao invés de retornar um dicionário vazio.
-function count_words(words)
+function count_even_words(words)
 	return Dict()
 end
 
 # ╔═╡ 9be64ea8-e147-499d-801d-bc0654480e8c
-md"👉 Usando a sua função acima, escreva outra rotina que dada uma lista de palavras`word` e um número mínimo de caracteres `low` devolve a string **pelo menos `low` caracteres** que mais aparece no livro e o número de vezes que essa palavra está presente (nessa ordem)." 
+md"👉 Usando a sua função acima, escreva outra rotina que, dada uma lista de palavras `words`, devolve uma das strings que possui um número par de caracteres e que é mais comum entre aquelas que aparecem um número par de vezes em `words`. Ela deve retornar uma das strings buscadas, junto com o seu número de aparições (nessa ordem)." 
 
 # ╔═╡ cfd49909-46f0-4808-8b32-8ac8a184cd5c
 # Escreva o seu código abaixo
-function most_common(words, low)
+function most_common_even(words)
 	return words[1], 0
 end
-
-# ╔═╡ ca4662bd-ccd7-41f9-901f-fb4cb0aef4f6
-md"""### 4 Binomial como soma de Bernoulli vs `Distributions.jl`
-
-Vimos que uma variávela aleatória binomial com parâmetro `n` e `p` nada mais é do que uma soma de `n` Bernoulli's de parâmetro `p`. Vamos aqui implementar nossa versão da variável binômial em estilo "funcional" (sem usar tipos) partindo da definição de uma Bernoulli de parâmetro `p` que apresento a seguir.
-"""
-
-# ╔═╡ a65e18ce-0290-45b1-986e-bcd49ed0e386
-bernoulli(p) = Int(rand() < p)
-
-# ╔═╡ c17837a8-b568-4289-ba19-0a321e353882
-md"""👉 Usando essa definição de `bernoulli` escreva uma função `binomial` **da forma mais curta possível (em uma única linha)** que recebe `n` e `p` e devolve um valor entre $1, \ldots, n$ seguindo a respectiva distribuição binomial.
-"""
-
-# ╔═╡ 6ab58efe-122a-42c4-9acb-bae303954f2e
-# Ajuste o código abaixo
-binomial(n, p) = n ÷ 2
-
-# ╔═╡ 06ccddaf-23d0-4fba-9366-8780aff131d3
-md"""Agora, Julia tem pacotes que já possuem várias distribuições de probabilidade pré-definidas. Um exemplo é o `Distributions.jl` que já foi importado nesse caderno. Nele as distribuições estão definidas como novos tipos, ao invés de funções, como fizemos nas últimas aulas.
-
-👉 Olhe a [documentação do `Distributions.jl`](https://juliastats.org/Distributions.jl/latest/starting/) e descubra como criar um variável para representar uma binomial com `n = 1000` e `p = 0.3` definindo a variável `bin_1000_3` abaixo.
-"""
-
-# ╔═╡ 955a0fe8-34c7-4c41-971d-6df9f0ca7027
-# Ajuste o código abaixo.
-bin_1000_3 = nothing
-
-# ╔═╡ f51cf71c-6c17-4f67-9cfa-8c3e75e303e3
-md"""👉 Agora use o pacote `BechmarkTools.jl`, que também já foi importado, para comparar o tempo de gerar um vertor de 10.000 amostras de uma binomial com parâmetros n = 1000 e p = 0.3 usando a sua implementação de `binomial(n, p)`  versus usando a variável `bin_1000_3` definida acima. Qual é a mais rápida? Você consegue imaginar o motivo?
-"""
-
-# ╔═╡ 408007b0-faa0-46a7-8cd6-67a4e84147c2
-# Coloque o código para avaliar o tempop de gerar uma amostra de 10.000 realizações de uma binomial com parâmetros n = 1000 e p = 0.3 e a sua função binomial.
-
-# ╔═╡ 1d55a9c5-5151-455e-9466-0b651b6720fb
-# Coloque o código para avaliar o tempop de gerar uma amostra de 10.000 realizações de uma binomial com parâmetros n = 1000 e p = 0.3 usando a variável bin_1000_3.
-
-# ╔═╡ 8c0f3c14-012c-480c-8fff-f8391f0c1bb7
-md"""Substitua esse texto por sua explicação na diferença dos tempos.
-"""
 
 # ╔═╡ 79fb3bb0-a260-49a5-9d1d-28ca0ab151a1
 md"#### Funções auxiliares, não mude a partir daqui"
@@ -194,23 +164,6 @@ function extend(M::AbstractMatrix, i, j)
 	i = clamp(i, 1, m)
 	j = clamp(j, 1, n)
 	return M[i, j]		
-end
-
-# ╔═╡ dd61b36d-fd52-4000-9ff3-81ca757fa18f
-# Modifique seguindo as instruções acima
-function convolve(img::AbstractMatrix, K::AbstractMatrix)
-	k, l = size(K)
-	k, l = (k - 1) ÷ 2, (l - 1) ÷ 2
-	off_K = OffsetArray(K, -k:k, -l:l)
-	m, n = size(img)
-	convolved = zeros(typeof(img[1, 1]), m, n)
-	for i in 1:m, j = 1:n
-		for r in -k:k, c = -l:l
-			convolved[i, j] += extend(img, i + r, j + c)*off_K[r, c]
-		end
-	end
-
-    return convolved
 end
 
 # ╔═╡ 52700c2a-7df5-4d4b-85a1-9fafb8e064b2
@@ -239,11 +192,11 @@ dc_words = splitwords(dom_casmurro)
 
 # ╔═╡ 67738bbc-9c2d-4f78-9045-5a671569b0a6
 # Esse é um teste nas palavras do Dom Casmurro
-count_words(dc_words)
+count_even_words(dc_words)
 
 # ╔═╡ 515f1aaf-fffb-49e2-aba4-1f2ab5c66230
 # Esse é um teste nas palavras do Dom Casmurro
-most_common(dc_words, 5)
+most_common_even(dc_words)
 
 # ╔═╡ 00000000-0000-0000-0000-000000000001
 PLUTO_PROJECT_TOML_CONTENTS = """
@@ -266,7 +219,7 @@ OffsetArrays = "~1.12.7"
 PLUTO_MANIFEST_TOML_CONTENTS = """
 # This file is machine-generated - editing it directly is not advised
 
-julia_version = "1.10.2"
+julia_version = "1.10.9"
 manifest_format = "2.0"
 project_hash = "2338b29704b6a624b0dcce5d9dd837689fdd9aaf"
 
@@ -404,7 +357,7 @@ weakdeps = ["Dates", "LinearAlgebra"]
 [[deps.CompilerSupportLibraries_jll]]
 deps = ["Artifacts", "Libdl"]
 uuid = "e66e0078-7015-5450-92f7-15fbd957f2ae"
-version = "1.1.0+0"
+version = "1.1.1+0"
 
 [[deps.ComputationalResources]]
 git-tree-sha1 = "52cb3ec90e8a8bea0e62e275ba577ad0f74821f7"
@@ -925,7 +878,7 @@ version = "2.5.0+0"
 [[deps.OpenLibm_jll]]
 deps = ["Artifacts", "Libdl"]
 uuid = "05823500-19ac-5b8b-9628-191a04bc5112"
-version = "0.8.1+2"
+version = "0.8.1+4"
 
 [[deps.OpenSpecFun_jll]]
 deps = ["Artifacts", "CompilerSupportLibraries_jll", "JLLWrappers", "Libdl", "Pkg"]
@@ -1286,7 +1239,7 @@ version = "1.5.6+0"
 [[deps.libblastrampoline_jll]]
 deps = ["Artifacts", "Libdl"]
 uuid = "8e850b90-86db-534c-a0d3-1478176c7d93"
-version = "5.8.0+1"
+version = "5.11.0+0"
 
 [[deps.libpng_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Zlib_jll"]
@@ -1323,40 +1276,31 @@ version = "17.4.0+2"
 # ╠═18020d1b-18fb-4046-be7e-fae9e86022b8
 # ╠═0aa90669-ce3b-4a0f-ad82-03cfddfc2f63
 # ╟─cd7179e0-ca85-4f53-8ac9-fcf1bf4b6d44
-# ╟─bb7f98a6-41a5-4703-8d97-3f78eb5f86d2
+# ╠═bb7f98a6-41a5-4703-8d97-3f78eb5f86d2
 # ╠═59926e49-0179-4aad-9f00-1993ba9deea3
 # ╟─e9f7aca5-ea14-4b85-8b11-87d9a53c1b0c
+# ╠═2127bc56-8bc8-46b6-841d-74a62226083f
 # ╠═817fb169-abb8-47db-9a76-267a55343fa1
 # ╟─39b97f4d-a3bd-4540-85b2-ff01b77e4f60
-# ╟─f8d12ee3-179c-4287-9bc2-9eb60a7d345a
+# ╠═f8d12ee3-179c-4287-9bc2-9eb60a7d345a
 # ╠═ab764e60-f1d7-473f-97c4-8ec4b61d0e50
 # ╟─2f43cc6b-b1cd-4f14-ba7a-157cd10cbeb3
-# ╟─2a377e3f-c4b2-44ae-8f50-a092d6c2698c
+# ╠═fecfcc70-71fe-4754-970c-78222336a731
+# ╟─c72caffe-f6e1-4737-b601-d94780f1b58a
+# ╠═7b5d9cf1-5069-4dd8-bc75-fb516b2d3559
+# ╠═2a377e3f-c4b2-44ae-8f50-a092d6c2698c
+# ╟─68a8cbd7-7e56-41c4-bd4b-fe036312f0ae
+# ╠═9f8b438a-9efa-4688-86f7-33186cb4584c
 # ╟─22fd7b89-bd38-4a84-ae77-460cfcf11a90
-# ╟─f9dadba0-8969-421b-905c-8ed2f59adfd3
-# ╠═3771231d-cf19-4563-a7da-9ede7b54aafc
-# ╟─6e8af021-d3fe-40c3-82cd-239e28de3430
-# ╠═dd61b36d-fd52-4000-9ff3-81ca757fa18f
-# ╟─7f429e34-7455-4fd6-bad3-5da3cdc4c2e7
-# ╠═a4f841b4-ed2e-4fd4-9388-eacf3d889b9b
+# ╠═d3aa5526-7caa-4be1-a90e-992ab408a30e
 # ╟─97cd1cfc-d4ad-4cb6-a1b1-9ae8f4325b38
 # ╠═7819d60f-4ecc-4668-b506-e994b589e3a0
 # ╟─26c5aae4-ff1e-4494-bf8c-f67fa873fc41
 # ╠═0145d9b2-ec8c-46c6-abba-1fba321a62bc
-# ╟─67738bbc-9c2d-4f78-9045-5a671569b0a6
+# ╠═67738bbc-9c2d-4f78-9045-5a671569b0a6
 # ╟─9be64ea8-e147-499d-801d-bc0654480e8c
 # ╠═cfd49909-46f0-4808-8b32-8ac8a184cd5c
 # ╠═515f1aaf-fffb-49e2-aba4-1f2ab5c66230
-# ╟─ca4662bd-ccd7-41f9-901f-fb4cb0aef4f6
-# ╠═a65e18ce-0290-45b1-986e-bcd49ed0e386
-# ╟─c17837a8-b568-4289-ba19-0a321e353882
-# ╠═6ab58efe-122a-42c4-9acb-bae303954f2e
-# ╟─06ccddaf-23d0-4fba-9366-8780aff131d3
-# ╠═955a0fe8-34c7-4c41-971d-6df9f0ca7027
-# ╟─f51cf71c-6c17-4f67-9cfa-8c3e75e303e3
-# ╠═408007b0-faa0-46a7-8cd6-67a4e84147c2
-# ╠═1d55a9c5-5151-455e-9466-0b651b6720fb
-# ╠═8c0f3c14-012c-480c-8fff-f8391f0c1bb7
 # ╟─79fb3bb0-a260-49a5-9d1d-28ca0ab151a1
 # ╟─1d7fd386-8356-4c85-ba58-46e1beae35a8
 # ╠═52700c2a-7df5-4d4b-85a1-9fafb8e064b2
