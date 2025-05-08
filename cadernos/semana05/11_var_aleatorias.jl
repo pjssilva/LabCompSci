@@ -1,5 +1,5 @@
 ### A Pluto.jl notebook ###
-# v0.20.4
+# v0.20.6
 
 using Markdown
 using InteractiveUtils
@@ -7,7 +7,7 @@ using InteractiveUtils
 # This Pluto notebook uses @bind for interactivity. When running this notebook outside of Pluto, the following 'mock version' of @bind gives bound variables a default value (instead of an error).
 macro bind(def, element)
     #! format: off
-    quote
+    return quote
         local iv = try Base.loaded_modules[Base.PkgId(Base.UUID("6e696c72-6542-2067-7265-42206c756150"), "AbstractPlutoDingetjes")].Bonds.initial_value catch; b -> missing; end
         local el = $(esc(element))
         global $(esc(def)) = Core.applicable(Base.get, el) ? Base.get(el) : iv(el)
@@ -464,7 +464,7 @@ end
 
 # ╔═╡ a15fc456-8738-11eb-25bd-b15c2b16d461
 md"""
-Agora trocamos do gráfico de barras, para **histogramas**. Eles são mais adequados quando imaginamos que oo valores possíveis são números e não categorias. Histogramas agrupam todas as ocorrências que aparecem em certa faixas ou **bins**. Para $n = 1$ o experimento consiste em lançar um único dado e o resultado é uma distribuição uniforme para cada possível valor. Mas, a partir daí, os valores pequenos e grandes vão ficando menos prováveis e a soma passa a se grupar em torno de uma média. E a medida que o $n$ aumenta a distribuição de valores se parece cada vez mais com uma distribuição contínua e suave na reta devida a **agregação**: múltiplas combinações podem gerar um mesmo valor.
+Agora trocamos do gráfico de barras, para **histogramas**. Eles são mais adequados quando imaginamos que os valores possíveis são números e não categorias. Histogramas agrupam todas as ocorrências que aparecem em certa faixas ou **bins**. Para $n = 1$ o experimento consiste em lançar um único dado e o resultado é uma distribuição uniforme para cada possível valor. Mas, a partir daí, os valores pequenos e grandes vão ficando menos prováveis e a soma passa a se grupar em torno de uma média. E a medida que o $n$ aumenta a distribuição de valores se parece cada vez mais com uma distribuição contínua e suave na reta devido à **agregação**: múltiplas combinações podem gerar um mesmo valor.
 """
 
 # ╔═╡ dd753568-8736-11eb-1f20-1b81110ae807
@@ -625,7 +625,7 @@ StatsBase = "~0.34.3"
 PLUTO_MANIFEST_TOML_CONTENTS = """
 # This file is machine-generated - editing it directly is not advised
 
-julia_version = "1.10.6"
+julia_version = "1.10.9"
 manifest_format = "2.0"
 project_hash = "8af64d6300f3b9dd3b497f9d87a9c37a0a02dac4"
 
@@ -1549,7 +1549,7 @@ version = "2.4.0+0"
 [[deps.OpenLibm_jll]]
 deps = ["Artifacts", "Libdl"]
 uuid = "05823500-19ac-5b8b-9628-191a04bc5112"
-version = "0.8.1+2"
+version = "0.8.1+4"
 
 [[deps.OpenSSL]]
 deps = ["BitFlags", "Dates", "MozillaCACerts_jll", "OpenSSL_jll", "Sockets"]

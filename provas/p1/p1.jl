@@ -60,7 +60,7 @@ end
 
 # ╔═╡ e9f7aca5-ea14-4b85-8b11-87d9a53c1b0c
 md"""
-👉 Usando a sua função acima escreva uma função `corrompe`, que recebe uma imagem RGB (matriz de píxeis) e uma probabilidade `prob` (em [0, 1]) e constrói uma nova imagem composta dos píxeis da imagem original com probabilidade `1 - prob` ou píxeis com os canais rotacionados com probabilidade `prob`. Ou seja, ela faz uma cópia da imagem original com os píxeis modificados pela rotina `rodacanais` com probabilidade `1 - prob`.
+👉 Usando a sua função acima escreva uma função `corrompe`, que recebe uma imagem RGB (matriz de píxeis) e uma probabilidade `prob` (em [0, 1]) e constrói uma nova imagem composta dos píxeis da imagem original com probabilidade `prob` ou píxeis com os canais rotacionados com probabilidade `1 - prob`. Ou seja, ela faz uma cópia da imagem original com os píxeis modificados pela rotina `rodacanais` com probabilidade `1 - prob`.
 """
 
 # ╔═╡ 2127bc56-8bc8-46b6-841d-74a62226083f
