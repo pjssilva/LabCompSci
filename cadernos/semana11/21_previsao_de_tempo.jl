@@ -1,17 +1,19 @@
 ### A Pluto.jl notebook ###
-# v0.19.42
+# v0.20.9
 
 using Markdown
 using InteractiveUtils
 
 # This Pluto notebook uses @bind for interactivity. When running this notebook outside of Pluto, the following 'mock version' of @bind gives bound variables a default value (instead of an error).
 macro bind(def, element)
-    quote
+    #! format: off
+    return quote
         local iv = try Base.loaded_modules[Base.PkgId(Base.UUID("6e696c72-6542-2067-7265-42206c756150"), "AbstractPlutoDingetjes")].Bonds.initial_value catch; b -> missing; end
         local el = $(esc(element))
         global $(esc(def)) = Core.applicable(Base.get, el) ? Base.get(el) : iv(el)
         el
     end
+    #! format: on
 end
 
 # ╔═╡ 88b46d2e-220e-11eb-0f7f-b3f523f0214e
@@ -71,7 +73,7 @@ md"""
 md"""
 Lembre-se que vamos usar equações diferenciais na nossa tentativa de modelar a evolução do clima. 
 
-O tipo mais simples de equações diferenciais são as equações diferenciais ordinárias. Nelas algumas variáveis contínuas evoluem (continuamente) ao longo do tempo. O modelo especifica a taxa de variação instantânea (as derivadas) da variável de interesse como uma função dos seus valores atuais e, eventualmente, do tempo.
+O tipo mais simples de equações diferenciais são as equações diferenciais ordinárias. Nelas, algumas variáveis contínuas evoluem (continuamente) ao longo do tempo. O modelo especifica a taxa de variação instantânea (as derivadas) da variável de interesse como uma função dos seus valores atuais e, eventualmente, do tempo.
 
 Equações diferenciais que não dependem explicitamente do tempo são mais simples. Elas são conhecidas como equações **autônomas**. O modelo geral para esse caso é
 
@@ -90,7 +92,7 @@ Lembre-se que $\dot{x}(t)$ denota a derivada da função $t \mapsto x(t)$ no ins
 md"""
 Nós também vimos que o primeiro método numérico para resolução desse tipo de equação é o **método de Euler (explícito)**. Ele transforma a equação diferencial em uma equação de diferenças explícita: dado um pequeno passo temporal $h$ o método aproxima a sua derivada por
 
-$$\frac{dx(t)}{dt} \simeq \frac{x(t + h) - x(t)}{h},$$
+$$f(x(t)) = \frac{dx(t)}{dt} \simeq \frac{x(t + h) - x(t)}{h},$$
 
 gerando o método 
 
@@ -302,9 +304,9 @@ Para deixar a explicação mais clara, pense que começamos com $\mu = -2$, o si
 
 Agora imagine que diminuímos, vagarosamente, o valor de $\mu$. Agora o sistema vai se manter em torno do ponto fixo superior até $\mu = -0.4$, aproximadamente, e só aí pular de volta para o ponto fixo inferior. 
 
-Já para os valores do parâmetro $\mu \in [-0.4, 0.4]$ ocorre o fenômeno de **biestabiidade**, ou seja a coexistência de _dois_ pontos fixos estáveis para o mesmo valor do parâmetro (ao mesmo tempo que há um terceiro onto fixo instável entre os dois que basicamente nunca será observado).
+Já para os valores do parâmetro $\mu \in [-0.4, 0.4]$ ocorre o fenômeno de **biestabiidade**, ou seja a coexistência de _dois_ pontos fixos estáveis para o mesmo valor do parâmetro (ao mesmo tempo que há um terceiro ponto fixo instável entre os dois que basicamente nunca será observado).
 
-O fato que o sistema persegue ramos diferentes depenendo de onde começa, ou seja dependente da história da dinâmica, é chamado de **histerese**.
+O fato que o sistema persegue ramos diferentes dependendo de onde começa, ou seja dependente da história da dinâmica, é chamado de **histerese**.
 """
 
 # ╔═╡ 4c73705e-230c-11eb-3c90-b14536d78808
@@ -525,7 +527,7 @@ A medida que $\rho$ aumenta, vemos uma sequência de bifurcações. Acima de um 
 
 # ╔═╡ cc7ee950-6b86-4d43-8524-86254978bd1b
 md"""
-Caos determinístico ocorre quando condições iniciais próximas se afastam exponencialmente rápido no estado de espaços. É esse fenômeno que é chamado de **efeito borboleta**: uma pertubação no estado da atmosfera causado pelo bater de asas de uma borboleta pode ser amplificado a ponto de modificar a direção na qual um tornado se move.
+Caos determinístico ocorre quando trajetórias partindo condições iniciais próximas se afastam exponencialmente rápido no espaço de estados. É esse fenômeno que é chamado de **efeito borboleta**: uma pertubação no estado da atmosfera causado pelo bater de asas de uma borboleta pode ser amplificado a ponto de modificar a direção na qual um tornado se move.
 
 Podemos ver isso perturbando pouco a condição inicial e calculando a distância entre as duas soluções como função de $t$:
 """
@@ -585,7 +587,7 @@ Por fim, vamos olhar o "clima" presente nesse modelo, ou seja vamos olhar estat�
 begin
     T = 1000.0
 
-    lorenz_prob3 = ODEProblem(lorenz, [0, 1 + ϵ, 1 + ϵ], (0.0, T), lorenz_params)
+    lorenz_prob3 = ODEProblem(lorenz, [1 + ϵ, 1 + ϵ, 1 + ϵ], (0.0, T), lorenz_params)
 
     lorenz_soln3 = solve(lorenz_prob3, Tsit5())
 
@@ -890,7 +892,7 @@ Roots = "~2.1.5"
 PLUTO_MANIFEST_TOML_CONTENTS = """
 # This file is machine-generated - editing it directly is not advised
 
-julia_version = "1.10.3"
+julia_version = "1.10.9"
 manifest_format = "2.0"
 project_hash = "9b98658420afad867eb4e8754d06cc139a25ac50"
 
@@ -2113,7 +2115,7 @@ version = "0.3.23+4"
 [[deps.OpenLibm_jll]]
 deps = ["Artifacts", "Libdl"]
 uuid = "05823500-19ac-5b8b-9628-191a04bc5112"
-version = "0.8.1+2"
+version = "0.8.1+4"
 
 [[deps.OpenSSL]]
 deps = ["BitFlags", "Dates", "MozillaCACerts_jll", "OpenSSL_jll", "Sockets"]
@@ -3058,7 +3060,7 @@ version = "0.15.1+0"
 [[deps.libblastrampoline_jll]]
 deps = ["Artifacts", "Libdl"]
 uuid = "8e850b90-86db-534c-a0d3-1478176c7d93"
-version = "5.8.0+1"
+version = "5.11.0+0"
 
 [[deps.libevdev_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg"]
