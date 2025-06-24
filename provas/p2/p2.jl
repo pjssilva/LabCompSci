@@ -26,7 +26,7 @@ end
 
 # ╔═╡ a267a81a-44a0-11ed-2997-89f4fa65e75f
 md"# Prova 2
-27 de junho de 2024
+24 de junho de 2025
 "
 
 # ╔═╡ 18020d1b-18fb-4046-be7e-fae9e86022b8
@@ -53,7 +53,7 @@ md"
 
 # ╔═╡ bb7f98a6-41a5-4703-8d97-3f78eb5f86d2
 md"""
-### 1 Infecção misteriosa
+### 1 Reinfecções
 
 Aqui você vai fazer uma variação de pandemia semelhante ao que você fez no exercício 3.1 da lista 7. No modelo SIR tradicional a dinâmica é dada por um (ou poucos) infectados originais em uma população totalmente suscetível. Ao interagirem com os suscetíveis os infectados podem passar a doença. Além disso, doentes (infecciosos) podem se recuperar com uma certa probabilidade. Isso tudo é capturado pela função `interact` abaixo.
 """
@@ -66,19 +66,19 @@ md"Aqui está uma simulação de pandemia."
 
 # ╔═╡ 2343329b-4dd7-4f34-a6c7-549415314983
 md"""
-👉 Vamos modificar um pouco a regra desse jogo. A ideia é simular um outro tipo de epidemia que possui outra forma de infeccção além do processo de transmissão baseado no encontro entre dois agentes. Essa outra forma de transmissão não é bem conhecida. Imagine que existe um outro ser vivo capaz de transmitir doenças que ainda não foi identificado, um inseto por exemplo.
+👉 Vamos modificar um pouco a regra desse jogo. A ideia é simular um outro tipo de epidemia em que os repecuperados não são completamente imunes, mas tem apenas uma proabilidade menor de infecção em um novo encontro. 
 
 Para isso crie um novo tipo de epidemia, adaptando `InfectionRecovery` apresentada abaixo.
 """
 
 # ╔═╡ ae9efcd1-fa65-4394-8efc-d09c781b4d10
 md"""
-Esse novo tipo de infecção deverá se chamar `MysteriousInfection`. Ela deve ser um subtipo de `AbstractInfection`, ter os campos que `InfectionRecovery` já tem e mais um campo extra, chamado `p_mysterious`, que vai modelar a probabilidade de um agente selecionado ficar doente pelo causa misteriosa.
+Esse novo tipo de infecção deverá se chamar `ReInfection`. Ela deve ser um subtipo de `AbstractInfection`, ter os campos que `InfectionRecovery` já tem e mais um campo extra, chamado `p_reinfection`, que vai modelar a probabilidade de um agente selecionado ficar doente por um encontro se estiver na situação recuperado.
 """
 
 # ╔═╡ e9f7aca5-ea14-4b85-8b11-87d9a53c1b0c
 md"""
-👉 Agora, copie o código de `interact!` apresentado acima na célula abaixo e faça que ele possa receber uma `MysteriousInfection` no lugar de uma `InfectionRecovery`. Depois, acrescente **no início da função** código que altera o status do `agent` para infectado (que é representado por `I`) com probabilidade `infection.p_mysterious` caso ele esteja inicialmente suscetível.
+👉 Agora, copie o código de `interact!` apresentado acima na célula abaixo e faça que ele possa receber uma `ReInfection` no lugar de uma `InfectionRecovery`. Depois, acrescente **no início da função (em primeiro lugar)** código para lidar com o caso que do encontro entre um `agent` recuperado e uma `source` infecciosa, permitindo que a infecção ocorra com probabilidade `p_reinfection`.
 """
 
 # ╔═╡ 817fb169-abb8-47db-9a76-267a55343fa1
@@ -100,27 +100,27 @@ Precisamos começar generalizando a estrutura `Agent` apresentada abaixo. """
 
 # ╔═╡ 40f84b9a-56f2-4445-8667-7fb69b01bceb
 md"""
-👉 Para isso crie uma estrutura mutável `XAgent` que também é um subtipo de `AbstractAgent` e tem os mesmos campos que `Agent` (com os mesmos nomes e tipos) mais um campo extra de nome `pos` e do tipo `Int64`. Esse campo irá representar a posição do agente em um mundo unidimensional. Crie também um construtor simplificado para `XAgent` que não recebe parâmetros e cria um agente no estado `S` com `num_infected` igual a 0 e em uma posição aleatória entre -100 e 100.
+👉 Para isso crie uma estrutura mutável `OneDAgent` que também é um subtipo de `AbstractAgent` e tem os mesmos campos que `Agent` (com os mesmos nomes e tipos) mais um campo extra de nome `pos` e do tipo `Int64`. Esse campo irá representar a posição do agente em um mundo unidimensional. Crie também um construtor simplificado para `oneDAgent` que não recebe parâmetros e cria um agente no estado `S` com `num_infected` igual a 0 e em uma posição aleatória entre -10 e 10.
 """
 
 # ╔═╡ f932788d-f9fe-4b19-9239-74d79819ab65
-md"👉 Crie uma função `get_pos` que recebe um `XAgent` e devolve sua posição"
+md"👉 Crie uma função `get_x` que recebe um `OneDAgent` e devolve sua posição"
 
 # ╔═╡ 24c5b71e-6474-46d1-a0f8-426d791793ae
-# Defina get_pos aqui
+# Defina get_x aqui
 
 # ╔═╡ ebd6f07e-babb-4497-ae7d-139abe293f27
-md"👉 Crie uma função `update_pos!` que recebe um `XAgent` e um valor `passo` de tipo `Int64`. ela deve atualizar a posição do agent somando passo à posição atual mas sem deixar o agent passar dos extremos -100 e 100."
+md"👉 Crie uma função `update_x!` que recebe um `OneDAgent` e um valor `passo` de tipo `Int64`. ela deve atualizar a posição do agent somando passo à posição atual mas sem deixar o agent passar dos extremos -20 e 20."
 
 # ╔═╡ acfd4957-5942-4b79-bf2e-83f124fa5c2b
-# Defina update_pos aqui
+# Defina update_x! aqui
 
 # ╔═╡ f9dadba0-8969-421b-905c-8ed2f59adfd3
-md"👉 Agora adapte mais uma vez a função `interact!` apresentada no topo da questão 1  para receber `agent` e `source` dos tipos `XAgent` e introduza nela duas novidades:
+md"👉 Agora adapte mais uma vez a função `interact!` apresentada no topo da questão 1  para receber `agent` e `source` dos tipos `oneDAgent` e introduza nela duas novidades:
 
-1. Na início do seu código só permita a infecção se `agent` e `source` estiverem na mesma posição. Para verificar a posição usa a função `get_pos` que você definiu acima.
+1. Na início do seu código só permita a infecção se `agent` e `source` estiverem **na mesma posição ou em posições vizinhas**. Para verificar a posição use a função `get_x` que você definiu acima.
 
-1. Ao final da função, adicione código que atualiza a posição de `source` escolhendo um passo uniformente entre os dois valores `-1` e `1`. Use a função `update_pos!` definida acima.
+1. Ao final da função, adicione código que atualiza a posição de `source` escolhendo um passo uniformente entre os dois valores `-1` e `1`. Use a função `update_x!` definida acima.
 "
 
 # ╔═╡ a4f841b4-ed2e-4fd4-9388-eacf3d889b9b
@@ -136,11 +136,11 @@ md"Se você fizer tudo direito deve ver curvas típicas de infecções SIR abaix
 md"""
 ### 3 Evolução de temperaturas com CO2 variando
 
-A célula abaixo foi usado na lista 10. Ela define um módulo `Model` que permite lidar com modelos simples de clima. Entre outras coisas, esse módulo define a estrutura `EBM` que representa uma trajetória de evolução da temperatura resolvendo a equação diferencial que representa o balanço de energia incidente e perdida pelo planeta.
+A célula abaixo foi usada na lista 10. Ela define um módulo `Model` que permite lidar com modelos simples de clima. Entre outras coisas, esse módulo define a estrutura `Model.EBM` que representa uma trajetória de evolução da temperatura resolvendo a equação diferencial que representa o balanço de energia incidente e perdida pelo planeta.
 
-Um dos construtores de `EBM` tem a forma
+Um dos construtores de `Model.EBM` tem a forma
 ```
-EBM(T0::Real, t0::Real, Δt::Real, CO2::Function)
+Model.EBM(T0::Real, t0::Real, Δt::Real, CO2::Function)
 ```
 Em que `T0` é a temperatura inicial, `t0` é o instante inicial, `Δt` é um passo de tempo e `CO2` é uma **função** de evolução da concentração de gás carbônico ao longo do tempo `t`.
 
@@ -258,7 +258,7 @@ tempos = 0:5:1_000
 
 # ╔═╡ 7ac43186-4159-4264-a830-72c30e8f1cf2
 md"""
-👉 Crie uma função `CO2(t)` que vale 500 para `t` no intervalo $[0, 250]$ e depois cai linearmente até atingir `250` em `t = 500` ficando constante a partir daí.
+👉 Crie uma função `CO2(t)` que vale 550 para `t` no intervalo $[0, 200]$ e depois cai linearmente até atingir `255` em `t = 530` ficando constante a partir daí.
 """
 
 # ╔═╡ cbd94f54-1c0f-47fb-989b-701c86abce53
@@ -271,7 +271,7 @@ plot(tempos, CO2.(tempos), lw=2)
 
 # ╔═╡ 04b1169b-fca1-4003-b2b4-8aeacb0ebd97
 md"""
-👉 Agora defina uma variável `ebm_bola_neve` do tipo `EBM` com temperatura inicial -48, tempo incial 0, passo de tempo de 5 e a função que você definiu acima. Em seguida calcule a evolução da temperatura até o tempo 1.000 usando a função `Model.run!` que tem como assinatura
+👉 Agora defina uma variável `ebm_bola_neve` do tipo `EBM` com temperatura inicial -48, tempo incial 0, passo de tempo de 2 e a função que você definiu acima. Em seguida calcule a evolução da temperatura até o tempo 1.100 usando a função `Model.run!` que tem como assinatura
 
 ```
 Model.run!(ebm, tempo_final)
@@ -283,7 +283,7 @@ md"Abaixo irá surgir um gráfico que mostra a evolução de temperaturas obtida
 
 # ╔═╡ 26c5aae4-ff1e-4494-bf8c-f67fa873fc41
 md"""
-👉 Por fim, defina uma variável `ebm_oceano` do tipo `EBM` com temperatura inicial 20 e os outros parâmetros como acima. Em seguida faça ela evoluir até o tempo 1.000 usando `Model.run!`.
+👉 Por fim, defina uma variável `ebm_oceano` do tipo `EBM` com temperatura inicial 20 e os outros parâmetros como acima. Em seguida faça ela evoluir até o tempo 1.100 usando `Model.run!`.
 """
 
 # ╔═╡ a5b9a699-0b7d-4851-9604-8bebf18368cc
@@ -310,9 +310,9 @@ struct InfectionRecovery <: AbstractInfection
 end	
 
 # ╔═╡ 59926e49-0179-4aad-9f00-1993ba9deea3
-# Defina MysteriousInfection aqui, trocando o código abaixo por sua solução.
+# Defina ReInfection aqui, trocando o código abaixo por sua solução.
 # Ela deve ser uma struct, assim como InfectionRecovery acima.
-MysteriousInfection(p1, p2, p3) = InfectionRecovery(p1, p2)
+ReInfection(p1, p2, p3) = InfectionRecovery(p1, p2)
 
 # ╔═╡ c2280709-4735-4e38-81f9-a2386163ed77
 abstract type AbstractAgent end
@@ -327,8 +327,8 @@ begin
 end
 
 # ╔═╡ 1fa8ce76-5344-4036-a239-de3604ac9d61
-# Defina o XAgent e seu constrautor aqui, trocando a definição abaixo pela sua implemantação
-XAgent = Agent
+# Defina o oneDAgent e seu construtor aqui, trocando a definição abaixo pela sua implemantação
+OneDAgent = Agent
 
 # ╔═╡ f3783688-ef5f-4171-9979-c25e50e5cd44
 function set_status!(agent::AbstractAgent, new_status::InfectionStatus)
@@ -457,7 +457,7 @@ let
 	
 	N = 100
 	T = 1000
-	sim = simulation(N, T, MysteriousInfection(0.02, 0.002, 0.02), Agent)
+	sim = simulation(N, T, ReInfection(0.02, 0.002, 0.001), Agent)
 	T = length(sim.S)
 	
 	result = plot(sim.S, ylim=(0, N), label="Susceptible", lw=2)
@@ -471,7 +471,7 @@ let
 	
 	N = 1000
 	T = 20000
-	sim = simulation(N, T, InfectionRecovery(0.2, 0.0002), XAgent)
+	sim = simulation(N, T, InfectionRecovery(0.05, 0.0002), OneDAgent)
 	T = length(sim.S)
 	
 	result = plot(sim.S, ylim=(0, N), label="Susceptible", lw=2, legend = :right)
@@ -730,15 +730,15 @@ version = "3.4.0+2"
 
 [[deps.GR]]
 deps = ["Artifacts", "Base64", "DelimitedFiles", "Downloads", "GR_jll", "HTTP", "JSON", "Libdl", "LinearAlgebra", "Preferences", "Printf", "Qt6Wayland_jll", "Random", "Serialization", "Sockets", "TOML", "Tar", "Test", "p7zip_jll"]
-git-tree-sha1 = "1828eb7275491981fa5f1752a5e126e8f26f8741"
+git-tree-sha1 = "4424dca1462cc3f19a0e6f07b809ad948ac1d62b"
 uuid = "28b8d3ca-fb5f-59d9-8090-bfdbd6d07a71"
-version = "0.73.17"
+version = "0.73.16"
 
 [[deps.GR_jll]]
 deps = ["Artifacts", "Bzip2_jll", "Cairo_jll", "FFMPEG_jll", "Fontconfig_jll", "FreeType2_jll", "GLFW_jll", "JLLWrappers", "JpegTurbo_jll", "Libdl", "Libtiff_jll", "Pixman_jll", "Qt6Base_jll", "Zlib_jll", "libpng_jll"]
-git-tree-sha1 = "27299071cc29e409488ada41ec7643e0ab19091f"
+git-tree-sha1 = "d7ecfaca1ad1886de4f9053b5b8aef34f36ede7f"
 uuid = "d2c73de3-f751-5644-a686-071e5b155ba9"
-version = "0.73.17+0"
+version = "0.73.16+0"
 
 [[deps.Gettext_jll]]
 deps = ["Artifacts", "CompilerSupportLibraries_jll", "JLLWrappers", "Libdl", "Libiconv_jll", "Pkg", "XML2_jll"]
@@ -1164,9 +1164,9 @@ version = "6.8.2+1"
 
 [[deps.Qt6Wayland_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Qt6Base_jll", "Qt6Declarative_jll"]
-git-tree-sha1 = "e1d5e16d0f65762396f9ca4644a5f4ddab8d452b"
+git-tree-sha1 = "2766344a35a1a5ec1147305c4b343055d7c22c90"
 uuid = "e99dba38-086e-5de3-a5b1-6e4c66e897c3"
-version = "6.8.2+1"
+version = "6.8.2+0"
 
 [[deps.REPL]]
 deps = ["InteractiveUtils", "Markdown", "Sockets", "Unicode"]
@@ -1637,7 +1637,7 @@ version = "1.8.1+0"
 # ╠═580be7eb-25e2-4e14-ba96-5d0199a89f5f
 # ╟─35069afb-c0d7-411c-9b15-aab1fde7d562
 # ╟─1f3abb59-629f-4278-977c-3c176579ec92
-# ╠═04edfe0d-f794-460d-9629-3f55d630b5da
+# ╟─04edfe0d-f794-460d-9629-3f55d630b5da
 # ╟─2343329b-4dd7-4f34-a6c7-549415314983
 # ╠═5b10e006-1668-4984-8389-c2ebdc741a64
 # ╟─ae9efcd1-fa65-4394-8efc-d09c781b4d10
@@ -1646,7 +1646,7 @@ version = "1.8.1+0"
 # ╠═817fb169-abb8-47db-9a76-267a55343fa1
 # ╟─39b97f4d-a3bd-4540-85b2-ff01b77e4f60
 # ╠═953c2875-c0fa-4dd6-8188-0f635c70daf0
-# ╠═f8d12ee3-179c-4287-9bc2-9eb60a7d345a
+# ╟─f8d12ee3-179c-4287-9bc2-9eb60a7d345a
 # ╟─2f43cc6b-b1cd-4f14-ba7a-157cd10cbeb3
 # ╠═bcc677f7-8e97-4097-96a7-7630a444c33f
 # ╟─40f84b9a-56f2-4445-8667-7fb69b01bceb
@@ -1669,9 +1669,9 @@ version = "1.8.1+0"
 # ╟─04b1169b-fca1-4003-b2b4-8aeacb0ebd97
 # ╠═b04c2638-421a-4c35-8d93-44eb70f609a2
 # ╟─2319bd33-24e8-403c-abd0-7e2fc5d89864
-# ╟─c062d99e-fbf2-452d-a186-e16f3122c629
+# ╠═c062d99e-fbf2-452d-a186-e16f3122c629
 # ╟─26c5aae4-ff1e-4494-bf8c-f67fa873fc41
-# ╠═0145d9b2-ec8c-46c6-abba-1fba321a62bc
+# ╟─0145d9b2-ec8c-46c6-abba-1fba321a62bc
 # ╟─a5b9a699-0b7d-4851-9604-8bebf18368cc
 # ╠═cfd49909-46f0-4808-8b32-8ac8a184cd5c
 # ╟─79fb3bb0-a260-49a5-9d1d-28ca0ab151a1
