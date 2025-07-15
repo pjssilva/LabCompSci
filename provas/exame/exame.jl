@@ -1,5 +1,5 @@
 ### A Pluto.jl notebook ###
-# v0.20.10
+# v0.20.13
 
 using Markdown
 using InteractiveUtils
@@ -70,7 +70,7 @@ preto = Gray(0)
 
 # ╔═╡ 03eb3486-2b59-4e86-a39a-cddbf6c1ad6d
 md"""
-👉 Crie uma função `corrompe` que recebe uma imagem e escolhe aleatoriamente 25 linhas diferentes usando a função `sample` (de `StatsBase`) com o parâmetro `replace` configurado como `false`. Se precisar veja a sua documentação usando o `Live Docs` ao lado ou procure na Internet. Para cada uma dessas linhas, sua função deve escolher uma coluna `c` entre `1` e `largura_da_imagem - 49` e alterar os pixeis da cópia da imagem na linha escolhida e colunas entres `c` e `c + 49` para a cor `preto`. Ao final retorne essa imagem alterada.
+👉 Crie uma função `corrompe` que recebe uma imagem e escolhe aleatoriamente 25 colunas diferentes usando a função `sample` (de `StatsBase`) com o parâmetro `replace` configurado como `false`. Se precisar veja a sua documentação usando o `Live Docs` ao lado ou procure na Internet. Para cada uma dessas colunas, sua função deve escolher uma linha `l` entre `1` e `altura_da_imagem - 49` e alterar os pixeis da cópia da imagem na coluna escolhida e linhas entres l` e `cl+ 49` para a cor `preto`. Ao final retorne essa imagem alterada.
 """
 
 # ╔═╡ 88edc87e-50d3-426c-8c4e-803d62e5b1a9
